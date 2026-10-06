@@ -1,0 +1,861 @@
+fileFormatVersion: 2
+guid: 144eeb44c42d14845958984b279a7ff5
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RowdyDandySprite_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 179f0e7d1b523b44c9ecbc027f0f1463
+      internalID: 734056055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_1
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 199852483ee4b6e4eb56b127b6990d01
+      internalID: -2072714029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_2
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64134082914d08542899f62a9d14b9cb
+      internalID: 12556748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_3
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37b594d01188d0147be389fe8e460752
+      internalID: 1098629005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_4
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e24fcb85b8e566149a50db35fd16be48
+      internalID: -1137896689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_5
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27db031f72e87db49a793650d9f34440
+      internalID: -1416948419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_6
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 964d1fbc8f3af504aa9681df8e077ca3
+      internalID: 648186991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_7
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6eac711b6fae9a74b9afada90aef772a
+      internalID: -609642329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_8
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 069aaeb6a9190bb4f8123d2f381da3ae
+      internalID: 1035901082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_9
+      rect:
+        serializedVersion: 2
+        x: 1242
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bce2032b5a256ba4fa2c3d531b08e410
+      internalID: 1641695576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_10
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25bbfe3e9a227c9498f3f707bd89753a
+      internalID: 219753741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_11
+      rect:
+        serializedVersion: 2
+        x: 1518
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f13010737dc9b7446ae3729c49c97655
+      internalID: 1433674686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_12
+      rect:
+        serializedVersion: 2
+        x: 1656
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b41db57aa5bbd5346aa451a345141631
+      internalID: 2075655199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_13
+      rect:
+        serializedVersion: 2
+        x: 1794
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a583ba7fca8401b43b8664bd367f3b26
+      internalID: 19420530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_14
+      rect:
+        serializedVersion: 2
+        x: 1932
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64c4911a3cf016e4a88d16f173afe5da
+      internalID: -826288080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_15
+      rect:
+        serializedVersion: 2
+        x: 2070
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1108a5ebbf66ca247b7775d6874a0f71
+      internalID: -1520605443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_16
+      rect:
+        serializedVersion: 2
+        x: 2208
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 845569a8ac316a642b92dfdb53ed4e54
+      internalID: 539817117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_17
+      rect:
+        serializedVersion: 2
+        x: 2346
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4eb038944f2800c4b9d1ccb404fad498
+      internalID: -156071169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_18
+      rect:
+        serializedVersion: 2
+        x: 2484
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c49a2a5410e0f64bbc04c26001cb51a
+      internalID: 1925375774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_19
+      rect:
+        serializedVersion: 2
+        x: 2622
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e30a0d79931175418ba417cfecc29d0
+      internalID: -251383210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_20
+      rect:
+        serializedVersion: 2
+        x: 2760
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9aacece5e35647d4ca65b87c2c0c9e5d
+      internalID: -1092289179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_21
+      rect:
+        serializedVersion: 2
+        x: 2898
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96331f9a3815cda4293c73a46d5c0690
+      internalID: 1518385034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_22
+      rect:
+        serializedVersion: 2
+        x: 3036
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea9485fc99e195243bf35462d4b8ae11
+      internalID: 860128317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_23
+      rect:
+        serializedVersion: 2
+        x: 3174
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 765bd1b09221b834797de6de3bf23d0c
+      internalID: 345299178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_24
+      rect:
+        serializedVersion: 2
+        x: 3312
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e825f9a5e8bd7b4697d82edd55dd826
+      internalID: 1321167414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_25
+      rect:
+        serializedVersion: 2
+        x: 3450
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf16b4fd90c28474ca32d1db31eeffc2
+      internalID: 1992844281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_26
+      rect:
+        serializedVersion: 2
+        x: 3588
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b0fab9d6dda9f34fa06cc6850122547
+      internalID: 1797585501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_27
+      rect:
+        serializedVersion: 2
+        x: 3726
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d3e455275af2c44bac51cac57bb5120
+      internalID: -1534135745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_28
+      rect:
+        serializedVersion: 2
+        x: 3864
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a24a54038f822af438ede247aa99b74b
+      internalID: -1456666505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_29
+      rect:
+        serializedVersion: 2
+        x: 4002
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 036cef27dfe4dfd43839a7f2df1c05e7
+      internalID: 89321951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_30
+      rect:
+        serializedVersion: 2
+        x: 4140
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a63114e601155448b814a52745f4a38
+      internalID: -1454454204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_31
+      rect:
+        serializedVersion: 2
+        x: 4278
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae2d2a2352dff904499589d14016d09f
+      internalID: -1148729785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RowdyDandySprite_32
+      rect:
+        serializedVersion: 2
+        x: 4416
+        y: 0
+        width: 138
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44, y: 0.33}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03fed3a19beba5b488830d04efe3d267
+      internalID: 837747303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      RowdyDandySprite_25: 1992844281
+      RowdyDandySprite_6: 648186991
+      RowdyDandySprite_20: -1092289179
+      RowdyDandySprite_5: -1416948419
+      RowdyDandySprite_10: 219753741
+      RowdyDandySprite_4: -1137896689
+      RowdyDandySprite_27: -1534135745
+      RowdyDandySprite_13: 19420530
+      RowdyDandySprite_3: 1098629005
+      RowdyDandySprite_11: 1433674686
+      RowdyDandySprite_15: -1520605443
+      RowdyDandySprite_31: -1148729785
+      RowdyDandySprite_1: -2072714029
+      RowdyDandySprite_28: -1456666505
+      RowdyDandySprite_0: 734056055
+      RowdyDandySprite_21: 1518385034
+      RowdyDandySprite_29: 89321951
+      RowdyDandySprite_26: 1797585501
+      RowdyDandySprite_22: 860128317
+      RowdyDandySprite_17: -156071169
+      RowdyDandySprite_19: -251383210
+      RowdyDandySprite_16: 539817117
+      RowdyDandySprite_9: 1641695576
+      RowdyDandySprite_2: 12556748
+      RowdyDandySprite_18: 1925375774
+      RowdyDandySprite_8: 1035901082
+      RowdyDandySprite_32: 837747303
+      RowdyDandySprite_12: 2075655199
+      RowdyDandySprite_23: 345299178
+      RowdyDandySprite_24: 1321167414
+      RowdyDandySprite_7: -609642329
+      RowdyDandySprite_14: -826288080
+      RowdyDandySprite_30: -1454454204
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

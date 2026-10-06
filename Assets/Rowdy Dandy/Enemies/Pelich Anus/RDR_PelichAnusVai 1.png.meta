@@ -1,0 +1,1413 @@
+fileFormatVersion: 2
+guid: 53f8edba6daea3341adeb905ecc246f6
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 564
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2d34bfad8fd99349b73da964807e853
+      internalID: -2119205264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_1
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 564
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 678035084e3f1a94e857fb01836a6cf3
+      internalID: 1213394708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_2
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 564
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3deae6f1c43b8140a7996a1437405d8
+      internalID: 808099691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_3
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 564
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92a59a009125b5c4cb66c6e4dcd3292b
+      internalID: 1556618221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_4
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 564
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 050281f2924ef2d44a85e3f7d566cd2d
+      internalID: -1041967856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_5
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 564
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82285f932bb6b6b4ca39ff43eff5ab69
+      internalID: -449875016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_6
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 564
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13d78c38296daf04590c0bdd3c6a107c
+      internalID: 845053693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_7
+      rect:
+        serializedVersion: 2
+        x: 2128
+        y: 564
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb35539c6cc4e344d9de2d7faaf66764
+      internalID: -761019789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6bea9f880145b543b1a9d614f557c1c
+      internalID: 463479109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_9
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5005928ee094f994fa872e32ae72a9c0
+      internalID: 1240390230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_10
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0dca2acb542bb3744aec165271d09339
+      internalID: -1194570010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_11
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f513f829a6c5d54691ee6cf778eb05f
+      internalID: -353639378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_12
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13208ccf410e753439be7d973afb62ff
+      internalID: -1192968275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_13
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2df19c63622a24d489d44315dfba66db
+      internalID: 4813129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_14
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c013bf106cde1d6439b6b5947e0dcffe
+      internalID: -1565505686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_15
+      rect:
+        serializedVersion: 2
+        x: 2128
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca24139f104a29a41bbcb74e31558668
+      internalID: -1978200165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_16
+      rect:
+        serializedVersion: 2
+        x: 2432
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed4b9b626761c6e4b92c21b16ad759d3
+      internalID: 641105865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_17
+      rect:
+        serializedVersion: 2
+        x: 2736
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ee9460e0f3453445a365e4effc512fb
+      internalID: -285637977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_18
+      rect:
+        serializedVersion: 2
+        x: 3040
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ff9bb4087d8e1e4d8c9b91a1e1d26f1
+      internalID: -781258761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_19
+      rect:
+        serializedVersion: 2
+        x: 3344
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec1f8fdefb981e243a0a9a2f16e98238
+      internalID: -2062281601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_20
+      rect:
+        serializedVersion: 2
+        x: 3648
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c6a3661b4e4904428bc46ca2bcb8abd
+      internalID: 1637274606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_21
+      rect:
+        serializedVersion: 2
+        x: 3952
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c28f2d552194434abadc73cb3f39698
+      internalID: 718984409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_22
+      rect:
+        serializedVersion: 2
+        x: 4256
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4206d128c3109d44a701e381a392a96
+      internalID: 688425039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_23
+      rect:
+        serializedVersion: 2
+        x: 4560
+        y: 376
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac458bfeba6e2d540a5065b355b4ec38
+      internalID: 1977692068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 876cc20107b3cd445854b1b0285a0ee4
+      internalID: 177107819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_25
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43c68923aed98174199fef8c2d002a1d
+      internalID: -1182033047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_26
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86dc88fd1239b2e488c3aa693cf9693a
+      internalID: 1420374266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_27
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1edcd49c0cbc91c4dad2ddb6c2c434b3
+      internalID: 125482296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_28
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f7b11969a9199a4998ea095983f552b
+      internalID: -458666808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_29
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 413748c155f9b30409c4bab8b39ae8a9
+      internalID: -1117474030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_30
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: caa81b26ce0c9f64293dd460184b7339
+      internalID: 1527671835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_31
+      rect:
+        serializedVersion: 2
+        x: 2128
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1dc8c8fa8ed8c346999f83215734a5d
+      internalID: -513043610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_32
+      rect:
+        serializedVersion: 2
+        x: 2432
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f11254de991a624b9c130cae8d1c6b3
+      internalID: -505751887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_33
+      rect:
+        serializedVersion: 2
+        x: 2736
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0c027fa7f9df5041bee5c743618e548
+      internalID: 1072125605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_34
+      rect:
+        serializedVersion: 2
+        x: 3040
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf151c2c57448cb4683b3275a78c9e1f
+      internalID: 1598436349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_35
+      rect:
+        serializedVersion: 2
+        x: 3344
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9106b1e291195ef4bb44140b4a768eef
+      internalID: -414336625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_36
+      rect:
+        serializedVersion: 2
+        x: 3648
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9aff6b5fcd4a87540a49c894661a86b5
+      internalID: 1280087543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_37
+      rect:
+        serializedVersion: 2
+        x: 3952
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bca21592eea834a4fb44636f4d1c814f
+      internalID: 2065855166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_38
+      rect:
+        serializedVersion: 2
+        x: 4256
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44eda918d5dfb9742bfd7b65f6270d90
+      internalID: 381224980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_39
+      rect:
+        serializedVersion: 2
+        x: 4560
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ea4eb625d7e9d64ebb742489b2822f9
+      internalID: -1556670726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_40
+      rect:
+        serializedVersion: 2
+        x: 4864
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68ebc0f3558211e44b5cfc96f54dd3fd
+      internalID: 1240382512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_41
+      rect:
+        serializedVersion: 2
+        x: 5168
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ee1971755e33b9489a8f75c19d24752
+      internalID: 1160860028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_42
+      rect:
+        serializedVersion: 2
+        x: 5472
+        y: 188
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b7d62a22d483274795089b1b2c9d05b
+      internalID: -1946253305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_43
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38a188dee3c413743b0f0a5a20291392
+      internalID: 1616470012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_44
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58384510c2d247847ab5f52cf9a4cee6
+      internalID: 1607333193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_45
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 666fabe5ad5a8874bbeec2c684d21bad
+      internalID: 833026971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_46
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45ee488a55900994e8e9fd09e83d1541
+      internalID: 298569657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_47
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5823a2d627f93d643a863818ec1da6c6
+      internalID: -1635229462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_48
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54d3dc2186d02eb4c994662b7ab79de3
+      internalID: 1743768722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_49
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fd040b12f33d0f4f94e02283114d4ca
+      internalID: 1198812318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_50
+      rect:
+        serializedVersion: 2
+        x: 2128
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9af15f1c481a8345a5e916765683497
+      internalID: 1812307410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_51
+      rect:
+        serializedVersion: 2
+        x: 2432
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d2e27b210b383342b4b6a7e8a90883e
+      internalID: 302202680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_52
+      rect:
+        serializedVersion: 2
+        x: 2736
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6492ee034e7993e4fa30b6c2045651ed
+      internalID: 1916039081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_53
+      rect:
+        serializedVersion: 2
+        x: 3040
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c7c6261b1cdf3043b01e6780b86e938
+      internalID: -1250532807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_54
+      rect:
+        serializedVersion: 2
+        x: 3344
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a49c57c3b6f6b72498b2cc5e13a0cd37
+      internalID: -529450787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_55
+      rect:
+        serializedVersion: 2
+        x: 3648
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07582a0dc70a6384fba4ec7fa57f9bba
+      internalID: -639070371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_PelichAnusVai 1_56
+      rect:
+        serializedVersion: 2
+        x: 3952
+        y: 0
+        width: 304
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 526fbc7ed17f9064a96784453b50e40a
+      internalID: -221295507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      RDR_PelichAnusVai 1_30: 1527671835
+      RDR_PelichAnusVai 1_44: 1607333193
+      RDR_PelichAnusVai 1_3: 1556618221
+      RDR_PelichAnusVai 1_37: 2065855166
+      RDR_PelichAnusVai 1_48: 1743768722
+      RDR_PelichAnusVai 1_52: 1916039081
+      RDR_PelichAnusVai 1_5: -449875016
+      RDR_PelichAnusVai 1_13: 4813129
+      RDR_PelichAnusVai 1_40: 1240382512
+      RDR_PelichAnusVai 1_24: 177107819
+      RDR_PelichAnusVai 1_32: -505751887
+      RDR_PelichAnusVai 1_41: 1160860028
+      RDR_PelichAnusVai 1_26: 1420374266
+      RDR_PelichAnusVai 1_22: 688425039
+      RDR_PelichAnusVai 1_38: 381224980
+      RDR_PelichAnusVai 1_9: 1240390230
+      RDR_PelichAnusVai 1_49: 1198812318
+      RDR_PelichAnusVai 1_42: -1946253305
+      RDR_PelichAnusVai 1_7: -761019789
+      RDR_PelichAnusVai 1_29: -1117474030
+      RDR_PelichAnusVai 1_27: 125482296
+      RDR_PelichAnusVai 1_1: 1213394708
+      RDR_PelichAnusVai 1_50: 1812307410
+      RDR_PelichAnusVai 1_4: -1041967856
+      RDR_PelichAnusVai 1_2: 808099691
+      RDR_PelichAnusVai 1_47: -1635229462
+      RDR_PelichAnusVai 1_11: -353639378
+      RDR_PelichAnusVai 1_25: -1182033047
+      RDR_PelichAnusVai 1_55: -639070371
+      RDR_PelichAnusVai 1_17: -285637977
+      RDR_PelichAnusVai 1_31: -513043610
+      RDR_PelichAnusVai 1_0: -2119205264
+      RDR_PelichAnusVai 1_43: 1616470012
+      RDR_PelichAnusVai 1_8: 463479109
+      RDR_PelichAnusVai 1_19: -2062281601
+      RDR_PelichAnusVai 1_51: 302202680
+      RDR_PelichAnusVai 1_21: 718984409
+      RDR_PelichAnusVai 1_39: -1556670726
+      RDR_PelichAnusVai 1_33: 1072125605
+      RDR_PelichAnusVai 1_6: 845053693
+      RDR_PelichAnusVai 1_28: -458666808
+      RDR_PelichAnusVai 1_35: -414336625
+      RDR_PelichAnusVai 1_56: -221295507
+      RDR_PelichAnusVai 1_23: 1977692068
+      RDR_PelichAnusVai 1_12: -1192968275
+      RDR_PelichAnusVai 1_15: -1978200165
+      RDR_PelichAnusVai 1_46: 298569657
+      RDR_PelichAnusVai 1_18: -781258761
+      RDR_PelichAnusVai 1_36: 1280087543
+      RDR_PelichAnusVai 1_34: 1598436349
+      RDR_PelichAnusVai 1_20: 1637274606
+      RDR_PelichAnusVai 1_45: 833026971
+      RDR_PelichAnusVai 1_14: -1565505686
+      RDR_PelichAnusVai 1_10: -1194570010
+      RDR_PelichAnusVai 1_54: -529450787
+      RDR_PelichAnusVai 1_53: -1250532807
+      RDR_PelichAnusVai 1_16: 641105865
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

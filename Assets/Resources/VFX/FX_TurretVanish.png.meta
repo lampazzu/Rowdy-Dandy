@@ -1,0 +1,672 @@
+fileFormatVersion: 2
+guid: 74130cb05a471ca4e92a5f1f2e9ef76b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8937858060292678757
+    second: FX_TurretVanish_0
+  - first:
+      213: 8676259451375190172
+    second: FX_TurretVanish_1
+  - first:
+      213: -4890743475805131009
+    second: FX_TurretVanish_2
+  - first:
+      213: 8537959553052278172
+    second: FX_TurretVanish_3
+  - first:
+      213: -4562058454330770354
+    second: FX_TurretVanish_4
+  - first:
+      213: 4071427449364339
+    second: FX_TurretVanish_5
+  - first:
+      213: -756827221612932490
+    second: FX_TurretVanish_6
+  - first:
+      213: 4572059180369008529
+    second: FX_TurretVanish_7
+  - first:
+      213: -1632883084853505342
+    second: FX_TurretVanish_8
+  - first:
+      213: -2871107025863895191
+    second: FX_TurretVanish_9
+  - first:
+      213: 5031209808728541444
+    second: FX_TurretVanish_10
+  - first:
+      213: -8225340403240520554
+    second: FX_TurretVanish_11
+  - first:
+      213: 8637345268234082516
+    second: FX_TurretVanish_12
+  - first:
+      213: 8128876236858833378
+    second: FX_TurretVanish_13
+  - first:
+      213: -4302702243339667648
+    second: FX_TurretVanish_14
+  - first:
+      213: -2112389189177269782
+    second: FX_TurretVanish_15
+  - first:
+      213: -3314718022924770156
+    second: FX_TurretVanish_16
+  - first:
+      213: -1027154742433762752
+    second: FX_TurretVanish_17
+  - first:
+      213: -1025928466175733016
+    second: FX_TurretVanish_18
+  - first:
+      213: 5625624687079248959
+    second: FX_TurretVanish_19
+  - first:
+      213: -8088767708227171486
+    second: FX_TurretVanish_20
+  - first:
+      213: 2764638476225058444
+    second: FX_TurretVanish_21
+  - first:
+      213: 6499545572705816171
+    second: FX_TurretVanish_22
+  - first:
+      213: -1519940735716855166
+    second: FX_TurretVanish_23
+  - first:
+      213: 5625484157944230473
+    second: FX_TurretVanish_24
+  - first:
+      213: -760717288513158080
+    second: FX_TurretVanish_25
+  - first:
+      213: 2939176853647742482
+    second: FX_TurretVanish_26
+  - first:
+      213: 160847431849236652
+    second: FX_TurretVanish_27
+  - first:
+      213: -40257627127461288
+    second: FX_TurretVanish_28
+  - first:
+      213: -1501561509010566638
+    second: FX_TurretVanish_29
+  - first:
+      213: -740207001504352434
+    second: FX_TurretVanish_30
+  - first:
+      213: 8494754518783674382
+    second: FX_TurretVanish_31
+  - first:
+      213: -7931296828990369370
+    second: FX_TurretVanish_32
+  - first:
+      213: 4641482614249892036
+    second: FX_TurretVanish_33
+  - first:
+      213: -7398621511721032058
+    second: FX_TurretVanish_34
+  - first:
+      213: 3871554781149123180
+    second: FX_TurretVanish_35
+  - first:
+      213: 7374145615667044921
+    second: FX_TurretVanish_36
+  - first:
+      213: -3113357429941049102
+    second: FX_TurretVanish_37
+  - first:
+      213: -728570123169976537
+    second: FX_TurretVanish_38
+  - first:
+      213: 4373428357672812114
+    second: FX_TurretVanish_39
+  - first:
+      213: -2761802963597327090
+    second: FX_TurretVanish_40
+  - first:
+      213: -8949798481903359796
+    second: FX_TurretVanish_41
+  - first:
+      213: -8996786257229195941
+    second: FX_TurretVanish_42
+  - first:
+      213: -6823040154043494351
+    second: FX_TurretVanish_43
+  - first:
+      213: 1773400466121054478
+    second: FX_TurretVanish_44
+  - first:
+      213: 3464184099001586197
+    second: FX_TurretVanish_45
+  - first:
+      213: -1188499805526590123
+    second: FX_TurretVanish_46
+  - first:
+      213: -2326214653997315140
+    second: FX_TurretVanish_47
+  - first:
+      213: 2887601751728774873
+    second: FX_TurretVanish_48
+  - first:
+      213: -7956930895950637097
+    second: FX_TurretVanish_49
+  - first:
+      213: 8786018640381034482
+    second: FX_TurretVanish_50
+  - first:
+      213: 7955476626916500983
+    second: FX_TurretVanish_51
+  - first:
+      213: -2802495701926203696
+    second: FX_TurretVanish_52
+  - first:
+      213: 5498935571350220245
+    second: FX_TurretVanish_53
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FX_TurretVanish_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5646b901d86a90c70800000000000000
+      internalID: 8937858060292678757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_1
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9008529004486870800000000000000
+      internalID: 8676259451375190172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_2
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffe631598b6902cb0800000000000000
+      internalID: -4890743475805131009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_3
+      rect:
+        serializedVersion: 2
+        x: 687
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9d755a3afcec7670800000000000000
+      internalID: 8537959553052278172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_4
+      rect:
+        serializedVersion: 2
+        x: 916
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4cfb01b10050b0c0800000000000000
+      internalID: -4562058454330770354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_5
+      rect:
+        serializedVersion: 2
+        x: 1145
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37f19d211f67e0000800000000000000
+      internalID: 4071427449364339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_6
+      rect:
+        serializedVersion: 2
+        x: 1374
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6725a6bd6a53f75f0800000000000000
+      internalID: -756827221612932490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_7
+      rect:
+        serializedVersion: 2
+        x: 1603
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19755f9c997337f30800000000000000
+      internalID: 4572059180369008529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_8
+      rect:
+        serializedVersion: 2
+        x: 1832
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c210975c75d659e0800000000000000
+      internalID: -1632883084853505342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_9
+      rect:
+        serializedVersion: 2
+        x: 2061
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 967114b2f57c728d0800000000000000
+      internalID: -2871107025863895191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_10
+      rect:
+        serializedVersion: 2
+        x: 2290
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 409c9bf1aa272d540800000000000000
+      internalID: 5031209808728541444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_11
+      rect:
+        serializedVersion: 2
+        x: 2519
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6943e24ab78b9dd80800000000000000
+      internalID: -8225340403240520554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_12
+      rect:
+        serializedVersion: 2
+        x: 2748
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d85e7342c30ed770800000000000000
+      internalID: 8637345268234082516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_13
+      rect:
+        serializedVersion: 2
+        x: 2977
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e9b5196ed19fc070800000000000000
+      internalID: 8128876236858833378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_14
+      rect:
+        serializedVersion: 2
+        x: 3206
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 047767b3b1bb944c0800000000000000
+      internalID: -4302702243339667648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_15
+      rect:
+        serializedVersion: 2
+        x: 3435
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae1a6bf69394fa2e0800000000000000
+      internalID: -2112389189177269782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_TurretVanish_16
+      rect:
+        serializedVersion: 2
+        x: 3664
+        y: 0
+        width: 229
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 494ebf03581cff1d0800000000000000
+      internalID: -3314718022924770156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 259e4b700dfa28343845a7992eade407
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":17.0,"y":1.0},"gridSpriteSize":{"x":229.0,"y":206.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      FX_TurretVanish_0: 8937858060292678757
+      FX_TurretVanish_1: 8676259451375190172
+      FX_TurretVanish_10: 5031209808728541444
+      FX_TurretVanish_11: -8225340403240520554
+      FX_TurretVanish_12: 8637345268234082516
+      FX_TurretVanish_13: 8128876236858833378
+      FX_TurretVanish_14: -4302702243339667648
+      FX_TurretVanish_15: -2112389189177269782
+      FX_TurretVanish_16: -3314718022924770156
+      FX_TurretVanish_2: -4890743475805131009
+      FX_TurretVanish_3: 8537959553052278172
+      FX_TurretVanish_4: -4562058454330770354
+      FX_TurretVanish_5: 4071427449364339
+      FX_TurretVanish_6: -756827221612932490
+      FX_TurretVanish_7: 4572059180369008529
+      FX_TurretVanish_8: -1632883084853505342
+      FX_TurretVanish_9: -2871107025863895191
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

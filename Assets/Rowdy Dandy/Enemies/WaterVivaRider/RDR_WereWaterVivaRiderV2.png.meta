@@ -1,0 +1,1039 @@
+fileFormatVersion: 2
+guid: fc8c9b2613684c341bdeda162c68d201
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 660
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07957b5f67aa5504a94715f877753af7
+      internalID: 421048307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_1
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 660
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 042b2c1c4610f204ebafecbd17d6ddd6
+      internalID: 96384019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_2
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 660
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3865a6c1d64bdf4a9bdde4c11e5bc44
+      internalID: -2137761194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_3
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 660
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b5287d3ffaba8a439ea5bcb26285b83
+      internalID: -1049117698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_4
+      rect:
+        serializedVersion: 2
+        x: 1396
+        y: 660
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2371b35231f6b104b9e666689b2b0b6a
+      internalID: -2058951425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cce8b6283fe96f4e8672b133d55e723
+      internalID: -1646739805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_6
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 973ca1acc625fdf44809eb981f8f653d
+      internalID: 262942220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_7
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61b236b2c2d9bbb41b437e901921961f
+      internalID: 1363232494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_8
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d86829e479099524b8011a0411e65f94
+      internalID: 1422359128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_9
+      rect:
+        serializedVersion: 2
+        x: 1396
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a4ac03638d3d13479bfa7bd86c24979
+      internalID: -1607144667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_10
+      rect:
+        serializedVersion: 2
+        x: 1745
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7af2240d69bff44cbc897cb188ef888
+      internalID: 621594783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_11
+      rect:
+        serializedVersion: 2
+        x: 2094
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb078f05b2a41b648bcb6351020647db
+      internalID: 286850924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_12
+      rect:
+        serializedVersion: 2
+        x: 2443
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: effda9c9ab9c5d5439129511d9a0c4b8
+      internalID: 744033582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_13
+      rect:
+        serializedVersion: 2
+        x: 2792
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaea78fb16c6bbe478e663c8c3832f7e
+      internalID: 189095392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_14
+      rect:
+        serializedVersion: 2
+        x: 3141
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6e81a08214172041900618599b433b8
+      internalID: -128523528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_15
+      rect:
+        serializedVersion: 2
+        x: 3490
+        y: 495
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08b18c463afc8e249bd2cfc0285e3c74
+      internalID: -348135580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4aeea6a3694b58e409bae6f6dfd1d74b
+      internalID: 1233367103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_17
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a79cd91f8eaa0142bcce1628dddec6e
+      internalID: 1807596927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_18
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afc1ff163d4b66a45b04cce476bc46da
+      internalID: 864547999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_19
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4da4ab113cfff947a58b1b0698f54d0
+      internalID: -1888664357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_20
+      rect:
+        serializedVersion: 2
+        x: 1396
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfe6f5d0e7429c74684f41341271a9a8
+      internalID: 1755212910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_21
+      rect:
+        serializedVersion: 2
+        x: 1745
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3607d8aca39c68e4d928cba4f6d7d91d
+      internalID: -735560997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_22
+      rect:
+        serializedVersion: 2
+        x: 2094
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dffb9caf68aaff40b08c73033098bd0
+      internalID: 964759579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_23
+      rect:
+        serializedVersion: 2
+        x: 2443
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7dd6a7c784f474f458210c540f82f4ff
+      internalID: 337946922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_24
+      rect:
+        serializedVersion: 2
+        x: 2792
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 566e4968ab05be1448d0363dd3669e29
+      internalID: 1007545634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_25
+      rect:
+        serializedVersion: 2
+        x: 3141
+        y: 330
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1649148b44f7d24c8789c9ff3daf743
+      internalID: 624490071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 165
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 969f73e508a1b7941974b9fee9dab8dd
+      internalID: 1627295710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_27
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 165
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb7325e844be12c4dbc0ce49b6ca1099
+      internalID: -358303183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_28
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 165
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f6eb7243987ec74cae85900980c5dd0
+      internalID: 1489623580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_29
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 165
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 228e558d60c93b64cadd3c844d9a82f7
+      internalID: 103734900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_30
+      rect:
+        serializedVersion: 2
+        x: 1396
+        y: 165
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08e699118f5b8a64cad53a29374cdd7d
+      internalID: -409959081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_31
+      rect:
+        serializedVersion: 2
+        x: 1745
+        y: 165
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6717ff5b8610dcf4390f3d5a6243fd8f
+      internalID: 1854659087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e754e838a29b97349a731b0dc29eca4e
+      internalID: -2140687523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_33
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 0
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d24c5b33e213b5a45b9b196183e917cc
+      internalID: 700381454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_34
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 0
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0401bffe2382e074d9c82531cd99c897
+      internalID: 681292855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_35
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 0
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88d4ba3551d67034a8a636eb2a214006
+      internalID: -1084264043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_36
+      rect:
+        serializedVersion: 2
+        x: 1396
+        y: 0
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4be00c06e2b0d0b44b0f7d81500ed931
+      internalID: 1420639419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_37
+      rect:
+        serializedVersion: 2
+        x: 1745
+        y: 0
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb387ba8b221d8647a6e530f82bf66e6
+      internalID: 821015995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_38
+      rect:
+        serializedVersion: 2
+        x: 2094
+        y: 0
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7df8b047ca3a4f742a5f31f064a5f7a7
+      internalID: -1319099357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_WereWaterVivaRiderV2_39
+      rect:
+        serializedVersion: 2
+        x: 2443
+        y: 0
+        width: 349
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62d11247d26ea1341aa4de6bf4fab766
+      internalID: 1123732289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      RDR_WereWaterVivaRiderV2_6: 262942220
+      RDR_WereWaterVivaRiderV2_28: 1489623580
+      RDR_WereWaterVivaRiderV2_8: 1422359128
+      RDR_WereWaterVivaRiderV2_39: 1123732289
+      RDR_WereWaterVivaRiderV2_24: 1007545634
+      RDR_WereWaterVivaRiderV2_0: 421048307
+      RDR_WereWaterVivaRiderV2_13: 189095392
+      RDR_WereWaterVivaRiderV2_18: 864547999
+      RDR_WereWaterVivaRiderV2_7: 1363232494
+      RDR_WereWaterVivaRiderV2_27: -358303183
+      RDR_WereWaterVivaRiderV2_35: -1084264043
+      RDR_WereWaterVivaRiderV2_36: 1420639419
+      RDR_WereWaterVivaRiderV2_3: -1049117698
+      RDR_WereWaterVivaRiderV2_20: 1755212910
+      RDR_WereWaterVivaRiderV2_2: -2137761194
+      RDR_WereWaterVivaRiderV2_38: -1319099357
+      RDR_WereWaterVivaRiderV2_12: 744033582
+      RDR_WereWaterVivaRiderV2_17: 1807596927
+      RDR_WereWaterVivaRiderV2_29: 103734900
+      RDR_WereWaterVivaRiderV2_10: 621594783
+      RDR_WereWaterVivaRiderV2_30: -409959081
+      RDR_WereWaterVivaRiderV2_33: 700381454
+      RDR_WereWaterVivaRiderV2_5: -1646739805
+      RDR_WereWaterVivaRiderV2_9: -1607144667
+      RDR_WereWaterVivaRiderV2_31: 1854659087
+      RDR_WereWaterVivaRiderV2_26: 1627295710
+      RDR_WereWaterVivaRiderV2_1: 96384019
+      RDR_WereWaterVivaRiderV2_34: 681292855
+      RDR_WereWaterVivaRiderV2_19: -1888664357
+      RDR_WereWaterVivaRiderV2_22: 964759579
+      RDR_WereWaterVivaRiderV2_11: 286850924
+      RDR_WereWaterVivaRiderV2_14: -128523528
+      RDR_WereWaterVivaRiderV2_25: 624490071
+      RDR_WereWaterVivaRiderV2_37: 821015995
+      RDR_WereWaterVivaRiderV2_21: -735560997
+      RDR_WereWaterVivaRiderV2_15: -348135580
+      RDR_WereWaterVivaRiderV2_16: 1233367103
+      RDR_WereWaterVivaRiderV2_23: 337946922
+      RDR_WereWaterVivaRiderV2_4: -2058951425
+      RDR_WereWaterVivaRiderV2_32: -2140687523
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

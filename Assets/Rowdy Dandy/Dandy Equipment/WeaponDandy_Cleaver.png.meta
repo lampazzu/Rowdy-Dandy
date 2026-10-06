@@ -1,0 +1,599 @@
+fileFormatVersion: 2
+guid: 5c71176848587844a9e64bfb989fbdba
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d57a8f52358ac4343b7802c7cb8e1a74
+      internalID: -787208031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_1
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e278574d0977af46a87ad99820a036a
+      internalID: -865320338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_2
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abf678773ee8199408b91cd8a12d849f
+      internalID: -1601083357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_3
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af608c0cc9fb8d547aa7f7847ba8dc76
+      internalID: 1545009674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_4
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7be3a37e861e5274684bd0a33106bcd7
+      internalID: -562197282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_5
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bcd0ba5a4e2ec544a18f722511217c7
+      internalID: -2075478955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_6
+      rect:
+        serializedVersion: 2
+        x: 1656
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0637e03a4f0b7f84b96cd9db5744833c
+      internalID: 346213094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_7
+      rect:
+        serializedVersion: 2
+        x: 1932
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63fbc0a0c18f5b941b201e166c4147d6
+      internalID: 428755529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_8
+      rect:
+        serializedVersion: 2
+        x: 2208
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc89507e309d2b94785cdd98edb6cfd7
+      internalID: 807880831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_9
+      rect:
+        serializedVersion: 2
+        x: 2484
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1852e68d225cf4d4dadef4f7fd083679
+      internalID: -1700852439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_10
+      rect:
+        serializedVersion: 2
+        x: 2760
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 657f103bac8a27c499926b53eb662f54
+      internalID: -804858297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_11
+      rect:
+        serializedVersion: 2
+        x: 3036
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd2a7b97bbe69024b95cd01e96828cda
+      internalID: -353250722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_12
+      rect:
+        serializedVersion: 2
+        x: 3312
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd638b37772f4fd41ac60ec7d6b14703
+      internalID: -708223029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_13
+      rect:
+        serializedVersion: 2
+        x: 3588
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93c941dc12e880c4cbe7d71714f7e001
+      internalID: -548669335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_14
+      rect:
+        serializedVersion: 2
+        x: 3864
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a60cff07252a67b48a304f9234d7d28f
+      internalID: 1522602171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_15
+      rect:
+        serializedVersion: 2
+        x: 4140
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c42a02f5a69f214cb9675cd7677de0a
+      internalID: -2122103115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_16
+      rect:
+        serializedVersion: 2
+        x: 4416
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4cb3f45c307d0c47947c205bbb82bee
+      internalID: -251292438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_17
+      rect:
+        serializedVersion: 2
+        x: 4692
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72a6f361e125562418b5a017f54da8e2
+      internalID: 1825713407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_18
+      rect:
+        serializedVersion: 2
+        x: 4968
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9297eb9ae8e72834e82054cd2ec766be
+      internalID: 1041555071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponDandy_Cleaver_19
+      rect:
+        serializedVersion: 2
+        x: 5244
+        y: 0
+        width: 276
+        height: 128
+      alignment: 9
+      pivot: {x: 0.471, y: 0.414}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 178079b3b4123b242b740511d65e3767
+      internalID: 915761585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      WeaponDandy_Cleaver_3: 1545009674
+      WeaponDandy_Cleaver_13: -548669335
+      WeaponDandy_Cleaver_18: 1041555071
+      WeaponDandy_Cleaver_11: -353250722
+      WeaponDandy_Cleaver_4: -562197282
+      WeaponDandy_Cleaver_16: -251292438
+      WeaponDandy_Cleaver_14: 1522602171
+      WeaponDandy_Cleaver_19: 915761585
+      WeaponDandy_Cleaver_0: -787208031
+      WeaponDandy_Cleaver_12: -708223029
+      WeaponDandy_Cleaver_6: 346213094
+      WeaponDandy_Cleaver_15: -2122103115
+      WeaponDandy_Cleaver_9: -1700852439
+      WeaponDandy_Cleaver_5: -2075478955
+      WeaponDandy_Cleaver_1: -865320338
+      WeaponDandy_Cleaver_2: -1601083357
+      WeaponDandy_Cleaver_7: 428755529
+      WeaponDandy_Cleaver_10: -804858297
+      WeaponDandy_Cleaver_8: 807880831
+      WeaponDandy_Cleaver_17: 1825713407
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

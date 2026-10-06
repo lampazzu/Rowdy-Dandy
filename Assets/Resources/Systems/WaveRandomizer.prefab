@@ -1,0 +1,233 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3080436500474221518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4780539894762396629}
+  - component: {fileID: 6938418943485869856}
+  m_Layer: 0
+  m_Name: WaveRandomizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4780539894762396629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080436500474221518}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.08, y: -0.73, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6938418943485869856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080436500474221518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a9c613dc47e4645a61ea24fe12de95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaveEnemySpawner
+  player: {fileID: 0}
+  findPlayerAutomatically: 1
+  enemyPool:
+  - prefab: {fileID: 5383276224651880362, guid: 0db1d8df068fe5f439ab54562d80ee18, type: 3}
+    difficulty: 1
+    spawnWeight: 1
+  - prefab: {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+    difficulty: 2
+    spawnWeight: 1
+  - prefab: {fileID: 8158899793850162549, guid: 3b912b67cd4dd0944b4ca5d94ce403c5, type: 3}
+    difficulty: 5
+    spawnWeight: 1
+  - prefab: {fileID: 4439632549426885596, guid: aa605952a8c11014d92e6659a8144dca, type: 3}
+    difficulty: 5
+    spawnWeight: 1
+  - prefab: {fileID: 3289589201661742322, guid: 67216e4491b3c38459085eda16162baa, type: 3}
+    difficulty: 6
+    spawnWeight: 1
+  - prefab: {fileID: 4439632549426885596, guid: 02aac6a0c1b6dd245b0f98fdee6bffa1, type: 3}
+    difficulty: 7
+    spawnWeight: 1
+  - prefab: {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+    difficulty: 1
+    spawnWeight: 1
+  - prefab: {fileID: 2587601815565194795, guid: 188262a8f84f44b49b853dd9fb59112c, type: 3}
+    difficulty: 5
+    spawnWeight: 1
+  - prefab: {fileID: 4781681752531276323, guid: de96a51e659abd94b95b9e5eb67cc872, type: 3}
+    difficulty: 3
+    spawnWeight: 1
+  - prefab: {fileID: 5428715127340523530, guid: 2cbe9ab33a02ac447a95fd4785c5ece8, type: 3}
+    difficulty: 6
+    spawnWeight: 1
+  - prefab: {fileID: 3710152582615580440, guid: ed50123a8a1b619489e89b84db908bf7, type: 3}
+    difficulty: 2
+    spawnWeight: 1
+  - prefab: {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    difficulty: 1
+    spawnWeight: 1
+  - prefab: {fileID: 6614695622292043602, guid: 5aa1b69dec08bdc4e84e1da3f2975bdf, type: 3}
+    difficulty: 1
+    spawnWeight: 1
+  - prefab: {fileID: 6614695622292043602, guid: 06e34631d1b98b749bb6b544825d1784, type: 3}
+    difficulty: 1
+    spawnWeight: 1
+  - prefab: {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    difficulty: 1
+    spawnWeight: 1
+  - prefab: {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+    difficulty: 1
+    spawnWeight: 1
+  waves:
+  - waveName: 
+    difficulty: 1
+    enemies:
+    - {fileID: 5383276224651880362, guid: 0db1d8df068fe5f439ab54562d80ee18, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 6614695622292043602, guid: 06e34631d1b98b749bb6b544825d1784, type: 3}
+    - {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    - {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+    - {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+  - waveName: 
+    difficulty: 2
+    enemies:
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+    - {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+    - {fileID: 6614695622292043602, guid: 5aa1b69dec08bdc4e84e1da3f2975bdf, type: 3}
+    - {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+  - waveName: 
+    difficulty: 3
+    enemies:
+    - {fileID: 4781681752531276323, guid: de96a51e659abd94b95b9e5eb67cc872, type: 3}
+    - {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    - {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+    - {fileID: 3710152582615580440, guid: ed50123a8a1b619489e89b84db908bf7, type: 3}
+    - {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+    - {fileID: 5383276224651880362, guid: 0db1d8df068fe5f439ab54562d80ee18, type: 3}
+  - waveName: 
+    difficulty: 4
+    enemies:
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    - {fileID: 5383276224651880362, guid: 0db1d8df068fe5f439ab54562d80ee18, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    - {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+  - waveName: 
+    difficulty: 5
+    enemies:
+    - {fileID: 8158899793850162549, guid: 3b912b67cd4dd0944b4ca5d94ce403c5, type: 3}
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+    - {fileID: 2587601815565194795, guid: 188262a8f84f44b49b853dd9fb59112c, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 4439632549426885596, guid: aa605952a8c11014d92e6659a8144dca, type: 3}
+  - waveName: 
+    difficulty: 6
+    enemies:
+    - {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 3289589201661742322, guid: 67216e4491b3c38459085eda16162baa, type: 3}
+    - {fileID: 2587601815565194795, guid: 188262a8f84f44b49b853dd9fb59112c, type: 3}
+    - {fileID: 5428715127340523530, guid: 2cbe9ab33a02ac447a95fd4785c5ece8, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+  - waveName: 
+    difficulty: 7
+    enemies:
+    - {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+    - {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+    - {fileID: 5428715127340523530, guid: 2cbe9ab33a02ac447a95fd4785c5ece8, type: 3}
+    - {fileID: 8158899793850162549, guid: 3b912b67cd4dd0944b4ca5d94ce403c5, type: 3}
+    - {fileID: 6333856848017564608, guid: 8b37330abeeff0d45b62709611be7bdb, type: 3}
+    - {fileID: 4439632549426885596, guid: aa605952a8c11014d92e6659a8144dca, type: 3}
+    - {fileID: 6614695622292043602, guid: 5aa1b69dec08bdc4e84e1da3f2975bdf, type: 3}
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+  - waveName: 
+    difficulty: 8
+    enemies:
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 3289589201661742322, guid: 67216e4491b3c38459085eda16162baa, type: 3}
+    - {fileID: 5383276224651880362, guid: 0db1d8df068fe5f439ab54562d80ee18, type: 3}
+    - {fileID: 4439632549426885596, guid: 02aac6a0c1b6dd245b0f98fdee6bffa1, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 2587601815565194795, guid: 188262a8f84f44b49b853dd9fb59112c, type: 3}
+    - {fileID: 2587601815565194795, guid: 188262a8f84f44b49b853dd9fb59112c, type: 3}
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+  - waveName: 
+    difficulty: 9
+    enemies:
+    - {fileID: 4439632549426885596, guid: aa605952a8c11014d92e6659a8144dca, type: 3}
+    - {fileID: 3710152582615580440, guid: ed50123a8a1b619489e89b84db908bf7, type: 3}
+    - {fileID: 6614695622292043602, guid: 5aa1b69dec08bdc4e84e1da3f2975bdf, type: 3}
+    - {fileID: 4439632549426885596, guid: aa605952a8c11014d92e6659a8144dca, type: 3}
+    - {fileID: 3710152582615580440, guid: ed50123a8a1b619489e89b84db908bf7, type: 3}
+    - {fileID: 6614695622292043602, guid: 5aa1b69dec08bdc4e84e1da3f2975bdf, type: 3}
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+    - {fileID: 6614695622292043602, guid: 06e34631d1b98b749bb6b544825d1784, type: 3}
+    - {fileID: 3710152582615580440, guid: ed50123a8a1b619489e89b84db908bf7, type: 3}
+    - {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+  - waveName: 
+    difficulty: 10
+    enemies:
+    - {fileID: 5383276224651880362, guid: 0db1d8df068fe5f439ab54562d80ee18, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 4439632549426885596, guid: aa605952a8c11014d92e6659a8144dca, type: 3}
+    - {fileID: 1865836685208860838, guid: 7c53cba6a9752934d9f3d2a7c1dbd858, type: 3}
+    - {fileID: 5428715127340523530, guid: 2cbe9ab33a02ac447a95fd4785c5ece8, type: 3}
+    - {fileID: 8158899793850162549, guid: 3b912b67cd4dd0944b4ca5d94ce403c5, type: 3}
+    - {fileID: 6614695622292043602, guid: 5aa1b69dec08bdc4e84e1da3f2975bdf, type: 3}
+    - {fileID: 4439632549426885596, guid: aa605952a8c11014d92e6659a8144dca, type: 3}
+    - {fileID: 5383276224651880362, guid: 0db1d8df068fe5f439ab54562d80ee18, type: 3}
+    - {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+  - waveName: 
+    difficulty: 10
+    enemies:
+    - {fileID: 5383276224651880362, guid: 0db1d8df068fe5f439ab54562d80ee18, type: 3}
+    - {fileID: 9197841659235563515, guid: 88f933ae0bd2be24e8745052514bb8eb, type: 3}
+    - {fileID: 5428715127340523530, guid: 2cbe9ab33a02ac447a95fd4785c5ece8, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    - {fileID: 6614695622292043602, guid: b3941c45ad4bbe94f8b49b2451a2d51c, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+    - {fileID: 4439632549426885596, guid: aa605952a8c11014d92e6659a8144dca, type: 3}
+    - {fileID: 6275336954842281681, guid: 5dd557e324a094a4fb54562348257f5e, type: 3}
+  initialDelay: 2
+  timeBetweenWaves: 10
+  spawnInterval: 0.2
+  loopWaves: 1
+  minimumEnemiesPerWave: 5
+  maximumEnemiesPerWave: 10
+  difficultyRarity: 1
+  minimumSpawnDistance: 4
+  maximumSpawnDistance: 6
+  randomizeSpawnSide: 1
+  groundSpawnOffset: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  useGroundTag: 1
+  spawnPortalPrefab: {fileID: 1038809992138632093, guid: 142ced2556019904aa311849c484b0f1, type: 3}
+  drawSpawnRadius: 1
