@@ -37,10 +37,21 @@ public class FloatingDamageText : MonoBehaviour
     [SerializeField] private float fadeDuration = 0.75f;
     [SerializeField] private Vector3 randomOffset = new Vector3(0.2f, 0.2f, 0f);
 
+    [Header("Pixel Font")]
+    [Tooltip("Draw the text with the game's pixel font (PixelFont) instead of the TMP font.")]
+    [SerializeField] private bool usePixelFont = true;
+    [Tooltip("64 = one font pixel per art pixel at scale 1.")]
+    [SerializeField] private float pixelsPerUnit = 64f;
+
+    private static Material unlitSpriteMaterial;
+
     private Vector3 initialVelocity;
     private Vector3 targetScale;
     private Color textColor;
     private float timer = 0f;
+    private SpriteRenderer pixelRenderer;
+    private Texture2D pixelTexture;
+    private Sprite pixelSprite;
 
     // Standard Setup for Numeric Damage
     public void Setup(float damageAmount)
@@ -119,7 +130,8 @@ public class FloatingDamageText : MonoBehaviour
 
     private void ApplySetup(float finalScale)
     {
-        damageText.color = textColor;
+        if (usePixelFont) BuildPixelSprite();
+        ApplyColor();
 
         // Scale setup
         targetScale = Vector3.one * finalScale;
@@ -152,7 +164,51 @@ public class FloatingDamageText : MonoBehaviour
         else
         {
             textColor.a = Mathf.Lerp(1f, 0f, timer / fadeDuration);
-            damageText.color = textColor;
+            ApplyColor();
         }
+    }
+
+    private void ApplyColor()
+    {
+        if (pixelRenderer != null) pixelRenderer.color = textColor;
+        else damageText.color = textColor;
+    }
+
+    // Renders damageText's text with the pixel font onto a child sprite and hides the TMP mesh
+    private void BuildPixelSprite()
+    {
+        pixelTexture = PixelFont.Render(damageText.text, PixelFont.Edge.Outline, pixelTexture);
+        if (pixelSprite != null) Destroy(pixelSprite);
+        pixelSprite = Sprite.Create(pixelTexture, new Rect(0, 0, pixelTexture.width, pixelTexture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+        pixelSprite.name = "FloatingPixelText";
+
+        var tmpRenderer = damageText.GetComponent<Renderer>();
+        if (pixelRenderer == null)
+        {
+            var go = new GameObject("Pixel Text");
+            go.transform.SetParent(transform, false);
+            pixelRenderer = go.AddComponent<SpriteRenderer>();
+            if (unlitSpriteMaterial == null)
+            {
+                Shader shader = Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");
+                if (shader == null) shader = Shader.Find("Sprites/Default");
+                if (shader != null) unlitSpriteMaterial = new Material(shader) { name = "Floating Text (Unlit)" };
+            }
+            if (unlitSpriteMaterial != null) pixelRenderer.sharedMaterial = unlitSpriteMaterial; // ignore 2D lights, like the TMP text did
+            if (tmpRenderer != null)
+            {
+                pixelRenderer.sortingLayerID = tmpRenderer.sortingLayerID;
+                pixelRenderer.sortingOrder = tmpRenderer.sortingOrder;
+            }
+        }
+        pixelRenderer.sprite = pixelSprite;
+
+        if (tmpRenderer != null) tmpRenderer.enabled = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (pixelSprite != null) Destroy(pixelSprite);
+        if (pixelTexture != null) Destroy(pixelTexture);
     }
 }
