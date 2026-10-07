@@ -29,7 +29,11 @@ public class SoundManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad only works on root objects; when this lives under Rowdy it just follows Rowdy's lifetime
+        if (transform.parent == null)
+        {
+            DontDestroyOnLoad(gameObject);
+        }
 
         foreach (Sound sound in sounds)
         {
@@ -39,9 +43,23 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(string soundName)
     {
+        // Events with no sound name filled in are treated as "no sound" instead of warning every time
+        if (string.IsNullOrEmpty(soundName)) return;
+
         if (soundDictionary.TryGetValue(soundName, out Sound sound))
         {
-            AudioSource.PlayClipAtPoint(sound.clip, Camera.main.transform.position, sound.volume);
+            // Clip can be missing/destroyed after a scene reload since this object survives scene changes
+            if (sound.clip == null)
+            {
+                Debug.LogWarning("Sound clip missing or destroyed: " + soundName);
+                return;
+            }
+
+            // Camera.main can be briefly null during scene transitions
+            Camera cam = Camera.main;
+            Vector3 playPosition = cam != null ? cam.transform.position : transform.position;
+
+            AudioSource.PlayClipAtPoint(sound.clip, playPosition, sound.volume);
         }
         else
         {

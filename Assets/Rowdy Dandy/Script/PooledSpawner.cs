@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PooledSpawner : MonoBehaviour
@@ -13,66 +14,88 @@ public class PooledSpawner : MonoBehaviour
     public int maxSpawnedObjects = 5; // Maximum allowed spawned objects
     public Transform characterTransform;
 
-    private GameObject[] objectPool;
-    private int spawnedObjectCount = 0;
-    private int currentSpawnIndex = 0;
-    private bool isSpawning = false;
+    // Each pooled instance remembers which prefab it came from, so it is only reused for that prefab
+    private class PooledObject
+    {
+        public GameObject prefab;
+        public GameObject instance;
+    }
 
+    private readonly List<PooledObject> objectPool = new List<PooledObject>();
+    // Active objects in the order they were spawned (oldest first), used for recycling
+    private readonly List<PooledObject> activeObjects = new List<PooledObject>();
+
+    private bool isValid = false;
+    private Coroutine spawnRoutine;
+    private Coroutine poolGrowthRoutine;
+
+    private void Awake()
+    {
+        isValid = ValidateSetup();
+        if (isValid)
+        {
+            InitializeObjectPool();
+        }
+    }
 
     private void OnEnable()
     {
-        if (!isSpawning)
+        if (!isValid) return;
+
+        // Only one spawn loop at a time (previously Start and OnEnable both started one)
+        if (spawnRoutine == null)
         {
-            isSpawning = true;
-            StartCoroutine(SpawnObjects());
+            spawnRoutine = StartCoroutine(SpawnObjects());
+        }
+
+        if (increasePoolSizeOverTime && poolGrowthRoutine == null)
+        {
+            poolGrowthRoutine = StartCoroutine(IncreasePoolSizeOverTime());
         }
     }
 
     private void OnDisable()
     {
         // Stop spawning when the script is disabled
-        isSpawning = false;
-        StopCoroutine(SpawnObjects());
-    }
-
-    private void Update()
-    {
-        // Check if the script is active and respond accordingly
-        if (isSpawning)
+        if (spawnRoutine != null)
         {
-            // Your update logic here (if needed)
+            StopCoroutine(spawnRoutine);
+            spawnRoutine = null;
+        }
+
+        if (poolGrowthRoutine != null)
+        {
+            StopCoroutine(poolGrowthRoutine);
+            poolGrowthRoutine = null;
         }
     }
 
-    private void Start()
+    private bool ValidateSetup()
     {
-        // Check if prefabsToSpawn array is empty
         if (prefabsToSpawn == null || prefabsToSpawn.Length == 0)
         {
-            Debug.LogError("No prefabs assigned to spawn. Please assign prefabs to the 'Prefabs To Spawn' array in the inspector.");
-            return; // Stop execution if no prefabs are assigned
+            Debug.LogError($"PooledSpawner on '{name}': no prefabs assigned to 'Prefabs To Spawn'. Spawner disabled.", this);
+            return false;
         }
 
-        // Initialize object pool
-        InitializeObjectPool();
-
-        // Start spawning
-        StartCoroutine(SpawnObjects());
-
-        // Optionally, start increasing the pool size over time
-        if (increasePoolSizeOverTime)
+        if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            StartCoroutine(IncreasePoolSizeOverTime());
+            Debug.LogError($"PooledSpawner on '{name}': no 'Spawn Points' assigned. Spawner disabled.", this);
+            return false;
         }
+
+        return true;
     }
 
     private void InitializeObjectPool()
     {
-        objectPool = new GameObject[initialPoolSize];
-
         for (int i = 0; i < initialPoolSize; i++)
         {
-            objectPool[i] = CreatePooledObject(prefabsToSpawn[0]); // Initialize with the first prefab
+            GameObject prefab = GetRandomPrefab();
+            if (prefab != null)
+            {
+                CreatePooledObject(prefab);
+            }
         }
     }
 
@@ -83,72 +106,78 @@ public class PooledSpawner : MonoBehaviour
             float spawnInterval = Random.Range(minSpawnRate, maxSpawnRate);
             yield return new WaitForSeconds(spawnInterval);
 
-            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            Transform spawnPoint = GetRandomSpawnPoint();
+            GameObject prefabToSpawn = GetRandomPrefab();
 
-            // Get a random prefab from the array
-            GameObject prefabToSpawn = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
+            // Skip this tick if the Inspector has empty slots
+            if (spawnPoint == null || prefabToSpawn == null) continue;
 
-            if (spawnedObjectCount < maxSpawnedObjects)
+            CleanUpDestroyedObjects();
+
+            // At the limit -> recycle the oldest active object to make room
+            if (activeObjects.Count >= maxSpawnedObjects && activeObjects.Count > 0)
             {
-                GameObject spawnedObject = GetPooledObject(prefabToSpawn);
+                activeObjects[0].instance.SetActive(false);
+                activeObjects.RemoveAt(0);
+            }
 
-                spawnedObject.transform.position = spawnPoint.position;
-                spawnedObject.transform.rotation = spawnPoint.rotation;
+            PooledObject pooled = GetPooledObject(prefabToSpawn);
+            GameObject spawnedObject = pooled.instance;
 
-                // Flip the spawned object based on the character's scale
+            spawnedObject.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+
+            // Flip the spawned object based on the character's scale
+            if (characterTransform != null)
+            {
                 spawnedObject.transform.localScale = new Vector3(characterTransform.localScale.x, 1, 1);
-
-                spawnedObject.SetActive(true);
-
-                spawnedObjectCount++;
-
-                
             }
-            else
-            {
-                RecycleOldestObject(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
-            }
+
+            spawnedObject.SetActive(true);
+            activeObjects.Add(pooled);
         }
     }
 
-    private GameObject GetPooledObject(GameObject prefabToSpawn)
+    // Reuses an inactive instance of the same prefab, or creates a new one if none is free
+    private PooledObject GetPooledObject(GameObject prefabToSpawn)
     {
-        for (int i = 0; i < objectPool.Length; i++)
+        for (int i = 0; i < objectPool.Count; i++)
         {
-            if (!objectPool[i].activeInHierarchy)
+            PooledObject pooled = objectPool[i];
+            if (pooled.prefab == prefabToSpawn && !pooled.instance.activeInHierarchy)
             {
-                // Re-initialize the object by replacing it with a new instance of the chosen prefab
-                objectPool[i] = CreatePooledObject(prefabToSpawn);
-                return objectPool[i];
+                return pooled;
             }
         }
 
-        GameObject newObj = CreatePooledObject(prefabToSpawn);
-        objectPool = AddObjectToArray(objectPool, newObj);
-
-        return newObj;
+        return CreatePooledObject(prefabToSpawn);
     }
 
-    private void RecycleOldestObject(GameObject prefabToSpawn, Vector3 position, Quaternion rotation)
+    // Removes pool entries whose objects were destroyed elsewhere, and forgets objects
+    // that deactivated themselves (e.g. died / vanished) so they don't count toward the limit
+    private void CleanUpDestroyedObjects()
     {
-        // Recycle the oldest spawned object by replacing it with a new instance of the chosen prefab
-        GameObject oldestObject = objectPool[currentSpawnIndex];
-        oldestObject.SetActive(false);
-
-        objectPool[currentSpawnIndex] = CreatePooledObject(prefabToSpawn);
-        objectPool[currentSpawnIndex].transform.position = position;
-        objectPool[currentSpawnIndex].transform.rotation = rotation;
-        objectPool[currentSpawnIndex].SetActive(true);
-
-        // Update the spawn index for the next recycle
-        currentSpawnIndex = (currentSpawnIndex + 1) % objectPool.Length;
+        objectPool.RemoveAll(p => p.instance == null);
+        activeObjects.RemoveAll(p => p.instance == null || !p.instance.activeInHierarchy);
     }
 
-    private GameObject CreatePooledObject(GameObject prefabToSpawn)
+    private PooledObject CreatePooledObject(GameObject prefabToSpawn)
     {
         GameObject newObj = Instantiate(prefabToSpawn, Vector3.zero, Quaternion.identity);
         newObj.SetActive(false);
-        return newObj;
+
+        PooledObject pooled = new PooledObject { prefab = prefabToSpawn, instance = newObj };
+        objectPool.Add(pooled);
+        return pooled;
+    }
+
+    private GameObject GetRandomPrefab()
+    {
+        return prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
+    }
+
+    private Transform GetRandomSpawnPoint()
+    {
+        return spawnPoints[Random.Range(0, spawnPoints.Length)];
     }
 
     private IEnumerator IncreasePoolSizeOverTime()
@@ -162,19 +191,13 @@ public class PooledSpawner : MonoBehaviour
 
     public void IncreasePoolSize()
     {
-        int newSize = objectPool.Length + 1;
-        // Choose a random prefab from the array
-        GameObject prefabToSpawn = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
-        GameObject newObj = CreatePooledObject(prefabToSpawn);
-        objectPool = AddObjectToArray(objectPool, newObj);
-        Debug.Log($"Pool size increased to {newSize}");
-    }
+        if (!isValid) return;
 
-    private GameObject[] AddObjectToArray(GameObject[] array, GameObject newObj)
-    {
-        GameObject[] newArray = new GameObject[array.Length + 1];
-        array.CopyTo(newArray, 0);
-        newArray[array.Length] = newObj;
-        return newArray;
+        // Pre-create one more inactive instance of a random prefab
+        GameObject prefabToSpawn = GetRandomPrefab();
+        if (prefabToSpawn == null) return;
+
+        CreatePooledObject(prefabToSpawn);
+        Debug.Log($"Pool size increased to {objectPool.Count}");
     }
 }

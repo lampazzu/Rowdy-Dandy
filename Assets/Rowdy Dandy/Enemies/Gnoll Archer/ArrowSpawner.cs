@@ -28,9 +28,10 @@ public class ArrowSpawner : MonoBehaviour
             GameObject arrow = Instantiate(arrowPrefab, spawnPoint.position, spawnPoint.rotation);
             ConstantForce2D arrowForce = arrow.GetComponent<ConstantForce2D>();
 
+            // Some prefabs spawned through this (e.g. PelicanHeart, BloodSpill) aren't projectiles
+            // and have no ConstantForce2D, so there's nothing to aim -- just leave them as spawned
             if (arrowForce == null)
             {
-                Debug.LogError("Arrow Prefab does not have a ConstantForce2D component.");
                 return;
             }
 

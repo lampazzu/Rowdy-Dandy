@@ -39,6 +39,10 @@ public class DynamicWater2D : MonoBehaviour
     private int[] triangles;
     private Vector2[] uvs;
 
+    // Reused every FixedUpdate to avoid allocating new arrays each physics step
+    private float[] leftDeltas;
+    private float[] rightDeltas;
+
     private float timer;
 
     private void Awake()
@@ -55,8 +59,13 @@ public class DynamicWater2D : MonoBehaviour
 
     public void SetupWater()
     {
+        if (boxCollider == null) boxCollider = GetComponent<BoxCollider2D>();
+        if (meshFilter == null) meshFilter = GetComponent<MeshFilter>();
+
         edgeCount = Mathf.Max(10, edgeCount);
         springs = new WaterSpring[edgeCount];
+        leftDeltas = new float[edgeCount];
+        rightDeltas = new float[edgeCount];
 
         // Use local bounds matching the BoxCollider2D
         float topY = boxCollider.offset.y + (boxCollider.size.y / 2f);
@@ -135,8 +144,22 @@ public class DynamicWater2D : MonoBehaviour
         }
     }
 
+    // Rebuilds the water if its runtime data was lost (e.g. scripts recompiled during Play mode)
+    // or edgeCount was changed in the Inspector while playing.
+    private bool EnsureSetup()
+    {
+        if (springs == null || springs.Length != edgeCount || vertices == null || leftDeltas == null)
+        {
+            if (GetComponent<BoxCollider2D>() == null) return false;
+            SetupWater();
+        }
+        return true;
+    }
+
     private void FixedUpdate()
     {
+        if (!EnsureSetup()) return;
+
         // 1. Update spring physics
         for (int i = 0; i < edgeCount; i++)
         {
@@ -152,8 +175,8 @@ public class DynamicWater2D : MonoBehaviour
         }
 
         // 2. Propagate waves across neighbor springs
-        float[] leftDeltas = new float[edgeCount];
-        float[] rightDeltas = new float[edgeCount];
+        System.Array.Clear(leftDeltas, 0, edgeCount);
+        System.Array.Clear(rightDeltas, 0, edgeCount);
 
         for (int i = 0; i < edgeCount; i++)
         {
@@ -180,6 +203,8 @@ public class DynamicWater2D : MonoBehaviour
 
     public void Splash(float worldXPos, float force)
     {
+        if (!EnsureSetup()) return;
+
         float localX = transform.InverseTransformPoint(new Vector3(worldXPos, 0, 0)).x;
         float leftX = boxCollider.offset.x - (boxCollider.size.x / 2f);
         float width = boxCollider.size.x;

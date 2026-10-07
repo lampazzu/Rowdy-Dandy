@@ -39,7 +39,7 @@ public class PlayerDamage : MonoBehaviour
                 enemy.TakeDamageEnemy(finalDamage, isCrit);
 
                 // Reduce active weapon durability by 1 on enemy hit
-                WeaponManager wm = FindObjectOfType<WeaponManager>();
+                WeaponManager wm = FindFirstObjectByType<WeaponManager>();
                 if (wm != null)
                 {
                     wm.DepleteActiveWeaponDurability(1f);

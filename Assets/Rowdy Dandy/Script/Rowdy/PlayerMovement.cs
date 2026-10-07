@@ -133,7 +133,10 @@ public class PlayerMovement : MonoBehaviour
         slidingEvents.Add(onSlidingB);
         slidingEvents.Add(onSlidingC);
         slidingEvents.Add(onSlidingD);
-        weaponManager = FindObjectOfType<WeaponManager>();
+        weaponManager = FindFirstObjectByType<WeaponManager>();
+
+        // Water splash effects (sound already comes from On Enter Water)
+        WaterSplashBody.AttachTo(gameObject, true);
     }
 
     private void ApplyCustomForce()

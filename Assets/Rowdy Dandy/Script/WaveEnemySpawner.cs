@@ -281,11 +281,15 @@ public class WaveEnemySpawner : MonoBehaviour
         if (player == null)
             return false;
 
-        // Try up to 5 times with slightly varied horizontal distance if a bad spot (like water for ground unit) is hit
-        for (int attempt = 0; attempt < 5; attempt++)
+        // Pick a starting side; with randomized sides, alternate sides on each retry so a bad spot
+        // on one side (e.g. water under a ground enemy) doesn't make every attempt fail
+        float startDirection = randomizeSpawnSide ? (Random.value < 0.5f ? -1f : 1f) : 1f;
+
+        // Try up to 8 times with slightly varied horizontal distance if a bad spot (like water for ground unit) is hit
+        for (int attempt = 0; attempt < 8; attempt++)
         {
             float distance = Random.Range(minimumSpawnDistance, maximumSpawnDistance);
-            float direction = randomizeSpawnSide ? (Random.value < 0.5f ? -1f : 1f) : 1f;
+            float direction = (randomizeSpawnSide && attempt % 2 == 1) ? -startDirection : startDirection;
             float x = player.position.x + (distance + attempt * 0.5f) * direction;
 
             // Flying enemies spawn in mid-air near player height

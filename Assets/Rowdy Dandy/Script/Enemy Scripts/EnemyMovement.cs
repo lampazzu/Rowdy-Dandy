@@ -98,6 +98,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float patrolWaitTime = 1f;
     private float patrolWaitTimer;
     private bool isWaitingAtPatrolPoint;
+    private bool hasWarnedMissingPatrolPoint;
 
     [Header("Polish: Target Detection Alert Pause")]
     [SerializeField] private bool enableAlertPause = false;
@@ -161,6 +162,9 @@ public class EnemyMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         originalScale = transform.localScale;
+
+        // Water splash / drowning effects
+        WaterSplashBody.AttachTo(gameObject, false);
 
         GameObject player = GameObject.FindWithTag("Player");
 
@@ -887,7 +891,16 @@ public class EnemyMovement : MonoBehaviour
                 return;
             }
 
-            Transform patrolTarget = patrolPoints[patrolDestination];
+            Transform patrolTarget = GetValidPatrolTarget();
+
+            // No usable patrol points (all slots empty or destroyed) -> stand still instead of erroring every frame
+            if (patrolTarget == null)
+            {
+                isMoving = false;
+                SetAnimatorBool("moving", false);
+                ApplyHorizontalVelocity(0f);
+                return;
+            }
 
             // Check if stuck on one side of aquatic patrol point for too long
             if (isOnlyAquatic)
@@ -935,6 +948,30 @@ public class EnemyMovement : MonoBehaviour
             SetAnimatorBool("moving", false);
             ApplyHorizontalVelocity(0f);
         }
+    }
+
+    // Returns the current patrol point, skipping over empty (None) slots in the patrolPoints array.
+    // Warns once per enemy so the broken Inspector setup can be found and fixed.
+    private Transform GetValidPatrolTarget()
+    {
+        for (int i = 0; i < patrolPoints.Length; i++)
+        {
+            Transform candidate = patrolPoints[patrolDestination];
+            if (candidate != null)
+            {
+                return candidate;
+            }
+
+            if (!hasWarnedMissingPatrolPoint)
+            {
+                hasWarnedMissingPatrolPoint = true;
+                Debug.LogWarning($"EnemyMovement on '{name}' has an empty slot in Patrol Points (element {patrolDestination}). Assign it or remove it in the Inspector.", this);
+            }
+
+            patrolDestination = (patrolDestination + 1) % patrolPoints.Length;
+        }
+
+        return null;
     }
 
     private void MoveTowards(Vector3 targetPosition)

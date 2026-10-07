@@ -29,7 +29,12 @@ public class Spike : MonoBehaviour
             {
                 // Apply damage to the player
                 playerHealth.TakeDamage(damage);
-                anima.SetTrigger("shark attack");
+
+                // Not every spike has an Animator (e.g. Frecha arrows), so only trigger when one is assigned
+                if (anima != null)
+                {
+                    anima.SetTrigger("shark attack");
+                }
             }
 
             // If this spike is a "Frecha", instantiate explosion and destroy spike

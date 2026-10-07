@@ -68,7 +68,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (targetPlayerDamages.Count == 0)
         {
-            targetPlayerDamages.AddRange(FindObjectsOfType<PlayerDamage>());
+            targetPlayerDamages.AddRange(FindObjectsByType<PlayerDamage>(FindObjectsSortMode.None));
         }
 
         if (statsPanel != null)

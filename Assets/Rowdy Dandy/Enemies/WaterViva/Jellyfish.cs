@@ -25,11 +25,13 @@ public class Jellyfish : MonoBehaviour
     private Vector3 startPos;
     private Vector3 originalScale;
     private float hoverOffset; // Randomized offset for unique hovering
+    private bool hasSplishTrigger; // Not every jelly's Animator has the "Splish" trigger
 
     private void Start()
     {
         jellyfishLight = GetComponent<Light2D>();
         jellyfishAnimator = GetComponent<Animator>();
+        hasSplishTrigger = AnimatorHasParameter(jellyfishAnimator, "Splish");
         startPos = transform.position;
         originalScale = transform.localScale; // Store original scale
         hoverOffset = Random.Range(0f, Mathf.PI * 2); // Random offset to desync the hovering
@@ -72,7 +74,7 @@ public class Jellyfish : MonoBehaviour
                     glowCoroutine = StartCoroutine(ResetLightIntensity(glowDuration));
                 }
 
-                if (jellyfishAnimator != null)
+                if (hasSplishTrigger)
                 {
                     jellyfishAnimator.SetTrigger("Splish");
                 }
@@ -89,11 +91,22 @@ public class Jellyfish : MonoBehaviour
         {
             GetComponent<Collider2D>().sharedMaterial = null;
 
-            if (jellyfishAnimator != null)
+            if (hasSplishTrigger)
             {
                 jellyfishAnimator.ResetTrigger("Splish");
             }
         }
+    }
+
+    private static bool AnimatorHasParameter(Animator animator, string parameterName)
+    {
+        if (animator == null || animator.runtimeAnimatorController == null) return false;
+
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
+        {
+            if (parameter.name == parameterName) return true;
+        }
+        return false;
     }
 
     private IEnumerator ResetLightIntensity(float duration)
