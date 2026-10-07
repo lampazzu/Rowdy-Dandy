@@ -66,6 +66,7 @@ public class Health : MonoBehaviour
             {
                 anim.SetTrigger("dead");
                 dead = true;
+                CatRoster.MarkDied(); // costs a cat once the scene reloads
                 anim.SetTrigger("IsDead");
                 gameObject.tag = "Untagged";
             }

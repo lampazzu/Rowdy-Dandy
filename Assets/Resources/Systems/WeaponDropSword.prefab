@@ -51,6 +51,10 @@ MonoBehaviour:
   scaleMultiplier: 1.3
   animationSpeed: 8
   purpleGlowColor: {r: 0.75, g: 0.3, b: 1, a: 1}
+  dropSound: {fileID: 8300000, guid: c087ca6dd5db250408146587d4537c8f, type: 3}
+  dropVolume: 0.8
+  pickupSound: {fileID: 8300000, guid: 3dd5bc1baf83c1445b2162755b8b316b, type: 3}
+  pickupVolume: 1
 --- !u!61 &260197071294811265
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -146,7 +150,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 200
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300044, guid: 9bd9265533309304db171aa9f916554a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 39225db7eba542d0ad403f261a7e6883, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -717,17 +717,21 @@ public class PlayerMovement : MonoBehaviour
         // Implement attack animations
         if (Input.GetKeyDown(KeyCode.J) || Input.GetMouseButtonDown(0) || Input.GetButtonDown("X"))
         {
+            bool attackStarted = false; // weapon durability: 1 per swing, no matter how many enemies it hits
+
             if (isGrounded && !isJumping && !isDucking && !isAttacking && !isWatered)
             {
                 transform.rotation = Quaternion.Euler(0, 0, 0);// Neutral attack animation
                 animator.SetTrigger("NeutralAttack");
                 animator.SetBool("IsRunning", false);
+                attackStarted = true;
             }
             if (!isGrounded && !isDucking && !hasAttackedInAir && !isWatered && !isAttackChecked)
             {
                 // Jump attack animation
                 animator.SetTrigger("JumpAttack");
                 hasAttackedInAir = true;
+                attackStarted = true;
 
                 if (!isAttackingAir)
                 {
@@ -744,6 +748,7 @@ public class PlayerMovement : MonoBehaviour
 
                 StartCoroutine(DelayedJumpAttack()); // Delay the attack trigger
                 hasAttackedInAir = true;
+                attackStarted = true;
 
                 if (!isAttackingAir)
                 {
@@ -754,6 +759,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 // Ducking attack animation
                 animator.SetTrigger("DuckingAttack");
+                attackStarted = true;
+            }
+
+            if (attackStarted && weaponManager != null)
+            {
+                StartCoroutine(SpendWeaponDurability());
             }
         }
 
@@ -910,6 +921,14 @@ public class PlayerMovement : MonoBehaviour
             if (col != null) Physics2D.IgnoreCollision(col, platform, false);
         }
         droppingThrough = null;
+    }
+
+    // Spent a moment into the swing, so the swing that breaks the weapon still plays and hits
+    // before WeaponManager swaps back to the Rod's animator
+    IEnumerator SpendWeaponDurability()
+    {
+        yield return new WaitForSeconds(0.25f);
+        weaponManager.DepleteActiveWeaponDurability(1f);
     }
 
     IEnumerator DelayedJumpAttack()

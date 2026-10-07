@@ -35,6 +35,11 @@ public class PetFollower : MonoBehaviour
     [Tooltip("Samurai: speak on every cut of a chain instead of only the first")]
     [SerializeField] private bool voiceEveryStrike = false;
 
+    [Header("Pickup")]
+    [Tooltip("Played when Rowdy finds this cat")]
+    [SerializeField] private AudioClip collectSound;
+    [SerializeField, Range(0f, 2f)] private float collectVolume = 0.8f;
+
     [Header("Following Settings")]
     [SerializeField] private Transform player;
     [SerializeField] private float followDelay = 0.5f;
@@ -103,6 +108,10 @@ public class PetFollower : MonoBehaviour
     private float hoverOffset;
     private float movementOffset;
 
+    // Where the level placed this cat, also its identity across scene reloads (see CatRoster)
+    public Vector3 HomePosition { get; private set; }
+    public string RosterKey { get; private set; }
+
     // For the cat HUD (CatHUD)
     public CatType Type => catType;
     public string CatName => string.IsNullOrEmpty(catName) ? catType.ToString() : catName;
@@ -124,6 +133,9 @@ public class PetFollower : MonoBehaviour
     {
         hoverOffset = Random.Range(0f, 10f);
         movementOffset = Random.Range(0f, 10f);
+
+        HomePosition = transform.position;
+        RosterKey = gameObject.scene.name + "/" + catType + "/" + Mathf.RoundToInt(HomePosition.x * 10f) + "," + Mathf.RoundToInt(HomePosition.y * 10f);
 
         ActivePets.Add(this);
     }
@@ -174,6 +186,8 @@ public class PetFollower : MonoBehaviour
 
     private void Update()
     {
+        CatRoster.Tick();
+
         // The execution chain moves him itself; the placeholder Wig clip still keys backToIdle, ignore it meanwhile
         if (isExecuting)
         {
@@ -221,8 +235,28 @@ public class PetFollower : MonoBehaviour
             pickupOrder = ++pickupCounter;
             isFollowingPlayer = true;
 
+            CatRoster.RecordCollected(RosterKey);
+            SoundManager.PlaySfx(collectSound, collectVolume);
+
             StartCoroutine(StartFollowing());
         }
+    }
+
+    // Already Rowdy's cat before the scene reloaded: join him straight away, no pickup sound
+    public void Rejoin(Transform rowdy, int order)
+    {
+        player = rowdy;
+        pickupOrder = order;
+        pickupCounter = Mathf.Max(pickupCounter, order);
+        isFollowingPlayer = true;
+        transform.position = rowdy.position + new Vector3(Random.Range(-0.4f, 0.4f), 0.6f, 0f);
+    }
+
+    // Moves a cat that isn't Rowdy's (yet) to a new hiding spot
+    public void Relocate(Vector3 position)
+    {
+        if (player != null) return;
+        transform.position = position;
     }
 
     private void FollowTarget(Transform target)
@@ -594,5 +628,210 @@ public class PetFollower : MonoBehaviour
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, chainRange);
         }
+    }
+}
+
+// Remembers Rowdy's cats across scene reloads (death, checkpoint reload) for this play session.
+//  - Cats he has come back with him after a reload.
+//  - Dying costs the most recently found cat: it runs off and has to be found again.
+//  - Every load, the cats he doesn't have are hidden again at random reachable spots: the spots the level
+//    placed cats at, plus places Rowdy has actually stood on solid ground (so always reachable).
+public static class CatRoster
+{
+    private const float MinDistanceFromRowdy = 8f;   // don't hide a cat right where he respawns
+    private const float MinSpacing = 4f;             // keep hidden cats apart
+    private const float VisitedSampleSpacing = 3f;   // how often his footsteps are remembered
+    private const int MaxVisitedPerScene = 400;
+    private static readonly Vector3 HoverAboveFeet = new Vector3(0f, 0.35f, 0f);
+
+    private static readonly List<string> collected = new List<string>(); // pickup order
+    private static readonly Dictionary<string, List<Vector3>> visitedSpots = new Dictionary<string, List<Vector3>>();
+    private static bool needsApply = true;
+    private static bool diedBeforeReload;
+    private static int lastTickFrame = -1;
+
+    private static Transform rowdy;
+    private static PlayerMovement rowdyMovement;
+    private static Collider2D[] rowdyColliders;
+    private static float findRowdyTimer;
+    private static Vector3 lastSample = new Vector3(float.MaxValue, float.MaxValue, 0f);
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetSession()
+    {
+        collected.Clear();
+        visitedSpots.Clear();
+        needsApply = true;
+        diedBeforeReload = false;
+        lastTickFrame = -1;
+        rowdy = null;
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private static void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        needsApply = true;
+        rowdy = null;
+        lastSample = new Vector3(float.MaxValue, float.MaxValue, 0f);
+    }
+
+    public static void MarkDied() => diedBeforeReload = true;
+
+    public static void RecordCollected(string key)
+    {
+        if (!collected.Contains(key)) collected.Add(key);
+    }
+
+    // Called by every cat's Update; runs once per frame
+    public static void Tick()
+    {
+        if (Time.frameCount == lastTickFrame) return;
+        lastTickFrame = Time.frameCount;
+
+        if (rowdy == null && !FindRowdy()) return;
+
+        // First frame after a load (after Rowdy was moved to his checkpoint)
+        if (needsApply) ApplyToScene();
+
+        SampleVisitedSpot();
+    }
+
+    private static bool FindRowdy()
+    {
+        findRowdyTimer -= Time.unscaledDeltaTime;
+        if (findRowdyTimer > 0f) return false;
+        findRowdyTimer = 0.5f;
+
+        GameObject go = GameObject.FindGameObjectWithTag("Player");
+        if (go == null) return false;
+        rowdy = go.transform;
+        rowdyMovement = go.GetComponent<PlayerMovement>();
+        rowdyColliders = go.GetComponentsInChildren<Collider2D>();
+        return true;
+    }
+
+    private static void ApplyToScene()
+    {
+        needsApply = false;
+        string sceneName = rowdy.gameObject.scene.name;
+
+        // Death penalty: the newest cat runs off
+        string lostKey = null;
+        if (diedBeforeReload && collected.Count > 0)
+        {
+            lostKey = collected[collected.Count - 1];
+            collected.RemoveAt(collected.Count - 1);
+        }
+        diedBeforeReload = false;
+
+        var pets = new List<PetFollower>();
+        foreach (PetFollower pet in PetFollower.Pets)
+        {
+            if (pet != null && pet.gameObject.scene.name == sceneName) pets.Add(pet);
+        }
+
+        // Cats he still has rejoin him
+        for (int i = 0; i < collected.Count; i++)
+        {
+            foreach (PetFollower pet in pets)
+            {
+                if (!pet.IsCollected && pet.RosterKey == collected[i]) { pet.Rejoin(rowdy, i + 1); break; }
+            }
+        }
+
+        // Hide the rest again
+        var homeSpots = new List<Vector3>();
+        foreach (PetFollower pet in pets) homeSpots.Add(pet.HomePosition);
+        visitedSpots.TryGetValue(sceneName, out List<Vector3> visited);
+
+        var taken = new List<Vector3>();
+        PetFollower lostPet = null;
+        foreach (PetFollower pet in pets)
+        {
+            if (!pet.IsCollected && pet.RosterKey == lostKey) lostPet = pet;
+        }
+
+        // The cat that just ran off goes somewhere he has been (if we know any), the others anywhere valid
+        if (lostPet != null) PlaceCat(lostPet, visited != null && visited.Count > 0 ? visited : homeSpots, homeSpots, taken);
+        foreach (PetFollower pet in pets)
+        {
+            if (pet.IsCollected || pet == lostPet) continue;
+            var pool = new List<Vector3>(homeSpots);
+            if (visited != null) pool.AddRange(visited);
+            PlaceCat(pet, pool, homeSpots, taken);
+        }
+
+        if (lostPet != null) ShowRanOffText(lostPet.CatName);
+    }
+
+    private static void PlaceCat(PetFollower pet, List<Vector3> pool, List<Vector3> homeSpots, List<Vector3> taken)
+    {
+        // Random order, take the first spot that's far enough from Rowdy and the other hidden cats
+        for (int attempt = 0; attempt < 2; attempt++)
+        {
+            List<Vector3> source = attempt == 0 ? pool : homeSpots;
+            int count = source.Count;
+            if (count == 0) continue;
+            int start = Random.Range(0, count);
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 spot = source[(start + i) % count];
+                if (Vector2.Distance(spot, rowdy.position) < MinDistanceFromRowdy) continue;
+                bool crowded = false;
+                foreach (Vector3 t in taken) if (Vector2.Distance(spot, t) < MinSpacing) { crowded = true; break; }
+                if (crowded) continue;
+
+                pet.Relocate(spot);
+                taken.Add(spot);
+                return;
+            }
+        }
+        taken.Add(pet.HomePosition); // nowhere better: stays where the level put it
+    }
+
+    // Remembers where Rowdy stands on solid ground (not water) as future hiding spots
+    private static void SampleVisitedSpot()
+    {
+        if (rowdyMovement == null || !rowdyMovement.IsGrounded) return;
+        Vector3 pos = rowdy.position;
+        if (Vector2.Distance(pos, lastSample) < VisitedSampleSpacing) return;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(pos, Vector2.down, 2f);
+        foreach (RaycastHit2D hit in hits)
+        {
+            Collider2D col = hit.collider;
+            if (col == null || col.isTrigger || IsRowdyCollider(col)) continue;
+
+            bool water = col.CompareTag("Water") || col.gameObject.layer == LayerMask.NameToLayer("waterLayer") || col.gameObject.layer == LayerMask.NameToLayer("Water");
+            if (water) return; // standing on water: not a hiding spot
+
+            string sceneName = rowdy.gameObject.scene.name;
+            if (!visitedSpots.TryGetValue(sceneName, out List<Vector3> list))
+            {
+                list = new List<Vector3>();
+                visitedSpots[sceneName] = list;
+            }
+            if (list.Count >= MaxVisitedPerScene) list.RemoveAt(Random.Range(0, list.Count));
+            list.Add(pos + HoverAboveFeet);
+            lastSample = pos;
+            return;
+        }
+    }
+
+    private static bool IsRowdyCollider(Collider2D col)
+    {
+        if (rowdyColliders == null) return false;
+        foreach (Collider2D c in rowdyColliders) if (c == col) return true;
+        return false;
+    }
+
+    private static void ShowRanOffText(string catName)
+    {
+        GameObject prefab = Resources.Load<GameObject>("DamageTextPrefab");
+        if (prefab == null) return;
+        GameObject text = Object.Instantiate(prefab, rowdy.position + Vector3.up * 0.8f, Quaternion.identity);
+        if (text.TryGetComponent(out FloatingDamageText floating))
+            floating.SetupCustomText(catName + " ran off!", new Color(1f, 0.55f, 0.85f), 1.3f);
     }
 }

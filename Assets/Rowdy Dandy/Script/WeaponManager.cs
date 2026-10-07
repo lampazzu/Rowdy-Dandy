@@ -69,6 +69,7 @@ public class WeaponManager : MonoBehaviour
     private float[] maxDurability = new float[4];
 
     private Coroutine weaponUIEffectCoroutine;
+    private bool suppressSwitchSound;
     private Vector3 textOriginalScale = Vector3.one;
     private Vector3 imageOriginalScale = Vector3.one;
     private Color textOriginalColor = Color.white;
@@ -209,7 +210,8 @@ public class WeaponManager : MonoBehaviour
         fx.Play(position, facing, names[Mathf.Clamp(brokenIndex, 0, names.Length - 1)], weaponProfileImage, brokenIcon);
     }
 
-    public void PickupWeapon(WeaponType type, float durabilityMax)
+    // equipSound: played instead of the regular switch sound (the drop's own pickup sound)
+    public void PickupWeapon(WeaponType type, float durabilityMax, AudioClip equipSound = null, float equipVolume = 1f)
     {
         int index = GetIndexFromType(type);
         unlockedWeapons[index] = true;
@@ -218,12 +220,28 @@ public class WeaponManager : MonoBehaviour
 
         SaveWeaponData();
 
+        suppressSwitchSound = equipSound != null;
         switch (type)
         {
             case WeaponType.Sword: SetWeaponToSword(); break;
             case WeaponType.Axe: SetWeaponToAxe(); break;
             case WeaponType.Naginata: SetWeaponToNaginata(); break;
             case WeaponType.Cleaver: SetWeaponToCleaver(); break;
+        }
+        suppressSwitchSound = false;
+
+        SoundManager.PlaySfx(equipSound, equipVolume);
+    }
+
+    // Icon for a weapon type (weapon drops show the same art as the HUD)
+    public Sprite GetProfile(WeaponType type)
+    {
+        switch (type)
+        {
+            case WeaponType.Sword: return swordProfile;
+            case WeaponType.Naginata: return naginataProfile;
+            case WeaponType.Cleaver: return cleaverProfile;
+            default: return rodProfile;
         }
     }
 
@@ -432,6 +450,7 @@ public class WeaponManager : MonoBehaviour
 
     private void PlaySwitchSound()
     {
+        if (suppressSwitchSound) return;
         if (weaponSwitchAudioSource != null && weaponSwitchSound != null)
         {
             weaponSwitchAudioSource.PlayOneShot(weaponSwitchSound, weaponSwitchVolume);

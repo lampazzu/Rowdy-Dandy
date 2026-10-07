@@ -5769,15 +5769,28 @@ MonoBehaviour:
   marchTarget: {fileID: 5143825188275818849}
   isChasing: 0
   isMarching: 0
-  chaseDistance: 2
+  chaseDistance: 6
   isPatrolGround: 1
   isDrownable: 1
   isOnlyAquatic: 0
   waterLayer:
     serializedVersion: 2
     m_Bits: 64
-  aquaticBounceForce: 6
-  aquaticStuckThreshold: 4
+  shoreMargin: 0.6
+  enableAquaticLeap: 1
+  leapTriggerRange: 4
+  leapShoreReach: 2.5
+  leapShoreOvershoot: 1.5
+  leapMinHeight: 1.2
+  leapMaxHeight: 3
+  leapMaxSpeedX: 7
+  leapCooldown: 2.5
+  leapWhenPlayerAbove: 1
+  hopBackHeight: 1
+  enableLeapTilt: 1
+  maxLeapTilt: 20
+  leapTiltSpeed: 120
+  leapTiltStep: 0
   wallCheckDistance: 0
   obstacleCheckHeight: 0.5
   headClearanceDistance: 1.5
@@ -5834,6 +5847,10 @@ MonoBehaviour:
     m_Bits: 8
   enableChaseTimeout: 1
   loseTargetTime: 3
+  enableFloorAwareChase: 1
+  floorHeightTolerance: 1.5
+  giveUpTime: 2.5
+  playerOnOtherFloor: 0
   enableDustParticles: 0
   landingDustParticle: {fileID: 0}
   jumpDustParticle: {fileID: 0}

@@ -37,13 +37,7 @@ public class PlayerDamage : MonoBehaviour
             {
                 float finalDamage = CalculateTotalDamage(out bool isCrit);
                 enemy.TakeDamageEnemy(finalDamage, isCrit);
-
-                // Reduce active weapon durability by 1 on enemy hit
-                WeaponManager wm = FindFirstObjectByType<WeaponManager>();
-                if (wm != null)
-                {
-                    wm.DepleteActiveWeaponDurability(1f);
-                }
+                // Weapon durability is spent per swing in PlayerMovement, not per hit (cats share this script too)
             }
 
             if (isPlayer)

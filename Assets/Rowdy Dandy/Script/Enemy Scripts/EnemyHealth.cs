@@ -107,6 +107,8 @@ public class EnemyHealth : MonoBehaviour
     [Header("Floating Damage UI & FX")]
     [SerializeField] private GameObject damageTextPrefab;
     [SerializeField] private GameObject critFXPrefab;
+    [Tooltip("Small bar over the head that shows up when hit (look: Resources/EnemyHealthBarStyle). Never shown on objects.")]
+    [SerializeField] private bool showHealthBar = true;
 
     [Header("Controller Rumble Settings (Legacy System)")]
     [SerializeField] private bool enableParryRumble = true;
@@ -145,6 +147,9 @@ public class EnemyHealth : MonoBehaviour
 
         if (cinemachineCam != null)
             originalFollowTarget = cinemachineCam.Follow;
+
+        if (showHealthBar && !isObject)
+            EnemyHealthBar.Attach(this);
     }
 
     private void Update()

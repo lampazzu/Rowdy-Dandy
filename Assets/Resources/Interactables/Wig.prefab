@@ -276,6 +276,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 45b73691922eac148b4ea7efb8ce2958, type: 3}
   - {fileID: 8300000, guid: b0d53ba9acbe3974dbfee2d7d5556706, type: 3}
   voiceVolume: 5
+  collectSound: {fileID: 8300000, guid: 75e7163fdf7a1604498c1c5eab0a9a4e, type: 3}
+  collectVolume: 0.7
   portrait: {fileID: 21300000, guid: a3c1f0e2b4d64f7a9e8b2c1d0f3a5b71, type: 3}
 --- !u!61 &7676863159426135163
 BoxCollider2D:

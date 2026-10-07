@@ -268,6 +268,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 63c51df0a989b1f4abd050fc87e501c3, type: 3}
   - {fileID: 8300000, guid: 924eac349453d8e4bac1feb3bc04a765, type: 3}
   voiceVolume: 5
+  collectSound: {fileID: 8300000, guid: 75e7163fdf7a1604498c1c5eab0a9a4e, type: 3}
+  collectVolume: 0.7
   portrait: {fileID: 21300000, guid: b7d2e4f6a8c04e1b9d3f5a7c9e1b3d82, type: 3}
   player: {fileID: 0}
   followDelay: -2.38

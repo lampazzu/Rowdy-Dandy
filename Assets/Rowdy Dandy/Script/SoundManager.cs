@@ -41,6 +41,16 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    // One-shot for scripts holding their own clip (weapon drops, cats...). Same route as PlaySound:
+    // played at the camera so it isn't faded by distance, scaled by the Sound Effects setting.
+    public static void PlaySfx(AudioClip clip, float volume = 1f)
+    {
+        if (clip == null) return;
+        Camera cam = Camera.main;
+        Vector3 playPosition = cam != null ? cam.transform.position : Vector3.zero;
+        AudioSource.PlayClipAtPoint(clip, playPosition, volume * GameSettings.SfxVolume);
+    }
+
     public void PlaySound(string soundName)
     {
         // Events with no sound name filled in are treated as "no sound" instead of warning every time
