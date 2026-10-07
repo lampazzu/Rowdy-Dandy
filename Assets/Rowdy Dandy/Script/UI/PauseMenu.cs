@@ -31,6 +31,16 @@ public class PauseMenu : MonoBehaviour
         public Func<float> getBar;
         public int column;
         public float y;
+
+        // Selection feedback (see AnimateRows)
+        public Image flash;          // white overlay on the plate: bright on select / confirm, fades out
+        public Image accent;         // bright edge on the left of the selected plate
+        public PixelText cursor;     // ">" in front of the label, bobbing
+        public PixelText arrowLeft, arrowRight;
+        public Vector2 labelHome, valueHome, arrowLeftHome, arrowRightHome;
+        public float selectedAt = -10f;
+        public float pulseAt = -10f; // confirm / value change
+        public int pulseDirection;   // -1 / +1 for value changes, 0 for confirm
     }
 
     // Layout (UI pixels at 1080p)
@@ -43,11 +53,18 @@ public class PauseMenu : MonoBehaviour
     private const float ValueX = -195f;
     private const float ArrowRightX = -60f;
 
-    private static readonly Color Gold = new Color32(0xFF, 0xC9, 0x3C, 0xFF);
     private static readonly Color Pink = new Color32(0xFF, 0x9B, 0xE6, 0xFF);
+    private static readonly Color HotPink = new Color32(0xFF, 0x39, 0xC0, 0xFF);
+    private static readonly Color TitleColor = new Color32(0xF4, 0xEC, 0xFA, 0xFF);
     private static readonly Color PlateColor = new Color32(0xB6, 0x0A, 0x7F, 0xE6);
     private static readonly Color Dim = new Color(0.04f, 0.01f, 0.07f, 0.72f);
     private static readonly Color TextIdle = new Color(0.82f, 0.76f, 0.88f, 1f);
+
+    // Feedback timing (seconds, unscaled)
+    private const float PlateSlideTime = 0.09f;
+    private const float FlashTime = 0.22f;
+    private const float PulseTime = 0.16f;
+    private const float PageInTime = 0.16f;
 
     private const float ColumnOffset = 410f;  // settings page: two columns of rows, this far left / right of center
 
@@ -68,6 +85,7 @@ public class PauseMenu : MonoBehaviour
     private float navRepeatTimer;
     private int heldVertical, heldHorizontal;
     private bool pendingResume;
+    private float pageShownAt = -10f;
     private bool savedCursorVisible;
     private CursorLockMode savedCursorLock;
 
@@ -108,12 +126,15 @@ public class PauseMenu : MonoBehaviour
 
         if (page == Page.Closed)
         {
-            if (pausePressed) Open();
+            if (pausePressed && !RowdyNotes.BlocksPause) Open();
             return;
         }
 
+        if (pendingResume) return;
+
         if (pausePressed || backPressed)
         {
+            UISound.Play(UISound.Cue.Back);
             if (page == Page.Settings) ShowPage(Page.Main, 1);
             else if (page == Page.Controls) CloseControls();
             else Resume();
@@ -127,8 +148,7 @@ public class PauseMenu : MonoBehaviour
         if (vertical != 0) MoveSelection(-vertical);
         if (horizontal != 0 && rows[selected].change != null)
         {
-            rows[selected].change(horizontal);
-            RefreshValues();
+            ChangeValue(selected, horizontal);
         }
         else if (horizontal != 0 && page == Page.Settings)
         {
@@ -137,6 +157,8 @@ public class PauseMenu : MonoBehaviour
 
         bool submit = Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0);
         if (submit) Activate(selected, +1);
+
+        AnimateRows();
     }
 
     private void LateUpdate()
@@ -184,6 +206,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         EnsureEventSystem();
         root.SetActive(true);
+        UISound.Play(UISound.Cue.Page);
         ShowPage(Page.Main, 0);
     }
 
@@ -196,6 +219,13 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = savedCursorVisible;
         Cursor.lockState = savedCursorLock;
         SetPaused(false);
+    }
+
+    // Other full-screen menus (Rowdy Notes) stop the game the same way, so gameplay input / TimeSlowController behave
+    public static void SetExternalPause(bool paused)
+    {
+        if (instance != null && instance.page != Page.Closed) return; // the pause menu owns it right now
+        SetPaused(paused);
     }
 
     private static void SetPaused(bool paused)
@@ -212,8 +242,13 @@ public class PauseMenu : MonoBehaviour
         settingsPanel.SetActive(page == Page.Settings);
         controlsPanel.SetActive(page == Page.Controls);
         RefreshValues();
-        Select(FirstSelectable(CurrentRows(), select));
+        pageShownAt = Time.unscaledTime;
+        selected = -1; // so the first row gets the full select animation
+        Select(FirstSelectable(CurrentRows(), select), false);
+        AnimateRows();
     }
+
+    private GameObject CurrentPanel() => page == Page.Settings ? settingsPanel : page == Page.Controls ? controlsPanel : mainPanel;
 
     private List<Row> CurrentRows() => page == Page.Settings ? settingsRows : page == Page.Controls ? controlsRows : mainRows;
 
@@ -261,10 +296,16 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    private void Select(int index)
+    private void Select(int index, bool withSound = true)
     {
         List<Row> rows = CurrentRows();
+        int previous = selected;
         selected = Mathf.Clamp(index, 0, rows.Count - 1);
+        if (selected != previous)
+        {
+            rows[selected].selectedAt = Time.unscaledTime;
+            if (withSound) UISound.Play(UISound.Cue.Move);
+        }
         for (int i = 0; i < rows.Count; i++)
         {
             Row row = rows[i];
@@ -272,7 +313,9 @@ public class PauseMenu : MonoBehaviour
             bool on = i == selected;
             row.plate.enabled = on;
             row.label.Color = on ? Color.white : TextIdle;
-            if (row.value != null) row.value.Color = on ? Gold : TextIdle;
+            if (row.value != null) row.value.Color = on ? Color.white : TextIdle;
+            if (row.accent != null) row.accent.enabled = on;
+            if (row.cursor != null) row.cursor.gameObject.SetActive(on);
         }
     }
 
@@ -281,8 +324,102 @@ public class PauseMenu : MonoBehaviour
         List<Row> rows = CurrentRows();
         if (index < 0 || index >= rows.Count) return;
         Row row = rows[index];
-        if (row.submit != null) row.submit();
-        else if (row.change != null) { row.change(direction); RefreshValues(); }
+        if (row.submit != null)
+        {
+            row.pulseAt = Time.unscaledTime;
+            row.pulseDirection = 0;
+            UISound.Play(UISound.Cue.Confirm);
+            row.submit();
+        }
+        else if (row.change != null) ChangeValue(index, direction);
+    }
+
+    private void ChangeValue(int index, int direction)
+    {
+        Row row = CurrentRows()[index];
+        row.change(direction);
+        row.pulseAt = Time.unscaledTime;
+        row.pulseDirection = direction;
+        UISound.Play(UISound.Cue.Change);
+        RefreshValues();
+    }
+
+    // ---------------------------------------------------------------- feedback animation
+    // Street Fighter V-ish: the plate wipes in from the left with a white flash, the label slides over to make room
+    // for a bobbing ">" cursor, confirming punches the row, changing a value kicks the arrow on that side.
+    private void AnimateRows()
+    {
+        float now = Time.unscaledTime;
+
+        // Page entrance: quick fade + rise
+        GameObject panel = CurrentPanel();
+        if (panel != null)
+        {
+            float t = Mathf.Clamp01((now - pageShownAt) / PageInTime);
+            float ease = 1f - (1f - t) * (1f - t);
+            var group = panel.GetComponent<CanvasGroup>();
+            if (group == null) group = panel.AddComponent<CanvasGroup>();
+            group.alpha = ease;
+            panel.transform.localScale = Vector3.one * Mathf.Lerp(0.96f, 1f, ease);
+            ((RectTransform)panel.transform).anchoredPosition = new Vector2(0f, Mathf.Round(Mathf.Lerp(-18f, 0f, ease)));
+        }
+
+        List<Row> rows = CurrentRows();
+        for (int i = 0; i < rows.Count; i++)
+        {
+            Row row = rows[i];
+            if (row.isHeader) continue;
+            bool on = i == selected;
+
+            float sinceSelect = now - row.selectedAt;
+            float slide = on ? Mathf.Clamp01(sinceSelect / PlateSlideTime) : 0f;
+            row.plate.fillAmount = 1f - (1f - slide) * (1f - slide);
+
+            // Flash: on select, and brighter on confirm
+            float sincePulse = now - row.pulseAt;
+            float flash = 0f;
+            if (on) flash = Mathf.Max(flash, 0.55f * (1f - Mathf.Clamp01(sinceSelect / FlashTime)));
+            if (row.pulseDirection == 0) flash = Mathf.Max(flash, 0.8f * (1f - Mathf.Clamp01(sincePulse / FlashTime)));
+            if (row.flash != null)
+            {
+                row.flash.color = new Color(1f, 1f, 1f, flash);
+                row.flash.fillAmount = row.plate.fillAmount;
+            }
+
+            // Label slides right while selected (room for the cursor); confirm punches it a bit further
+            float pulse = 1f - Mathf.Clamp01(sincePulse / PulseTime);
+            float nudge = on ? Mathf.Lerp(0f, 14f, row.plate.fillAmount) : 0f;
+            if (row.pulseDirection == 0) nudge += 8f * pulse * pulse;
+            bool centered = row.label.Rect.pivot.x > 0.25f;
+            row.label.Rect.anchoredPosition = row.labelHome + new Vector2(Mathf.Round(centered ? nudge * 0.5f : nudge), 0f);
+
+            if (row.cursor != null && on)
+            {
+                float bob = Mathf.Round(Mathf.Sin(now * 9f) * 2f);
+                float labelLeft = row.label.Rect.anchoredPosition.x - (centered ? row.label.Rect.sizeDelta.x * 0.5f : 0f);
+                row.cursor.Rect.anchorMin = row.cursor.Rect.anchorMax = row.label.Rect.anchorMin;
+                row.cursor.Rect.anchoredPosition = new Vector2(labelLeft - 26f + bob, 0f);
+                row.cursor.Color = new Color(1f, 1f, 1f, row.plate.fillAmount);
+            }
+
+            // Value change: value pops, the arrow on that side kicks outwards
+            if (row.value != null)
+            {
+                float pop = row.pulseDirection != 0 ? pulse : 0f;
+                row.value.Rect.localScale = Vector3.one * (1f + 0.18f * pop * pop);
+                row.value.Rect.anchoredPosition = row.valueHome;
+            }
+            if (row.arrowLeft != null)
+            {
+                float kickL = row.pulseDirection < 0 ? pulse : 0f;
+                float kickR = row.pulseDirection > 0 ? pulse : 0f;
+                row.arrowLeft.Rect.anchoredPosition = row.arrowLeftHome + new Vector2(Mathf.Round(-8f * kickL), 0f);
+                row.arrowRight.Rect.anchoredPosition = row.arrowRightHome + new Vector2(Mathf.Round(8f * kickR), 0f);
+                Color arrowColor = on ? Color.white : Pink;
+                row.arrowLeft.Color = kickL > 0.01f ? HotPink : arrowColor;
+                row.arrowRight.Color = kickR > 0.01f ? HotPink : arrowColor;
+            }
+        }
     }
 
     private void RefreshValues()
@@ -318,7 +455,7 @@ public class PauseMenu : MonoBehaviour
         float mainHeight = 150 + 5 * (RowHeight + RowGap) + 70;
         mainPanel = MakePanel("Main", root.transform, 560, mainHeight);
         float top = mainHeight / 2f;
-        MakeLabel(mainPanel.transform, "PAUSED", 6, Gold, 0.5f, new Vector2(0, top - 70));
+        MakeTitle(mainPanel.transform, "PAUSED", top - 70);
         float y = top - 150;
         AddButton(mainRows, mainPanel.transform, "Resume", ref y, Resume);
         AddButton(mainRows, mainPanel.transform, "Settings", ref y, () => ShowPage(Page.Settings, 0));
@@ -332,7 +469,7 @@ public class PauseMenu : MonoBehaviour
         float settingsHeight = 130 + leftHeight + 70;
         settingsPanel = MakePanel("Settings", root.transform, 2 * SettingsRowWidth + 140, settingsHeight);
         top = settingsHeight / 2f;
-        MakeLabel(settingsPanel.transform, "SETTINGS", 6, Gold, 0.5f, new Vector2(0, top - 66));
+        MakeTitle(settingsPanel.transform, "SETTINGS", top - 66);
         y = top - 130;
 
         columnX = -ColumnOffset;
@@ -381,6 +518,9 @@ public class PauseMenu : MonoBehaviour
         AddOption(settingsRows, settingsPanel.transform, "Message Size", ref y,
             () => Mathf.RoundToInt(GameSettings.MessageSize * 100f) + "%",
             d => GameSettings.SetMessageSize(StepSize(GameSettings.MessageSize, d)));
+        AddOption(settingsRows, settingsPanel.transform, "Crowd Limit", ref y,
+            () => GameSettings.CrowdLimit <= 0 ? "Off" : GameSettings.CrowdLimit + " at once",
+            d => GameSettings.SetCrowdLimit(Wrap(GameSettings.CrowdLimit + d, 9)));
 
         y -= 16;
         AddButton(settingsRows, settingsPanel.transform, "Controls", ref y, OpenControls, SettingsRowWidth);
@@ -416,7 +556,7 @@ public class PauseMenu : MonoBehaviour
         controlsPanel = MakePanel("Controls", root.transform, width, height);
         Transform panel = controlsPanel.transform;
         float top = height / 2f;
-        MakeLabel(panel, "CONTROLS", 6, Gold, 0.5f, new Vector2(0, top - 66));
+        MakeTitle(panel, "CONTROLS", top - 66);
 
         // ---- Keyboard (left)
         const float leftX = -390f, rightX = 390f;
@@ -429,8 +569,9 @@ public class PauseMenu : MonoBehaviour
             (new[] { "S", "+", "SPACE" }, "Drop through platform"),
             (new[] { "J" }, "Attack  (or left click)"),
             (new[] { "SHIFT" }, "Surf dash  (or L)"),
-            (new[] { "CTRL" }, "Switch weapon"),
+            (new[] { "Q" }, "Switch weapon"),
             (new[] { "E" }, "Pick up weapon"),
+            (new[] { "TAB" }, "Rowdy Notes"),
             (new[] { "C" }, "Stats"),
             (new[] { "ESC" }, "Pause"),
         };
@@ -445,7 +586,7 @@ public class PauseMenu : MonoBehaviour
             }
             PixelText action = PixelText.Create(panel, entry.action, 2, TextIdle, 0f);
             Anchor(action.Rect, new Vector2(0.5f, 0.5f), new Vector2(leftX - 80f, y));
-            y -= 52f;
+            y -= 46f;
         }
 
         // ---- Gamepad (right): drawn controller + button list
@@ -463,7 +604,8 @@ public class PauseMenu : MonoBehaviour
             ("LB", PadGrey, "Switch weapon"),
             ("Y", PadY, "Pick up weapon"),
             ("DOWN + A", PadA, "Drop through platform"),
-            ("VIEW", PadGrey, "Stats"),
+            ("L2 / LT", PadGrey, "Rowdy Notes"),
+            ("SELECT", PadGrey, "Stats"),
             ("MENU", PadGrey, "Pause"),
         };
         y = top - 410;
@@ -473,7 +615,7 @@ public class PauseMenu : MonoBehaviour
             Anchor(button.Rect, new Vector2(0.5f, 0.5f), new Vector2(rightX - 60f, y));
             PixelText action = PixelText.Create(panel, entry.action, 2, TextIdle, 0f);
             Anchor(action.Rect, new Vector2(0.5f, 0.5f), new Vector2(rightX - 30f, y));
-            y -= 38f;
+            y -= 34f;
         }
 
         // Back
@@ -587,6 +729,7 @@ public class PauseMenu : MonoBehaviour
         Row row = MakeRow(rows, parent, y, width);
         row.label = PixelText.Create(row.rect, text, TextScale, TextIdle, 0.5f);
         Anchor(row.label.Rect, new Vector2(0.5f, 0.5f), Vector2.zero);
+        row.labelHome = row.label.Rect.anchoredPosition;
         row.submit = action;
         y -= RowHeight + RowGap;
     }
@@ -597,15 +740,17 @@ public class PauseMenu : MonoBehaviour
         Row row = MakeRow(rows, parent, y, SettingsRowWidth);
         row.label = PixelText.Create(row.rect, text, TextScale, TextIdle, 0f);
         Anchor(row.label.Rect, new Vector2(0f, 0.5f), new Vector2(28, 0));
+        row.labelHome = row.label.Rect.anchoredPosition;
 
         row.value = PixelText.Create(row.rect, "", TextScale, TextIdle, 0.5f);
         Anchor(row.value.Rect, new Vector2(1f, 0.5f), new Vector2(ValueX, 0));
+        row.valueHome = row.value.Rect.anchoredPosition;
         row.getValue = getValue;
         row.change = change;
 
         int index = rows.Count - 1;
-        MakeArrow(row.rect, "<", ArrowLeftX, () => { Select(index); change(-1); RefreshValues(); }, index);
-        MakeArrow(row.rect, ">", ArrowRightX, () => { Select(index); change(+1); RefreshValues(); }, index);
+        MakeArrow(row, "<", ArrowLeftX, () => { Select(index); ChangeValue(index, -1); }, index);
+        MakeArrow(row, ">", ArrowRightX, () => { Select(index); ChangeValue(index, +1); }, index);
         y -= RowHeight + RowGap;
     }
 
@@ -615,6 +760,7 @@ public class PauseMenu : MonoBehaviour
         AddOption(rows, parent, text, ref y, () => Mathf.RoundToInt(get() * 100f) + "%", d => set(Mathf.Round((get() + d * 0.1f) * 10f) / 10f));
         Row row = rows[rows.Count - 1];
         Anchor(row.value.Rect, new Vector2(1f, 0.5f), new Vector2(-122, 0));
+        row.valueHome = row.value.Rect.anchoredPosition;
 
         Image back = MakeImage("BarBack", row.rect, new Color(0.08f, 0.02f, 0.1f, 0.95f));
         Anchor(back.rectTransform, new Vector2(1f, 0.5f), new Vector2(-240, 0), new Vector2(120, 15));
@@ -646,9 +792,24 @@ public class PauseMenu : MonoBehaviour
         var row = new Row { column = buildColumn, y = y };
         Image plate = MakeImage("Row", parent, PlateColor);
         Anchor(plate.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(columnX, y - RowHeight / 2f), new Vector2(width, RowHeight));
+        MakeWipe(plate);
         row.rect = plate.rectTransform;
         row.plate = plate;
         plate.enabled = false; // only shown on the selected row
+
+        // Feedback pieces: white flash over the plate, hot pink edge on its left, ">" cursor
+        row.flash = MakeImage("Flash", row.rect, new Color(1f, 1f, 1f, 0f));
+        Stretch(row.flash.rectTransform);
+        MakeWipe(row.flash);
+        row.accent = MakeImage("Accent", row.rect, HotPink);
+        row.accent.rectTransform.anchorMin = new Vector2(0f, 0f);
+        row.accent.rectTransform.anchorMax = new Vector2(0f, 1f);
+        row.accent.rectTransform.pivot = new Vector2(0f, 0.5f);
+        row.accent.rectTransform.anchoredPosition = Vector2.zero;
+        row.accent.rectTransform.sizeDelta = new Vector2(6f, 0f);
+        row.accent.enabled = false;
+        row.cursor = PixelText.Create(row.rect, ">", TextScale, Color.white, 0f);
+        row.cursor.gameObject.SetActive(false);
 
         // Invisible hitbox: hover selects the row, click activates it
         int index = rows.Count;
@@ -663,10 +824,33 @@ public class PauseMenu : MonoBehaviour
         return row;
     }
 
-    private void MakeArrow(RectTransform rowRect, string glyph, float x, Action onClick, int index)
+    // Image that can wipe in from the left (Filled, horizontal)
+    private static void MakeWipe(Image image)
     {
-        PixelText arrow = PixelText.Create(rowRect, glyph, TextScale, Gold, 0.5f);
+        image.sprite = WhiteSprite();
+        image.type = Image.Type.Filled;
+        image.fillMethod = Image.FillMethod.Horizontal;
+        image.fillOrigin = (int)Image.OriginHorizontal.Left;
+    }
+
+    // Title: white pixel text with a hot pink underline (was a big gold word)
+    private void MakeTitle(Transform parent, string text, float y)
+    {
+        PixelText title = PixelText.Create(parent, text, 5, TitleColor, 0.5f);
+        Anchor(title.Rect, new Vector2(0.5f, 0.5f), new Vector2(0, y));
+        float width = title.Rect.sizeDelta.x + 48f;
+        Image line = MakeImage("Title Line", parent, HotPink);
+        Anchor(line.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, y - title.Rect.sizeDelta.y / 2f - 12f), new Vector2(width, 4f));
+        Image shade = MakeImage("Title Line Shade", parent, new Color(0.1f, 0.02f, 0.12f, 0.9f));
+        Anchor(shade.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, y - title.Rect.sizeDelta.y / 2f - 16f), new Vector2(width, 4f));
+    }
+
+    private void MakeArrow(Row row, string glyph, float x, Action onClick, int index)
+    {
+        PixelText arrow = PixelText.Create(row.rect, glyph, TextScale, Pink, 0.5f);
         Anchor(arrow.Rect, new Vector2(1f, 0.5f), new Vector2(x, 0));
+        if (glyph == "<") { row.arrowLeft = arrow; row.arrowLeftHome = arrow.Rect.anchoredPosition; }
+        else { row.arrowRight = arrow; row.arrowRightHome = arrow.Rect.anchoredPosition; }
         // generous click area around the small glyph
         Image hit = MakeImage("ArrowHit", arrow.Rect, new Color(0, 0, 0, 0));
         Anchor(hit.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(48, RowHeight));

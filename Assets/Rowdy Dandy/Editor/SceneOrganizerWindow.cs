@@ -88,7 +88,10 @@ public class SceneOrganizerWindow : EditorWindow
         new Profile("Bushes", @"^Bush", InteractiveVegetation.Mode.Grass, 0.6f, 0.22f, true),
         new Profile("Crystal plants", @"^CrystalFlower|^CrystalVegetation|^CrystalVine", InteractiveVegetation.Mode.Grass, 0.35f, 0.15f, true),
         new Profile("Trees", @"^RDR_Vegetation_[0-5]$|^Tree[A-Z]$|^HorrificTree", InteractiveVegetation.Mode.Tree, 0.22f, 0.2f, true),
-    };
+        // Added 2026-10-07 so the rest of the map moves like the Gloomy Forest (check them in Preview first)
+        new Profile("Palm trees", @"^RDR_BigPalmTree", InteractiveVegetation.Mode.Tree, 0.3f, 0.2f, true),
+        new Profile("Flowers (set 1)", @"^RDR_Flowers_1$", InteractiveVegetation.Mode.Grass, 0.9f, 0.3f, true),
+        new Profile("Crystal patches", @"^CrystalPatch", InteractiveVegetation.Mode.Grass, 0.3f, 0.12f, true),    };
 
     private const string DefaultSpriteShader = "Universal Render Pipeline/2D/Sprite-Lit-Default";
     private const string VegetationShader = "Rowdy Dandy/2D/Sprite-Lit-Vegetation";

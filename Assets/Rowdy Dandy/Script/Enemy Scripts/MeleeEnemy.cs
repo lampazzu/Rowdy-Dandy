@@ -36,6 +36,19 @@ public class MeleeEnemy : MonoBehaviour
     private int enemyLayerIndex = -2, ignorePlayerLayerIndex = -2;
 
 
+    // How far in front of the enemy's middle its attack check reaches (world units). Used by EnemyMovement to stop
+    // chasing once Rowdy is inside it instead of walking into him.
+    public float AttackReach
+    {
+        get
+        {
+            if (boxCollider == null) return 1f;
+            float width = boxCollider.bounds.size.x * range;
+            float offset = Mathf.Abs(range * transform.localScale.x * colliderDistance);
+            return Mathf.Max(0.3f, offset + width * 0.5f);
+        }
+    }
+
     private void Awake()
     {
         anim = GetComponent<Animator>();

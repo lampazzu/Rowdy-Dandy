@@ -25,6 +25,8 @@ public static class RunStats
     public static float PlayTime;    // seconds, paused time not counted
     public static readonly Dictionary<string, int> KillsByEnemy = new Dictionary<string, int>();
 
+    public static void ResetAll() => ResetSession(); // dev reset (key 0)
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSession()
     {

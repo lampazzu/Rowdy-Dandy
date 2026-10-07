@@ -680,6 +680,15 @@ public static class CatRoster
 
     public static void MarkDied() => diedBeforeReload = true;
 
+    // Dev reset (key 0): forget every collected cat and the remembered hiding spots
+    public static void ClearAll()
+    {
+        collected.Clear();
+        visitedSpots.Clear();
+        needsApply = true;
+        diedBeforeReload = false;
+    }
+
     public static void RecordCollected(string key)
     {
         if (!collected.Contains(key)) collected.Add(key);

@@ -212,6 +212,21 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    // Runtime setup for enemies configured from code (e.g. PelichBoss): new max HP, starting full
+    public void SetMaxHealth(float health)
+    {
+        startingenemyHealth = health;
+        currentenemyHealth = health;
+    }
+
+    // EXP gems to drop on death, if none were set in the Inspector
+    public void SetExpDropIfMissing(GameObject gemPrefab, int amount)
+    {
+        if (expGemPrefab != null || giveDirectEXP || gemPrefab == null) return;
+        expGemPrefab = gemPrefab;
+        expGemAmount = amount;
+    }
+
     public void AddHealthEnemy(float _value)
     {
         currentenemyHealth = Mathf.Clamp(currentenemyHealth + _value, 0, startingenemyHealth);
@@ -250,6 +265,7 @@ public class EnemyHealth : MonoBehaviour
         {
             isBeingHit = true;
             onHurtWolf.Invoke();
+            SoundEffect.PlayUnboundSounds(onHurtWolf);
             anima.Play("GetHit", 0, 0f);
 
             if (isParryTime)
@@ -292,6 +308,7 @@ public class EnemyHealth : MonoBehaviour
             if (!enemydead)
             {
                 onEnemyKill.Invoke();
+                SoundEffect.PlayUnboundSounds(onEnemyKill);
                 SetAnimatorTrigger("destroyed");
                 enemydead = true;
                 if (TryGetComponent(out EnemyCorpse corpse)) corpse.OnKilled();
@@ -352,7 +369,11 @@ public class EnemyHealth : MonoBehaviour
     {
         if (isObject)
         {
-            if (credit != null && credit.kind != KillCredit.Kind.World) RunStats.ObjectsSmashed++;
+            if (credit != null && credit.kind != KillCredit.Kind.World)
+            {
+                RunStats.ObjectsSmashed++;
+                RowdyNotes.RecordKill(this); // statues have a page too (plants don't match any entry)
+            }
             return;
         }
 
@@ -377,6 +398,7 @@ public class EnemyHealth : MonoBehaviour
             {
                 RunStats.RecordKill(victimName, killer.kind == KillCredit.Kind.Cat);
                 if (killer.execution) RunStats.Executions++;
+                RowdyNotes.RecordKill(this);
             }
             KillFeed.Report(killer, victimName, portrait);
         }

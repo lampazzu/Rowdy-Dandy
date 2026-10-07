@@ -132,6 +132,34 @@ public class WeaponManager : MonoBehaviour
 
         LoadWeaponData();
         UpdateWeapon();
+
+        if (weaponProfileImage != null) WeaponSwitchPrompt.Attach(this, weaponProfileImage.rectTransform);
+    }
+
+    // The weapon L1 / Q would switch to, or null when there's nothing else to switch to (for the HUD prompt)
+    public Sprite NextWeaponProfile
+    {
+        get
+        {
+            int current = GetActiveWeaponIndex();
+            for (int i = 1; i < 4; i++)
+            {
+                int index = (current + i) % 4;
+                if (unlockedWeapons[index]) return index == current ? null : GetProfileByIndex(index);
+            }
+            return null;
+        }
+    }
+
+    public Sprite GetProfileByIndex(int index)
+    {
+        switch (index)
+        {
+            case 1: return swordProfile;
+            case 2: return naginataProfile;
+            case 3: return cleaverProfile;
+            default: return rodProfile;
+        }
     }
 
     void Update()
@@ -141,9 +169,10 @@ public class WeaponManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha7) && unlockedWeapons[0]) SetWeaponToAxe();
         if (Input.GetKeyDown(KeyCode.Alpha8) && unlockedWeapons[1]) SetWeaponToSword();
         if (Input.GetKeyDown(KeyCode.Alpha9) && unlockedWeapons[2]) SetWeaponToNaginata();
-        if (Input.GetKeyDown(KeyCode.Alpha0) && unlockedWeapons[3]) SetWeaponToCleaver();
+        // (0 used to pick the Cleaver; it's the dev "reset everything" key now, see DevReset)
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.JoystickButton4))
+        // Q on keyboard (was Left Ctrl), L1 / LB on gamepad
+        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.JoystickButton4))
         {
             CycleWeapon();
         }
@@ -252,6 +281,7 @@ public class WeaponManager : MonoBehaviour
     {
         int index = GetIndexFromType(type);
         unlockedWeapons[index] = true;
+        RowdyNotes.MarkWeaponFound(index); // unlocks its Weapon Notes page
         maxDurability[index] = durabilityMax;
         currentDurability[index] = durabilityMax;
 

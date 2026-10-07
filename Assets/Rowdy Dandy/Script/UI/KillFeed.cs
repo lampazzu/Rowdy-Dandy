@@ -187,6 +187,16 @@ public class KillFeed : MonoBehaviour
     // head crop of its sprite. Cached per enemy type.
     public static void Describe(EnemyHealth enemy, out string name, out Sprite portrait)
     {
+        // Known enemy types: catalog name + generated head portrait (Resources/EnemyPortraits)
+        EnemyCatalog.Entry entry = EnemyCatalog.Identify(enemy);
+        if (entry != null)
+        {
+            name = entry.name;
+            if (entry.fallbackPortrait == null && entry.Portrait == null) entry.fallbackPortrait = HeadCropOf(enemy);
+            portrait = entry.Portrait;
+            return;
+        }
+
         string key = CleanObjectName(enemy.gameObject.name);
         if (identities.TryGetValue(key, out var known) && (known.portrait != null || !string.IsNullOrEmpty(known.name)))
         {
@@ -212,10 +222,16 @@ public class KillFeed : MonoBehaviour
             if (image.gameObject.name == "Portrait" && image.sprite != null) { portrait = image.sprite; break; }
         }
 
-        if (string.IsNullOrEmpty(name)) name = SplitWords(key);
-        if (portrait == null && enemy.TryGetComponent(out SpriteRenderer sr) && sr.sprite != null) portrait = HeadCrop(sr.sprite);
+        if (string.IsNullOrEmpty(name)) name = EnemyCatalog.PrettyName(enemy.gameObject.name);
+        if (portrait == null) portrait = HeadCropOf(enemy);
 
         identities[key] = (name, portrait);
+    }
+
+    // Fallback face when there's no generated portrait yet
+    public static Sprite HeadCropOf(EnemyHealth enemy)
+    {
+        return enemy != null && enemy.TryGetComponent(out SpriteRenderer sr) && sr.sprite != null ? HeadCrop(sr.sprite) : null;
     }
 
     private static string CleanObjectName(string objectName)
@@ -225,20 +241,6 @@ public class KillFeed : MonoBehaviour
         if (paren > 0) n = n.Substring(0, paren);
         if (n.StartsWith("Enemy_")) n = n.Substring(6);
         return n;
-    }
-
-    // "GnollWarrior" -> "Gnoll Warrior"
-    private static string SplitWords(string s)
-    {
-        var sb = new System.Text.StringBuilder();
-        for (int i = 0; i < s.Length; i++)
-        {
-            char c = s[i];
-            if (c == '_') { sb.Append(' '); continue; }
-            if (i > 0 && char.IsUpper(c) && char.IsLower(s[i - 1])) sb.Append(' ');
-            sb.Append(c);
-        }
-        return sb.ToString().Trim();
     }
 
     // Square crop around the top of the sprite's visible pixels (its head)

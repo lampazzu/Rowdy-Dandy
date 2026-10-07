@@ -50,12 +50,14 @@ public class AudioVolumeManager : MonoBehaviour
         {
             if (source.gameObject.name == "One shot audio") continue; // SoundManager one-shots, already scaled
             if (SoundtrackManager.Owns(source)) continue;              // fades its own volume with the Music setting
+            if (UISound.Owns(source)) continue;                        // menu sounds, scaled in UISound
 
             if (!tracked.TryGetValue(source, out Tracked info))
             {
                 info = new Tracked { baseVolume = source.volume, clip = source.clip, isMusic = IsMusic(source) };
                 tracked[source] = info;
                 source.ignoreListenerPause = info.isMusic;
+                if (info.isMusic) SoundtrackManager.AddMuffle(source); // ambience gets muffled with the music when paused
                 Apply(source, info);
             }
             else if (info.clip != source.clip)

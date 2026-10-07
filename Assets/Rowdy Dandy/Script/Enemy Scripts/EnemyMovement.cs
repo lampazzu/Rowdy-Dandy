@@ -193,6 +193,29 @@ public class EnemyMovement : MonoBehaviour
     private float watchTimer;
     private PlayerMovement playerMovement;
 
+    public enum SpacingMode { Auto, On, Off }
+
+    [Header("Chase: Keep Attack Distance & Take Turns")]
+    [Tooltip("Stop walking once Rowdy is inside its attack reach (from MeleeEnemy) instead of pushing into him, and take turns: only Crowd Limit of these (pause menu setting, default 4) press him at once, the rest hang back. Auto = on for Big Wolf, Transform Wolf and Werefast.")]
+    [SerializeField] private SpacingMode keepAttackDistance = SpacingMode.Auto;
+    [Tooltip("Stop when Rowdy is this fraction of the attack reach away (a bit inside it, so the attack check catches him).")]
+    [SerializeField] private float stopAtReachFraction = 0.75f;
+    [Tooltip("Ones waiting for a turn hold this much further out than the attack distance.")]
+    [SerializeField] private float waitingDistance = 2.2f;
+    [Tooltip("With others waiting, an attacker gives up its turn after this many seconds and backs off.")]
+    [SerializeField] private float turnLength = 5f;
+    [Tooltip("Debug: on while it's hanging back waiting for a turn.")]
+    [SerializeField] private bool waitingForTurn;
+
+    private static readonly List<EnemyMovement> attackers = new List<EnemyMovement>();
+    private static readonly HashSet<EnemyMovement> waiters = new HashSet<EnemyMovement>();
+    private bool usesSpacing;
+    private MeleeEnemy melee;
+    private EnemyHealth health;
+    private float turnStartedAt;
+    private float rejoinAfter;
+    private float personalOffset; // spreads the waiting ones out a little
+
     [Header("Patrol: Turn Back When Blocked")]
     [Tooltip("Walking to a patrol point but not getting anywhere (a wall in the way, or hanging on a wall's side) for this long = give up on that point and head for the next one.")]
     [SerializeField] private float patrolBlockedTime = 0.6f;
@@ -279,6 +302,88 @@ public class EnemyMovement : MonoBehaviour
         }
 
         lastStuckCheckPosition = transform.position;
+
+        melee = GetComponent<MeleeEnemy>();
+        health = GetComponent<EnemyHealth>();
+        personalOffset = Random.Range(0f, 1.2f);
+        if (keepAttackDistance == SpacingMode.Auto)
+        {
+            EnemyCatalog.Entry entry = health != null ? EnemyCatalog.Identify(health) : null;
+            usesSpacing = entry != null && (entry.id == "bigwolf" || entry.id == "transformwolf" || entry.id == "werefast");
+        }
+        else usesSpacing = keepAttackDistance == SpacingMode.On;
+        usesSpacing &= melee != null && !isOnlyAquatic;
+    }
+
+    private void OnDisable() => LeaveTurnQueue();
+    private void OnDestroy() => LeaveTurnQueue();
+
+    private void LeaveTurnQueue()
+    {
+        attackers.Remove(this);
+        waiters.Remove(this);
+        waitingForTurn = false;
+    }
+
+    // Keep-distance + take-turns chase. Returns true when it moved the enemy itself this frame.
+    private bool HandleSpacing(Vector2 toTarget)
+    {
+        if (health != null && health.enemydead) { LeaveTurnQueue(); return false; }
+
+        float dist = Mathf.Abs(toTarget.x);
+        float stopAt = Mathf.Max(0.35f, melee.AttackReach * stopAtReachFraction);
+        float holdAt = stopAt + waitingDistance + personalOffset;
+        int limit = GameSettings.CrowdLimit;
+        attackers.RemoveAll(a => a == null || !a.isActiveAndEnabled);
+        waiters.RemoveWhere(w => w == null || !w.isActiveAndEnabled);
+
+        bool near = dist < holdAt + 1.5f;
+        bool hasTurn = attackers.Contains(this);
+        if (!near)
+        {
+            if (hasTurn) attackers.Remove(this);
+            waiters.Remove(this);
+            waitingForTurn = false;
+            return false; // far away: normal chase
+        }
+
+        if (!hasTurn && (limit <= 0 || attackers.Count < limit) && Time.time >= rejoinAfter)
+        {
+            attackers.Add(this);
+            turnStartedAt = Time.time;
+            hasTurn = true;
+        }
+        // Been at it a while and others are waiting: step back and let one in
+        if (hasTurn && limit > 0 && waiters.Count > 0 && Time.time - turnStartedAt > turnLength)
+        {
+            attackers.Remove(this);
+            hasTurn = false;
+            rejoinAfter = Time.time + 2f;
+        }
+
+        waitingForTurn = !hasTurn;
+        if (waitingForTurn) waiters.Add(this); else waiters.Remove(this);
+
+        float towards = Mathf.Sign(toTarget.x);
+        float want = hasTurn ? stopAt : holdAt;
+        float moveDir;
+        if (dist > want + 0.25f)
+        {
+            if (hasTurn) return false; // still closing in: normal chase (jumps, wall hops...)
+            moveDir = towards;
+        }
+        else if (!hasTurn && dist < want - 0.5f) moveDir = -towards; // too close while waiting: back off
+        else moveDir = 0f;
+
+        if (moveDir != 0f && IsAtEdge(moveDir)) moveDir = 0f; // never back off a ledge
+
+        FlipSprite(towards); // always facing Rowdy, even walking backwards
+        ApplyHorizontalVelocity(moveDir * moveSpeed * (moveDir == towards ? 1f : 0.7f));
+        bool walking = moveDir != 0f;
+        SetAnimatorBool("moving", walking);
+        isMoving = walking;
+        pushAgainstWallTimer = 0f;
+        return true;
     }
 
     // Water / AntiEnemy colliders per water mask, found once per scene instead of searching every collider in the
@@ -989,6 +1094,16 @@ public class EnemyMovement : MonoBehaviour
             SetAnimatorBool("moving", false);
             isMoving = false;
             return;
+        }
+
+        // Pushy melee enemies stop at attack range and take turns (same floor, on the ground only)
+        if (usesSpacing && target == playerTransform && isGrounded && Mathf.Abs(directionToTarget.y) < 1.2f)
+        {
+            if (HandleSpacing(directionToTarget)) return;
+        }
+        else if (usesSpacing && waitingForTurn)
+        {
+            LeaveTurnQueue();
         }
 
         if (isJumperMan && isGrounded && directionToTarget.y < -0.5f)

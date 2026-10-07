@@ -27,6 +27,9 @@ public static class GameSettings
     public static float DamageNumberSize { get; private set; } = 1f; // x the (already halved) base size of damage numbers
     public static float MessageSize { get; private set; } = 1f;      // x the (already halved) base size of CRITICAL! / COUNTER! / EXECUTED!...
     public static bool ShowFps { get; private set; }
+    // "Respect": how many of the pushy melee enemies (Big Wolf, Transform Wolf, Werefast) may press Rowdy at once;
+    // the rest hang back and wait for a turn. 0 = no limit.
+    public static int CrowdLimit { get; private set; } = 4;
 
     public static event Action Changed;
 
@@ -107,6 +110,7 @@ public static class GameSettings
         DamageNumberSize = PlayerPrefs.GetFloat(Prefix + "NumberSize", 1f);
         MessageSize = PlayerPrefs.GetFloat(Prefix + "MessageSize", 1f);
         ShowFps = PlayerPrefs.GetInt(Prefix + "ShowFps", 0) == 1;
+        CrowdLimit = PlayerPrefs.GetInt(Prefix + "CrowdLimit", 4);
     }
 
     private static void Save()
@@ -126,6 +130,7 @@ public static class GameSettings
         PlayerPrefs.SetFloat(Prefix + "NumberSize", DamageNumberSize);
         PlayerPrefs.SetFloat(Prefix + "MessageSize", MessageSize);
         PlayerPrefs.SetInt(Prefix + "ShowFps", ShowFps ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "CrowdLimit", CrowdLimit);
         PlayerPrefs.Save();
     }
 
@@ -163,6 +168,7 @@ public static class GameSettings
     public static void SetDamageNumberSize(float v) { DamageNumberSize = Mathf.Clamp(v, 0.25f, 3f); Commit(); }
     public static void SetMessageSize(float v) { MessageSize = Mathf.Clamp(v, 0.25f, 3f); Commit(); }
     public static void SetShowFps(bool on) { ShowFps = on; Commit(); }
+    public static void SetCrowdLimit(int n) { CrowdLimit = Mathf.Clamp(n, 0, 8); Commit(); }
 
     public static string DisplayModeName(FullScreenMode mode)
     {

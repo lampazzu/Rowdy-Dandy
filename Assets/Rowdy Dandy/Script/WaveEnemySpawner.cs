@@ -43,6 +43,47 @@ public class WaveEnemySpawner : MonoBehaviour
         public List<EnemyEntry> enemies = new List<EnemyEntry>();
     }
 
+    // A stretch of the level with its own difficulty. Checked top to bottom; the first one containing Rowdy wins.
+    [System.Serializable]
+    public class Zone
+    {
+        public string name = "Zone";
+        public float fromX = -100000f, toX = 100000f;
+        public float fromY = -100000f, toY = 100000f;
+        [Tooltip("Hardest enemy tier that can show up here (matches the pool's Difficulty).")]
+        [Range(1, 10)] public int difficulty = 1;
+        [Tooltip("x the wave size.")]
+        public float countMultiplier = 1f;
+
+        public Zone() { }
+        public Zone(string name, float fromX, float toX, float fromY, float toY, int difficulty, float countMultiplier)
+        {
+            this.name = name; this.fromX = fromX; this.toX = toX; this.fromY = fromY; this.toY = toY;
+            this.difficulty = difficulty; this.countMultiplier = countMultiplier;
+        }
+
+        public bool Contains(Vector2 p) => p.x >= fromX && p.x < toX && p.y >= fromY && p.y < toY;
+    }
+
+    [Header("Difficulty Zones")]
+    [Tooltip("On: each wave is built when it starts, from the enemy pool, for the zone Rowdy is in (harder zones = tougher enemies and more of them). Off: the pre-made waves below are used as before.")]
+    [SerializeField] private bool useZones = true;
+    [Tooltip("Guessed borders - the Console logs 'Spawn zone: ...' at every wave, so walk around and adjust.")]
+    [SerializeField] private List<Zone> zones = new List<Zone>
+    {
+        new Zone("Gloomy Forest (up top)", 5f, 60f, 7f, 100000f, 9, 1.3f),
+        new Zone("Pelich", 205f, 100000f, -100000f, 100000f, 10, 1.4f),
+        new Zone("Before Pelich", 160f, 205f, -100000f, 100000f, 6, 1.1f),
+        new Zone("Jungle", 104f, 160f, -100000f, 100000f, 4, 1f),
+        new Zone("Beach", -100000f, 104f, -100000f, 100000f, 2, 0.7f),
+    };
+
+    [Header("Ranged Enemies (Gnoll Archer / Bomber)")]
+    [Tooltip("They don't move, so they only spawn on flat ground with a clear shot at Rowdy, facing him.")]
+    [SerializeField] private bool smartRangedPlacement = true;
+    [SerializeField] private float rangedMinDistance = 5f;
+    [SerializeField] private float rangedMaxDistance = 11f;
+
     [Header("Player")]
     [SerializeField] private Transform player;
 
@@ -252,13 +293,25 @@ public class WaveEnemySpawner : MonoBehaviour
         if (wave == null)
             yield break;
 
-        if (wave.enemies == null || wave.enemies.Count == 0)
+        // Zones: build this wave now, for wherever Rowdy is
+        List<EnemyEntry> list = wave.enemies;
+        if (useZones && player != null)
+        {
+            Zone zone = CurrentZone();
+            if (zone != null)
+            {
+                list = BuildZoneWave(zone);
+                Debug.Log($"Spawn zone: {zone.name} (difficulty {zone.difficulty}, {list.Count} enemies) at x {player.position.x:F0}, y {player.position.y:F0}");
+            }
+        }
+
+        if (list == null || list.Count == 0)
         {
             Debug.LogWarning("WaveEnemySpawner: " + wave.waveName + " contains no enemies. Press RANDOMIZE ALL WAVES first.");
             yield break;
         }
 
-        for (int i = 0; i < wave.enemies.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
             if (player == null)
             {
@@ -268,7 +321,7 @@ public class WaveEnemySpawner : MonoBehaviour
                     yield break;
             }
 
-            EnemyEntry entry = wave.enemies[i];
+            EnemyEntry entry = list[i];
 
             // At the limit: wait for some to die or be cleaned up before spawning more
             while (maxAliveEnemies > 0 && AliveCount >= maxAliveEnemies)
@@ -285,11 +338,61 @@ public class WaveEnemySpawner : MonoBehaviour
         }
     }
 
+    private Zone CurrentZone()
+    {
+        if (player == null || zones == null) return null;
+        foreach (Zone zone in zones) if (zone != null && zone.Contains(player.position)) return zone;
+        return null;
+    }
+
+    // Enemies allowed in the zone (pool Difficulty <= zone difficulty), favouring the ones near the zone's tier,
+    // and a wave size that grows with the difficulty
+    private List<EnemyEntry> BuildZoneWave(Zone zone)
+    {
+        var result = new List<EnemyEntry>();
+        var allowed = new List<EnemyEntry>();
+        foreach (EnemyEntry e in GetValidEnemies()) if (e.difficulty <= zone.difficulty) allowed.Add(e);
+        if (allowed.Count == 0) return result;
+
+        float progress = Mathf.InverseLerp(1f, 10f, zone.difficulty);
+        int min = Mathf.Max(1, minimumEnemiesPerWave), max = Mathf.Max(min, maximumEnemiesPerWave);
+        int count = Mathf.RoundToInt(Mathf.Lerp(min, max, progress * 0.8f) * Random.Range(0.85f, 1.15f) * Mathf.Max(0.1f, zone.countMultiplier));
+        count = Mathf.Clamp(count, 1, max * 2);
+
+        float total = 0f;
+        var weights = new float[allowed.Count];
+        for (int i = 0; i < allowed.Count; i++)
+        {
+            // close to the zone's tier = common; much easier ones still show up as fodder
+            float gap = zone.difficulty - allowed[i].difficulty;
+            weights[i] = Mathf.Max(1, allowed[i].spawnWeight) * Mathf.Lerp(1f, 0.25f, Mathf.Clamp01(gap / 6f));
+            total += weights[i];
+        }
+        for (int n = 0; n < count; n++)
+        {
+            float pick = Random.Range(0f, total);
+            for (int i = 0; i < allowed.Count; i++)
+            {
+                pick -= weights[i];
+                if (pick <= 0f || i == allowed.Count - 1) { result.Add(allowed[i]); break; }
+            }
+        }
+        return result;
+    }
+
+    private static bool IsRanged(GameObject prefab)
+    {
+        EnemyCatalog.Entry entry = prefab != null ? EnemyCatalog.Match(prefab.name) : null;
+        return entry != null && (entry.id == "gnollarcher" || entry.id == "gnollbomber");
+    }
+
     private void SpawnEnemy(EnemyEntry entry)
     {
         Vector3 spawnPosition;
+        bool ranged = smartRangedPlacement && entry.enemyType == EnemyType.Ground && IsRanged(entry.prefab);
 
-        if (!GetSpawnPosition(entry.enemyType, out spawnPosition))
+        bool found = ranged ? GetRangedSpawnPosition(out spawnPosition) : GetSpawnPosition(entry.enemyType, out spawnPosition);
+        if (!found)
         {
             Debug.LogWarning("WaveEnemySpawner: Could not find suitable surface position for " + entry.enemyType + " enemy.");
             return;
@@ -298,6 +401,14 @@ public class WaveEnemySpawner : MonoBehaviour
         // 1. Instantiate enemy first
         GameObject enemy = Instantiate(entry.prefab, spawnPosition, Quaternion.identity);
         Track(enemy);
+
+        // Archers / bombers stand still: turn them towards Rowdy (the art faces left at +x scale)
+        if (ranged && player != null)
+        {
+            Vector3 s = enemy.transform.localScale;
+            s.x = Mathf.Abs(s.x) * (player.position.x > spawnPosition.x ? -1f : 1f);
+            enemy.transform.localScale = s;
+        }
 
         if (entry.enemyType == EnemyType.Flying)
         {
@@ -387,7 +498,7 @@ public class WaveEnemySpawner : MonoBehaviour
             float rayStartY = player.position.y + 15f;
             Vector2 rayStart = new Vector2(x, rayStartY);
 
-            RaycastHit2D[] hits = Physics2D.RaycastAll(rayStart, Vector2.down, 40f);
+            RaycastHit2D[] hits = SolidHits(rayStart, 40f);
 
             bool columnHasWater = false;
             float highestWaterY = float.MinValue;
@@ -405,6 +516,18 @@ public class WaveEnemySpawner : MonoBehaviour
                         highestWaterY = hit.point.y;
                     }
                 }
+            }
+
+            // Sea creatures only in open water: the water has to be the first thing from the sky down (not a pool
+            // sealed under the ground), with air above it and some room to swim
+            if (type == EnemyType.Water)
+            {
+                if (TryOpenWater(x, rayStart.y, out Vector2 surface))
+                {
+                    position = new Vector3(x, surface.y, player.position.z);
+                    return true;
+                }
+                continue;
             }
 
             // If spawning a Ground enemy in a column that has water above/on it, reject this position attempt
@@ -460,6 +583,102 @@ public class WaveEnemySpawner : MonoBehaviour
         }
 
         return false;
+    }
+
+    // Down-ray hits on solid colliders only (triggers like attack boxes / pickups don't count), nearest first
+    private static RaycastHit2D[] SolidHits(Vector2 from, float distance)
+    {
+        RaycastHit2D[] all = Physics2D.RaycastAll(from, Vector2.down, distance);
+        var solid = new List<RaycastHit2D>(all.Length);
+        foreach (RaycastHit2D h in all) if (h.collider != null && !h.collider.isTrigger) solid.Add(h);
+        return solid.ToArray();
+    }
+
+    // First surface (ground or water) straight down from the top of the column
+    private bool FirstSurface(float x, float fromY, out RaycastHit2D surface)
+    {
+        foreach (RaycastHit2D h in SolidHits(new Vector2(x, fromY), 40f))
+        {
+            if (IsGround(h.collider.gameObject) || IsWater(h.collider.gameObject)) { surface = h; return true; }
+        }
+        surface = default;
+        return false;
+    }
+
+    private bool TryOpenWater(float x, float fromY, out Vector2 surface)
+    {
+        surface = default;
+        if (!FirstSurface(x, fromY, out RaycastHit2D hit) || !IsWater(hit.collider.gameObject)) return false;
+        if (Mathf.Abs(hit.point.y - player.position.y) > 8f) return false; // not some sea far below / above Rowdy
+
+        // Room to swim: the water is also the first surface a bit to each side, at about the same height
+        foreach (float side in new[] { -1.4f, 1.4f })
+        {
+            if (!FirstSurface(x + side, fromY, out RaycastHit2D near) || !IsWater(near.collider.gameObject)) return false;
+            if (Mathf.Abs(near.point.y - hit.point.y) > 0.4f) return false;
+        }
+
+        // Air above the surface (no ground lid right on top of it)
+        Collider2D lid = Physics2D.OverlapBox(hit.point + Vector2.up * 1f, new Vector2(2f, 1.4f), 0f, groundLayer);
+        if (lid != null && !lid.isTrigger) return false;
+
+        surface = hit.point;
+        return true;
+    }
+
+    // Archers / bombers: flat ground, a clear line to Rowdy, not right in front of a wall or slope, at shooting range
+    private bool GetRangedSpawnPosition(out Vector3 position)
+    {
+        position = Vector3.zero;
+        if (player == null) return false;
+
+        for (int attempt = 0; attempt < 16; attempt++)
+        {
+            float side = Random.value < 0.5f ? -1f : 1f;
+            float x = player.position.x + side * Random.Range(rangedMinDistance, rangedMaxDistance);
+            if (!FirstSurfaceNear(x, out RaycastHit2D ground)) continue;
+            if (!IsGround(ground.collider.gameObject) || ground.normal.y < 0.95f) continue; // flat only
+
+            // Flat for a body width either side (no slope / step right next to it)
+            bool flat = true;
+            foreach (float dx in new[] { -0.5f, 0.5f })
+            {
+                if (!FirstSurfaceNear(x + dx, out RaycastHit2D h) || Mathf.Abs(h.point.y - ground.point.y) > 0.12f) { flat = false; break; }
+            }
+            if (!flat) continue;
+            if (Mathf.Abs(ground.point.y - player.position.y) > 3f) continue; // roughly Rowdy's level
+
+            // Clear shot from chest height to Rowdy, and no wall within a few steps in the facing direction
+            Vector2 chest = ground.point + Vector2.up * 0.6f;
+            Vector2 target = (Vector2)player.position + Vector2.up * 0.3f;
+            RaycastHit2D block = Physics2D.Linecast(chest, target, groundLayer);
+            if (block.collider != null && !block.collider.isTrigger) continue;
+            float facing = Mathf.Sign(player.position.x - x);
+            RaycastHit2D wall = Physics2D.Raycast(chest, new Vector2(facing, 0f), 3f, groundLayer);
+            if (wall.collider != null && !wall.collider.isTrigger) continue;
+            if (Physics2D.Raycast(ground.point + Vector2.up * 0.1f, Vector2.up, ceilingCheckDistance, groundLayer).collider != null) continue;
+
+            position = new Vector3(x, ground.point.y, player.position.z);
+            return true;
+        }
+
+        // Nothing good nearby: a normal ground spot is better than no enemy
+        return GetSpawnPosition(EnemyType.Ground, out position);
+    }
+
+    // The surface closest to Rowdy's height in this column (like GetSpawnPosition), ground or water
+    private bool FirstSurfaceNear(float x, out RaycastHit2D best)
+    {
+        best = default;
+        bool found = false;
+        float bestDy = float.MaxValue;
+        foreach (RaycastHit2D h in SolidHits(new Vector2(x, player.position.y + 6f), 14f))
+        {
+            if (!IsGround(h.collider.gameObject) && !IsWater(h.collider.gameObject)) continue;
+            float dy = Mathf.Abs(h.point.y - player.position.y);
+            if (dy < bestDy) { bestDy = dy; best = h; found = true; }
+        }
+        return found;
     }
 
     private bool IsGround(GameObject obj)

@@ -84,8 +84,8 @@ public class PlayerStats : MonoBehaviour
     {
         if (PauseMenu.IsPaused) return;
 
-        // C, or the gamepad's Select / View button
-        if (Input.GetKeyDown(toggleUIKey) || Input.GetKeyDown(KeyCode.JoystickButton6))
+        // C, or the gamepad's Select / View / Share (Rowdy Notes are on L2 / Tab)
+        if (Input.GetKeyDown(toggleUIKey) || PadInput.SelectDown)
         {
             ToggleStatsUI();
         }
@@ -283,6 +283,7 @@ public class PlayerStats : MonoBehaviour
         currentEXP = PlayerPrefs.GetFloat("PlayerEXP", 0f);
     }
 
+    public bool IsStatsOpen => isUIPanelOpen;
     public int GetCurrentLevel() => currentLevel;
     public float GetCurrentEXP() => currentEXP;
     public float GetAppliedDamage() => appliedDamageBonus;

@@ -21,7 +21,32 @@ public class SoundtrackManager : MonoBehaviour
     private readonly HashSet<AudioClip> soundtrackClips = new HashSet<AudioClip>();
     private readonly List<AudioSource> sceneCopies = new List<AudioSource>();
 
-    public static bool Owns(AudioSource source) => instance != null && source != null && source.gameObject == instance.gameObject;
+    // Where each song was when it last faded out, so coming back to a biome picks the song up where it left off
+    private readonly Dictionary<AudioClip, float> resumeTimes = new Dictionary<AudioClip, float>();
+
+    // Pause menu muffle: a low-pass on every music source (soundtrack + looping ambience), eased in and out
+    private const float MuffledCutoff = 650f;
+    private const float OpenCutoff = 22000f;
+    private const float MuffleSpeed = 6f;         // per second, in "fraction of the way" terms
+    private const float MuffledVolume = 0.6f;
+    private static readonly List<AudioLowPassFilter> muffleFilters = new List<AudioLowPassFilter>();
+    private static float muffle;                  // 0 = clear, 1 = fully muffled
+    private static float appliedMuffle = -1f;
+    private static int appliedFilterCount = -1;
+    public static float MuffleVolume => Mathf.Lerp(1f, MuffledVolume, muffle);
+
+    public static bool Owns(AudioSource source) => instance != null && source != null && source.transform.IsChildOf(instance.transform);
+
+    // Music sources found by AudioVolumeManager get muffled with the soundtrack while paused
+    public static void AddMuffle(AudioSource source)
+    {
+        if (source == null || source.GetComponent<AudioLowPassFilter>() != null) return;
+        AudioLowPassFilter filter = source.gameObject.AddComponent<AudioLowPassFilter>();
+        filter.cutoffFrequency = OpenCutoff;
+        filter.lowpassResonanceQ = 1f;
+        filter.enabled = false;
+        muffleFilters.Add(filter);
+    }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Create()
@@ -43,7 +68,10 @@ public class SoundtrackManager : MonoBehaviour
         sectionVolumes = new float[2];
         for (int i = 0; i < 2; i++)
         {
-            AudioSource source = gameObject.AddComponent<AudioSource>();
+            // One child per player, so each can carry its own low-pass filter (filters act on their GameObject's source)
+            var holder = new GameObject("Player " + (i + 1));
+            holder.transform.SetParent(transform, false);
+            AudioSource source = holder.AddComponent<AudioSource>();
             source.playOnAwake = false;
             source.loop = true;
             source.spatialBlend = 0f;
@@ -51,6 +79,7 @@ public class SoundtrackManager : MonoBehaviour
             source.ignoreListenerPause = true; // the pause menu pauses sound effects, not the music
             source.volume = 0f;
             players[i] = source;
+            AddMuffle(source);
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -115,7 +144,28 @@ public class SoundtrackManager : MonoBehaviour
         }
 
         if (rowdy != null) ChooseSection(rowdy.position.x);
+        UpdateMuffle();
         UpdateFades();
+    }
+
+    private static void UpdateMuffle()
+    {
+        float target = PauseMenu.IsPaused ? 1f : 0f;
+        muffle = Mathf.MoveTowards(muffle, target, MuffleSpeed * Time.unscaledDeltaTime);
+        if (muffle == appliedMuffle && muffleFilters.Count == appliedFilterCount) return;
+        appliedMuffle = muffle;
+        appliedFilterCount = muffleFilters.Count;
+
+        // Exponential sweep sounds even, a linear one jumps straight to "dull"
+        float cutoff = Mathf.Exp(Mathf.Lerp(Mathf.Log(OpenCutoff), Mathf.Log(MuffledCutoff), muffle));
+        bool on = muffle > 0.001f;
+        for (int i = muffleFilters.Count - 1; i >= 0; i--)
+        {
+            AudioLowPassFilter filter = muffleFilters[i];
+            if (filter == null) { muffleFilters.RemoveAt(i); continue; }
+            filter.cutoffFrequency = cutoff;
+            filter.enabled = on;
+        }
     }
 
     private void ChooseSection(float x)
@@ -152,25 +202,49 @@ public class SoundtrackManager : MonoBehaviour
             return;
         }
 
+        // Walked back before the old song finished fading out: just fade it back in, no restart
+        int other = 1 - activePlayer;
+        if (clip != null && players[other].clip == clip && players[other].isPlaying)
+        {
+            activePlayer = other;
+            sectionVolumes[activePlayer] = volume;
+            return;
+        }
+
         // Fade the current one out and the new one in on the other player
-        activePlayer = 1 - activePlayer;
+        activePlayer = other;
         AudioSource next = players[activePlayer];
+        if (next.isPlaying) Remember(next);
         next.Stop();
         next.clip = clip;
         sectionVolumes[activePlayer] = volume;
         fades[activePlayer] = 0f;
-        if (clip != null) next.Play();
+        if (clip == null) return;
+
+        // Carry on from where this song was left (long tracks get to play out instead of restarting every visit)
+        if (resumeTimes.TryGetValue(clip, out float time) && time > 0f && time < clip.length - 1f) next.time = time;
+        next.Play();
+    }
+
+    private void Remember(AudioSource source)
+    {
+        if (source.clip != null) resumeTimes[source.clip] = source.time;
     }
 
     private void UpdateFades()
     {
         float step = config.crossfade > 0f ? Time.unscaledDeltaTime / config.crossfade : 1f;
+        float pauseVolume = MuffleVolume;
         for (int i = 0; i < 2; i++)
         {
             bool isActive = i == activePlayer && players[i].clip != null;
             fades[i] = Mathf.MoveTowards(fades[i], isActive ? 1f : 0f, step);
-            players[i].volume = fades[i] * sectionVolumes[i] * GameSettings.MusicVolume;
-            if (!isActive && fades[i] <= 0f && players[i].isPlaying) players[i].Stop();
+            players[i].volume = fades[i] * sectionVolumes[i] * GameSettings.MusicVolume * pauseVolume;
+            if (!isActive && fades[i] <= 0f && players[i].isPlaying)
+            {
+                Remember(players[i]);
+                players[i].Stop();
+            }
         }
     }
 }
