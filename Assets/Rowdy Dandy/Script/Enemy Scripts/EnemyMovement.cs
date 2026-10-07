@@ -180,6 +180,19 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float loseTargetTime = 3f;
     private float timeOutOfRange;
 
+    [Header("Chase: Rowdy On Another Floor")]
+    [Tooltip("Walkers stop copying Rowdy's X when he's on a different floor: they walk as close as their floor allows (never off a ledge), stand there watching him, then give up and go back to patrolling. They also won't start a chase at him from another floor. JumperMen only do this when he's below (they still jump up to him). Flyers, sea creatures and marchers are unaffected.")]
+    [SerializeField] private bool enableFloorAwareChase = true;
+    [Tooltip("Rowdy's feet more than this above/below the enemy's feet = another floor.")]
+    [SerializeField] private float floorHeightTolerance = 1.5f;
+    [Tooltip("Seconds it stands watching Rowdy on another floor before giving up.")]
+    [SerializeField] private float giveUpTime = 2.5f;
+    [Tooltip("Debug: ticks on while it thinks Rowdy is on another floor.")]
+    [SerializeField] private bool playerOnOtherFloor;
+    private bool playerIsBelow;
+    private float watchTimer;
+    private PlayerMovement playerMovement;
+
     [Header("Polish: Dust Particle Effects")]
     [SerializeField] private bool enableDustParticles = false;
     [SerializeField] private ParticleSystem landingDustParticle;
@@ -363,13 +376,21 @@ public class EnemyMovement : MonoBehaviour
             return;
         }
 
-        if (isChasing || isMarching)
+        UpdatePlayerFloor();
+
+        if (isChasing && !isMarching && ShouldWatchPlayer)
         {
+            WatchPlayerOnOtherFloor();
+        }
+        else if (isChasing || isMarching)
+        {
+            watchTimer = 0f;
             ChaseTarget(target);
         }
         else
         {
             bool canChasePlayer = playerTransform != null &&
+                !ShouldWatchPlayer &&
                 Vector2.Distance(transform.position, playerTransform.position) < chaseDistance &&
                 HasLineOfSightToTarget(playerTransform);
 
@@ -961,6 +982,71 @@ public class EnemyMovement : MonoBehaviour
         FlipSprite(movementDirection.x);
         SetAnimatorBool("moving", true);
         isMoving = true;
+    }
+
+    private bool UsesFloorAwareChase =>
+        enableFloorAwareChase && !isOnlyAquatic && rb != null && rb.gravityScale >= 0.5f;
+
+    // JumperMen still jump up to Rowdy; they only stop and watch when he's below them
+    private bool ShouldWatchPlayer => playerOnOtherFloor && (!isJumperMan || playerIsBelow);
+
+    // Mid-jump (Rowdy's or the enemy's own wall hop) keeps the last answer, so a jump on the same floor never counts
+    private void UpdatePlayerFloor()
+    {
+        if (!UsesFloorAwareChase || playerTransform == null)
+        {
+            playerOnOtherFloor = false;
+            return;
+        }
+
+        if (Mathf.Abs(rb.linearVelocity.y) > 0.1f) return;
+
+        if (playerMovement == null) playerMovement = playerTransform.GetComponent<PlayerMovement>();
+        if (playerMovement != null && !playerMovement.IsGrounded) return;
+
+        float playerFeetY = playerCollider != null ? playerCollider.bounds.min.y : playerTransform.position.y;
+        playerOnOtherFloor = Mathf.Abs(playerFeetY - FeetY) > floorHeightTolerance;
+        playerIsBelow = playerFeetY < FeetY;
+    }
+
+    // Probes from the body's feet (not the pivot), so it works whatever the sprite's pivot / Ground Check Distance is
+    private bool HasFloorAhead(float direction)
+    {
+        float aheadX = bodyCollider != null
+            ? (direction > 0f ? bodyCollider.bounds.max.x : bodyCollider.bounds.min.x) + direction * 0.2f
+            : transform.position.x + direction * ledgeCheckDistance;
+        RaycastHit2D hit = Physics2D.Raycast(new Vector2(aheadX, FeetY + 0.2f), Vector2.down, 0.6f, groundLayer);
+        return hit.collider != null;
+    }
+
+    // Rowdy is above/below: get as close as this floor allows, then stand and watch him instead of running on the spot
+    private void WatchPlayerOnOtherFloor()
+    {
+        float dx = playerTransform.position.x - transform.position.x;
+        float direction = Mathf.Sign(dx);
+
+        bool canGetCloser = Mathf.Abs(dx) > 0.5f && HasFloorAhead(direction) && !IsObstacleInFront(direction);
+
+        if (canGetCloser)
+        {
+            ApplyHorizontalVelocity(direction * moveSpeed);
+            FlipSprite(direction);
+            SetAnimatorBool("moving", true);
+            isMoving = true;
+            return;
+        }
+
+        ApplyHorizontalVelocity(0f);
+        FlipSprite(dx);
+        SetAnimatorBool("moving", false);
+        isMoving = false;
+
+        watchTimer += Time.deltaTime;
+        if (watchTimer >= giveUpTime)
+        {
+            isChasing = false;
+            watchTimer = 0f;
+        }
     }
 
     private bool CanInitiateJump()

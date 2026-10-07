@@ -51,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     [SerializeField] private bool isGrounded = false;
+    public bool IsGrounded => isGrounded;
     [SerializeField] private float jumpTimeCounter = 0f;
     [SerializeField] private bool isJumping = false;
     [SerializeField] private bool isDucking = false;
