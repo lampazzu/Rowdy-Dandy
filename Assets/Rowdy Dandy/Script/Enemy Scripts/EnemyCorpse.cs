@@ -22,12 +22,15 @@ public class EnemyCorpse : MonoBehaviour
     [SerializeField] private float maxFallSpeed = 9f;
     [Tooltip("Stop falling after this long without finding ground (e.g. sank out of view).")]
     [SerializeField] private float maxFallTime = 4f;
+    [Tooltip("Max sinking speed for drownable bodies under water.")]
+    [SerializeField] private float waterSinkSpeed = 0.9f;
 
     // Solid colliders of dead bodies, so enemies that spawn later walk through them too
     private static readonly List<Collider2D> DeadSolids = new List<Collider2D>();
 
     private EnemyHealth health;
     private EnemyMovement movement;
+    private EnemyDrowning drowning;
     private Rigidbody2D rb;
     private Collider2D[] ownColliders;
     private Collider2D[] solidColliders;
@@ -71,6 +74,7 @@ public class EnemyCorpse : MonoBehaviour
         if (isDead || rb == null) return;
         isDead = true;
         landed = false;
+        drowning = GetComponent<EnemyDrowning>(); // added at runtime by EnemyMovement, possibly after this Awake
         fallSpeed = 0f;
         fallTime = 0f;
         targetAngle = 0f;
@@ -136,7 +140,8 @@ public class EnemyCorpse : MonoBehaviour
         if (!landed && fallTime < maxFallTime)
         {
             fallTime += dt;
-            fallSpeed = Mathf.Min(fallSpeed + fallGravity * dt, maxFallSpeed);
+            float maxSpeed = drowning != null && drowning.IsInWater() ? waterSinkSpeed : maxFallSpeed;
+            fallSpeed = Mathf.Min(fallSpeed + fallGravity * dt, maxSpeed);
             float step = fallSpeed * dt;
 
             // Look from a little above the feet down past this step's movement

@@ -28,7 +28,11 @@ public class PlayerMovement : MonoBehaviour
     public GameObject effectPrefab; // dust when land
 
     [Header("Drop-Down Platform Settings")]
-    [SerializeField] private float dropDownDisableDuration = 0.35f;
+    [SerializeField] private float dropDownMaxDuration = 1f; // safety: collision comes back after this even if Rowdy is still inside the platform
+
+    [Header("Body Collider")]
+    [SerializeField] private float maxStepHeight = 0.06f; // lips/seams lower than this get stepped over automatically (0 = off)
+    [SerializeField] private float groundSnapDistance = 0.12f; // keeps him on the ground over slope crests / small dips instead of launching (0 = off)
 
     public Transform groundCheck;
     public LayerMask groundLayer;
@@ -99,6 +103,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public UnityEvent onGruntD;
 
     private Collider2D playerCollider;
+    private BoxCollider2D bodyBox;
+    private ContactFilter2D groundFilter;
+    private readonly Collider2D[] groundHits = new Collider2D[8];
+    private readonly List<RaycastHit2D> surfaceHits = new List<RaycastHit2D>();
+    private Collider2D droppingThrough; // one-way platform currently being dropped through
+    private float lastMoveInput; // read in Update, used by the step-up in FixedUpdate
+    private float lastStepCheckX;
+    private bool wasGroundedFixed;
+    private ContactFilter2D effectorFilter;
+    private readonly Collider2D[] effectorHits = new Collider2D[8];
 
     public void ResetAttackState()
     {
@@ -122,6 +136,17 @@ public class PlayerMovement : MonoBehaviour
         originalSpeed = animator.speed;
         playerCollider = GetComponent<Collider2D>();
         playerCollider.enabled = true;
+
+        bodyBox = GetComponent<BoxCollider2D>();
+        bodyBox.edgeRadius = 0f; // clean up the rounded corners an earlier version set (they lifted him off slopes)
+
+        groundFilter = new ContactFilter2D();
+        groundFilter.SetLayerMask(groundLayer);
+        groundFilter.useTriggers = Physics2D.queriesHitTriggers;
+
+        effectorFilter = new ContactFilter2D();
+        effectorFilter.useTriggers = true;
+
         audioSource = GetComponent<AudioSource>();
         originalLinearDrag = rb.linearDamping;
         Sssr = transform.Find(shadowSurfRight).gameObject;
@@ -188,6 +213,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // A one-way platform Rowdy is passing through from below reports a disabled collision: not a landing
+        if (collision.gameObject.CompareTag("Ground") && !collision.enabled) return;
+
         if (collision.gameObject.CompareTag("Ground") && isSurfing) // Adjust the tag as needed
         {
             // Create an array of the sliding events
@@ -250,13 +278,120 @@ public class PlayerMovement : MonoBehaviour
         }
 
         ApplyCustomForce();
+        TryStepUp();
+        SnapToGround();
+    }
+
+    // Walking up a slope gives him upward speed; at the crest that speed launched him into the air ("flying").
+    // If he was grounded last step, didn't jump, and the ground is just below his feet, keep him glued to it.
+    private void SnapToGround()
+    {
+        bool groundedNow = CheckGrounded();
+        bool canSnap = wasGroundedFixed && !groundedNow && !hasInitiatedJump && !isJumping && !applyForce
+            && knockbackTimer <= 0f && droppingThrough == null && !isWatered && !isSurfing
+            && rb.linearVelocity.y <= moveSpeed + 0.2f && !InsideEffectorField();
+        wasGroundedFixed = groundedNow;
+        if (!canSnap) return;
+
+        Bounds b = bodyBox.bounds;
+        float inset = Mathf.Min(0.02f, b.extents.x);
+        float[] rayXs = { b.min.x + inset, b.center.x, b.max.x - inset };
+        float nearest = float.MaxValue;
+        foreach (float x in rayXs)
+        {
+            int count = Physics2D.Raycast(new Vector2(x, b.min.y + 0.01f), Vector2.down, groundFilter, surfaceHits, groundSnapDistance + 0.01f);
+            for (int i = 0; i < count; i++)
+            {
+                RaycastHit2D hit = surfaceHits[i];
+                if (hit.normal.y < 0.5f || hit.collider == droppingThrough) continue;
+                nearest = Mathf.Min(nearest, hit.distance - 0.01f);
+                break;
+            }
+        }
+
+        if (nearest > 0.005f && nearest <= groundSnapDistance)
+        {
+            rb.position += new Vector2(0f, -(nearest - 0.005f));
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Min(rb.linearVelocity.y, 0f));
+            wasGroundedFixed = true;
+        }
+    }
+
+    // Plants etc. push Rowdy with force effectors; never snap him back down while one is acting on him
+    private bool InsideEffectorField()
+    {
+        int count = bodyBox.Overlap(effectorFilter, effectorHits);
+        for (int i = 0; i < count; i++)
+        {
+            if (effectorHits[i].isTrigger && effectorHits[i].usedByEffector) return true;
+        }
+        return false;
+    }
+
+    // Tilemap seams and tiny steps snag the body box. If only the bottom maxStepHeight of the body is blocked
+    // in the direction he's moving (and the rest of the body is clear), lift him on top of the lip.
+    private void TryStepUp()
+    {
+        // Only when actually snagged: holding a direction but barely moving (otherwise slopes made of tiny steps launch him)
+        float movedX = Mathf.Abs(rb.position.x - lastStepCheckX);
+        lastStepCheckX = rb.position.x;
+        if (maxStepHeight <= 0f || Mathf.Abs(lastMoveInput) < 0.1f || knockbackTimer > 0f || droppingThrough != null || isSurfing) return;
+        if (rb.linearVelocity.y > 0.1f || movedX > moveSpeed * Time.fixedDeltaTime * 0.25f) return;
+
+        float dir = Mathf.Sign(lastMoveInput);
+        Bounds b = bodyBox.bounds;
+        const float probe = 0.03f;
+        float width = b.size.x * 0.9f;
+
+        // Upper body blocked = a real wall, leave it alone
+        float upperBottom = b.min.y + maxStepHeight + 0.01f;
+        Vector2 upperSize = new Vector2(width, b.max.y - upperBottom);
+        if (upperSize.y <= 0f || IsBlocked(new Vector2(b.center.x, upperBottom + upperSize.y * 0.5f), upperSize, dir, probe, 0.9f)) return;
+
+        // Feet band (kept just above the floor so the floor itself doesn't count). Any face pushing back counts here,
+        // not just vertical ones: corrector polygon corners are often angled. He's stuck, so it isn't a walkable slope.
+        Vector2 lowerSize = new Vector2(width, maxStepHeight);
+        if (!IsBlocked(new Vector2(b.center.x, b.min.y + 0.01f + maxStepHeight * 0.5f), lowerSize, dir, probe, 0.3f)) return;
+
+        // Find the top of the lip just in front of him (a few spots, an angled corner's top can be a bit further in)
+        float frontX = dir > 0 ? b.max.x : b.min.x;
+        foreach (float ahead in new[] { 0.01f, 0.03f, 0.06f })
+        {
+            int count = Physics2D.Raycast(new Vector2(frontX + dir * ahead, upperBottom), Vector2.down, groundFilter, surfaceHits, maxStepHeight + 0.01f);
+            for (int i = 0; i < count; i++)
+            {
+                RaycastHit2D hit = surfaceHits[i];
+                if (hit.collider.usedByEffector || hit.normal.y < 0.5f) continue;
+
+                float step = hit.point.y - b.min.y;
+                if (step > 0.001f && step <= maxStepHeight)
+                {
+                    rb.position += new Vector2(dir * 0.01f, step + 0.005f);
+                    return;
+                }
+                break;
+            }
+        }
+    }
+
+    // A solid face within 'distance' that pushes back against moving in 'dir' (one-way platforms don't count).
+    // minFacing 0.9 = only near-vertical walls, lower = angled faces too.
+    private bool IsBlocked(Vector2 center, Vector2 size, float dir, float distance, float minFacing)
+    {
+        int count = Physics2D.BoxCast(center, size, 0f, new Vector2(dir, 0f), groundFilter, surfaceHits, distance);
+        for (int i = 0; i < count; i++)
+        {
+            RaycastHit2D hit = surfaceHits[i];
+            if (!hit.collider.usedByEffector && hit.normal.x * dir < -minFacing) return true;
+        }
+        return false;
     }
 
     private void Update()
     {
         if (PauseMenu.IsPaused) return; // no jumping / attacking from menu button presses
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
+        isGrounded = CheckGrounded();
         isWatered = Physics2D.OverlapCircle(groundCheck.position, 0.1f, waterLayer);
 
         {
@@ -369,6 +504,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         float moveInput = Input.GetAxisRaw("Horizontal");
+        lastMoveInput = moveInput;
 
         if (!isSurfing)
         {
@@ -436,8 +572,8 @@ public class PlayerMovement : MonoBehaviour
         if ((Input.GetKey(KeyCode.S) || Input.GetAxis("Vertical") < 0) && !isSurfing && isGrounded && !isWounded)
         {
             isDucking = true;
-            GetComponent<BoxCollider2D>().size = new Vector2(GetComponent<BoxCollider2D>().size.x, duckedColliderHeight);
-            GetComponent<BoxCollider2D>().offset = new Vector2(0f, duckedColliderOffsetY); // Set the offset based on your needs
+            SetBodyBoxHeight(duckedColliderHeight);
+            bodyBox.offset = new Vector2(0f, duckedColliderOffsetY); // Set the offset based on your needs
             if (!isCanMoveDucking)
             {
                 rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
@@ -453,8 +589,8 @@ public class PlayerMovement : MonoBehaviour
             if (!isAttacking)
             {
                 isDucking = false;
-                GetComponent<BoxCollider2D>().size = new Vector2(GetComponent<BoxCollider2D>().size.x, originalColliderHeight);
-                GetComponent<BoxCollider2D>().offset = new Vector2(0f, originalColliderOffsetY); // Set the offset based on your needs
+                SetBodyBoxHeight(originalColliderHeight);
+                bodyBox.offset = new Vector2(0f, originalColliderOffsetY); // Set the offset based on your needs
 
                 rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
@@ -524,7 +660,11 @@ public class PlayerMovement : MonoBehaviour
         // DROP-DOWN CHECK (Down + Jump)
         if (jumpPressed && isHoldingDown && isGrounded && !isWounded)
         {
-            StartCoroutine(DropThroughPlatformRoutine());
+            Collider2D platform = GetOneWayPlatformUnderFeet();
+            if (platform != null)
+            {
+                StartCoroutine(DropThroughPlatformRoutine(platform));
+            }
         }
         // NORMAL JUMP (Only when NOT holding down)
         else if (jumpPressed && (isGrounded || isWatered || coyoteTimer > 0) && !isDucking && !isAttacking && !isWounded)
@@ -669,16 +809,106 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator DropThroughPlatformRoutine()
+    // One-way platforms (colliders used by a PlatformEffector2D) only count as ground while Rowdy is actually
+    // standing on top of them. Otherwise his feet overlapping one while jumping up through it kills the jump state.
+    private bool CheckGrounded()
     {
-        Collider2D platformCollider = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-
-        if (platformCollider != null)
+        int count = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundFilter, groundHits);
+        for (int i = 0; i < count; i++)
         {
-            Physics2D.IgnoreCollision(playerCollider, platformCollider, true);
-            yield return new WaitForSeconds(dropDownDisableDuration);
-            Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
+            if (!groundHits[i].usedByEffector || IsStandingOn(groundHits[i]))
+            {
+                return true;
+            }
         }
+
+        // On a slope the box rests on one corner and the centered circle can miss the surface, so also check at the feet
+        return IsStandingOn(null);
+    }
+
+    private bool IsStandingOn(Collider2D platform)
+    {
+        // platform == null: any ground (solid or one-way)
+        if (platform != null && platform == droppingThrough) return false;
+
+        // Standing on top = the platform's top surface is right at his feet (not above them, which means he's inside it).
+        // Checked with short rays at both feet edges and the middle so standing on a ledge / on a slope (box rests on one corner) still counts.
+        Vector2 velocity = rb.linearVelocity;
+        Bounds body = bodyBox.bounds;
+        float inset = Mathf.Min(0.02f, body.extents.x);
+        float[] rayXs = { body.min.x + inset, body.center.x, body.max.x - inset };
+        foreach (float x in rayXs)
+        {
+            Vector2 origin = new Vector2(x, body.min.y + 0.05f);
+            int count = Physics2D.Raycast(origin, Vector2.down, groundFilter, surfaceHits, 0.09f);
+            for (int i = 0; i < count; i++)
+            {
+                RaycastHit2D hit = surfaceHits[i];
+                bool isPlatform = platform != null ? hit.collider == platform : hit.collider != droppingThrough;
+                if (!isPlatform || hit.normal.y < 0.5f) continue;
+
+                // Walking up a slope moves him up too; only rising faster than the slope means jumping (or passing up through a one-way)
+                float slopeClimb = Mathf.Abs(velocity.x * hit.normal.x / hit.normal.y);
+                if (velocity.y <= slopeClimb + 0.3f)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Down + Jump only works on one-way platforms; on solid ground (or straddling solid ground) it does nothing
+    private Collider2D GetOneWayPlatformUnderFeet()
+    {
+        Collider2D oneWay = null;
+        int count = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundFilter, groundHits);
+        for (int i = 0; i < count; i++)
+        {
+            if (!groundHits[i].usedByEffector) return null;
+            oneWay = groundHits[i];
+        }
+        return oneWay;
+    }
+
+    private void SetBodyBoxHeight(float height)
+    {
+        bodyBox.size = new Vector2(bodyBox.size.x, height);
+    }
+
+    private IEnumerator DropThroughPlatformRoutine(Collider2D platform)
+    {
+        List<Collider2D> bodyColliders = new List<Collider2D>();
+        foreach (Collider2D col in GetComponentsInChildren<Collider2D>(true))
+        {
+            if (!col.isTrigger) bodyColliders.Add(col);
+        }
+
+        float surfaceY = bodyBox.bounds.min.y;
+        foreach (Collider2D col in bodyColliders) Physics2D.IgnoreCollision(col, platform, true);
+        droppingThrough = platform;
+
+        // Keep ignoring until his feet are below the surface he left AND he's clear of the platform's tiles.
+        // The whole one-way tilemap is a single collider, so a fixed timer would also make him fall through
+        // any platform below; this way the collision comes back as soon as he's out of the one he dropped from.
+        float timer = 0f;
+        while (timer < dropDownMaxDuration)
+        {
+            yield return new WaitForFixedUpdate();
+            timer += Time.fixedDeltaTime;
+
+            bool belowSurface = bodyBox.bounds.min.y < surfaceY - 0.05f;
+            if (belowSurface && Physics2D.Distance(bodyBox, platform).distance > 0.01f)
+            {
+                break;
+            }
+        }
+
+        foreach (Collider2D col in bodyColliders)
+        {
+            if (col != null) Physics2D.IgnoreCollision(col, platform, false);
+        }
+        droppingThrough = null;
     }
 
     IEnumerator DelayedJumpAttack()

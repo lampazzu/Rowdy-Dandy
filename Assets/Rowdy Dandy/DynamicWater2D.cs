@@ -1,116 +1,154 @@
+using System.Collections.Generic;
 using UnityEngine;
 
+// Water surface that reacts to bodies. The top edge is a row of nodes running a 1D wave equation, so a hit
+// sends waves travelling out to both sides (water) instead of one point bouncing on a spring (rubber).
+// Gentle idle waves roll on top. All distances are world units, so the object's scale doesn't change the feel.
+// Pair with the Custom/Water2D_Advanced shader: it turns the surface into a pixel-stepped edge.
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider2D))]
 public class DynamicWater2D : MonoBehaviour
 {
     [Header("Mesh Setup")]
-    [SerializeField] private int edgeCount = 60; // Number of surface points
+    [Tooltip("Surface nodes per world unit. 8 = one node every 8 pixels at 64 PPU.")]
+    [SerializeField] private float surfaceNodesPerUnit = 8f;
+    [SerializeField] private float pixelsPerUnit = 64f;
     [SerializeField] private string sortingLayerName = "Default";
     [SerializeField] private int orderInLayer = 0;
 
-    [Header("Wave Physics")]
-    [Range(0.001f, 0.1f)] public float stiffness = 0.025f;
-    [Range(0.01f, 0.2f)] public float damping = 0.05f;
-    [Range(0.01f, 0.2f)] public float spread = 0.06f;
+    [Header("Wave Physics (per physics step)")]
+    [Tooltip("How fast waves travel along the surface.")]
+    [Range(0.01f, 0.45f)] public float waveSpread = 0.22f;
+    [Tooltip("How strongly the surface is pulled back flat. Low = heavy water, high = jelly.")]
+    [Range(0f, 0.05f)] public float flattenStrength = 0.006f;
+    [Tooltip("How fast waves die out.")]
+    [Range(0f, 0.2f)] public float waveDamping = 0.02f;
+    [Range(1, 4)] [SerializeField] private int substeps = 2;
 
     [Header("Wave Limits")]
-    [SerializeField] private float maxWaveHeight = 0.35f;
-    [SerializeField] private float maxVelocity = 2.0f;
-    [SerializeField] private float splashForceMultiplier = 0.08f;
+    [SerializeField] private float maxWaveHeight = 0.6f;
+    [SerializeField] private float maxNodeVelocity = 0.25f;
 
-    [Header("Continuous Ripples")]
-    [SerializeField] private float swimmingRippleForce = 0.03f;
-    [SerializeField] private float rippleInterval = 0.12f;
+    [Header("Idle Waves")]
+    [SerializeField] private float idleWaveHeight = 0.025f;
+    [SerializeField] private float idleWaveLength = 3.5f;
+    [SerializeField] private float idleWaveSpeed = 1.1f;
 
-    private struct WaterSpring
-    {
-        public float height;
-        public float targetHeight;
-        public float velocity;
-    }
+    [Header("Bodies On / In The Water")]
+    [Tooltip("How far above the surface a body still counts as touching it (surfing on the tiles).")]
+    [SerializeField] private float contactMargin = 0.25f;
+    [Tooltip("Push from landing, per unit of falling speed.")]
+    [SerializeField] private float landingForcePerSpeed = 0.014f;
+    [Tooltip("Constant press under a body standing on the water (its weight).")]
+    [SerializeField] private float weightForce = 0.0015f;
+    [Tooltip("Press under a moving body, per unit of horizontal speed. This is the surf wake.")]
+    [SerializeField] private float surfForcePerSpeed = 0.0022f;
+    [Tooltip("Water heaped up in front of a moving body (bow wave), relative to the surf press.")]
+    [Range(0f, 1.5f)] [SerializeField] private float bowWave = 0.6f;
 
-    private WaterSpring[] springs;
+    private static readonly List<DynamicWater2D> active = new List<DynamicWater2D>();
+
+    private float[] heights;    // world-unit offset of each node from the rest surface
+    private float[] velocities; // world units per physics step
+    private float[] neighborSum;
+    private int nodeCount;
+
     private MeshFilter meshFilter;
-    private MeshRenderer meshRenderer;
     private BoxCollider2D boxCollider;
     private Mesh waterMesh;
-
     private Vector3[] vertices;
-    private int[] triangles;
     private Vector2[] uvs;
+    private Vector2[] surfaceData;
 
-    // Reused every FixedUpdate to avoid allocating new arrays each physics step
-    private float[] leftDeltas;
-    private float[] rightDeltas;
+    private readonly HashSet<Rigidbody2D> touching = new HashSet<Rigidbody2D>();
+    private readonly HashSet<Rigidbody2D> touchingNow = new HashSet<Rigidbody2D>();
+    private readonly List<Collider2D> overlapResults = new List<Collider2D>();
+    private ContactFilter2D solidFilter;
 
-    private float timer;
+    // =========================================================================
+    // LOOKUP (used by WaterSplashFX / drowning)
+    // =========================================================================
+
+    // The water mesh whose surface is at or above this point (within 'margin' above the surface)
+    public static DynamicWater2D FindAt(Vector2 point, float margin = 0.3f)
+    {
+        foreach (DynamicWater2D water in active)
+        {
+            if (water.Contains(point, margin)) return water;
+        }
+        return null;
+    }
+
+    public bool Contains(Vector2 point, float margin = 0f)
+    {
+        Bounds b = boxCollider.bounds;
+        return point.x >= b.min.x && point.x <= b.max.x && point.y >= b.min.y && point.y <= b.max.y + margin;
+    }
+
+    // World Y of the moving surface at this X
+    public float SurfaceY(float worldX)
+    {
+        if (!EnsureSetup()) return boxCollider.bounds.max.y;
+        float f = NodeFloat(worldX);
+        int i = Mathf.Clamp(Mathf.FloorToInt(f), 0, nodeCount - 2);
+        float h = Mathf.Lerp(heights[i], heights[i + 1], f - i);
+        return boxCollider.bounds.max.y + h;
+    }
+
+    // =========================================================================
 
     private void Awake()
     {
         meshFilter = GetComponent<MeshFilter>();
-        meshRenderer = GetComponent<MeshRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
 
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sortingLayerName = sortingLayerName;
         meshRenderer.sortingOrder = orderInLayer;
 
+        solidFilter = new ContactFilter2D();
+        solidFilter.NoFilter();
+        solidFilter.useTriggers = false;
+
         SetupWater();
     }
+
+    private void OnEnable() => active.Add(this);
+    private void OnDisable() => active.Remove(this);
 
     public void SetupWater()
     {
         if (boxCollider == null) boxCollider = GetComponent<BoxCollider2D>();
         if (meshFilter == null) meshFilter = GetComponent<MeshFilter>();
 
-        edgeCount = Mathf.Max(10, edgeCount);
-        springs = new WaterSpring[edgeCount];
-        leftDeltas = new float[edgeCount];
-        rightDeltas = new float[edgeCount];
+        float worldWidth = boxCollider.size.x * Mathf.Abs(transform.lossyScale.x);
+        nodeCount = Mathf.Clamp(Mathf.CeilToInt(worldWidth * surfaceNodesPerUnit) + 1, 10, 2000);
 
-        // Use local bounds matching the BoxCollider2D
-        float topY = boxCollider.offset.y + (boxCollider.size.y / 2f);
-
-        for (int i = 0; i < edgeCount; i++)
-        {
-            springs[i].height = topY;
-            springs[i].targetHeight = topY;
-            springs[i].velocity = 0f;
-        }
+        heights = new float[nodeCount];
+        velocities = new float[nodeCount];
+        neighborSum = new float[nodeCount];
 
         BuildMesh();
     }
 
     private void BuildMesh()
     {
-        waterMesh = new Mesh();
-        waterMesh.name = "Dynamic Water Mesh";
+        waterMesh = new Mesh { name = "Dynamic Water Mesh" };
+        waterMesh.MarkDynamic();
 
-        int vertexCount = edgeCount * 2;
-        vertices = new Vector3[vertexCount];
-        uvs = new Vector2[vertexCount];
-        triangles = new int[(edgeCount - 1) * 6];
+        vertices = new Vector3[nodeCount * 2];
+        uvs = new Vector2[nodeCount * 2];
+        surfaceData = new Vector2[nodeCount * 2];
+        var triangles = new int[(nodeCount - 1) * 6];
 
         UpdateMeshGeometry();
 
-        int triIndex = 0;
-        for (int i = 0; i < edgeCount - 1; i++)
+        int t = 0;
+        for (int i = 0; i < nodeCount - 1; i++)
         {
-            int topL = i * 2;
-            int botL = topL + 1;
-            int topR = topL + 2;
-            int botR = topL + 3;
-
-            triangles[triIndex++] = topL;
-            triangles[triIndex++] = topR;
-            triangles[triIndex++] = botL;
-
-            triangles[triIndex++] = botL;
-            triangles[triIndex++] = topR;
-            triangles[triIndex++] = botR;
+            int topL = i * 2, botL = topL + 1, topR = topL + 2, botR = topL + 3;
+            triangles[t++] = topL; triangles[t++] = topR; triangles[t++] = botL;
+            triangles[t++] = botL; triangles[t++] = topR; triangles[t++] = botR;
         }
-
-        waterMesh.vertices = vertices;
-        waterMesh.uv = uvs;
         waterMesh.triangles = triangles;
 
         meshFilter.mesh = waterMesh;
@@ -118,37 +156,48 @@ public class DynamicWater2D : MonoBehaviour
 
     private void UpdateMeshGeometry()
     {
-        float leftX = boxCollider.offset.x - (boxCollider.size.x / 2f);
-        float rightX = boxCollider.offset.x + (boxCollider.size.x / 2f);
-        float bottomY = boxCollider.offset.y - (boxCollider.size.y / 2f);
+        float leftX = boxCollider.offset.x - boxCollider.size.x / 2f;
+        float rightX = boxCollider.offset.x + boxCollider.size.x / 2f;
+        float topY = boxCollider.offset.y + boxCollider.size.y / 2f;
+        float bottomY = boxCollider.offset.y - boxCollider.size.y / 2f;
 
-        for (int i = 0; i < edgeCount; i++)
+        float scaleY = Mathf.Max(0.0001f, Mathf.Abs(transform.lossyScale.y));
+        float time = Time.time * idleWaveSpeed;
+        float k = idleWaveLength > 0.01f ? Mathf.PI * 2f / idleWaveLength : 0f;
+        // The shader cuts the pixel-stepped edge itself, so the triangles reach a couple of pixels higher
+        float pad = 2f / Mathf.Max(1f, pixelsPerUnit);
+
+        for (int i = 0; i < nodeCount; i++)
         {
-            float t = (float)i / (edgeCount - 1);
-            float xPos = Mathf.Lerp(leftX, rightX, t);
+            float u = (float)i / (nodeCount - 1);
+            float x = Mathf.Lerp(leftX, rightX, u);
+            float worldX = transform.TransformPoint(new Vector3(x, 0f, 0f)).x;
 
-            // Top surface vertex
-            vertices[i * 2] = new Vector3(xPos, springs[i].height, 0f);
-            uvs[i * 2] = new Vector2(t, 1f);
+            float idle = idleWaveHeight * (Mathf.Sin(worldX * k + time) + 0.5f * Mathf.Sin(worldX * k * 2.3f - time * 1.4f)) / 1.5f;
+            float surfaceLocal = topY + (heights[i] + idle) / scaleY;
 
-            // Bottom base vertex
-            vertices[i * 2 + 1] = new Vector3(xPos, bottomY, 0f);
-            uvs[i * 2 + 1] = new Vector2(t, 0f);
+            vertices[i * 2] = new Vector3(x, surfaceLocal + pad / scaleY, 0f);
+            vertices[i * 2 + 1] = new Vector3(x, bottomY, 0f);
+            uvs[i * 2] = new Vector2(u, 1f);
+            uvs[i * 2 + 1] = new Vector2(u, 0f);
+            // y = how far this column is above/below rest (world units), for crest foam and trough shading
+            surfaceData[i * 2] = new Vector2(surfaceLocal, heights[i] + idle);
+            surfaceData[i * 2 + 1] = new Vector2(surfaceLocal, heights[i] + idle);
         }
 
         if (waterMesh != null)
         {
             waterMesh.vertices = vertices;
             waterMesh.uv = uvs;
+            waterMesh.uv2 = surfaceData;
             waterMesh.RecalculateBounds();
         }
     }
 
     // Rebuilds the water if its runtime data was lost (e.g. scripts recompiled during Play mode)
-    // or edgeCount was changed in the Inspector while playing.
     private bool EnsureSetup()
     {
-        if (springs == null || springs.Length != edgeCount || vertices == null || leftDeltas == null)
+        if (heights == null || vertices == null || heights.Length != nodeCount)
         {
             if (GetComponent<BoxCollider2D>() == null) return false;
             SetupWater();
@@ -160,98 +209,124 @@ public class DynamicWater2D : MonoBehaviour
     {
         if (!EnsureSetup()) return;
 
-        // 1. Update spring physics
-        for (int i = 0; i < edgeCount; i++)
+        PushFromBodies();
+
+        for (int s = 0; s < substeps; s++)
         {
-            float x = springs[i].height - springs[i].targetHeight;
-            float acceleration = -stiffness * x - damping * springs[i].velocity;
-
-            springs[i].velocity += acceleration;
-            springs[i].height += springs[i].velocity;
-
-            // HARD CLAMP: Prevents vertices from stretching into giant walls or exploding
-            springs[i].height = Mathf.Clamp(springs[i].height, springs[i].targetHeight - maxWaveHeight, springs[i].targetHeight + maxWaveHeight);
-            springs[i].velocity = Mathf.Clamp(springs[i].velocity, -maxVelocity, maxVelocity);
-        }
-
-        // 2. Propagate waves across neighbor springs
-        System.Array.Clear(leftDeltas, 0, edgeCount);
-        System.Array.Clear(rightDeltas, 0, edgeCount);
-
-        for (int i = 0; i < edgeCount; i++)
-        {
-            if (i > 0)
+            // Wave equation: each node is pulled toward its neighbours' average, so bumps travel outward
+            for (int i = 0; i < nodeCount; i++)
             {
-                leftDeltas[i] = spread * (springs[i].height - springs[i - 1].height);
-                springs[i - 1].velocity += leftDeltas[i];
+                float left = i > 0 ? heights[i - 1] : heights[i];
+                float right = i < nodeCount - 1 ? heights[i + 1] : heights[i];
+                neighborSum[i] = left + right - 2f * heights[i];
             }
-            if (i < edgeCount - 1)
+
+            // Substeps only add stability; the wave speed stays the same
+            float dt = 1f / substeps;
+            for (int i = 0; i < nodeCount; i++)
             {
-                rightDeltas[i] = spread * (springs[i].height - springs[i + 1].height);
-                springs[i + 1].velocity += rightDeltas[i];
+                float accel = waveSpread * neighborSum[i] - flattenStrength * heights[i] - waveDamping * velocities[i];
+                velocities[i] = Mathf.Clamp(velocities[i] + accel * dt, -maxNodeVelocity, maxNodeVelocity);
+                heights[i] += velocities[i] * dt;
+
+                // Safety limit only; splashes are sized to stay well below it
+                if (Mathf.Abs(heights[i]) > maxWaveHeight)
+                {
+                    heights[i] = Mathf.Sign(heights[i]) * maxWaveHeight;
+                    velocities[i] *= 0.5f;
+                }
             }
         }
+    }
 
-        for (int i = 0; i < edgeCount; i++)
-        {
-            if (i > 0) springs[i - 1].height += leftDeltas[i];
-            if (i < edgeCount - 1) springs[i + 1].height += rightDeltas[i];
-        }
-
+    private void LateUpdate()
+    {
+        if (!EnsureSetup()) return;
         UpdateMeshGeometry();
     }
 
-    public void Splash(float worldXPos, float force)
+    private float NodeFloat(float worldX)
+    {
+        float localX = transform.InverseTransformPoint(new Vector3(worldX, 0f, 0f)).x;
+        float leftX = boxCollider.offset.x - boxCollider.size.x / 2f;
+        float u = Mathf.Clamp01((localX - leftX) / boxCollider.size.x);
+        return u * (nodeCount - 1);
+    }
+
+    // force: world units per step pushed into the surface (negative = down). radius: world units.
+    public void Splash(float worldX, float force, float radius = 0.35f)
     {
         if (!EnsureSetup()) return;
 
-        float localX = transform.InverseTransformPoint(new Vector3(worldXPos, 0, 0)).x;
-        float leftX = boxCollider.offset.x - (boxCollider.size.x / 2f);
-        float width = boxCollider.size.x;
+        float center = NodeFloat(worldX);
+        float radiusNodes = Mathf.Max(1f, radius * surfaceNodesPerUnit);
+        int from = Mathf.Max(0, Mathf.FloorToInt(center - radiusNodes));
+        int to = Mathf.Min(nodeCount - 1, Mathf.CeilToInt(center + radiusNodes));
 
-        float normalizedX = Mathf.Clamp01((localX - leftX) / width);
-        int index = Mathf.RoundToInt(normalizedX * (edgeCount - 1));
-
-        if (index >= 0 && index < edgeCount)
+        for (int i = from; i <= to; i++)
         {
-            springs[index].velocity = Mathf.Clamp(force, -maxVelocity, maxVelocity);
+            float d = (i - center) / radiusNodes;
+            float falloff = Mathf.Max(0f, 1f - d * d);
+            falloff *= falloff;
+            velocities[i] = Mathf.Clamp(velocities[i] + force * falloff, -maxNodeVelocity, maxNodeVelocity);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    // =========================================================================
+    // BODIES ON / IN THE WATER
+    // Scans the strip around the surface every step (Rowdy surfs on top of the solid water tiles,
+    // so he's often just above the mesh, never inside a trigger).
+    // =========================================================================
+
+    private void PushFromBodies()
     {
-        Rigidbody2D rb = collision.attachedRigidbody;
-        if (rb != null)
+        Bounds water = boxCollider.bounds;
+        Vector2 center = new Vector2(water.center.x, (water.min.y + water.max.y + maxWaveHeight + contactMargin) * 0.5f);
+        Vector2 size = new Vector2(water.size.x, water.size.y + maxWaveHeight + contactMargin);
+
+        overlapResults.Clear();
+        Physics2D.OverlapBox(center, size, 0f, solidFilter, overlapResults);
+
+        touchingNow.Clear();
+        foreach (Collider2D col in overlapResults)
         {
-            // Clamp downward impact force so fast falling doesn't spike waves
-            float force = Mathf.Clamp(rb.linearVelocity.y * splashForceMultiplier, -maxVelocity, 0f);
-            Splash(collision.bounds.center.x, force);
+            Rigidbody2D rb = col.attachedRigidbody;
+            if (rb == null || rb.bodyType == RigidbodyType2D.Static || !touchingNow.Add(rb)) continue;
+
+            PushFromBody(rb, col.bounds);
         }
+
+        touching.Clear();
+        touching.UnionWith(touchingNow);
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void PushFromBody(Rigidbody2D rb, Bounds body)
     {
-        Rigidbody2D rb = collision.attachedRigidbody;
-        if (rb != null && rb.linearVelocity.sqrMagnitude > 0.1f)
-        {
-            timer += Time.deltaTime;
-            if (timer >= rippleInterval)
-            {
-                timer = 0f;
-                // Generate soft, continuous swimming ripples
-                float ripple = -swimmingRippleForce * (rb.linearVelocity.magnitude / 5f);
-                Splash(collision.bounds.center.x, Mathf.Max(ripple, -0.15f));
-            }
-        }
-    }
+        float x = body.center.x;
+        float surface = SurfaceY(x);
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        Rigidbody2D rb = collision.attachedRigidbody;
-        if (rb != null)
+        if (body.min.y > surface + contactMargin) { touchingNow.Remove(rb); return; } // above the water
+        if (body.max.y < surface - 0.1f) return; // fully under: doesn't press the surface
+
+        Vector2 v = rb.linearVelocity;
+        float halfWidth = body.extents.x;
+
+        // Just touched down: impact
+        if (!touching.Contains(rb) && v.y < -1f)
         {
-            // CRITICAL FIX: Leaving water applies a tiny downward wake instead of pulling mesh UP
-            Splash(collision.bounds.center.x, -0.05f);
+            Splash(x, -Mathf.Min(-v.y * landingForcePerSpeed, 0.2f), halfWidth + 0.35f);
+        }
+
+        // Riding / wading: the body presses a trough that travels with it, leaving a wake behind
+        float speed = Mathf.Abs(v.x);
+        float press = Mathf.Min(weightForce + speed * surfForcePerSpeed, 0.035f);
+        Splash(x, -press, halfWidth + 0.15f);
+
+        // Bow wave: water heaps up in front
+        if (speed > 1f && bowWave > 0f)
+        {
+            float front = x + Mathf.Sign(v.x) * (halfWidth + 0.3f);
+            Splash(front, press * bowWave, 0.3f);
         }
     }
 }

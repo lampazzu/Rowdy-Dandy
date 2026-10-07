@@ -165,14 +165,15 @@ public class WaterSplashFX : MonoBehaviour
 
         ConfigureAndPlay(splash, intensity, widthScale, kind);
 
-        // Make the dynamic water mesh (if this water uses one) react too
-        if (water != null)
+        // Make the dynamic water mesh react too. The water tiles and the mesh are separate objects,
+        // so find the mesh drawn at this point if the collider isn't part of one.
+        DynamicWater2D dynamicWater = water != null ? water.GetComponentInParent<DynamicWater2D>() : null;
+        if (dynamicWater == null) dynamicWater = DynamicWater2D.FindAt(surfacePoint);
+        if (dynamicWater != null)
         {
-            DynamicWater2D dynamicWater = water.GetComponentInParent<DynamicWater2D>();
-            if (dynamicWater != null)
-            {
-                dynamicWater.Splash(surfacePoint.x, -Mathf.Lerp(0.3f, 2f, intensity));
-            }
+            float push = Mathf.Lerp(0.04f, 0.16f, intensity);
+            if (kind == SplashKind.Exit) push *= 0.5f;
+            dynamicWater.Splash(surfacePoint.x, -push, 0.25f + 0.2f * widthScale);
         }
 
         if (kind == SplashKind.Entry && bigSplashImpulse != null && intensity >= bigSplashShakeThreshold)

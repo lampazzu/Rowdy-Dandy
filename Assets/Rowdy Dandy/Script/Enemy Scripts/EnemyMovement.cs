@@ -169,8 +169,9 @@ public class EnemyMovement : MonoBehaviour
         if (movesPhysically)
         {
             // Water splash / drowning effects
-            WaterSplashBody.AttachTo(gameObject, false);
+            WaterSplashBody.AttachTo(gameObject, false, isDrownable);
             VegetationInteractor.AttachTo(gameObject, 0.8f);
+            if (isDrownable && GetComponent<EnemyDrowning>() == null) gameObject.AddComponent<EnemyDrowning>();
 
             // Dead bodies: stop the AI, don't block Rowdy, rest on the ground, match the slope.
             // Not for flyers (Manta, Pelican...) or anything using effectors: their death clips handle it.
@@ -241,6 +242,18 @@ public class EnemyMovement : MonoBehaviour
 
     // Used by EnemyCorpse so a drowning corpse keeps sinking through water like the living enemy did
     public bool PassesThroughLayer(int layer) => isDrownable && IsDrowningLayer(layer);
+
+    // Water this enemy drowns in (its own Water Layer setting plus the 'Water' layer; not AntiEnemy walls)
+    public int DrowningWaterMask
+    {
+        get
+        {
+            int mask = waterLayer.value;
+            int water = LayerMask.NameToLayer("Water");
+            if (water >= 0) mask |= 1 << water;
+            return mask;
+        }
+    }
 
     private bool IsDrowningLayer(int layer)
     {

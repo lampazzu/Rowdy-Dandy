@@ -14,6 +14,8 @@ public class WaterSplashBody : MonoBehaviour
     [Tooltip("Multiplies the splash size for this body.")]
     [SerializeField] private float splashScale = 1f;
     [SerializeField] private float cooldown = 0.2f;
+    [Tooltip("Entering the water always splashes at least this big (0 = only fast falls splash). Drownable enemies get 0.7.")]
+    [Range(0f, 1f)] [SerializeField] private float minEntryIntensity = 0f;
 
     [Header("Jumping Out")]
     [SerializeField] private bool splashOnJumpOut = true;
@@ -42,7 +44,7 @@ public class WaterSplashBody : MonoBehaviour
     private Collider2D sinkWater;
 
     // Adds the component with defaults unless one was already added by hand (then its Inspector settings win)
-    public static WaterSplashBody AttachTo(GameObject target, bool player)
+    public static WaterSplashBody AttachTo(GameObject target, bool player, bool drownable = false)
     {
         WaterSplashBody body = target.GetComponent<WaterSplashBody>();
         if (body == null)
@@ -53,6 +55,10 @@ public class WaterSplashBody : MonoBehaviour
                 body.splashSound = "";
                 body.gulpSplash = false;
                 body.drowningBubbles = false;
+            }
+            if (drownable)
+            {
+                body.minEntryIntensity = 0.7f;
             }
         }
         return body;
@@ -257,13 +263,15 @@ public class WaterSplashBody : MonoBehaviour
         WaterSplashFX fx = WaterSplashFX.Instance;
         if (fx == null) return;
 
+        bool forcedEntry = kind == WaterSplashFX.SplashKind.Entry && minEntryIntensity > 0f;
         float minSpeed = kind == WaterSplashFX.SplashKind.Exit ? jumpOutMinSpeed : fx.MinImpactSpeed;
-        if (speed < minSpeed) return;
+        if (speed < minSpeed && !forcedEntry) return;
         if (Time.time - lastSplashTime < cooldown) return;
         lastSplashTime = Time.time;
 
         float intensity = fx.GetIntensity(speed);
         if (kind == WaterSplashFX.SplashKind.Exit) intensity *= 0.6f;
+        if (forcedEntry) intensity = Mathf.Max(intensity, minEntryIntensity);
 
         fx.PlaySplash(surfacePoint, intensity, GetWidthScale(bounds), kind, water);
 
