@@ -275,7 +275,7 @@ MonoBehaviour:
   attackVoices:
   - {fileID: 8300000, guid: 45b73691922eac148b4ea7efb8ce2958, type: 3}
   - {fileID: 8300000, guid: b0d53ba9acbe3974dbfee2d7d5556706, type: 3}
-  voiceVolume: 5
+  voiceVolume: 2.5
   collectSound: {fileID: 8300000, guid: 75e7163fdf7a1604498c1c5eab0a9a4e, type: 3}
   collectVolume: 0.7
   portrait: {fileID: 21300000, guid: a3c1f0e2b4d64f7a9e8b2c1d0f3a5b71, type: 3}
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7676863159426135136}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
@@ -393,7 +393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7676863159626024837
 Transform:
   m_ObjectHideFlags: 0
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7676863159626024838}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 

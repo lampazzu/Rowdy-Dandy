@@ -68,8 +68,44 @@ public class WeaponManager : MonoBehaviour
     private float[] currentDurability = new float[4];
     private float[] maxDurability = new float[4];
 
+    // Rowdy's weapon manager (kill feed / stats read the active weapon from here)
+    public static WeaponManager Instance { get; private set; }
+
+    public Sprite ActiveProfile
+    {
+        get
+        {
+            switch (GetActiveWeaponIndex())
+            {
+                case 1: return swordProfile;
+                case 2: return naginataProfile;
+                case 3: return cleaverProfile;
+                default: return rodProfile;
+            }
+        }
+    }
+
+    public string ActiveName
+    {
+        get
+        {
+            switch (GetActiveWeaponIndex())
+            {
+                case 1: return swordName;
+                case 2: return naginataName;
+                case 3: return cleaverName;
+                default: return rodName;
+            }
+        }
+    }
+
     private Coroutine weaponUIEffectCoroutine;
     private bool suppressSwitchSound;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private Vector3 textOriginalScale = Vector3.one;
     private Vector3 imageOriginalScale = Vector3.one;
     private Color textOriginalColor = Color.white;
@@ -189,6 +225,7 @@ public class WeaponManager : MonoBehaviour
             currentDurability[activeIndex] = 0f;
             unlockedWeapons[activeIndex] = false; // Relock broken weapon
             SaveWeaponData();
+            RunStats.WeaponsBroken++;
             PlayBreakMoment(activeIndex); // before the switch, while the HUD still shows the broken weapon
             onWeaponBroken?.Invoke();
             SetWeaponToAxe(); // Auto-switch back to starting Rod

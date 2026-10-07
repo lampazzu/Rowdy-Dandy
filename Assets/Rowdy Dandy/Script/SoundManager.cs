@@ -12,7 +12,12 @@ public class SoundManager : MonoBehaviour
         public AudioClip clip;
         [Range(0f, 1f)] public float volume = 1f;
         [Range(0.1f, 3f)] public float pitch = 1f;
+        [Tooltip("Rowdy's own voice: also scaled by the Rowdy Voice setting. Sounds named 'Grunt...' count automatically.")]
+        public bool rowdyVoice;
     }
+
+    private static bool IsRowdyVoice(Sound sound) =>
+        sound.rowdyVoice || sound.soundName.StartsWith("Grunt", System.StringComparison.OrdinalIgnoreCase);
 
     public List<Sound> sounds = new List<Sound>();
     private Dictionary<string, Sound> soundDictionary = new Dictionary<string, Sound>();
@@ -69,7 +74,9 @@ public class SoundManager : MonoBehaviour
             Camera cam = Camera.main;
             Vector3 playPosition = cam != null ? cam.transform.position : transform.position;
 
-            AudioSource.PlayClipAtPoint(sound.clip, playPosition, sound.volume * GameSettings.SfxVolume);
+            float volume = sound.volume * GameSettings.SfxVolume;
+            if (IsRowdyVoice(sound)) volume *= GameSettings.RowdyVoiceVolume;
+            AudioSource.PlayClipAtPoint(sound.clip, playPosition, volume);
         }
         else
         {

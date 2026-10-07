@@ -110,11 +110,32 @@ public class WaveEnemySpawner : MonoBehaviour
     [Tooltip("Portal VFX spawned at the exact same position as each enemy.")]
     [SerializeField] private GameObject spawnPortalPrefab;
 
+    [Header("Cleanup (enemies left behind)")]
+    [Tooltip("Spawned enemies further than this from Rowdy (and off screen) for a while are removed, so ones you run away from don't pile up.")]
+    [SerializeField] private float despawnDistance = 30f;
+    [Tooltip("Seconds an enemy has to stay that far away before it's removed.")]
+    [SerializeField] private float despawnDelay = 4f;
+    [Tooltip("Most spawned enemies alive at once. Spawning pauses while at the limit (0 = no limit).")]
+    [SerializeField] private int maxAliveEnemies = 25;
+    [Tooltip("Dead bodies of spawned enemies are cleaned up this long after dying.")]
+    [SerializeField] private float corpseLifetime = 12f;
+
     [Header("Debug")]
     [SerializeField] private bool drawSpawnRadius = true;
 
+    private class SpawnedEnemy
+    {
+        public GameObject root;
+        public EnemyHealth health;
+        public Renderer renderer;
+        public float farTime;
+        public float deadTime = -1f;
+    }
+
     private Coroutine waveRoutine;
     private int currentWaveIndex = -1;
+    private readonly List<SpawnedEnemy> spawned = new List<SpawnedEnemy>();
+    private float cleanupTimer;
 
     private void Start()
     {
@@ -124,6 +145,61 @@ public class WaveEnemySpawner : MonoBehaviour
         {
             waveRoutine = StartCoroutine(StartWaves());
         }
+    }
+
+    private int AliveCount
+    {
+        get
+        {
+            int alive = 0;
+            foreach (SpawnedEnemy e in spawned) if (e.root != null && (e.health == null || !e.health.enemydead)) alive++;
+            return alive;
+        }
+    }
+
+    // Removes spawned enemies Rowdy left far behind (off screen), and old corpses. Checked a few times a second.
+    private void Update()
+    {
+        cleanupTimer -= Time.deltaTime;
+        if (cleanupTimer > 0f) return;
+        float step = 0.25f - cleanupTimer;
+        cleanupTimer = 0.25f;
+
+        for (int i = spawned.Count - 1; i >= 0; i--)
+        {
+            SpawnedEnemy e = spawned[i];
+            if (e.root == null) { spawned.RemoveAt(i); continue; }
+
+            bool dead = e.health != null && e.health.enemydead;
+            if (dead)
+            {
+                if (e.deadTime < 0f) e.deadTime = Time.time;
+                if (corpseLifetime > 0f && Time.time - e.deadTime > corpseLifetime && !IsVisible(e)) Despawn(i);
+                continue;
+            }
+
+            if (player == null || despawnDistance <= 0f) continue;
+            Vector3 position = e.health != null ? e.health.transform.position : e.root.transform.position;
+            bool far = Vector2.Distance(position, player.position) > despawnDistance && !IsVisible(e);
+            e.farTime = far ? e.farTime + step : 0f;
+            if (e.farTime >= despawnDelay) Despawn(i);
+        }
+    }
+
+    private static bool IsVisible(SpawnedEnemy e) => e.renderer != null && e.renderer.isVisible;
+
+    private void Despawn(int index)
+    {
+        if (spawned[index].root != null) Destroy(spawned[index].root);
+        spawned.RemoveAt(index);
+    }
+
+    private void Track(GameObject enemy)
+    {
+        var entry = new SpawnedEnemy { root = enemy, health = enemy.GetComponentInChildren<EnemyHealth>(true) };
+        entry.renderer = entry.health != null ? entry.health.GetComponent<Renderer>() : null;
+        if (entry.renderer == null) entry.renderer = enemy.GetComponentInChildren<SpriteRenderer>();
+        spawned.Add(entry);
     }
 
     private void FindPlayer()
@@ -194,6 +270,12 @@ public class WaveEnemySpawner : MonoBehaviour
 
             EnemyEntry entry = wave.enemies[i];
 
+            // At the limit: wait for some to die or be cleaned up before spawning more
+            while (maxAliveEnemies > 0 && AliveCount >= maxAliveEnemies)
+            {
+                yield return new WaitForSeconds(0.5f);
+            }
+
             if (entry != null && entry.prefab != null)
             {
                 SpawnEnemy(entry);
@@ -215,6 +297,7 @@ public class WaveEnemySpawner : MonoBehaviour
 
         // 1. Instantiate enemy first
         GameObject enemy = Instantiate(entry.prefab, spawnPosition, Quaternion.identity);
+        Track(enemy);
 
         if (entry.enemyType == EnemyType.Flying)
         {

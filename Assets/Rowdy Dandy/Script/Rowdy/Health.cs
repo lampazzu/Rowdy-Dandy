@@ -54,7 +54,9 @@ public class Health : MonoBehaviour
 
         if (Time.time - lastDamageTime > damageCooldown)
         {
+            float before = currentHealth;
             currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
+            RunStats.RecordDamageTaken(before - currentHealth);
             if (currentHealth > 0)
             {
                 anim.SetTrigger("hit");
@@ -66,6 +68,7 @@ public class Health : MonoBehaviour
             {
                 anim.SetTrigger("dead");
                 dead = true;
+                RunStats.Deaths++;
                 CatRoster.MarkDied(); // costs a cat once the scene reloads
                 anim.SetTrigger("IsDead");
                 gameObject.tag = "Untagged";

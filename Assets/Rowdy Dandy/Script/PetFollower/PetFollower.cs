@@ -29,7 +29,7 @@ public class PetFollower : MonoBehaviour
     [Header("Voice")]
     [Tooltip("One is picked at random on attack (never the same twice in a row)")]
     [SerializeField] private AudioClip[] attackVoices;
-    [Tooltip("1 = same level as the other sound effects. Above 1 boosts it (5 cancels the project's 0.2 global volume = the file at full loudness).")]
+    [Tooltip("1 = same level as the other sound effects. Above 1 boosts it (5 cancels the project's 0.2 global volume = the file at full loudness). The Cat Voice setting scales it on top.")]
     [SerializeField, Range(0f, 5f)] private float voiceVolume = 1f;
     [SerializeField] private float voicePitchVariation = 0.05f;
     [Tooltip("Samurai: speak on every cut of a chain instead of only the first")]
@@ -181,7 +181,7 @@ public class PetFollower : MonoBehaviour
 
         if (attackVoices[index] == null) return;
         voiceSource.pitch = 1f + Random.Range(-voicePitchVariation, voicePitchVariation);
-        voiceSource.PlayOneShot(attackVoices[index], voiceVolume);
+        voiceSource.PlayOneShot(attackVoices[index], voiceVolume * GameSettings.CatVoiceVolume);
     }
 
     private void Update()
@@ -236,6 +236,7 @@ public class PetFollower : MonoBehaviour
             isFollowingPlayer = true;
 
             CatRoster.RecordCollected(RosterKey);
+            RunStats.CatsRescued++;
             SoundManager.PlaySfx(collectSound, collectVolume);
 
             StartCoroutine(StartFollowing());
@@ -464,6 +465,7 @@ public class PetFollower : MonoBehaviour
                 if (target != null && IsExecutable(target))
                 {
                     target.ShowCustomText("EXECUTED!", new Color(1f, 0.85f, 0.3f));
+                    EnemyHealth.CreditNextHit(KillCredit.Cat(this, true));
                     target.TakeDamageEnemy(target.currentenemyHealth);
                     onExecute?.Invoke();
                     kills++;
@@ -722,6 +724,7 @@ public static class CatRoster
         {
             lostKey = collected[collected.Count - 1];
             collected.RemoveAt(collected.Count - 1);
+            RunStats.CatsLost++;
         }
         diedBeforeReload = false;
 

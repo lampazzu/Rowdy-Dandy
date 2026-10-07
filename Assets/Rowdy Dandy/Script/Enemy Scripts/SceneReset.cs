@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 // 1 = reload the scene at the last checkpoint.
 // 2 = reload the scene at the test checkpoint (the one next to PelichAnus at the end of the map).
+// 3 = reload the scene at the first checkpoint ("Spawner") from the left = the start of the map.
 public class SceneReset : MonoBehaviour
 {
     [Tooltip("Checkpoint used by key 2. Leave empty to use the checkpoint closest to the object named below (or the right-most one).")]
@@ -22,6 +23,20 @@ public class SceneReset : MonoBehaviour
         {
             GoToTestCheckpoint();
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            GoToCheckpoint(FindLeftmostCheckpoint());
+        }
+    }
+
+    Transform FindLeftmostCheckpoint()
+    {
+        Transform best = null;
+        foreach (RespawnTrigger checkpoint in FindObjectsByType<RespawnTrigger>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (best == null || checkpoint.transform.position.x < best.position.x) best = checkpoint.transform;
+        }
+        return best;
     }
 
     void ResetScene()
@@ -32,10 +47,14 @@ public class SceneReset : MonoBehaviour
 
     void GoToTestCheckpoint()
     {
-        Transform checkpoint = testCheckpoint != null ? testCheckpoint : FindTestCheckpoint();
+        GoToCheckpoint(testCheckpoint != null ? testCheckpoint : FindTestCheckpoint());
+    }
+
+    void GoToCheckpoint(Transform checkpoint)
+    {
         if (checkpoint == null)
         {
-            Debug.LogWarning("SceneReset: no checkpoint found for key 2, reloading at the last checkpoint instead.");
+            Debug.LogWarning("SceneReset: no checkpoint found, reloading at the last checkpoint instead.");
             ResetScene();
             return;
         }

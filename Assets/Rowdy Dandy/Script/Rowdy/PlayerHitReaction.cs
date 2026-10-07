@@ -135,7 +135,7 @@ public class PlayerHitReaction : MonoBehaviour
             if (voice != null)
             {
                 audioSource.pitch = Random.Range(0.95f, 1.05f);
-                audioSource.PlayOneShot(voice, soundVolume);
+                audioSource.PlayOneShot(voice, soundVolume * GameSettings.RowdyVoiceVolume);
             }
         }
     }

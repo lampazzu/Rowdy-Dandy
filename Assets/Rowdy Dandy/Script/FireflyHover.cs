@@ -32,8 +32,15 @@ public class FireflyHover : MonoBehaviour
         if (glow != null) baseIntensity = glow.intensity;
     }
 
+    // Off-screen fireflies (well outside the camera) just hold still: nobody sees them drift
+    private const float ActiveDistance = 22f;
+    private static Camera cachedCamera;
+
     void Update()
     {
+        if (cachedCamera == null) cachedCamera = Camera.main;
+        if (cachedCamera != null && Mathf.Abs(cachedCamera.transform.position.x - startPos.x) > ActiveDistance) return;
+
         if (scatter) UpdateScatter();
 
         float x = Mathf.PerlinNoise(Time.time * speed + offsetX, 0) * 2 - 1;
@@ -69,6 +76,10 @@ public class FireflyHover : MonoBehaviour
         scatterOffset = Vector3.Lerp(scatterOffset, Vector3.zero, dt / Mathf.Max(0.1f, settleTime));
         excitement = Mathf.Max(0f, excitement - dt / Mathf.Max(0.1f, settleTime));
 
-        if (glow != null) glow.intensity = baseIntensity * (1f + excitement * glowBoost);
+        if (glow != null)
+        {
+            float intensity = baseIntensity * (1f + excitement * glowBoost);
+            if (!Mathf.Approximately(glow.intensity, intensity)) glow.intensity = intensity;
+        }
     }
 }

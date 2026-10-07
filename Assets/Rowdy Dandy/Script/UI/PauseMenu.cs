@@ -15,7 +15,7 @@ public class PauseMenu : MonoBehaviour
 
     private static PauseMenu instance;
 
-    private enum Page { Closed, Main, Settings }
+    private enum Page { Closed, Main, Settings, Controls }
 
     private class Row
     {
@@ -29,6 +29,8 @@ public class PauseMenu : MonoBehaviour
         public Action<int> change;
         public Func<string> getValue;
         public Func<float> getBar;
+        public int column;
+        public float y;
     }
 
     // Layout (UI pixels at 1080p)
@@ -47,12 +49,19 @@ public class PauseMenu : MonoBehaviour
     private static readonly Color Dim = new Color(0.04f, 0.01f, 0.07f, 0.72f);
     private static readonly Color TextIdle = new Color(0.82f, 0.76f, 0.88f, 1f);
 
+    private const float ColumnOffset = 410f;  // settings page: two columns of rows, this far left / right of center
+
     private Page page = Page.Closed;
     private GameObject root;
-    private GameObject mainPanel, settingsPanel;
+    private GameObject mainPanel, settingsPanel, controlsPanel;
     private readonly List<Row> mainRows = new List<Row>();
     private readonly List<Row> settingsRows = new List<Row>();
+    private readonly List<Row> controlsRows = new List<Row>();
     private int selected;
+    private float columnX;     // x of the rows being built
+    private int buildColumn;   // which settings column they belong to
+    private Page controlsReturnPage = Page.Main;
+    private int controlsReturnRow;
     private Sprite panelSprite;
     private float slicedMultiplier = 0.390625f;
 
@@ -106,6 +115,7 @@ public class PauseMenu : MonoBehaviour
         if (pausePressed || backPressed)
         {
             if (page == Page.Settings) ShowPage(Page.Main, 1);
+            else if (page == Page.Controls) CloseControls();
             else Resume();
             return;
         }
@@ -119,6 +129,10 @@ public class PauseMenu : MonoBehaviour
         {
             rows[selected].change(horizontal);
             RefreshValues();
+        }
+        else if (horizontal != 0 && page == Page.Settings)
+        {
+            JumpColumn(horizontal);
         }
 
         bool submit = Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0);
@@ -196,11 +210,38 @@ public class PauseMenu : MonoBehaviour
         page = newPage;
         mainPanel.SetActive(page == Page.Main);
         settingsPanel.SetActive(page == Page.Settings);
+        controlsPanel.SetActive(page == Page.Controls);
         RefreshValues();
         Select(FirstSelectable(CurrentRows(), select));
     }
 
-    private List<Row> CurrentRows() => page == Page.Settings ? settingsRows : mainRows;
+    private List<Row> CurrentRows() => page == Page.Settings ? settingsRows : page == Page.Controls ? controlsRows : mainRows;
+
+    private void OpenControls()
+    {
+        controlsReturnPage = page;
+        controlsReturnRow = selected;
+        ShowPage(Page.Controls, 0);
+    }
+
+    private void CloseControls() => ShowPage(controlsReturnPage == Page.Settings ? Page.Settings : Page.Main, controlsReturnRow);
+
+    // Left / right on a row without a value (a button): hop to the closest row in the other column
+    private void JumpColumn(int direction)
+    {
+        List<Row> rows = CurrentRows();
+        Row current = rows[selected];
+        int targetColumn = current.column + direction;
+        int best = -1;
+        float bestDistance = float.MaxValue;
+        for (int i = 0; i < rows.Count; i++)
+        {
+            if (rows[i].isHeader || rows[i].column != targetColumn) continue;
+            float distance = Mathf.Abs(rows[i].y - current.y);
+            if (distance < bestDistance) { bestDistance = distance; best = i; }
+        }
+        if (best >= 0) Select(best);
+    }
 
     // ---------------------------------------------------------------- selection
     private static int FirstSelectable(List<Row> rows, int from)
@@ -272,24 +313,30 @@ public class PauseMenu : MonoBehaviour
         Stretch((RectTransform)root.transform);
 
         // ---- Main page
-        float mainHeight = 150 + 4 * (RowHeight + RowGap) + 70;
+        columnX = 0f;
+        buildColumn = 0;
+        float mainHeight = 150 + 5 * (RowHeight + RowGap) + 70;
         mainPanel = MakePanel("Main", root.transform, 560, mainHeight);
         float top = mainHeight / 2f;
         MakeLabel(mainPanel.transform, "PAUSED", 6, Gold, 0.5f, new Vector2(0, top - 70));
         float y = top - 150;
         AddButton(mainRows, mainPanel.transform, "Resume", ref y, Resume);
         AddButton(mainRows, mainPanel.transform, "Settings", ref y, () => ShowPage(Page.Settings, 0));
+        AddButton(mainRows, mainPanel.transform, "Controls", ref y, OpenControls);
         AddButton(mainRows, mainPanel.transform, "Restart Level", ref y, RestartLevel);
         AddButton(mainRows, mainPanel.transform, "Quit Game", ref y, QuitGame);
         MakeHint(mainPanel.transform, -top + 34);
 
-        // ---- Settings page
-        float settingsHeight = 130 + 3 * 44 + 10 * (RowHeight + RowGap) + (RowHeight + RowGap + 16) + 70;
-        settingsPanel = MakePanel("Settings", root.transform, 860, settingsHeight);
+        // ---- Settings page (two columns: display + audio | gameplay + controls)
+        float leftHeight = 2 * 44 + 10 + 10 * (RowHeight + RowGap);
+        float settingsHeight = 130 + leftHeight + 70;
+        settingsPanel = MakePanel("Settings", root.transform, 2 * SettingsRowWidth + 140, settingsHeight);
         top = settingsHeight / 2f;
         MakeLabel(settingsPanel.transform, "SETTINGS", 6, Gold, 0.5f, new Vector2(0, top - 66));
         y = top - 130;
 
+        columnX = -ColumnOffset;
+        buildColumn = 0;
         AddHeader(settingsRows, settingsPanel.transform, "Display", ref y);
         AddOption(settingsRows, settingsPanel.transform, "Resolution", ref y,
             () => { Vector2Int r = GameSettings.Resolutions[GameSettings.ResolutionIndex]; return $"{r.x} x {r.y}"; },
@@ -303,12 +350,21 @@ public class PauseMenu : MonoBehaviour
         AddOption(settingsRows, settingsPanel.transform, "Frame Limit", ref y,
             () => GameSettings.VSync ? "VSync" : (GameSettings.FrameLimit < 0 ? "Unlimited" : GameSettings.FrameLimit + " FPS"),
             d => GameSettings.SetFrameLimit(GameSettings.FrameLimits[Wrap(Array.IndexOf(GameSettings.FrameLimits, GameSettings.FrameLimit) + d, GameSettings.FrameLimits.Length)]));
+        AddOption(settingsRows, settingsPanel.transform, "Show FPS", ref y,
+            () => GameSettings.ShowFps ? "On" : "Off",
+            d => GameSettings.SetShowFps(!GameSettings.ShowFps));
 
         AddHeader(settingsRows, settingsPanel.transform, "Audio", ref y);
         AddVolume(settingsRows, settingsPanel.transform, "Master Volume", ref y, () => GameSettings.MasterVolume, GameSettings.SetMasterVolume);
         AddVolume(settingsRows, settingsPanel.transform, "Music", ref y, () => GameSettings.MusicVolume, GameSettings.SetMusicVolume);
         AddVolume(settingsRows, settingsPanel.transform, "Sound Effects", ref y, () => GameSettings.SfxVolume, GameSettings.SetSfxVolume);
+        AddVolume(settingsRows, settingsPanel.transform, "Rowdy Voice", ref y, () => GameSettings.RowdyVoiceVolume, GameSettings.SetRowdyVoiceVolume);
+        AddVolume(settingsRows, settingsPanel.transform, "Cat Voice", ref y, () => GameSettings.CatVoiceVolume, GameSettings.SetCatVoiceVolume);
 
+        // Right column
+        columnX = ColumnOffset;
+        buildColumn = 1;
+        y = top - 130;
         AddHeader(settingsRows, settingsPanel.transform, "Gameplay", ref y);
         AddOption(settingsRows, settingsPanel.transform, "Screen Shake", ref y,
             () => GameSettings.ScreenShake <= 0f ? "Off" : Mathf.RoundToInt(GameSettings.ScreenShake * 100f) + "%",
@@ -319,10 +375,191 @@ public class PauseMenu : MonoBehaviour
         AddOption(settingsRows, settingsPanel.transform, "Damage Numbers", ref y,
             () => GameSettings.DamageNumbers ? "On" : "Off",
             d => GameSettings.SetDamageNumbers(!GameSettings.DamageNumbers));
+        AddOption(settingsRows, settingsPanel.transform, "Number Size", ref y,
+            () => Mathf.RoundToInt(GameSettings.DamageNumberSize * 100f) + "%",
+            d => GameSettings.SetDamageNumberSize(StepSize(GameSettings.DamageNumberSize, d)));
+        AddOption(settingsRows, settingsPanel.transform, "Message Size", ref y,
+            () => Mathf.RoundToInt(GameSettings.MessageSize * 100f) + "%",
+            d => GameSettings.SetMessageSize(StepSize(GameSettings.MessageSize, d)));
 
         y -= 16;
-        AddButton(settingsRows, settingsPanel.transform, "Back", ref y, () => ShowPage(Page.Main, 1));
+        AddButton(settingsRows, settingsPanel.transform, "Controls", ref y, OpenControls, SettingsRowWidth);
+        AddButton(settingsRows, settingsPanel.transform, "Back", ref y, () => ShowPage(Page.Main, 1), SettingsRowWidth);
         MakeHint(settingsPanel.transform, -top + 34);
+        columnX = 0f;
+        buildColumn = 0;
+
+        BuildControlsPage();
+    }
+
+    // Next / previous entry of GameSettings.TextSizes (no wrap-around, so it's clear where the ends are)
+    private static float StepSize(float current, int direction)
+    {
+        float[] sizes = GameSettings.TextSizes;
+        int index = 0;
+        for (int i = 0; i < sizes.Length; i++) if (Mathf.Abs(sizes[i] - current) < Mathf.Abs(sizes[index] - current)) index = i;
+        return sizes[Mathf.Clamp(index + direction, 0, sizes.Length - 1)];
+    }
+
+    // ---------------------------------------------------------------- controls page
+    private static readonly Color KeyFill = new Color32(0x14, 0x06, 0x1A, 0xFF);
+    private static readonly Color KeyEdge = new Color32(0xC9, 0xB6, 0xD6, 0xFF);
+    private static readonly Color PadA = new Color32(0x5C, 0xD6, 0x5C, 0xFF);
+    private static readonly Color PadB = new Color32(0xF0, 0x4A, 0x4A, 0xFF);
+    private static readonly Color PadX = new Color32(0x4A, 0x9C, 0xF5, 0xFF);
+    private static readonly Color PadY = new Color32(0xF5, 0xD1, 0x3C, 0xFF);
+    private static readonly Color PadGrey = new Color32(0xE6, 0xDC, 0xEE, 0xFF);
+
+    private void BuildControlsPage()
+    {
+        const float width = 1560f, height = 900f;
+        controlsPanel = MakePanel("Controls", root.transform, width, height);
+        Transform panel = controlsPanel.transform;
+        float top = height / 2f;
+        MakeLabel(panel, "CONTROLS", 6, Gold, 0.5f, new Vector2(0, top - 66));
+
+        // ---- Keyboard (left)
+        const float leftX = -390f, rightX = 390f;
+        MakeLabel(panel, "KEYBOARD + MOUSE", 3, Pink, 0.5f, new Vector2(leftX, top - 140));
+        var keyboard = new (string[] keys, string action)[]
+        {
+            (new[] { "A", "D" }, "Move  (or arrows)"),
+            (new[] { "SPACE" }, "Jump  (hold for higher)"),
+            (new[] { "S" }, "Duck"),
+            (new[] { "S", "+", "SPACE" }, "Drop through platform"),
+            (new[] { "J" }, "Attack  (or left click)"),
+            (new[] { "SHIFT" }, "Surf dash  (or L)"),
+            (new[] { "CTRL" }, "Switch weapon"),
+            (new[] { "E" }, "Pick up weapon"),
+            (new[] { "C" }, "Stats"),
+            (new[] { "ESC" }, "Pause"),
+        };
+        float y = top - 200;
+        foreach (var entry in keyboard)
+        {
+            float x = leftX - 330f;
+            foreach (string key in entry.keys)
+            {
+                if (key == "+") { MakeLabel(panel, "+", 2, TextIdle, 0f, new Vector2(x, y)); x += 22f; continue; }
+                x += MakeKeycap(panel, key, x, y) + 8f;
+            }
+            PixelText action = PixelText.Create(panel, entry.action, 2, TextIdle, 0f);
+            Anchor(action.Rect, new Vector2(0.5f, 0.5f), new Vector2(leftX - 80f, y));
+            y -= 52f;
+        }
+
+        // ---- Gamepad (right): drawn controller + button list
+        MakeLabel(panel, "GAMEPAD", 3, Pink, 0.5f, new Vector2(rightX, top - 140));
+        Image pad = MakeImage("Gamepad", panel, Color.white);
+        pad.sprite = GamepadSprite();
+        Anchor(pad.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(rightX, top - 282), new Vector2(56 * 6, 34 * 6));
+
+        var gamepad = new (string button, Color color, string action)[]
+        {
+            ("L-STICK", PadGrey, "Move  (down: duck)"),
+            ("A", PadA, "Jump  (hold for higher)"),
+            ("X", PadX, "Attack"),
+            ("RB", PadGrey, "Surf dash"),
+            ("LB", PadGrey, "Switch weapon"),
+            ("Y", PadY, "Pick up weapon"),
+            ("DOWN + A", PadA, "Drop through platform"),
+            ("VIEW", PadGrey, "Stats"),
+            ("MENU", PadGrey, "Pause"),
+        };
+        y = top - 410;
+        foreach (var entry in gamepad)
+        {
+            PixelText button = PixelText.Create(panel, entry.button, 2, entry.color, 1f);
+            Anchor(button.Rect, new Vector2(0.5f, 0.5f), new Vector2(rightX - 60f, y));
+            PixelText action = PixelText.Create(panel, entry.action, 2, TextIdle, 0f);
+            Anchor(action.Rect, new Vector2(0.5f, 0.5f), new Vector2(rightX - 30f, y));
+            y -= 38f;
+        }
+
+        // Back
+        y = -top + 130;
+        AddButton(controlsRows, panel, "Back", ref y, CloseControls);
+        MakeHint(panel, -top + 34);
+    }
+
+    // A key drawn as a little cap with its name; returns its width
+    private float MakeKeycap(Transform parent, string key, float x, float y)
+    {
+        PixelText label = PixelText.Create(parent, key, 2, Color.white, 0.5f);
+        float w = Mathf.Max(40f, label.Rect.sizeDelta.x + 20f), h = 36f;
+        Image edge = MakeImage("Key " + key, parent, KeyEdge);
+        Anchor(edge.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(x + w / 2f, y), new Vector2(w, h));
+        edge.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        Image fill = MakeImage("Fill", edge.rectTransform, KeyFill);
+        Stretch(fill.rectTransform);
+        fill.rectTransform.offsetMin = new Vector2(3, 6);
+        fill.rectTransform.offsetMax = new Vector2(-3, -3);
+        label.transform.SetParent(edge.rectTransform, false);
+        Anchor(label.Rect, new Vector2(0.5f, 0.5f), new Vector2(0, 1));
+        return w;
+    }
+
+    // 56x34 pixel-art controller: grips, bumpers, sticks, d-pad, colored A/B/X/Y, view/menu
+    private static Sprite gamepadSprite;
+    private static Sprite GamepadSprite()
+    {
+        if (gamepadSprite != null) return gamepadSprite;
+        const int W = 56, H = 34;
+        var id = new int[W, H]; // 0 empty, 1 body, 2 dark, 3 light, 10+ colors
+        void Disc(int cx, int cy, float r, int v) { for (int x = 0; x < W; x++) for (int y = 0; y < H; y++) if ((x - cx) * (x - cx) + (y - cy) * (y - cy) <= r * r) id[x, y] = v; }
+        void Box(int x0, int y0, int x1, int y1, int v) { for (int x = x0; x <= x1; x++) for (int y = y0; y <= y1; y++) if (x >= 0 && y >= 0 && x < W && y < H) id[x, y] = v; }
+
+        Box(9, 8, 46, 21, 1);           // body
+        Disc(11, 13, 5, 1); Disc(44, 13, 5, 1);
+        Disc(13, 23, 8, 1); Disc(42, 23, 8, 1); // grips
+        Box(8, 4, 18, 6, 3); Box(37, 4, 47, 6, 3);  // LB / RB
+        Disc(15, 14, 4, 2); Disc(15, 14, 2.2f, 3);   // left stick
+        Disc(35, 22, 3.6f, 2); Disc(35, 22, 1.8f, 3); // right stick
+        Box(20, 19, 22, 25, 2); Box(18, 21, 24, 23, 2); // d-pad
+        Disc(42, 10, 2.2f, 13); Disc(38, 14, 2.2f, 12); Disc(46, 14, 2.2f, 11); Disc(42, 18, 2.2f, 10); // Y X B A
+        Box(25, 12, 26, 13, 2); Box(30, 12, 31, 13, 2); // view / menu
+
+        Color32 outline = new Color32(0x1B, 0x08, 0x20, 0xFF);
+        Color32 Pick(int v)
+        {
+            switch (v)
+            {
+                case 1: return new Color32(0x6A, 0x4A, 0x80, 0xFF);
+                case 2: return new Color32(0x2A, 0x16, 0x34, 0xFF);
+                case 3: return new Color32(0xB8, 0xA4, 0xC8, 0xFF);
+                case 10: return PadA;
+                case 11: return PadB;
+                case 12: return PadX;
+                case 13: return PadY;
+                default: return new Color32(0, 0, 0, 0);
+            }
+        }
+
+        var tex = new Texture2D(W, H, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, name = "GamepadLayout" };
+        var px = new Color32[W * H];
+        for (int y = 0; y < H; y++)
+        {
+            for (int x = 0; x < W; x++)
+            {
+                Color32 c = Pick(id[x, y]);
+                if (id[x, y] == 0)
+                {
+                    bool nearBody = false;
+                    for (int dx = -1; dx <= 1 && !nearBody; dx++)
+                        for (int dy = -1; dy <= 1 && !nearBody; dy++)
+                        {
+                            int nx = x + dx, ny = y + dy;
+                            if (nx >= 0 && ny >= 0 && nx < W && ny < H && id[nx, ny] != 0) nearBody = true;
+                        }
+                    if (nearBody) c = outline;
+                }
+                px[(H - 1 - y) * W + x] = c; // texture rows start at the bottom
+            }
+        }
+        tex.SetPixels32(px);
+        tex.Apply(false, true);
+        gamepadSprite = Sprite.Create(tex, new Rect(0, 0, W, H), new Vector2(0.5f, 0.5f), 16f);
+        return gamepadSprite;
     }
 
     private static int Wrap(int i, int count) => count <= 0 ? 0 : ((i % count) + count) % count;
@@ -345,9 +582,9 @@ public class PauseMenu : MonoBehaviour
 
     // ---------------------------------------------------------------- row builders
     // A centered button (Resume, Back...)
-    private void AddButton(List<Row> rows, Transform parent, string text, ref float y, Action action)
+    private void AddButton(List<Row> rows, Transform parent, string text, ref float y, Action action, float width = ButtonRowWidth)
     {
-        Row row = MakeRow(rows, parent, y, ButtonRowWidth);
+        Row row = MakeRow(rows, parent, y, width);
         row.label = PixelText.Create(row.rect, text, TextScale, TextIdle, 0.5f);
         Anchor(row.label.Rect, new Vector2(0.5f, 0.5f), Vector2.zero);
         row.submit = action;
@@ -391,11 +628,13 @@ public class PauseMenu : MonoBehaviour
 
     private void AddHeader(List<Row> rows, Transform parent, string text, ref float y)
     {
-        var row = new Row { isHeader = true };
+        // A little breathing room above a header that follows other rows in the same column
+        if (rows.Count > 0 && rows[rows.Count - 1].column == buildColumn) y -= 10;
+        var row = new Row { isHeader = true, column = buildColumn, y = y };
         var holder = new GameObject("Header " + text, typeof(RectTransform));
         holder.transform.SetParent(parent, false);
         row.rect = (RectTransform)holder.transform;
-        Anchor(row.rect, new Vector2(0.5f, 0.5f), new Vector2(0, y - 10), new Vector2(SettingsRowWidth, 34));
+        Anchor(row.rect, new Vector2(0.5f, 0.5f), new Vector2(columnX, y - 10), new Vector2(SettingsRowWidth, 34));
         row.label = PixelText.Create(row.rect, text, 2, Pink, 0f);
         Anchor(row.label.Rect, new Vector2(0f, 0.5f), new Vector2(8, 0));
         rows.Add(row);
@@ -404,9 +643,9 @@ public class PauseMenu : MonoBehaviour
 
     private Row MakeRow(List<Row> rows, Transform parent, float y, float width)
     {
-        var row = new Row();
+        var row = new Row { column = buildColumn, y = y };
         Image plate = MakeImage("Row", parent, PlateColor);
-        Anchor(plate.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, y - RowHeight / 2f), new Vector2(width, RowHeight));
+        Anchor(plate.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(columnX, y - RowHeight / 2f), new Vector2(width, RowHeight));
         row.rect = plate.rectTransform;
         row.plate = plate;
         plate.enabled = false; // only shown on the selected row

@@ -1,54 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using Cinemachine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [StructLayout(LayoutKind.Sequential)]
-    private struct XINPUT_VIBRATION
-    {
-        public ushort wLeftMotorSpeed;
-        public ushort wRightMotorSpeed;
-    }
+    // Who the next TakeDamageEnemy call comes from (kill feed + stats). Set by PlayerDamage, the samurai cat, drowning.
+    private static KillCredit nextHitCredit;
+    public static void CreditNextHit(KillCredit credit) => nextHitCredit = credit;
 
-    [DllImport("xinput1_4.dll", EntryPoint = "XInputSetState")]
-    private static extern int XInputSetState1_4(int dwUserIndex, ref XINPUT_VIBRATION pVibration);
+    private KillCredit lastCredit;
+    private float lastCreditTime = -99f;
 
-    [DllImport("xinput9_1_0.dll", EntryPoint = "XInputSetState")]
-    private static extern int XInputSetState9_1_0(int dwUserIndex, ref XINPUT_VIBRATION pVibration);
+    // Stuck-in-GetHit safety net (see UpdateHitRecovery)
+    private static readonly int GetHitState = Animator.StringToHash("GetHit");
+    private static readonly int WalkState = Animator.StringToHash("Walk");
+    private float stuckInHitTimer;
 
-    private static bool useXInput14 = true;
-
-    private static void SetXInputVibration(int userIndex, float leftMotor, float rightMotor)
-    {
-        XINPUT_VIBRATION vibration = new XINPUT_VIBRATION
-        {
-            wLeftMotorSpeed = (ushort)(Mathf.Clamp01(leftMotor) * 65535),
-            wRightMotorSpeed = (ushort)(Mathf.Clamp01(rightMotor) * 65535)
-        };
-
-        try
-        {
-            if (useXInput14)
-                XInputSetState1_4(userIndex, ref vibration);
-            else
-                XInputSetState9_1_0(userIndex, ref vibration);
-        }
-        catch (DllNotFoundException)
-        {
-            try
-            {
-                useXInput14 = false;
-                XInputSetState9_1_0(userIndex, ref vibration);
-            }
-            catch { }
-        }
-        catch { }
-    }
+    // Animator parameter names, cached (Animator.parameters allocates a new array on every call)
+    private readonly HashSet<string> animatorParameters = new HashSet<string>();
+    private RuntimeAnimatorController cachedController;
 
     [SerializeField] private CinemachineVirtualCamera cinemachineCam;
     [SerializeField] private Transform newFollowTarget;
@@ -185,6 +158,34 @@ public class EnemyHealth : MonoBehaviour
         {
             ActivatePillarSequence();
         }
+
+        UpdateHitRecovery();
+    }
+
+    // GetHit only leaves through 'back to idle' (when not moving) or 'moving'. If neither comes (the hit cut off an
+    // attack before its clip re-enabled BackToIdle, and the enemy is standing still), it froze on the last hit frame.
+    // Once the hit clip has finished and it's still there, send it on to Walk (Walk drops to idle by itself).
+    private void UpdateHitRecovery()
+    {
+        if (anima == null || enemydead || isBeingHit || isObject || !anima.isActiveAndEnabled || anima.runtimeAnimatorController == null)
+        {
+            stuckInHitTimer = 0f;
+            return;
+        }
+
+        AnimatorStateInfo state = anima.GetCurrentAnimatorStateInfo(0);
+        if (state.shortNameHash != GetHitState || anima.IsInTransition(0) || state.normalizedTime < 1f)
+        {
+            stuckInHitTimer = 0f;
+            return;
+        }
+
+        stuckInHitTimer += Time.deltaTime;
+        if (stuckInHitTimer < 0.25f) return;
+
+        stuckInHitTimer = 0f;
+        if (anima.HasState(0, WalkState)) anima.Play(WalkState, 0, 0f);
+        else SetAnimatorTrigger("back to idle");
     }
 
     private void ActivatePillarSequence()
@@ -218,6 +219,18 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamageEnemy(float _damage, bool isCritical = false)
     {
+        KillCredit credit = nextHitCredit;
+        nextHitCredit = null;
+        bool byRowdySide = credit != null && credit.kind != KillCredit.Kind.World;
+        if (byRowdySide && !enemydead)
+        {
+            lastCredit = credit;
+            lastCreditTime = Time.time;
+            RunStats.RecordHit(_damage, credit.with);
+            if (isCritical) RunStats.CriticalHits++;
+            if (isParryTime && currentenemyHealth > 0f) RunStats.Counters++;
+        }
+
         currentenemyHealth = Mathf.Clamp(currentenemyHealth - _damage, 0, startingenemyHealth);
 
         SpawnDamageText(_damage);
@@ -282,6 +295,7 @@ public class EnemyHealth : MonoBehaviour
                 SetAnimatorTrigger("destroyed");
                 enemydead = true;
                 if (TryGetComponent(out EnemyCorpse corpse)) corpse.OnKilled();
+                ReportKill(credit);
 
                 // --- SPAWN EXP GEMS OR GIVE EXP DIRECTLY ---
                 if (giveDirectEXP)
@@ -333,6 +347,45 @@ public class EnemyHealth : MonoBehaviour
         SetAnimatorBool("IsBeingHit", isBeingHit);
     }
 
+    // Kill feed + stats. Drowned (or otherwise world-killed) soon after Rowdy / a cat hit it = still their kill.
+    private void ReportKill(KillCredit credit)
+    {
+        if (isObject)
+        {
+            if (credit != null && credit.kind != KillCredit.Kind.World) RunStats.ObjectsSmashed++;
+            return;
+        }
+
+        KillCredit killer = credit;
+        bool worldKill = killer == null || killer.kind == KillCredit.Kind.World;
+        if (worldKill && lastCredit != null && Time.time - lastCreditTime < 5f)
+        {
+            killer = new KillCredit
+            {
+                kind = lastCredit.kind,
+                name = lastCredit.name,
+                icon = killer != null && killer.icon != null ? killer.icon : lastCredit.icon,
+                with = lastCredit.with,
+            };
+            worldKill = false;
+        }
+
+        try
+        {
+            KillFeed.Describe(this, out string victimName, out Sprite portrait);
+            if (!worldKill)
+            {
+                RunStats.RecordKill(victimName, killer.kind == KillCredit.Kind.Cat);
+                if (killer.execution) RunStats.Executions++;
+            }
+            KillFeed.Report(killer, victimName, portrait);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Kill feed: " + e.Message, this); // never let the UI break a kill
+        }
+    }
+
     private void SpawnDamageText(float damage)
     {
         if (damage <= 0f || !GameSettings.DamageNumbers) return;
@@ -368,22 +421,11 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    // Rumble runs on GamepadRumble: the old per-enemy coroutine was killed by StopAllCoroutines on the next hit,
+    // so the "off" never came and the counter rumble kept going.
     public void TriggerRumble(float lowFreq, float highFreq, float duration)
     {
-        if (!GameSettings.Vibration) return;
-        StartCoroutine(LegacyRumbleRoutine(lowFreq, highFreq, duration));
-    }
-
-    private IEnumerator LegacyRumbleRoutine(float lowFreq, float highFreq, float duration)
-    {
-        SetXInputVibration(0, lowFreq, highFreq);
-        yield return new WaitForSecondsRealtime(duration);
-        SetXInputVibration(0, 0f, 0f);
-    }
-
-    private void OnDisable()
-    {
-        SetXInputVibration(0, 0f, 0f);
+        GamepadRumble.Pulse(lowFreq, highFreq, duration);
     }
 
     private IEnumerator ResetIsBeingHitAfterDelay(float delay)
@@ -420,14 +462,16 @@ public class EnemyHealth : MonoBehaviour
     {
         if (anima == null) return false;
 
-        foreach (AnimatorControllerParameter param in anima.parameters)
+        if (cachedController != anima.runtimeAnimatorController)
         {
-            if (param.name == paramName)
+            cachedController = anima.runtimeAnimatorController;
+            animatorParameters.Clear();
+            if (cachedController != null)
             {
-                return true;
+                foreach (AnimatorControllerParameter param in anima.parameters) animatorParameters.Add(param.name);
             }
         }
-        return false;
+        return animatorParameters.Contains(paramName);
     }
 
     private void SwitchRandomHitAnimation()

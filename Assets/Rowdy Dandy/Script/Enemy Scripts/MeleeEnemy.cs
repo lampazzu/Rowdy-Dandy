@@ -33,6 +33,7 @@ public class MeleeEnemy : MonoBehaviour
     //jump stuff end
     private string enemyLayer = "Enemy";
     private string ignorePlayerLayer = "IgnorePlayer";
+    private int enemyLayerIndex = -2, ignorePlayerLayerIndex = -2;
 
 
     private void Awake()
@@ -67,16 +68,14 @@ public class MeleeEnemy : MonoBehaviour
             }
         }
 
-        if (isPhasingDead)
+        // IgnorePlayer while phasing, Enemy otherwise (layer indices cached, this runs every frame)
+        if (enemyLayerIndex < -1)
         {
-            // Change the layer to IgnorePlayer when phasing
-            gameObject.layer = LayerMask.NameToLayer(ignorePlayerLayer);
+            enemyLayerIndex = LayerMask.NameToLayer(enemyLayer);
+            ignorePlayerLayerIndex = LayerMask.NameToLayer(ignorePlayerLayer);
         }
-        else
-        {
-            // Revert back to Enemy layer when not phasing
-            gameObject.layer = LayerMask.NameToLayer(enemyLayer);
-        }
+        int layer = isPhasingDead ? ignorePlayerLayerIndex : enemyLayerIndex;
+        if (gameObject.layer != layer) gameObject.layer = layer;
     }
 
     private bool PlayerInSight()

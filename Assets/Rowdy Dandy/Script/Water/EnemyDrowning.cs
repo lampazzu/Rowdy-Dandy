@@ -156,6 +156,7 @@ public class EnemyDrowning : MonoBehaviour
 
         if (health != null && !health.enemydead && health.currentenemyHealth > 0f)
         {
+            EnemyHealth.CreditNextHit(KillCredit.Drowning());
             health.TakeDamageEnemy(health.currentenemyHealth);
         }
     }

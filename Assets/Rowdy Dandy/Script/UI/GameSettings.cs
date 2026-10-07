@@ -18,16 +18,22 @@ public static class GameSettings
     public static float MasterVolume { get; private set; } = 1f;
     public static float MusicVolume { get; private set; } = 0.8f;
     public static float SfxVolume { get; private set; } = 1f;
+    public static float RowdyVoiceVolume { get; private set; } = 1f; // Rowdy's grunts / hurt voice (on top of Sound Effects)
+    public static float CatVoiceVolume { get; private set; } = 1f;   // Wig / Nick voice lines (on top of Sound Effects)
 
     public static float ScreenShake { get; private set; } = 1f;     // 0 .. 1
     public static bool Vibration { get; private set; } = true;
     public static bool DamageNumbers { get; private set; } = true;
+    public static float DamageNumberSize { get; private set; } = 1f; // x the (already halved) base size of damage numbers
+    public static float MessageSize { get; private set; } = 1f;      // x the (already halved) base size of CRITICAL! / COUNTER! / EXECUTED!...
+    public static bool ShowFps { get; private set; }
 
     public static event Action Changed;
 
     public static readonly int[] FrameLimits = { 30, 60, 120, 144, 240, -1 };
     public static readonly FullScreenMode[] DisplayModes = { FullScreenMode.FullScreenWindow, FullScreenMode.ExclusiveFullScreen, FullScreenMode.Windowed };
     public static readonly float[] ShakeLevels = { 0f, 0.5f, 1f };
+    public static readonly float[] TextSizes = { 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f };
 
     private static List<Vector2Int> resolutions;
     private static bool loaded;
@@ -92,10 +98,15 @@ public static class GameSettings
         MasterVolume = PlayerPrefs.GetFloat(Prefix + "Master", 1f);
         MusicVolume = PlayerPrefs.GetFloat(Prefix + "Music", 0.8f);
         SfxVolume = PlayerPrefs.GetFloat(Prefix + "Sfx", 1f);
+        RowdyVoiceVolume = PlayerPrefs.GetFloat(Prefix + "RowdyVoice", 1f);
+        CatVoiceVolume = PlayerPrefs.GetFloat(Prefix + "CatVoice", 1f);
 
         ScreenShake = PlayerPrefs.GetFloat(Prefix + "Shake", 1f);
         Vibration = PlayerPrefs.GetInt(Prefix + "Vibration", 1) == 1;
         DamageNumbers = PlayerPrefs.GetInt(Prefix + "DamageNumbers", 1) == 1;
+        DamageNumberSize = PlayerPrefs.GetFloat(Prefix + "NumberSize", 1f);
+        MessageSize = PlayerPrefs.GetFloat(Prefix + "MessageSize", 1f);
+        ShowFps = PlayerPrefs.GetInt(Prefix + "ShowFps", 0) == 1;
     }
 
     private static void Save()
@@ -107,9 +118,14 @@ public static class GameSettings
         PlayerPrefs.SetFloat(Prefix + "Master", MasterVolume);
         PlayerPrefs.SetFloat(Prefix + "Music", MusicVolume);
         PlayerPrefs.SetFloat(Prefix + "Sfx", SfxVolume);
+        PlayerPrefs.SetFloat(Prefix + "RowdyVoice", RowdyVoiceVolume);
+        PlayerPrefs.SetFloat(Prefix + "CatVoice", CatVoiceVolume);
         PlayerPrefs.SetFloat(Prefix + "Shake", ScreenShake);
         PlayerPrefs.SetInt(Prefix + "Vibration", Vibration ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "DamageNumbers", DamageNumbers ? 1 : 0);
+        PlayerPrefs.SetFloat(Prefix + "NumberSize", DamageNumberSize);
+        PlayerPrefs.SetFloat(Prefix + "MessageSize", MessageSize);
+        PlayerPrefs.SetInt(Prefix + "ShowFps", ShowFps ? 1 : 0);
         PlayerPrefs.Save();
     }
 
@@ -139,9 +155,14 @@ public static class GameSettings
     public static void SetMasterVolume(float v) { MasterVolume = Mathf.Clamp01(v); Commit(); }
     public static void SetMusicVolume(float v) { MusicVolume = Mathf.Clamp01(v); Commit(); }
     public static void SetSfxVolume(float v) { SfxVolume = Mathf.Clamp01(v); Commit(); }
+    public static void SetRowdyVoiceVolume(float v) { RowdyVoiceVolume = Mathf.Clamp01(v); Commit(); }
+    public static void SetCatVoiceVolume(float v) { CatVoiceVolume = Mathf.Clamp01(v); Commit(); }
     public static void SetScreenShake(float v) { ScreenShake = Mathf.Clamp01(v); Commit(); }
     public static void SetVibration(bool on) { Vibration = on; Commit(); }
     public static void SetDamageNumbers(bool on) { DamageNumbers = on; Commit(); }
+    public static void SetDamageNumberSize(float v) { DamageNumberSize = Mathf.Clamp(v, 0.25f, 3f); Commit(); }
+    public static void SetMessageSize(float v) { MessageSize = Mathf.Clamp(v, 0.25f, 3f); Commit(); }
+    public static void SetShowFps(bool on) { ShowFps = on; Commit(); }
 
     public static string DisplayModeName(FullScreenMode mode)
     {

@@ -36,7 +36,7 @@ public class AudioVolumeManager : MonoBehaviour
         // New sources appear all the time (spawned enemies, effects), so look for them a couple of times a second
         scanTimer -= Time.unscaledDeltaTime;
         if (scanTimer > 0f) return;
-        scanTimer = 0.5f;
+        scanTimer = 1f;
         Scan();
     }
 
@@ -49,6 +49,7 @@ public class AudioVolumeManager : MonoBehaviour
         foreach (AudioSource source in FindObjectsByType<AudioSource>(FindObjectsSortMode.None))
         {
             if (source.gameObject.name == "One shot audio") continue; // SoundManager one-shots, already scaled
+            if (SoundtrackManager.Owns(source)) continue;              // fades its own volume with the Music setting
 
             if (!tracked.TryGetValue(source, out Tracked info))
             {

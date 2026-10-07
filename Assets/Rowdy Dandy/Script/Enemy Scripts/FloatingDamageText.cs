@@ -23,6 +23,10 @@ public class FloatingDamageText : MonoBehaviour
 
     [Header("Juicy Pop & Scale")]
     [SerializeField] private float baseScale = 1.0f;
+    [Tooltip("Base size of damage numbers before the Number Size setting (0.5 = half the original size).")]
+    [SerializeField] private float numberSizeBase = 0.5f;
+    [Tooltip("Base size of words (CRITICAL!, COUNTER!, EXECUTED!...) before the Message Size setting.")]
+    [SerializeField] private float messageSizeBase = 0.5f;
     [SerializeField] private float ultraDamageScaleMultiplier = 1.8f;
     [SerializeField] private float extremeDamageScaleMultiplier = 1.6f;
     [SerializeField] private float highDamageScaleMultiplier = 1.4f;
@@ -100,8 +104,11 @@ public class FloatingDamageText : MonoBehaviour
             textColor = mediumDamageColor;
         }
 
-        ApplySetup(calculatedBaseScale);
+        ApplySetup(calculatedBaseScale * NumberSize);
     }
+
+    private float NumberSize => numberSizeBase * GameSettings.DamageNumberSize;
+    private float MessageSize => messageSizeBase * GameSettings.MessageSize;
 
     // Dedicated Setup for Critical Hits (Works like SetupCustomText)
     public void SetupCritical(float damageAmount)
@@ -114,7 +121,7 @@ public class FloatingDamageText : MonoBehaviour
         damageText.text = $"CRITICAL!\n{formattedDamage}";
         textColor = criticalColor;
 
-        ApplySetup(baseScale * critScaleMultiplier);
+        ApplySetup(baseScale * critScaleMultiplier * NumberSize);
     }
 
     // Overloaded Setup for Custom Words (e.g. "COUNTER!", "PARRY!")
@@ -125,7 +132,7 @@ public class FloatingDamageText : MonoBehaviour
         damageText.text = text;
         textColor = overrideColor ?? counterColor;
 
-        ApplySetup(baseScale * scaleMultiplier);
+        ApplySetup(baseScale * scaleMultiplier * MessageSize);
     }
 
     private void ApplySetup(float finalScale)

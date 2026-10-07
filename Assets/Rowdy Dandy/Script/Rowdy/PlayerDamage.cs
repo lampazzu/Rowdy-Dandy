@@ -27,6 +27,14 @@ public class PlayerDamage : MonoBehaviour
 
     private HashSet<Collider2D> alreadyDamagedEnemies = new HashSet<Collider2D>();
 
+    // A cat's damage box (Wig) shares this script: credit the cat, not Rowdy (kill feed / stats)
+    private PetFollower owningCat;
+
+    private void Awake()
+    {
+        owningCat = GetComponentInParent<PetFollower>(true);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy") && !alreadyDamagedEnemies.Contains(collision))
@@ -36,6 +44,7 @@ public class PlayerDamage : MonoBehaviour
             if (enemy != null)
             {
                 float finalDamage = CalculateTotalDamage(out bool isCrit);
+                EnemyHealth.CreditNextHit(owningCat != null ? KillCredit.Cat(owningCat) : KillCredit.Rowdy());
                 enemy.TakeDamageEnemy(finalDamage, isCrit);
                 // Weapon durability is spent per swing in PlayerMovement, not per hit (cats share this script too)
             }

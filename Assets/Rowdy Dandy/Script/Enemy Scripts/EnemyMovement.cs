@@ -193,6 +193,18 @@ public class EnemyMovement : MonoBehaviour
     private float watchTimer;
     private PlayerMovement playerMovement;
 
+    [Header("Patrol: Turn Back When Blocked")]
+    [Tooltip("Walking to a patrol point but not getting anywhere (a wall in the way, or hanging on a wall's side) for this long = give up on that point and head for the next one.")]
+    [SerializeField] private float patrolBlockedTime = 0.6f;
+    private float patrolBlockedTimer;
+    private float patrolBlockStartX;
+
+    [Header("Performance: Sleep When Far")]
+    [Tooltip("Far from Rowdy and not chasing: stand still and skip the AI (raycasts etc.) until he comes closer.")]
+    [SerializeField] private bool sleepWhenFar = true;
+    [SerializeField] private float sleepDistance = 40f;
+    private bool isSleeping;
+
     [Header("Polish: Dust Particle Effects")]
     [SerializeField] private bool enableDustParticles = false;
     [SerializeField] private ParticleSystem landingDustParticle;
@@ -205,11 +217,24 @@ public class EnemyMovement : MonoBehaviour
     private bool hasCommittedDropDirection;
     private float committedDropDirection;
 
+    // Cached lookups (these used to run every frame: string layer lookups, and Animator.parameters allocates an array per call)
+    private int enemyLayerIndex;
+    private int ignorePlayerLayerIndex;
+    private readonly HashSet<string> animatorParameters = new HashSet<string>();
+    private RuntimeAnimatorController cachedController;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         originalScale = transform.localScale;
+        enemyLayerIndex = LayerMask.NameToLayer(enemyLayer);
+        ignorePlayerLayerIndex = LayerMask.NameToLayer(ignorePlayerLayer);
+
+        // Start out believing whatever way the sprite really faces (negative x scale = facing right, see GetFlippedScale).
+        // It used to always assume "left": prefabs saved facing right (Gnoll Warrior) with smooth facing on then
+        // chased Rowdy walking backwards until he switched sides.
+        currentFacingDirection = transform.localScale.x < 0f ? 1f : -1f;
 
         // Extras only for enemies that physically move around. Plants (kinematic bodies, e.g. the BluePlant
         // launch effector) are left exactly as they were.
@@ -241,7 +266,7 @@ public class EnemyMovement : MonoBehaviour
         bodyCollider = FindSolidCollider(gameObject);
         if (playerTransform != null) playerCollider = FindSolidCollider(playerTransform.gameObject);
 
-        gameObject.layer = LayerMask.NameToLayer(enemyLayer);
+        gameObject.layer = enemyLayerIndex;
 
         if (randomizeSpeed)
         {
@@ -256,17 +281,38 @@ public class EnemyMovement : MonoBehaviour
         lastStuckCheckPosition = transform.position;
     }
 
+    // Water / AntiEnemy colliders per water mask, found once per scene instead of searching every collider in the
+    // scene for every drownable enemy (the wave spawner makes new ones all the time)
+    private static readonly Dictionary<int, List<Collider2D>> drowningCollidersByMask = new Dictionary<int, List<Collider2D>>();
+    private static int drowningCacheScene = -1;
+
+    private List<Collider2D> GetDrowningColliders()
+    {
+        int sceneHandle = gameObject.scene.handle;
+        if (sceneHandle != drowningCacheScene)
+        {
+            drowningCollidersByMask.Clear();
+            drowningCacheScene = sceneHandle;
+        }
+
+        if (!drowningCollidersByMask.TryGetValue(waterLayer.value, out List<Collider2D> list))
+        {
+            list = new List<Collider2D>();
+            foreach (Collider2D col in FindObjectsByType<Collider2D>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                if (col != null && IsDrowningLayer(col.gameObject.layer)) list.Add(col);
+            }
+            drowningCollidersByMask[waterLayer.value] = list;
+        }
+        return list;
+    }
+
     private void SetupDrowningCollisions()
     {
         Collider2D[] enemyColliders = GetComponentsInChildren<Collider2D>(true);
         if (enemyColliders.Length == 0) return;
 
-        Collider2D[] allColliders = FindObjectsByType<Collider2D>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None
-        );
-
-        foreach (Collider2D otherCollider in allColliders)
+        foreach (Collider2D otherCollider in GetDrowningColliders())
         {
             if (otherCollider == null) continue;
             bool isOwnCollider = false;
@@ -317,14 +363,10 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        if (isPhasing)
-        {
-            gameObject.layer = LayerMask.NameToLayer(ignorePlayerLayer);
-        }
-        else
-        {
-            gameObject.layer = LayerMask.NameToLayer(enemyLayer);
-        }
+        int layer = isPhasing ? ignorePlayerLayerIndex : enemyLayerIndex;
+        if (gameObject.layer != layer) gameObject.layer = layer;
+
+        if (UpdateSleep()) return;
 
         GroundCheck();
 
@@ -415,6 +457,28 @@ public class EnemyMovement : MonoBehaviour
         }
 
         CheckStuckStatus();
+    }
+
+    // Far from Rowdy, not chasing / marching / mid-leap: stand still and skip the rest of the AI this frame
+    private bool UpdateSleep()
+    {
+        bool far = sleepWhenFar && playerTransform != null && !isChasing && !isMarching && !isLeaping &&
+                   Mathf.Abs(playerTransform.position.x - transform.position.x) > sleepDistance;
+
+        if (far)
+        {
+            if (!isSleeping)
+            {
+                isSleeping = true;
+                if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic) ApplyHorizontalVelocity(0f);
+                SetAnimatorBool("moving", false);
+                isMoving = false;
+            }
+            return true;
+        }
+
+        isSleeping = false;
+        return false;
     }
 
     private static Collider2D FindSolidCollider(GameObject target)
@@ -1259,8 +1323,28 @@ public class EnemyMovement : MonoBehaviour
                 ? Mathf.Abs(transform.position.x - patrolTarget.position.x) < 1f
                 : Vector2.Distance(transform.position, patrolTarget.position) < 1f;
 
+            // Walking into a wall (or hanging on its side, held up by friction) without getting anywhere:
+            // count that point as done and turn back. Works even with no Ground Layer set (Horse Rider).
+            // (Measured by how far it actually got: the velocity read back here is just what was asked for this frame.)
+            if (!reachedPatrolPoint && isPatrolGround && isMoving && Mathf.Abs(moveSpeed) > 0.1f && patrolBlockedTime > 0f)
+            {
+                if (patrolBlockedTimer <= 0f) patrolBlockStartX = transform.position.x;
+                patrolBlockedTimer += Time.deltaTime;
+                if (patrolBlockedTimer >= patrolBlockedTime)
+                {
+                    float expected = Mathf.Abs(moveSpeed) * patrolBlockedTimer;
+                    if (Mathf.Abs(transform.position.x - patrolBlockStartX) < Mathf.Min(0.2f, expected * 0.25f)) reachedPatrolPoint = true;
+                    patrolBlockedTimer = 0f;
+                }
+            }
+            else
+            {
+                patrolBlockedTimer = 0f;
+            }
+
             if (reachedPatrolPoint)
             {
+                patrolBlockedTimer = 0f;
                 patrolDestination = (patrolDestination + 1) % patrolPoints.Length;
                 isMoving = true;
 
@@ -1337,17 +1421,13 @@ public class EnemyMovement : MonoBehaviour
 
         float targetDirection = Mathf.Sign(direction);
 
-        if (enableSmoothFacing)
+        if (enableSmoothFacing && targetDirection != currentFacingDirection)
         {
-            if (targetDirection != currentFacingDirection && Time.time >= lastTurnTime + turnCooldown)
-            {
-                currentFacingDirection = targetDirection;
-                lastTurnTime = Time.time;
-            }
-            else
-            {
-                return;
-            }
+            // Turning around waits for the cooldown; facing the same way still re-applies the scale below,
+            // so the sprite can never stay out of sync with the direction it thinks it faces
+            if (Time.time < lastTurnTime + turnCooldown) return;
+            currentFacingDirection = targetDirection;
+            lastTurnTime = Time.time;
         }
         else
         {
@@ -1356,7 +1436,8 @@ public class EnemyMovement : MonoBehaviour
 
         if (!isSquashing)
         {
-            transform.localScale = GetFlippedScale(currentFacingDirection);
+            Vector3 flipped = GetFlippedScale(currentFacingDirection);
+            if (transform.localScale != flipped) transform.localScale = flipped;
         }
     }
 
@@ -1372,12 +1453,18 @@ public class EnemyMovement : MonoBehaviour
     {
         if (animator == null) return false;
 
-        foreach (AnimatorControllerParameter param in animator.parameters)
+        // usesOverride swaps the controller at runtime, so rebuild the cache whenever it changes
+        if (cachedController != animator.runtimeAnimatorController)
         {
-            if (param.name == paramName) return true;
+            cachedController = animator.runtimeAnimatorController;
+            animatorParameters.Clear();
+            if (cachedController != null)
+            {
+                foreach (AnimatorControllerParameter param in animator.parameters) animatorParameters.Add(param.name);
+            }
         }
 
-        return false;
+        return animatorParameters.Contains(paramName);
     }
 
     private void GroundCheck()

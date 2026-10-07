@@ -84,10 +84,13 @@ public class PlayerStats : MonoBehaviour
     {
         if (PauseMenu.IsPaused) return;
 
-        if (Input.GetKeyDown(toggleUIKey))
+        // C, or the gamepad's Select / View button
+        if (Input.GetKeyDown(toggleUIKey) || Input.GetKeyDown(KeyCode.JoystickButton6))
         {
             ToggleStatsUI();
         }
+
+        if (isUIPanelOpen) RunStatsPanel.Refresh();
 
         if (enableDevHotkeys)
         {
@@ -115,16 +118,21 @@ public class PlayerStats : MonoBehaviour
         currentEXP += amount;
         float requiredEXP = GetRequiredEXPForCurrentLevel();
 
+        bool leveledUp = false;
         while (currentEXP >= requiredEXP)
         {
             currentEXP -= requiredEXP;
             currentLevel++;
+            leveledUp = true;
+            RunStats.LevelUps++;
             Debug.Log($"<color=cyan>[PlayerStats]</color> Leveled UP! Current Level: {currentLevel}");
             requiredEXP = GetRequiredEXPForCurrentLevel();
         }
 
         SaveEXPData();
         ApplyCurrentLevelStats();
+
+        if (leveledUp) LevelUpFX.Play(currentLevel); // full heal + golden light + sound
     }
 
     public float GetRequiredEXPForCurrentLevel()
@@ -148,6 +156,7 @@ public class PlayerStats : MonoBehaviour
         SaveEXPData();
         Debug.Log($"<color=cyan>[PlayerStats]</color> Dev Leveled UP! Current Level: {currentLevel}");
         ApplyCurrentLevelStats();
+        LevelUpFX.Play(currentLevel);
     }
 
     public void LevelDown()
@@ -216,15 +225,19 @@ public class PlayerStats : MonoBehaviour
 
     public void ToggleStatsUI()
     {
-        if (statsPanel == null) return;
-
         isUIPanelOpen = !isUIPanelOpen;
-        statsPanel.SetActive(isUIPanelOpen);
+        if (statsPanel != null) statsPanel.SetActive(isUIPanelOpen);
+        RunStatsPanel.SetVisible(isUIPanelOpen, statsPanel != null ? statsPanel.transform as RectTransform : null);
 
         if (isUIPanelOpen)
         {
             UpdateUI();
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (isUIPanelOpen) RunStatsPanel.SetVisible(false, null); // the overlay outlives the scene
     }
 
     private void UpdateUI()
