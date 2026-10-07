@@ -11,7 +11,8 @@ public class FramerateLock : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = FPS;
+        // The player's choice (Pause > Settings > Frame Limit) wins once they've picked one
+        Application.targetFrameRate = PlayerPrefs.HasKey("RD_Settings_FrameLimit") ? GameSettings.FrameLimit : FPS;
     }
 
     // Update is called once per frame

@@ -7,6 +7,9 @@ public class TimeSlowController : MonoBehaviour
 
     private void Update()
     {
+        // The pause menu owns time while it's open (otherwise this would un-pause the game every frame)
+        if (PauseMenu.IsPaused) return;
+
         Time.timeScale = timeSlowValue;
         Time.fixedDeltaTime = 0.02f * Time.timeScale; // Adjust physics update rate
     }

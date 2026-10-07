@@ -329,7 +329,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void SpawnDamageText(float damage)
     {
-        if (damage <= 0f) return;
+        if (damage <= 0f || !GameSettings.DamageNumbers) return;
 
         if (damageTextPrefab != null)
         {
@@ -361,6 +361,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TriggerRumble(float lowFreq, float highFreq, float duration)
     {
+        if (!GameSettings.Vibration) return;
         StartCoroutine(LegacyRumbleRoutine(lowFreq, highFreq, duration));
     }
 

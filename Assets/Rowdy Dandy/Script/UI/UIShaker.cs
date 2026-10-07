@@ -36,7 +36,7 @@ public class UIShaker : MonoBehaviour
 
     public void Shake(float strength)
     {
-        trauma = Mathf.Clamp01(trauma + strength * 0.5f);
+        trauma = Mathf.Clamp01(trauma + strength * 0.5f * GameSettings.ScreenShake);
     }
 
     private void LateUpdate()

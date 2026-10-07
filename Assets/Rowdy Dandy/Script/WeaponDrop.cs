@@ -64,7 +64,7 @@ public class WeaponDrop : MonoBehaviour
 
         // --- PICKUP INPUT ---
         // Press E on Keyboard OR Triangle/Y on Gamepad
-        if (playerIsClose && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3)))
+        if (playerIsClose && !PauseMenu.IsPaused && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3)))
         {
             WeaponManager wm = FindFirstObjectByType<WeaponManager>();
             if (wm != null)

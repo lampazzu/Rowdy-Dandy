@@ -19,7 +19,7 @@ public class CameraShakeManager : MonoBehaviour
 
     public void CameraShake(CinemachineImpulseSource impulseSource)
     {
-        impulseSource.GenerateImpulseWithForce(globalShakeForce);
+        if (GameSettings.ScreenShake <= 0f) return; // Settings > Screen Shake
     }
     
 

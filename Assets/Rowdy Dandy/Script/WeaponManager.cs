@@ -99,6 +99,8 @@ public class WeaponManager : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenu.IsPaused) return;
+
         if (Input.GetKeyDown(KeyCode.Alpha7) && unlockedWeapons[0]) SetWeaponToAxe();
         if (Input.GetKeyDown(KeyCode.Alpha8) && unlockedWeapons[1]) SetWeaponToSword();
         if (Input.GetKeyDown(KeyCode.Alpha9) && unlockedWeapons[2]) SetWeaponToNaginata();

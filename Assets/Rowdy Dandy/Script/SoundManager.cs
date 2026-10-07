@@ -59,7 +59,7 @@ public class SoundManager : MonoBehaviour
             Camera cam = Camera.main;
             Vector3 playPosition = cam != null ? cam.transform.position : transform.position;
 
-            AudioSource.PlayClipAtPoint(sound.clip, playPosition, sound.volume);
+            AudioSource.PlayClipAtPoint(sound.clip, playPosition, sound.volume * GameSettings.SfxVolume);
         }
         else
         {

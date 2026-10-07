@@ -254,6 +254,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenu.IsPaused) return; // no jumping / attacking from menu button presses
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
         isWatered = Physics2D.OverlapCircle(groundCheck.position, 0.1f, waterLayer);
 

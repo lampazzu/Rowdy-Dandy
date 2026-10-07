@@ -82,6 +82,8 @@ public class PlayerStats : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenu.IsPaused) return;
+
         if (Input.GetKeyDown(toggleUIKey))
         {
             ToggleStatsUI();
