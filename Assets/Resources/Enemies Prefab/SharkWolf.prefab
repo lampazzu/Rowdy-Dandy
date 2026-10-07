@@ -5318,7 +5318,7 @@ MonoBehaviour:
   marchTarget: {fileID: 0}
   isChasing: 0
   isMarching: 0
-  chaseDistance: 2
+  chaseDistance: 6
   isPatrolGround: 1
   isDrownable: 0
   isOnlyAquatic: 1

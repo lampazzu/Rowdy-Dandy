@@ -20,11 +20,46 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private bool isDrownable;
     [SerializeField] private bool isOnlyAquatic;
     [SerializeField] private LayerMask waterLayer;
-    [SerializeField] private float aquaticBounceForce = 6f;
-    [SerializeField] private float aquaticStuckThreshold = 4f;
 
-    private float aquaticStuckTimer = 0f;
-    private float lastAquaticSide = 0f;
+    [Header("Aquatic: Stay In The Pool & Leap (Only Aquatic)")]
+    [Tooltip("Keep the body this far from the shore line while swimming.")]
+    [SerializeField] private float shoreMargin = 0.6f;
+    [Tooltip("Leap out of the water at Rowdy when he's on the shore or in the air above the water.")]
+    [SerializeField] private bool enableAquaticLeap = true;
+    [Tooltip("Rowdy must be this close (horizontally) for a leap.")]
+    [SerializeField] private float leapTriggerRange = 4f;
+    [Tooltip("How far onto the shore Rowdy can stand and still be hunted / leapt at.")]
+    [SerializeField] private float leapShoreReach = 2.5f;
+    [Tooltip("A leap may land at most this far past the shore line (then it hops straight back in).")]
+    [SerializeField] private float leapShoreOvershoot = 1.5f;
+    [SerializeField] private float leapMinHeight = 1.2f;
+    [SerializeField] private float leapMaxHeight = 3f;
+    [SerializeField] private float leapMaxSpeedX = 7f;
+    [SerializeField] private float leapCooldown = 2.5f;
+    [Tooltip("Rowdy counts as 'above the water' (worth leaping at) when his feet are this high over the surface.")]
+    [SerializeField] private float leapWhenPlayerAbove = 1f;
+    [SerializeField] private float hopBackHeight = 1f;
+
+    [Header("Aquatic: Leap Tilt (dolphin arc)")]
+    [SerializeField] private bool enableLeapTilt = true;
+    [Tooltip("Keep it small: rotated pixel art gets jaggy fast.")]
+    [SerializeField] private float maxLeapTilt = 20f;
+    [SerializeField] private float leapTiltSpeed = 120f;
+    [Tooltip("Snap the tilt to steps of this many degrees (0 = smooth).")]
+    [SerializeField] private float leapTiltStep = 0f;
+
+    private bool waterSpanReady;
+    private float waterMinX;
+    private float waterMaxX;
+    private float waterSurfaceY;
+    private bool isLeaping;
+    private float leapStartTime;
+    private float lastLeapTime = -999f;
+    private float leapSettledTimer;
+    private float leapTilt;
+    private bool swimRight;
+    private Collider2D bodyCollider;
+    private Collider2D playerCollider;
 
     [Header("Obstacle & Wall Checks")]
     [SerializeField] private float wallCheckDistance = 0.8f;
@@ -190,6 +225,9 @@ public class EnemyMovement : MonoBehaviour
             playerTransform = player.transform;
         }
 
+        bodyCollider = FindSolidCollider(gameObject);
+        if (playerTransform != null) playerCollider = FindSolidCollider(playerTransform.gameObject);
+
         gameObject.layer = LayerMask.NameToLayer(enemyLayer);
 
         if (randomizeSpeed)
@@ -318,26 +356,15 @@ public class EnemyMovement : MonoBehaviour
 
         UpdateToggledTargetChecks(target);
 
-        // AQUATIC ENEMY CHASE & LAND ESCAPE RULES
+        // Sea creatures have their own swim / leap logic and never walk on land
         if (isOnlyAquatic)
         {
-            // Drop chase if player leaves water layer
-            if (isChasing && !IsPlayerInWater())
-            {
-                isChasing = false;
-            }
-
-            // FORCE RETURN TO WATER: If stranded on land outside chase, prioritize returning to water
-            if (!isChasing && !IsSelfInWater())
-            {
-                ReturnToWater();
-                return;
-            }
+            UpdateAquatic();
+            return;
         }
 
         if (isChasing || isMarching)
         {
-            aquaticStuckTimer = 0f;
             ChaseTarget(target);
         }
         else
@@ -345,11 +372,6 @@ public class EnemyMovement : MonoBehaviour
             bool canChasePlayer = playerTransform != null &&
                 Vector2.Distance(transform.position, playerTransform.position) < chaseDistance &&
                 HasLineOfSightToTarget(playerTransform);
-
-            if (isOnlyAquatic && canChasePlayer)
-            {
-                canChasePlayer = IsPlayerInWater();
-            }
 
             if (canChasePlayer)
             {
@@ -374,92 +396,303 @@ public class EnemyMovement : MonoBehaviour
         CheckStuckStatus();
     }
 
-    private bool IsPlayerInWater()
+    private static Collider2D FindSolidCollider(GameObject target)
     {
-        if (playerTransform == null) return false;
-        Collider2D waterHit = Physics2D.OverlapPoint(playerTransform.position, waterLayer);
-        return waterHit != null;
-    }
-
-    private bool IsSelfInWater()
-    {
-        Collider2D waterHit = Physics2D.OverlapPoint(transform.position, waterLayer);
-        return waterHit != null;
-    }
-
-    private void ReturnToWater()
-    {
-        // Find nearest patrol point that is actually inside water
-        int bestWaterPoint = -1;
-        float minDistance = float.MaxValue;
-
-        for (int i = 0; i < patrolPoints.Length; i++)
+        foreach (Collider2D col in target.GetComponents<Collider2D>())
         {
-            if (patrolPoints[i] == null) continue;
-            if (Physics2D.OverlapPoint(patrolPoints[i].position, waterLayer) != null)
-            {
-                float dist = Vector2.Distance(transform.position, patrolPoints[i].position);
-                if (dist < minDistance)
-                {
-                    minDistance = dist;
-                    bestWaterPoint = i;
-                }
-            }
+            if (!col.isTrigger) return col;
         }
+        return target.GetComponent<Collider2D>();
+    }
 
-        if (bestWaterPoint != -1)
+    // =========================================================================
+    // AQUATIC (Only Aquatic): swims inside its own stretch of water and never walks on land.
+    // It can leap out like a dolphin to snap at Rowdy (on the shore or jumping over the water),
+    // and always falls / hops straight back in. The water is found by raycasting down on the
+    // Water Layer (the water tilemap uses an outline collider, so point-overlap checks don't work).
+    // =========================================================================
+
+    private void UpdateAquatic()
+    {
+        if (!waterSpanReady) SetupWaterSpan();
+
+        if (isLeaping)
         {
-            patrolDestination = bestWaterPoint;
-            Vector2 waterDir = (patrolPoints[bestWaterPoint].position - transform.position).normalized;
-            ApplyHorizontalVelocity(waterDir.x * moveSpeed);
-            FlipSprite(waterDir.x);
-            SetAnimatorBool("moving", true);
+            UpdateLeap();
+        }
+        else if (!IsOverWater(transform.position.x))
+        {
+            // Knocked / landed on the shore: never walk, hop back in as soon as it's down
+            isChasing = false;
+            SetAnimatorBool("moving", false);
+            if (Mathf.Abs(rb.linearVelocity.y) < 0.05f) HopBackToWater();
         }
         else
         {
-            // Emergency hop back towards water if no submerged patrol points exist
-            Patrol();
+            Swim();
         }
+
+        UpdateLeapTilt();
     }
 
-    // =========================================================================
-    // AQUATIC GROUND REBOUND SAFETY NET
-    // =========================================================================
-
-    private void OnTriggerEnter2D(Collider2D other)
+    // Finds the left/right shore lines of the water under the enemy's start position
+    private void SetupWaterSpan()
     {
-        if (isOnlyAquatic && IsGroundLayer(other.gameObject.layer))
+        waterSpanReady = true;
+        int mask = DrowningWaterMask;
+        float startX = transform.position.x;
+
+        if (ProbeWater(startX, mask, out waterSurfaceY))
         {
-            HandleAquaticGroundRebound(other.bounds.center);
+            const float step = 0.25f;
+            const float maxScan = 80f;
+            float x = startX;
+            while (startX - x < maxScan && ProbeWater(x - step, mask, out _)) x -= step;
+            waterMinX = x;
+            x = startX;
+            while (x - startX < maxScan && ProbeWater(x + step, mask, out _)) x += step;
+            waterMaxX = x;
+            Debug.Log($"{name}: swims between x {waterMinX:F2} and {waterMaxX:F2} (surface y {waterSurfaceY:F2})", this);
+            return;
         }
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (isOnlyAquatic && IsGroundLayer(collision.gameObject.layer))
+        // No water found: keep to the patrol points so it at least never wanders off
+        Debug.LogWarning($"EnemyMovement on '{name}' is Only Aquatic but found no water under it (check Water Layer). It will stay between its patrol points.", this);
+        waterMinX = waterMaxX = startX;
+        if (patrolPoints != null)
         {
-            HandleAquaticGroundRebound(collision.contacts[0].point);
+            foreach (Transform p in patrolPoints)
+            {
+                if (p == null) continue;
+                waterMinX = Mathf.Min(waterMinX, p.position.x);
+                waterMaxX = Mathf.Max(waterMaxX, p.position.x);
+            }
+        }
+        waterSurfaceY = FeetY;
+    }
+
+    // Water at this x, and not buried under the beach (the water tilemap runs on under the sand in places)
+    private bool ProbeWater(float x, int mask, out float surfaceY)
+    {
+        Vector2 origin = new Vector2(x, transform.position.y + 2f);
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, 4f, mask);
+        surfaceY = hit.collider != null ? hit.point.y : 0f;
+        if (hit.collider == null) return false;
+
+        int groundMask = groundLayer.value != 0 ? groundLayer.value : LayerMask.GetMask("groundLayer");
+        RaycastHit2D ground = Physics2D.Raycast(origin, Vector2.down, 4f, groundMask);
+        return ground.collider == null || ground.point.y < hit.point.y - 0.05f;
+    }
+
+    private float FeetY => bodyCollider != null ? bodyCollider.bounds.min.y : transform.position.y;
+
+    private bool IsOverWater(float x) => x >= waterMinX && x <= waterMaxX;
+
+    private bool IsFloating()
+    {
+        return IsOverWater(transform.position.x) && FeetY <= waterSurfaceY + 0.15f && Mathf.Abs(rb.linearVelocity.y) < 0.5f;
+    }
+
+    private bool CanSeePlayerFromWater()
+    {
+        if (playerTransform == null) return false;
+
+        Vector2 p = playerTransform.position;
+        if (p.x < waterMinX - leapShoreReach || p.x > waterMaxX + leapShoreReach) return false; // too far inland
+        if (Mathf.Abs(p.x - transform.position.x) > chaseDistance) return false;
+        if (p.y > waterSurfaceY + leapMaxHeight + 2f || p.y < waterSurfaceY - 2f) return false;
+
+        return HasLineOfSightToTarget(playerTransform);
+    }
+
+    private void Swim()
+    {
+        float x = transform.position.x;
+        float minX = waterMinX + shoreMargin;
+        float maxX = waterMaxX - shoreMargin;
+        if (minX > maxX) minX = maxX = (waterMinX + waterMaxX) * 0.5f;
+
+        bool seesPlayer = CanSeePlayerFromWater();
+        isChasing = seesPlayer;
+
+        float targetX;
+        if (seesPlayer)
+        {
+            if (TryLeapAtPlayer()) return;
+            targetX = playerTransform.position.x;
+        }
+        else
+        {
+            targetX = GetAquaticPatrolX(minX, maxX);
+        }
+        targetX = Mathf.Clamp(targetX, minX, maxX);
+
+        float dx = targetX - x;
+        if (Mathf.Abs(dx) < 0.1f)
+        {
+            // At the shore line with Rowdy out on land: wait there facing him (until the next leap), don't push into the bank
+            ApplyHorizontalVelocity(0f);
+            SetAnimatorBool("moving", false);
+            isMoving = false;
+            if (seesPlayer) FlipSprite(playerTransform.position.x - x);
+        }
+        else
+        {
+            float direction = Mathf.Sign(dx);
+            ApplyHorizontalVelocity(direction * moveSpeed);
+            FlipSprite(direction);
+            SetAnimatorBool("moving", true);
+            isMoving = true;
+        }
+
+        // Hard leash: nothing (patrol, chase, the hurt clip's backwards push) moves it past the shore margin
+        Vector2 v = rb.linearVelocity;
+        if ((x <= minX && v.x < 0f) || (x >= maxX && v.x > 0f))
+        {
+            rb.linearVelocity = new Vector2(0f, v.y);
         }
     }
 
-    private bool IsGroundLayer(int layer)
+    // Patrol points are clamped into the water, so a point placed on the beach can't drag it onto land.
+    // No patrol points = cruise the whole pool.
+    private float GetAquaticPatrolX(float minX, float maxX)
     {
-        return (groundLayer.value & (1 << layer)) != 0;
-    }
+        float x = transform.position.x;
+        bool hasPoints = patrolPoints != null && patrolPoints.Length > 0;
+        if (hasPoints && patrolDestination >= patrolPoints.Length) patrolDestination = 0;
+        Transform point = hasPoints ? GetValidPatrolTarget() : null;
 
-    private void HandleAquaticGroundRebound(Vector2 groundPoint)
-    {
-        isChasing = false;
+        if (point == null)
+        {
+            float edge = swimRight ? maxX : minX;
+            if (Mathf.Abs(edge - x) < 0.3f) swimRight = !swimRight;
+            return swimRight ? maxX : minX;
+        }
 
-        Vector2 pushDir = ((Vector2)transform.position - groundPoint).normalized;
-        rb.linearVelocity = Vector2.zero;
-        rb.AddForce(pushDir * aquaticBounceForce, ForceMode2D.Impulse);
-
-        if (patrolPoints != null && patrolPoints.Length > 0)
+        float targetX = Mathf.Clamp(point.position.x, minX, maxX);
+        if (Mathf.Abs(targetX - x) < 0.3f)
         {
             patrolDestination = (patrolDestination + 1) % patrolPoints.Length;
-            aquaticStuckTimer = 0f;
+            point = GetValidPatrolTarget();
+            if (point != null) targetX = Mathf.Clamp(point.position.x, minX, maxX);
         }
+        return targetX;
+    }
+
+    private bool TryLeapAtPlayer()
+    {
+        // moveSpeed <= 0 while the hurt clip plays
+        if (!enableAquaticLeap || moveSpeed <= 0f || Time.time < lastLeapTime + leapCooldown) return false;
+        if (!IsFloating()) return false;
+
+        Vector2 target = playerCollider != null ? (Vector2)playerCollider.bounds.center : (Vector2)playerTransform.position;
+        float playerFeetY = playerCollider != null ? playerCollider.bounds.min.y : target.y;
+
+        if (Mathf.Abs(target.x - transform.position.x) > leapTriggerRange) return false;
+
+        // Rowdy surfing on the water at its level: just swim at him and bite
+        bool playerOnShore = !IsOverWater(target.x);
+        bool playerAbove = playerFeetY > waterSurfaceY + leapWhenPlayerAbove;
+        if (!playerOnShore && !playerAbove) return false;
+
+        float gravity = Mathf.Abs(Physics2D.gravity.y * rb.gravityScale);
+        if (gravity < 0.01f) return false;
+
+        float x = transform.position.x;
+        float rise = Mathf.Clamp(target.y - transform.position.y + 0.3f, leapMinHeight, leapMaxHeight);
+        float vy = Mathf.Sqrt(2f * gravity * rise);
+        float timeToTop = vy / gravity;
+
+        // Reach him at the top of the arc, but never land further than leapShoreOvershoot past the shore
+        float vx = (target.x - x) / timeToTop;
+        float airTime = 2f * timeToTop;
+        vx = Mathf.Clamp(vx, (waterMinX - leapShoreOvershoot - x) / airTime, (waterMaxX + leapShoreOvershoot - x) / airTime);
+        vx = Mathf.Clamp(vx, -leapMaxSpeedX, leapMaxSpeedX);
+
+        StartLeap(new Vector2(vx, vy));
+        if (Mathf.Abs(vx) < 0.01f) FlipSprite(target.x - x);
+        return true;
+    }
+
+    private void HopBackToWater()
+    {
+        float x = transform.position.x;
+        float inward = shoreMargin + 0.5f;
+        float targetX = x < waterMinX ? waterMinX + inward : waterMaxX - inward;
+        targetX = Mathf.Clamp(targetX, waterMinX, waterMaxX);
+
+        float gravity = Mathf.Abs(Physics2D.gravity.y * rb.gravityScale);
+        if (gravity < 0.01f)
+        {
+            // Floaty body: just slide back in
+            ApplyHorizontalVelocity(Mathf.Sign(targetX - x) * Mathf.Abs(moveSpeed));
+            FlipSprite(targetX - x);
+            return;
+        }
+
+        float vy = Mathf.Sqrt(2f * gravity * hopBackHeight);
+        float drop = Mathf.Max(0f, FeetY - waterSurfaceY);
+        float airTime = (vy + Mathf.Sqrt(vy * vy + 2f * gravity * drop)) / gravity;
+        float vx = Mathf.Clamp((targetX - x) / airTime, -leapMaxSpeedX, leapMaxSpeedX);
+
+        StartLeap(new Vector2(vx, vy));
+    }
+
+    private void StartLeap(Vector2 velocity)
+    {
+        isLeaping = true;
+        leapStartTime = Time.time;
+        lastLeapTime = Time.time;
+        leapSettledTimer = 0f;
+        rb.linearVelocity = velocity;
+        if (Mathf.Abs(velocity.x) > 0.01f) FlipSprite(velocity.x);
+        SetAnimatorBool("moving", true);
+    }
+
+    private void UpdateLeap()
+    {
+        // Ballistic until it comes to rest on something (the apex passes too fast to count as resting)
+        leapSettledTimer = Mathf.Abs(rb.linearVelocity.y) < 0.05f ? leapSettledTimer + Time.deltaTime : 0f;
+        float airTime = Time.time - leapStartTime;
+
+        if ((airTime > 0.2f && leapSettledTimer > 0.08f) || airTime > 4f)
+        {
+            isLeaping = false;
+            if (!IsOverWater(transform.position.x))
+            {
+                HopBackToWater(); // landed on the beach
+            }
+            else
+            {
+                ApplyHorizontalVelocity(0f);
+            }
+        }
+    }
+
+    // Nose up on the way out, nose down on the way back, levelling off just before touching the water
+    private void UpdateLeapTilt()
+    {
+        if (!enableLeapTilt)
+        {
+            if (leapTilt != 0f) { leapTilt = 0f; rb.rotation = 0f; }
+            return;
+        }
+
+        float targetTilt = 0f;
+        if (isLeaping)
+        {
+            Vector2 v = rb.linearVelocity;
+            float pitch = Mathf.Atan2(v.y, Mathf.Abs(v.x) + 2f) * Mathf.Rad2Deg; // +2 keeps near-vertical leaps subtle
+
+            float height = FeetY - waterSurfaceY;
+            if (v.y < 0f && height < 0.5f) pitch *= Mathf.Clamp01(height / 0.5f);
+
+            targetTilt = Mathf.Clamp(pitch, -maxLeapTilt, maxLeapTilt) * currentFacingDirection;
+        }
+
+        leapTilt = Mathf.MoveTowards(leapTilt, targetTilt, leapTiltSpeed * Time.deltaTime);
+        float shown = leapTiltStep > 0f ? Mathf.Round(leapTilt / leapTiltStep) * leapTiltStep : leapTilt;
+        if (!Mathf.Approximately(rb.rotation, shown)) rb.rotation = shown;
     }
 
     // =========================================================================
@@ -934,27 +1167,6 @@ public class EnemyMovement : MonoBehaviour
                 return;
             }
 
-            // Check if stuck on one side of aquatic patrol point for too long
-            if (isOnlyAquatic)
-            {
-                float currentSide = Mathf.Sign(patrolTarget.position.x - transform.position.x);
-                if (currentSide == lastAquaticSide)
-                {
-                    aquaticStuckTimer += Time.deltaTime;
-                    if (aquaticStuckTimer >= aquaticStuckThreshold)
-                    {
-                        patrolDestination = (patrolDestination + 1) % patrolPoints.Length;
-                        aquaticStuckTimer = 0f;
-                        return;
-                    }
-                }
-                else
-                {
-                    lastAquaticSide = currentSide;
-                    aquaticStuckTimer = 0f;
-                }
-            }
-
             MoveTowards(patrolTarget.position);
 
             bool reachedPatrolPoint = isPatrolGround
@@ -964,7 +1176,6 @@ public class EnemyMovement : MonoBehaviour
             if (reachedPatrolPoint)
             {
                 patrolDestination = (patrolDestination + 1) % patrolPoints.Length;
-                aquaticStuckTimer = 0f;
                 isMoving = true;
 
                 if (enablePatrolHesitation)
@@ -1018,13 +1229,6 @@ public class EnemyMovement : MonoBehaviour
                 ApplyHorizontalVelocity(0f);
                 SetAnimatorBool("moving", false);
                 isMoving = false;
-                return;
-            }
-
-            if (isOnlyAquatic && IsObstacleInFront(direction))
-            {
-                patrolDestination = (patrolDestination + 1) % patrolPoints.Length;
-                aquaticStuckTimer = 0f;
                 return;
             }
 

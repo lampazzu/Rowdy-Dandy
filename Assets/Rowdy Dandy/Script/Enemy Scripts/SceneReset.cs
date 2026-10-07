@@ -1,13 +1,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// 1 = reload the scene at the last checkpoint.
+// 2 = reload the scene at the test checkpoint (the one next to PelichAnus at the end of the map).
 public class SceneReset : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+    [Tooltip("Checkpoint used by key 2. Leave empty to use the checkpoint closest to the object named below (or the right-most one).")]
+    [SerializeField] private Transform testCheckpoint;
+    [SerializeField] private string testCheckpointNearObject = "PelichAnus";
+    [Tooltip("Spawn a bit above the checkpoint so Rowdy drops onto the ground instead of starting inside it.")]
+    [SerializeField] private float testSpawnHeight = 1f;
 
     // Update is called once per frame
     void Update()
@@ -16,11 +18,64 @@ public class SceneReset : MonoBehaviour
         {
             ResetScene();
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            GoToTestCheckpoint();
+        }
     }
 
     void ResetScene()
     {
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.buildIndex);
+    }
+
+    void GoToTestCheckpoint()
+    {
+        Transform checkpoint = testCheckpoint != null ? testCheckpoint : FindTestCheckpoint();
+        if (checkpoint == null)
+        {
+            Debug.LogWarning("SceneReset: no checkpoint found for key 2, reloading at the last checkpoint instead.");
+            ResetScene();
+            return;
+        }
+
+        // Same keys RespawnTrigger saves and PlayerRespawn reads on load
+        Vector2 spawnPoint = (Vector2)checkpoint.position + Vector2.up * testSpawnHeight;
+        PlayerPrefs.SetFloat("RespawnX", spawnPoint.x);
+        PlayerPrefs.SetFloat("RespawnY", spawnPoint.y);
+        PlayerPrefs.Save();
+
+        ResetScene();
+    }
+
+    Transform FindTestCheckpoint()
+    {
+        RespawnTrigger[] checkpoints = FindObjectsByType<RespawnTrigger>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        if (checkpoints.Length == 0) return null;
+
+        Transform anchor = null;
+        if (!string.IsNullOrEmpty(testCheckpointNearObject))
+        {
+            foreach (Transform t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                if (t.name == testCheckpointNearObject) { anchor = t; break; }
+            }
+        }
+
+        Transform best = null;
+        float bestScore = float.MaxValue;
+        foreach (RespawnTrigger checkpoint in checkpoints)
+        {
+            Transform t = checkpoint.transform;
+            // Closest to the anchor, or right-most (end of the map) if there is no anchor
+            float score = anchor != null ? Vector2.Distance(t.position, anchor.position) : -t.position.x;
+            if (score < bestScore)
+            {
+                bestScore = score;
+                best = t;
+            }
+        }
+        return best;
     }
 }
