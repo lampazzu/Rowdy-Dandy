@@ -165,6 +165,7 @@ public class EnemyMovement : MonoBehaviour
 
         // Water splash / drowning effects
         WaterSplashBody.AttachTo(gameObject, false);
+        VegetationInteractor.AttachTo(gameObject, 0.8f);
 
         GameObject player = GameObject.FindWithTag("Player");
 

@@ -137,6 +137,10 @@ public class PlayerMovement : MonoBehaviour
 
         // Water splash effects (sound already comes from On Enter Water)
         WaterSplashBody.AttachTo(gameObject, true);
+
+        // Pushes interactive grass aside; attack hitboxes whip plants and shake trees
+        VegetationInteractor vegetationBody = VegetationInteractor.AttachTo(gameObject, 1f);
+        VegetationInteractor.AttachSlashes(gameObject, vegetationBody);
     }
 
     private void ApplyCustomForce()

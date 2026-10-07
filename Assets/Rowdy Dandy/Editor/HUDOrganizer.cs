@@ -33,8 +33,6 @@ public static class HUDOrganizer
     private const float WeaponNameY = 112f;
     private const float DurabilityY = 148f;
 
-    private static readonly Color Gold = new Color32(0xFF, 0xC9, 0x3C, 0xFF);
-
     private static readonly List<string> report = new List<string>();
 
     [MenuItem("Tools/Rowdy Dandy/Organize HUD")]
@@ -164,8 +162,8 @@ public static class HUDOrganizer
         }
         else report.Add("WARNING: live health bar (User Interface/HealthBar) not found.");
 
-        // EXP row + level
-        RectTransform expRow = CreateRow("ExpRow", playerPanel, ExpY, labelXP, out _);
+        // EXP row; its label plate shows the level ("LV3")
+        RectTransform expRow = CreateRow("ExpRow", playerPanel, ExpY, labelXP, out Image expLabel);
         if (expFill != null)
         {
             BuildBar(expRow, expBack, expFill, greenFill, backSprite, frameSprite);
@@ -174,9 +172,7 @@ public static class HUDOrganizer
         if (levelText != null)
         {
             Reparent(levelText.transform, playerPanel);
-            Rename(levelText, "LevelText");
-            Place(levelText.rectTransform, RowX + BarX + BarWidth + 12f, ExpY, 220f, BarHeight);
-            StyleText(levelText, 24f, Gold, TextAlignmentOptions.MidlineLeft, shadowMaterial);
+            MoveLevelIntoLabel(expLabel, levelText);
         }
 
         // Weapon name + durability row
@@ -262,13 +258,6 @@ public static class HUDOrganizer
             SetFloat(dur, "punchScale", 0.04f);
             SetColor(dur, "lossGhostColor", new Color(1f, 0.95f, 0.7f, 1f));
         }
-        if (levelText != null)
-        {
-            HUDTextFeedback level = Undo.AddComponent<HUDTextFeedback>(levelText.gameObject);
-            SetFloat(level, "popScale", 0.5f);
-            SetFloat(level, "flashDuration", 0.8f);
-            SetColor(level, "flashColor", Color.white);
-        }
         foreach (TMP_Text stat in new[] { damageText, critChanceText, critDamageText })
         {
             if (stat != null) Undo.AddComponent<HUDTextFeedback>(stat.gameObject);
@@ -301,6 +290,58 @@ public static class HUDOrganizer
 
     [MenuItem("Tools/Rowdy Dandy/Organize HUD", true)]
     private static bool ValidateOrganize() => !EditorApplication.isPlaying;
+
+    // For a HUD organized before the level moved into the XP label
+    [MenuItem("Tools/Rowdy Dandy/HUD - Level Into XP Label")]
+    public static void LevelIntoXpLabel()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        Transform hud = scene.GetRootGameObjects()
+            .SelectMany(r => r.GetComponentsInChildren<Transform>(true))
+            .FirstOrDefault(t => t.name == "HUD" && t.parent != null && t.parent.name == MainCanvasName);
+        Transform panel = hud != null ? hud.Find("PlayerPanel") : null;
+        Transform label = panel != null ? panel.Find("ExpRow/Label") : null;
+        TMP_Text levelText = panel != null
+            ? panel.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(t => t.name.StartsWith("LevelText"))
+            : null;
+
+        if (label == null || levelText == null || !label.TryGetComponent(out Image labelImage))
+        {
+            EditorUtility.DisplayDialog("HUD", "Couldn't find HUD/PlayerPanel/ExpRow/Label and the LevelText. Run Organize HUD first.", "OK");
+            return;
+        }
+        if (label.GetComponent<PixelLevelLabel>() != null)
+        {
+            EditorUtility.DisplayDialog("HUD", "The level is already in the XP label.", "OK");
+            return;
+        }
+
+        Undo.IncrementCurrentGroup();
+        int group = Undo.GetCurrentGroup();
+        Undo.SetCurrentGroupName("Level Into XP Label");
+        MoveLevelIntoLabel(labelImage, levelText);
+        Undo.CollapseUndoOperations(group);
+        EditorSceneManager.MarkSceneDirty(scene);
+        Selection.activeGameObject = label.gameObject;
+        Debug.Log("Level now shows in the XP label (\"LV3\") in Play mode. Ctrl+Z to undo; save the scene to keep it.");
+    }
+
+    [MenuItem("Tools/Rowdy Dandy/HUD - Level Into XP Label", true)]
+    private static bool ValidateLevelIntoXpLabel() => !EditorApplication.isPlaying;
+
+    // The XP label plate draws the level in pixel letters; PlayerStats' level text stays as the hidden source
+    private static void MoveLevelIntoLabel(Image label, TMP_Text levelText)
+    {
+        PixelLevelLabel pixelLabel = Undo.AddComponent<PixelLevelLabel>(label.gameObject);
+        SetRef(pixelLabel, "source", levelText);
+
+        Rename(levelText, "LevelText (hidden source)");
+        Undo.RecordObject(levelText, UndoName);
+        levelText.enabled = false;
+
+        HUDTextFeedback oldPop = levelText.GetComponent<HUDTextFeedback>();
+        if (oldPop != null) Undo.DestroyObjectImmediate(oldPop);
+    }
 
     // =========================================================================
     // BUILDING BLOCKS
