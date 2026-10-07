@@ -73,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float originalLinearDrag;
     [SerializeField] private float duckedLinearDrag;
     [SerializeField] private bool applyForce = false;
+    private float knockbackTimer; // set by ApplyKnockback
     [SerializeField] private float forceX = 10f;  // Horizontal force
     [SerializeField] private float forceY = 5f;   // Vertical force
 
@@ -141,10 +142,23 @@ public class PlayerMovement : MonoBehaviour
         // Pushes interactive grass aside; attack hitboxes whip plants and shake trees
         VegetationInteractor vegetationBody = VegetationInteractor.AttachTo(gameObject, 1f);
         VegetationInteractor.AttachSlashes(gameObject, vegetationBody);
+
+        // Better getting-hit feel (knockback away from the attacker, freeze, blink, screen-edge flash)
+        if (GetComponent<PlayerHitReaction>() == null) gameObject.AddComponent<PlayerHitReaction>();
+    }
+
+    // Called by PlayerHitReaction: shove Rowdy and ignore input for a moment so the knockback reads
+    public void ApplyKnockback(Vector2 velocity, float lockTime)
+    {
+        rb.linearVelocity = velocity;
+        knockbackTimer = lockTime;
     }
 
     private void ApplyCustomForce()
     {
+        // During a knockback, the hit clip's facing-based force would fight the real knockback direction
+        if (knockbackTimer > 0f) return;
+
         float direction = transform.localScale.x > 0 ? 1f : -1f; // Character facing direction
 
         if (applyForce)
@@ -449,8 +463,12 @@ public class PlayerMovement : MonoBehaviour
             animator.ResetTrigger("BackToIdle");
         }
 
-        // Apply movement only if not ducking
-        if (!isDucking || isSurfing || isWounded)
+        // Apply movement only if not ducking (and not while being knocked back, or input would cancel the shove)
+        if (knockbackTimer > 0f)
+        {
+            knockbackTimer -= Time.deltaTime;
+        }
+        else if (!isDucking || isSurfing || isWounded)
         {
             rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 

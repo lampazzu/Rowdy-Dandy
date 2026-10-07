@@ -60,6 +60,7 @@ public class Health : MonoBehaviour
                 anim.SetTrigger("hit");
                 bloodhit.Play();
                 lastDamageTime = Time.time;
+                if (TryGetComponent(out PlayerHitReaction reaction)) reaction.OnHit(_damage);
             }
             else if (!dead)
             {

@@ -1839,6 +1839,7 @@ GameObject:
   - component: {fileID: 9197841659381472959}
   - component: {fileID: 9197841659381472957}
   - component: {fileID: 9197841659381472956}
+  - component: {fileID: 9197841659381472960}
   m_Layer: 0
   m_Name: AttackDmg
   m_TagString: Untagged
@@ -2233,3 +2234,16 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!114 &9197841659381472960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9197841659381472958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e3c1d2a4f54e6f9a1c2d3e4f5a6b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: WolfAttack

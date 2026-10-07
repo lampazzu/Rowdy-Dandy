@@ -93,6 +93,8 @@ public class WaterSplashFX : MonoBehaviour
     }
 
     public static bool HasInstance => instance != null;
+    // The current FX object if there is one; never creates one (safe during shutdown / scene unload)
+    public static WaterSplashFX Existing => instance;
 
     public int WaterMask => waterLayers.value != 0 ? waterLayers.value : LayerMask.GetMask("waterLayer", "Water");
     public float MinImpactSpeed => minImpactSpeed;

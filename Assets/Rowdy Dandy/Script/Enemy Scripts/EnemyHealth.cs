@@ -275,6 +275,7 @@ public class EnemyHealth : MonoBehaviour
                 onEnemyKill.Invoke();
                 SetAnimatorTrigger("destroyed");
                 enemydead = true;
+                if (TryGetComponent(out EnemyCorpse corpse)) corpse.OnKilled();
 
                 // --- SPAWN EXP GEMS OR GIVE EXP DIRECTLY ---
                 if (giveDirectEXP)

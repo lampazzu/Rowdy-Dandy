@@ -73,10 +73,8 @@ public class WaterSplashBody : MonoBehaviour
 
     private void OnDisable()
     {
-        if (WaterSplashFX.HasInstance)
-        {
-            WaterSplashFX.Instance.StopBubbles(this);
-        }
+        WaterSplashFX fx = WaterSplashFX.Existing;
+        if (fx != null) fx.StopBubbles(this);
     }
 
     // Prefer the main solid collider (not hitboxes/triggers)
@@ -179,7 +177,8 @@ public class WaterSplashBody : MonoBehaviour
     {
         if (!isSinking) return;
         isSinking = false;
-        if (WaterSplashFX.HasInstance) WaterSplashFX.Instance.StopBubbles(this);
+        WaterSplashFX fx = WaterSplashFX.Existing;
+        if (fx != null) fx.StopBubbles(this);
     }
 
     private void UpdateSinking(WaterSplashFX fx, Bounds bounds)

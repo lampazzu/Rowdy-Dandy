@@ -48,6 +48,8 @@ public class VegetationSystem : MonoBehaviour
     private static readonly int PixelSnapId = Shader.PropertyToID("_VegPixelSnap");
 
     public static bool HasInstance => instance != null;
+    // The current system if there is one; never creates one (safe during shutdown / scene unload)
+    public static VegetationSystem Existing => instance;
 
     public static VegetationSystem Instance
     {

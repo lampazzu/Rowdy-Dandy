@@ -106,7 +106,8 @@ public class InteractiveVegetation : MonoBehaviour
     private void OnDisable()
     {
         inside.Clear();
-        if (VegetationSystem.HasInstance) VegetationSystem.Instance.Unregister(this);
+        VegetationSystem system = VegetationSystem.Existing;
+        if (system != null) system.Unregister(this);
     }
 
     // World-space box around the visible pixels (falls back to the whole sprite)

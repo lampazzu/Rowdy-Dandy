@@ -163,9 +163,24 @@ public class EnemyMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         originalScale = transform.localScale;
 
-        // Water splash / drowning effects
-        WaterSplashBody.AttachTo(gameObject, false);
-        VegetationInteractor.AttachTo(gameObject, 0.8f);
+        // Extras only for enemies that physically move around. Plants (kinematic bodies, e.g. the BluePlant
+        // launch effector) are left exactly as they were.
+        bool movesPhysically = rb != null && rb.bodyType == RigidbodyType2D.Dynamic;
+        if (movesPhysically)
+        {
+            // Water splash / drowning effects
+            WaterSplashBody.AttachTo(gameObject, false);
+            VegetationInteractor.AttachTo(gameObject, 0.8f);
+
+            // Dead bodies: stop the AI, don't block Rowdy, rest on the ground, match the slope.
+            // Not for flyers (Manta, Pelican...) or anything using effectors: their death clips handle it.
+            bool isFlyer = rb.gravityScale < 0.5f;
+            bool hasEffector = GetComponentInChildren<Effector2D>(true) != null;
+            if (!isFlyer && !hasEffector && GetComponent<EnemyHealth>() != null && GetComponent<EnemyCorpse>() == null)
+            {
+                gameObject.AddComponent<EnemyCorpse>();
+            }
+        }
 
         GameObject player = GameObject.FindWithTag("Player");
 
@@ -223,6 +238,9 @@ public class EnemyMovement : MonoBehaviour
             }
         }
     }
+
+    // Used by EnemyCorpse so a drowning corpse keeps sinking through water like the living enemy did
+    public bool PassesThroughLayer(int layer) => isDrownable && IsDrowningLayer(layer);
 
     private bool IsDrowningLayer(int layer)
     {

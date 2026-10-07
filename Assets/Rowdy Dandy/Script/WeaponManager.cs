@@ -7,6 +7,10 @@ public class WeaponManager : MonoBehaviour
 {
     private const string SavedWeaponKey = "SelectedWeapon";
 
+    [Header("Weapon Break")]
+    [Tooltip("Fires when a weapon's durability runs out, right before switching back to the Rod.")]
+    [SerializeField] private UnityEngine.Events.UnityEvent onWeaponBroken;
+
     [Header("Weapon Options")]
     [SerializeField] public bool isWK_Axe = true;        // SLOT 0: Default Rod (Indestructible)
     [SerializeField] public bool isWK_Sword = false;    // SLOT 1: Sword (Breakable)
@@ -182,8 +186,25 @@ public class WeaponManager : MonoBehaviour
             currentDurability[activeIndex] = 0f;
             unlockedWeapons[activeIndex] = false; // Relock broken weapon
             SaveWeaponData();
+            PlayBreakMoment(activeIndex); // before the switch, while the HUD still shows the broken weapon
+            onWeaponBroken?.Invoke();
             SetWeaponToAxe(); // Auto-switch back to starting Rod
         }
+    }
+
+    // Shards, slow-mo, "BROKE!" and the HUD icon splitting apart (see WeaponBreakFX)
+    private void PlayBreakMoment(int brokenIndex)
+    {
+        WeaponBreakFX fx = WeaponBreakFX.Instance;
+        if (fx == null) return;
+
+        string[] names = { rodName, swordName, naginataName, cleaverName };
+        Collider2D body = GetComponent<Collider2D>();
+        Vector3 position = body != null ? body.bounds.center : transform.position;
+        float facing = transform.localScale.x >= 0f ? 1f : -1f;
+        Sprite brokenIcon = weaponProfileImage != null ? weaponProfileImage.sprite : null;
+
+        fx.Play(position, facing, names[Mathf.Clamp(brokenIndex, 0, names.Length - 1)], weaponProfileImage, brokenIcon);
     }
 
     public void PickupWeapon(WeaponType type, float durabilityMax)
