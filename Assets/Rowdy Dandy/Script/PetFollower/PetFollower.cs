@@ -13,6 +13,9 @@ public class PetFollower : MonoBehaviour
     // Enemies a samurai is already on its way to, so two samurai don't chase the same kill
     private static readonly HashSet<EnemyHealth> ClaimedTargets = new HashSet<EnemyHealth>();
 
+    private static int pickupCounter;
+    private int pickupOrder;
+
     [Header("Cat Type")]
     [Tooltip("Wig: small AoE hits on enemies and projectiles. Samurai: dashes to weakened enemies and executes them, chaining between kills.")]
     [SerializeField] private CatType catType = CatType.Wig;
@@ -36,8 +39,18 @@ public class PetFollower : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private float followDelay = 0.5f;
     [SerializeField] private float followSpeed = 3f;
+    [Tooltip("Position next to an enemy while attacking (the attack clip keys this)")]
     [SerializeField] private Vector3 offset = new Vector3(-1f, 1.5f, 0f);
-    [SerializeField] private float petSpacing = 1f;
+
+    [Header("Formation (Soulmass ring around Rowdy)")]
+    [Tooltip("The first cat picked up sets these for the whole ring")]
+    [SerializeField] private Vector2 orbitCenter = new Vector2(0f, 0.6f);
+    [Tooltip("x = ring width, y = how tilted it looks (small = flat ring seen from the side)")]
+    [SerializeField] private Vector2 orbitRadius = new Vector2(0.6f, 0.12f);
+    [Tooltip("Extra width per cat so a big ring doesn't crowd")]
+    [SerializeField] private float orbitRadiusPerCat = 0.06f;
+    [Tooltip("Degrees per second")]
+    [SerializeField] private float orbitSpeed = 50f;
 
     [Header("Hovering Settings")]
     [SerializeField] private float hoverSpeed = 2f;
@@ -79,6 +92,13 @@ public class PetFollower : MonoBehaviour
     private int lastVoice = -1;
     private bool facingRight = true;
 
+    // Drawn behind Rowdy on the back half of the ring, in front on the front half
+    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer playerRenderer;
+    private int baseSortingLayer;
+    private int baseSortingOrder;
+    private bool orbitBehind;
+
     // Gives every pet slightly different movement timing
     private float hoverOffset;
     private float movementOffset;
@@ -116,6 +136,12 @@ public class PetFollower : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            baseSortingLayer = spriteRenderer.sortingLayerID;
+            baseSortingOrder = spriteRenderer.sortingOrder;
+        }
 
         // Own source for the voice lines (AudioVolumeManager scales it with the SFX setting)
         voiceSource = gameObject.AddComponent<AudioSource>();
@@ -180,6 +206,8 @@ public class PetFollower : MonoBehaviour
             FollowTarget(targetEnemy);
             FlipTowards(targetEnemy);
         }
+
+        UpdateDepth();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -190,6 +218,7 @@ public class PetFollower : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             player = other.transform;
+            pickupOrder = ++pickupCounter;
             isFollowingPlayer = true;
 
             StartCoroutine(StartFollowing());
@@ -201,7 +230,8 @@ public class PetFollower : MonoBehaviour
         if (target == null)
             return;
 
-        Vector3 formationOffset = GetFormationOffset();
+        // Formation spot behind Rowdy, or the (clip-keyed) attack offset next to an enemy
+        Vector3 formationOffset = target == player ? GetFormationOffset() : offset;
 
         // Slightly desynchronize the hovering between pets
         float hoverY = Mathf.Sin((Time.time + hoverOffset) * hoverSpeed) * hoverAmount;
@@ -222,39 +252,56 @@ public class PetFollower : MonoBehaviour
         );
     }
 
+    // This cat's spot on the ring circling Rowdy's head (Soulmass style). Cats are spaced evenly by pickup order
+    // (a cat off attacking keeps its spot, so nobody reshuffles) and the whole ring turns slowly, whatever way he faces.
     private Vector3 GetFormationOffset()
     {
-        List<PetFollower> playerPets = new List<PetFollower>();
-
+        int index = 0, count = 1;
+        PetFollower leader = this;
         foreach (PetFollower pet in ActivePets)
         {
-            if (pet != null && pet.player == player)
-            {
-                playerPets.Add(pet);
-            }
+            if (pet == null || pet == this || pet.player != player) continue;
+            count++;
+            if (ComesBefore(pet, this)) index++;
+            if (ComesBefore(pet, leader)) leader = pet;
         }
 
-        if (playerPets.Count == 0)
-            return offset;
+        // The first cat's settings drive the ring, so mixed prefabs still spin together
+        float angle = (Time.time * leader.orbitSpeed + index * 360f / count) * Mathf.Deg2Rad;
+        float width = leader.orbitRadius.x + leader.orbitRadiusPerCat * (count - 1);
 
-        int index = playerPets.IndexOf(this);
-        int count = playerPets.Count;
-
-        // One pet stays on the original side
-        if (count == 1)
-        {
-            return offset;
-        }
-
-        // Spread pets horizontally around the player
-        float totalWidth = (count - 1) * petSpacing;
-        float xOffset = (index * petSpacing) - totalWidth / 2f;
-
+        // sin > 0 = far side of the ring (higher up, behind him)
+        orbitBehind = Mathf.Sin(angle) > 0f;
         return new Vector3(
-            xOffset,
-            offset.y,
-            offset.z
-        );
+            leader.orbitCenter.x + Mathf.Cos(angle) * width,
+            leader.orbitCenter.y + Mathf.Sin(angle) * leader.orbitRadius.y,
+            0f);
+    }
+
+    private static bool ComesBefore(PetFollower a, PetFollower b)
+    {
+        if (a.pickupOrder != b.pickupOrder) return a.pickupOrder < b.pickupOrder;
+        return a.GetInstanceID() < b.GetInstanceID();
+    }
+
+    // Behind Rowdy on the far half of the ring, in front on the near half; normal sorting when off attacking
+    private void UpdateDepth()
+    {
+        if (spriteRenderer == null) return;
+
+        if (isFollowingPlayer && player != null)
+        {
+            if (playerRenderer == null) playerRenderer = player.GetComponent<SpriteRenderer>();
+            if (playerRenderer == null) return;
+
+            spriteRenderer.sortingLayerID = playerRenderer.sortingLayerID;
+            spriteRenderer.sortingOrder = playerRenderer.sortingOrder + (orbitBehind ? -1 : 1);
+        }
+        else
+        {
+            spriteRenderer.sortingLayerID = baseSortingLayer;
+            spriteRenderer.sortingOrder = baseSortingOrder;
+        }
     }
 
     private void DetectNearestEnemy()
