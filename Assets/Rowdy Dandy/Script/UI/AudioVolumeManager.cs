@@ -4,7 +4,7 @@ using UnityEngine;
 // Applies the Music / Sound Effects volume settings to every AudioSource in the game (no mixer needed).
 //  - Music: looping clips 30s or longer (the soundtrack, ambience like the waves). Keeps playing while paused.
 //  - Sound effects: everything else. SoundManager's one-shot sounds are scaled in SoundManager itself.
-// Master volume is AudioListener.volume (set by GameSettings). Created automatically.
+// Master volume is AudioListener.volume = Project Settings global volume x Master (set by GameSettings). Created automatically.
 public class AudioVolumeManager : MonoBehaviour
 {
     private class Tracked

@@ -68,6 +68,7 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private bool isRevived = false;
     [SerializeField] private bool backtoidle = false;
     public bool NoPetFollow { get; private set; } = false;
+    public bool IsObject => isObject; // plants, statues... (pets can skip these)
     [SerializeField] public UnityEvent onHurtWolf;
     [SerializeField] public UnityEvent onEnemyKill;
     [SerializeField] public UnityEvent onCriticalDamage;
@@ -343,6 +344,9 @@ public class EnemyHealth : MonoBehaviour
             }
         }
     }
+
+    // Floating word over the enemy ("EXECUTED!" from the samurai cat, etc.)
+    public void ShowCustomText(string text, Color color) => SpawnCustomText(text, color, 1.6f);
 
     private void SpawnCustomText(string text, Color? customColor = null, float scaleMultiplier = 1.5f)
     {

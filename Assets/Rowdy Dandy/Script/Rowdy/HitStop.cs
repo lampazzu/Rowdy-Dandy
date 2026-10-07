@@ -8,6 +8,7 @@ public class HitStop : MonoBehaviour
     private Animator playerAnimator;
     private bool isHitStopActive = false;
     private bool isAttackingBeforeHitStop;
+    private float originalSpeed = 1f;
     private Light2D light2D;
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -38,7 +39,7 @@ public class HitStop : MonoBehaviour
                 }
 
                 isAttackingBeforeHitStop = IsInAttackAnimation(playerAnimator);
-                float originalSpeed = playerAnimator.speed;
+                originalSpeed = playerAnimator.speed;
                 playerAnimator.speed = 0f;
 
                 float startTime = Time.realtimeSinceStartup;
@@ -62,6 +63,17 @@ public class HitStop : MonoBehaviour
                 }
             }
         }
+    }
+
+    // The hitbox can be switched off mid hit-stop (e.g. a clip cut short), which kills the coroutine
+    // before it restores the speed and leaves the animator frozen. Restore it here instead.
+    private void OnDisable()
+    {
+        if (!isHitStopActive) return;
+
+        if (playerAnimator != null) playerAnimator.speed = originalSpeed;
+        if (light2D != null) light2D.enabled = false;
+        isHitStopActive = false;
     }
 
     private bool IsInAttackAnimation(Animator animator)

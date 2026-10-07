@@ -32,6 +32,11 @@ public static class GameSettings
     private static List<Vector2Int> resolutions;
     private static bool loaded;
 
+    // Project Settings > Audio > Global Volume (the game is mixed around it, 0.2). Master Volume scales it
+    // instead of replacing it, so 100% sounds like the game always did.
+    private static float projectVolume = 1f;
+    private static void ApplyMasterVolume() => AudioListener.volume = projectVolume * MasterVolume;
+
     // Distinct screen sizes the monitor supports, smallest first
     public static List<Vector2Int> Resolutions
     {
@@ -50,9 +55,24 @@ public static class GameSettings
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void LoadOnStartup()
     {
+        projectVolume = ReadProjectVolume();
         Load();
         ApplyDisplay();
-        AudioListener.volume = MasterVolume;
+        ApplyMasterVolume();
+    }
+
+    private static float ReadProjectVolume()
+    {
+#if UNITY_EDITOR
+        // In the editor a volume set during a previous Play session can stick around, so read the setting itself
+        UnityEngine.Object[] assets = UnityEditor.AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/AudioManager.asset");
+        if (assets.Length > 0)
+        {
+            UnityEditor.SerializedProperty volume = new UnityEditor.SerializedObject(assets[0]).FindProperty("m_Volume");
+            if (volume != null) return volume.floatValue;
+        }
+#endif
+        return AudioListener.volume; // in a build this is still the Project Settings value at startup
     }
 
     public static void Load()
@@ -107,7 +127,7 @@ public static class GameSettings
     {
         Save();
         if (display) ApplyDisplay();
-        AudioListener.volume = MasterVolume;
+        ApplyMasterVolume();
         Changed?.Invoke();
     }
 

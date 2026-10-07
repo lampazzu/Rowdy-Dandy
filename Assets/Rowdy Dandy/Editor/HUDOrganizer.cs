@@ -329,6 +329,62 @@ public static class HUDOrganizer
     [MenuItem("Tools/Rowdy Dandy/HUD - Level Into XP Label", true)]
     private static bool ValidateLevelIntoXpLabel() => !EditorApplication.isPlaying;
 
+    // Cat portraits + cooldown bars under the weapon slot (entries appear in game as cats are collected)
+    [MenuItem("Tools/Rowdy Dandy/HUD - Add Cat Panel")]
+    public static void AddCatPanel()
+    {
+        report.Clear();
+        Scene scene = SceneManager.GetActiveScene();
+        Transform hud = scene.GetRootGameObjects()
+            .SelectMany(r => r.GetComponentsInChildren<Transform>(true))
+            .FirstOrDefault(t => t.name == "HUD" && t.parent != null && t.parent.name == MainCanvasName);
+
+        if (hud == null)
+        {
+            EditorUtility.DisplayDialog("HUD", "Couldn't find the HUD (run Organize HUD first).", "OK");
+            return;
+        }
+        if (hud.Find("CatPanel") != null)
+        {
+            EditorUtility.DisplayDialog("HUD", "There's already a CatPanel under the HUD.", "OK");
+            return;
+        }
+
+        AssetDatabase.Refresh();
+        Sprite slotSprite = LoadSprite(GeneratedFolder + "Panel_9Slice.png");
+        Sprite backSprite = LoadSprite(HudFolder + "SubBlueHealthUI.png");
+        Sprite fillSprite = LoadSprite(GeneratedFolder + "BarFill_Pink.png");
+        Sprite frameSprite = LoadSprite(HudFolder + "GradeHealthUI.png");
+        if (slotSprite == null || backSprite == null || fillSprite == null || frameSprite == null)
+        {
+            EditorUtility.DisplayDialog("HUD", "Some sprites are missing:\n" + string.Join("\n", report), "OK");
+            return;
+        }
+
+        Undo.IncrementCurrentGroup();
+        int group = Undo.GetCurrentGroup();
+        Undo.SetCurrentGroupName("Add Cat Panel");
+
+        // Lined up with the weapon slot's left edge, just below it
+        RectTransform panel = CreateUI("CatPanel", hud);
+        Place(panel, 40f, 224f, 300f, 66f);
+        CatHUD catHud = Undo.AddComponent<CatHUD>(panel.gameObject);
+        SetRef(catHud, "slotSprite", slotSprite);
+        SetRef(catHud, "barBackSprite", backSprite);
+        SetRef(catHud, "barFillSprite", fillSprite);
+        SetRef(catHud, "barFrameSprite", frameSprite);
+        Transform statsPanel = hud.Find("StatsPanel");
+        if (statsPanel != null) SetRef(catHud, "statsPanel", statsPanel);
+
+        Undo.CollapseUndoOperations(group);
+        EditorSceneManager.MarkSceneDirty(scene);
+        Selection.activeGameObject = panel.gameObject;
+        Debug.Log("Cat panel added under the HUD. Cats show up there in Play mode once collected. Ctrl+Z to undo; save the scene to keep it.");
+    }
+
+    [MenuItem("Tools/Rowdy Dandy/HUD - Add Cat Panel", true)]
+    private static bool ValidateAddCatPanel() => !EditorApplication.isPlaying;
+
     // The XP label plate draws the level in pixel letters; PlayerStats' level text stays as the hidden source
     private static void MoveLevelIntoLabel(Image label, TMP_Text levelText)
     {

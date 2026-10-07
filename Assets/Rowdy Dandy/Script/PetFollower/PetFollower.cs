@@ -1,10 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PetFollower : MonoBehaviour
 {
+    public enum CatType { Wig, Samurai }
+
     private static readonly List<PetFollower> ActivePets = new List<PetFollower>();
+    public static IReadOnlyList<PetFollower> Pets => ActivePets;
+
+    // Enemies a samurai is already on its way to, so two samurai don't chase the same kill
+    private static readonly HashSet<EnemyHealth> ClaimedTargets = new HashSet<EnemyHealth>();
+
+    [Header("Cat Type")]
+    [Tooltip("Wig: small AoE hits on enemies and projectiles. Samurai: dashes to weakened enemies and executes them, chaining between kills.")]
+    [SerializeField] private CatType catType = CatType.Wig;
+
+    [Header("HUD")]
+    [Tooltip("Shown next to the portrait. Empty = the cat type's name.")]
+    [SerializeField] private string catName = "";
+    [Tooltip("16x16 face for the HUD slot. Empty = the cat's own sprite.")]
+    [SerializeField] private Sprite portrait;
+
+    [Header("Voice")]
+    [Tooltip("One is picked at random on attack (never the same twice in a row)")]
+    [SerializeField] private AudioClip[] attackVoices;
+    [Tooltip("1 = same level as the other sound effects. Above 1 boosts it (5 cancels the project's 0.2 global volume = the file at full loudness).")]
+    [SerializeField, Range(0f, 5f)] private float voiceVolume = 1f;
+    [SerializeField] private float voicePitchVariation = 0.05f;
+    [Tooltip("Samurai: speak on every cut of a chain instead of only the first")]
+    [SerializeField] private bool voiceEveryStrike = false;
 
     [Header("Following Settings")]
     [SerializeField] private Transform player;
@@ -22,16 +48,57 @@ public class PetFollower : MonoBehaviour
     [SerializeField] private float attackCooldown = 2f;
     [SerializeField] private float damage = 10f;
     [SerializeField] private bool backToIdle = false;
+    [Tooltip("Off = ignore breakables ticked 'Is Object' on their EnemyHealth (plants, wolf statues...)")]
+    [SerializeField] private bool targetObjects = false;
+
+    [Header("Samurai: Execution")]
+    [Tooltip("Executes enemies at or below this fraction of their max health (0.1 = 10%)")]
+    [SerializeField, Range(0f, 1f)] private float executeHealthPercent = 0.1f;
+    [Tooltip("...or at or below this many health points (fodder with tiny max health counts right away)")]
+    [SerializeField] private float executeHealthPoints = 10f;
+    [Tooltip("Most kills in one execution chain")]
+    [SerializeField] private int maxChain = 5;
+    [Tooltip("How far from the last kill he looks for the next one")]
+    [SerializeField] private float chainRange = 4f;
+    [SerializeField] private float dashSpeed = 18f;
+    [Tooltip("Pause next to the enemy before the cut lands")]
+    [SerializeField] private float strikeDelay = 0.15f;
+    [Tooltip("Pause after the cut before dashing to the next one")]
+    [SerializeField] private float afterStrikePause = 0.2f;
+    [Tooltip("Animator state played on every cut (restarts each time). Swap when the samurai art is in.")]
+    [SerializeField] private string strikeState = "WigAttack";
+    [SerializeField] private UnityEvent onExecute;
 
     private Transform targetEnemy = null;
     private bool isFollowingPlayer = false;
     private bool canAttack = true;
+    private bool isExecuting = false;
+    private float cooldownEnd;
     private Animator anim;
+    private AudioSource voiceSource;
+    private int lastVoice = -1;
     private bool facingRight = true;
 
     // Gives every pet slightly different movement timing
     private float hoverOffset;
     private float movementOffset;
+
+    // For the cat HUD (CatHUD)
+    public CatType Type => catType;
+    public string CatName => string.IsNullOrEmpty(catName) ? catType.ToString() : catName;
+    public Sprite Portrait => portrait != null ? portrait : (TryGetComponent(out SpriteRenderer sr) ? sr.sprite : null);
+    public bool IsCollected => player != null;
+
+    // 1 = ready, 0 = just used (or mid execution chain)
+    public float CooldownFraction
+    {
+        get
+        {
+            if (isExecuting) return 0f;
+            if (canAttack || attackCooldown <= 0f) return 1f;
+            return 1f - Mathf.Clamp01((cooldownEnd - Time.time) / attackCooldown);
+        }
+    }
 
     private void Awake()
     {
@@ -49,10 +116,45 @@ public class PetFollower : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
+
+        // Own source for the voice lines (AudioVolumeManager scales it with the SFX setting)
+        voiceSource = gameObject.AddComponent<AudioSource>();
+        voiceSource.playOnAwake = false;
+        voiceSource.spatialBlend = 0f;
+        voiceSource.volume = 1f; // the boost goes through PlayOneShot, AudioSource.volume can't go above 1
+
+        // Clips imported without "Preload Audio Data" stay unloaded and a one-shot on them can play nothing
+        if (attackVoices != null)
+        {
+            foreach (AudioClip clip in attackVoices)
+            {
+                if (clip != null && clip.loadState == AudioDataLoadState.Unloaded) clip.LoadAudioData();
+            }
+        }
+    }
+
+    private void PlayVoice()
+    {
+        if (voiceSource == null || attackVoices == null || attackVoices.Length == 0) return;
+
+        int index = Random.Range(0, attackVoices.Length);
+        if (attackVoices.Length > 1 && index == lastVoice) index = (index + 1) % attackVoices.Length;
+        lastVoice = index;
+
+        if (attackVoices[index] == null) return;
+        voiceSource.pitch = 1f + Random.Range(-voicePitchVariation, voicePitchVariation);
+        voiceSource.PlayOneShot(attackVoices[index], voiceVolume);
     }
 
     private void Update()
     {
+        // The execution chain moves him itself; the placeholder Wig clip still keys backToIdle, ignore it meanwhile
+        if (isExecuting)
+        {
+            backToIdle = false;
+            return;
+        }
+
         if (backToIdle)
         {
             ResetToIdle();
@@ -63,7 +165,10 @@ public class PetFollower : MonoBehaviour
             return;
 
         if (canAttack)
-            DetectNearestEnemy();
+        {
+            if (catType == CatType.Samurai) TryStartExecution();
+            else DetectNearestEnemy();
+        }
 
         if (isFollowingPlayer)
         {
@@ -169,31 +274,31 @@ public class PetFollower : MonoBehaviour
 
         foreach (Collider2D target in targets)
         {
-            if (target != null && target.gameObject != null)
-            {
-                float distance = Vector2.Distance(
-                    transform.position,
-                    target.transform.position
-                );
+            if (target == null)
+                continue;
 
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestTarget = target.transform;
-                }
+            // Only things he's allowed to hit (so a plant next to him doesn't block the enemy behind it)
+            EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
+            if (enemyHealth == null || enemyHealth.NoPetFollow || (enemyHealth.IsObject && !targetObjects))
+                continue;
+
+            float distance = Vector2.Distance(
+                transform.position,
+                target.transform.position
+            );
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestTarget = target.transform;
             }
         }
 
         if (closestTarget != null && canAttack)
         {
-            EnemyHealth enemyHealth = closestTarget.GetComponent<EnemyHealth>();
-
-            if (enemyHealth != null && !enemyHealth.NoPetFollow)
-            {
-                targetEnemy = closestTarget;
-                isFollowingPlayer = false;
-                StartCoroutine(AttackEnemy());
-            }
+            targetEnemy = closestTarget;
+            isFollowingPlayer = false;
+            StartCoroutine(AttackEnemy());
         }
         else
         {
@@ -208,8 +313,10 @@ public class PetFollower : MonoBehaviour
     private IEnumerator AttackEnemy()
     {
         canAttack = false;
+        cooldownEnd = Time.time + attackCooldown;
 
         anim.SetTrigger("Attack");
+        PlayVoice();
 
         yield return new WaitForSeconds(attackCooldown);
 
@@ -221,6 +328,146 @@ public class PetFollower : MonoBehaviour
 
         canAttack = true;
     }
+
+    // ---------------------------------------------------------------- Samurai
+
+    private void TryStartExecution()
+    {
+        EnemyHealth first = FindExecutable(transform.position, detectionRange, null);
+        if (first != null)
+        {
+            StartCoroutine(ExecutionChain(first));
+        }
+    }
+
+    private IEnumerator ExecutionChain(EnemyHealth target)
+    {
+        canAttack = false;
+        isExecuting = true;
+        isFollowingPlayer = false;
+
+        var visited = new HashSet<EnemyHealth>();
+        int kills = 0;
+        bool spoke = false;
+
+        while (target != null && kills < maxChain)
+        {
+            visited.Add(target);
+            ClaimedTargets.Add(target);
+            targetEnemy = target.transform;
+
+            // Dash to the enemy's near side (gives up if it takes too long, e.g. the enemy got knocked far away)
+            float dashTimer = 0f;
+            while (target != null && IsExecutable(target) && dashTimer < 1f)
+            {
+                Vector3 enemyPos = target.transform.position;
+                float side = enemyPos.x >= transform.position.x ? -1f : 1f;
+                Vector3 strikePos = enemyPos + new Vector3(side * 0.4f, 0.1f, 0f);
+
+                FlipTowards(target.transform);
+                transform.position = Vector2.MoveTowards(transform.position, strikePos, dashSpeed * Time.deltaTime);
+                if (Vector2.Distance(transform.position, strikePos) < 0.05f) break;
+
+                dashTimer += Time.deltaTime;
+                yield return null;
+            }
+
+            if (target != null && IsExecutable(target))
+            {
+                PlayStrike();
+                if (!spoke || voiceEveryStrike) PlayVoice();
+                spoke = true;
+                yield return new WaitForSeconds(strikeDelay);
+
+                // Still alive and still weak enough (the player may have killed it meanwhile)
+                if (target != null && IsExecutable(target))
+                {
+                    target.ShowCustomText("EXECUTED!", new Color(1f, 0.85f, 0.3f));
+                    target.TakeDamageEnemy(target.currentenemyHealth);
+                    onExecute?.Invoke();
+                    kills++;
+                }
+
+                yield return new WaitForSeconds(afterStrikePause);
+            }
+
+            if (target != null) ClaimedTargets.Remove(target);
+            target = FindExecutable(transform.position, chainRange, visited);
+        }
+
+        targetEnemy = null;
+        isFollowingPlayer = true;
+        isExecuting = false;
+        SetTriggerIfExists("back to idle");
+
+        // Cooldown starts once he's done, so a long chain doesn't eat into it
+        cooldownEnd = Time.time + attackCooldown;
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
+    }
+
+    private bool IsExecutable(EnemyHealth enemy)
+    {
+        if (enemy == null || enemy.enemydead || enemy.NoPetFollow) return false;
+        if (enemy.IsObject && !targetObjects) return false;
+
+        float health = enemy.currentenemyHealth;
+        if (health <= 0f) return false;
+
+        return health <= enemy.startingenemyHealth * executeHealthPercent || health <= executeHealthPoints;
+    }
+
+    // Closest executable enemy around 'center' that no other samurai is already going for
+    private EnemyHealth FindExecutable(Vector2 center, float range, HashSet<EnemyHealth> skip)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(center, range, LayerMask.GetMask("Enemy"));
+
+        EnemyHealth best = null;
+        float bestDistance = Mathf.Infinity;
+        foreach (Collider2D hit in hits)
+        {
+            if (hit == null) continue;
+
+            EnemyHealth enemy = hit.GetComponentInParent<EnemyHealth>();
+            if (enemy == null || !enemy.CompareTag("Enemy") || !IsExecutable(enemy)) continue;
+            if (ClaimedTargets.Contains(enemy) || (skip != null && skip.Contains(enemy))) continue;
+
+            float distance = Vector2.Distance(center, enemy.transform.position);
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                best = enemy;
+            }
+        }
+        return best;
+    }
+
+    // Restart the cut animation on every kill of the chain (a trigger wouldn't replay while already in the state)
+    private void PlayStrike()
+    {
+        if (anim == null) return;
+
+        int hash = Animator.StringToHash(strikeState);
+        if (!string.IsNullOrEmpty(strikeState) && anim.HasState(0, hash))
+        {
+            anim.Play(hash, 0, 0f);
+        }
+        else
+        {
+            anim.SetTrigger("Attack");
+        }
+    }
+
+    private void SetTriggerIfExists(string trigger)
+    {
+        if (anim == null) return;
+        foreach (AnimatorControllerParameter param in anim.parameters)
+        {
+            if (param.name == trigger) { anim.SetTrigger(trigger); return; }
+        }
+    }
+
+    // ----------------------------------------------------------------
 
     private void ResetToIdle()
     {
@@ -277,9 +524,28 @@ public class PetFollower : MonoBehaviour
         );
     }
 
+    private void OnDisable()
+    {
+        // Disabled mid-chain (coroutines stop): don't leave enemies claimed or him stuck unable to attack
+        if (isExecuting)
+        {
+            ClaimedTargets.Clear();
+            canAttack = true;
+            isFollowingPlayer = true;
+            targetEnemy = null;
+        }
+        isExecuting = false;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        if (catType == CatType.Samurai)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, chainRange);
+        }
     }
 }
