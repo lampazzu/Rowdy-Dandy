@@ -1,6 +1,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Animated portraits made by Tools > Rowdy Dandy > Generate Enemy Portraits: Resources/EnemyPortraits/<id>_anim.png
+// (frames side by side) + <id>_anim.txt (seconds per frame). Null when there's none.
+public static class AnimatedPortraits
+{
+    public class Clip
+    {
+        public Sprite[] frames;
+        public float[] durations;
+        public float length;
+
+        public Sprite FrameAt(float time)
+        {
+            float t = Mathf.Repeat(time, length);
+            for (int i = 0; i < frames.Length; i++)
+            {
+                if (t < durations[i]) return frames[i];
+                t -= durations[i];
+            }
+            return frames[frames.Length - 1];
+        }
+    }
+
+    private static readonly Dictionary<string, Clip> cache = new Dictionary<string, Clip>();
+
+    public static Clip Get(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        if (cache.TryGetValue(id, out Clip clip)) return clip;
+        clip = null;
+        Texture2D strip = Resources.Load<Texture2D>("EnemyPortraits/" + id + "_anim");
+        TextAsset timing = Resources.Load<TextAsset>("EnemyPortraits/" + id + "_anim");
+        if (strip != null && timing != null)
+        {
+            string[] parts = timing.text.Trim().Split(',');
+            int n = parts.Length;
+            int w = strip.width / Mathf.Max(1, n);
+            if (n >= 2 && w > 0)
+            {
+                clip = new Clip { frames = new Sprite[n], durations = new float[n] };
+                for (int i = 0; i < n; i++)
+                {
+                    clip.frames[i] = Sprite.Create(strip, new Rect(i * w, 0, w, strip.height), new Vector2(0.5f, 0.5f), 64f);
+                    float.TryParse(parts[i], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float d);
+                    clip.durations[i] = Mathf.Max(0.02f, d);
+                    clip.length += clip.durations[i];
+                }
+            }
+        }
+        cache[id] = clip;
+        return clip;
+    }
+}
+
 // Every enemy type the game knows about: display name (kill feed, Rowdy Notes), how to recognise it from object
 // names, and its Rowdy Notes page. Edit the texts here freely - they're placeholders written from how the enemies
 // are set up (attack clips, isParryTime windows, HP), so fix anything that plays differently.
@@ -18,6 +71,7 @@ public static class EnemyCatalog
         public string counter;
         public string drops = "EXP gems only.";  // weapon drops (from the prefabs' Weapon Drop settings)
         public bool inNotes = true;    // false = only used for its kill feed name
+        public string Quip => Quips.TryGetValue(id, out string q) ? q : null; // ROWDY SAYS line on its notes page
         public Sprite fallbackPortrait;
 
         private Sprite portrait;
@@ -79,7 +133,7 @@ public static class EnemyCatalog
         new Entry
         {
             id = "transformwolf", name = "Transform Wolf", keys = new[] { "transformwolf" }, killsToReveal = 8,
-            about = "What the old man becomes when the curse takes him. Fast, angry, and never stops coming.",
+            about = "A cursed wolf, fast, angry, and never stops coming.",
             weakness = "Only 25 HP. Trade hits early before it builds up speed.",
             counter = "Tight timing: hit it just as each claw comes down. Both of its swipes have a split-second window.",
         },
@@ -87,6 +141,7 @@ public static class EnemyCatalog
         {
             id = "sharkwolf", name = "Sharkwolf", keys = new[] { "sharkwolf", "wolfshark" }, killsToReveal = 6,
             about = "Half shark, half wolf. Swims under the surface and leaps out at anything near the shore.",
+            drops = "SWORD half the time - it floats on the water where it died.",
             weakness = "It can't leave the water. Stay back from the shoreline and hit it when it lands from a leap. Kickable.",
             counter = "Hit it at the start of the bite, as the jaws open. The window is generous.",
         },
@@ -158,7 +213,36 @@ public static class EnemyCatalog
             counter = "No known counter. Patience and good spacing.",
             drops = "A pile of EXP gems.",
         },
+        new Entry
+        {
+            id = "moonboundelder", name = "Moonbound Elder", keys = new[] { "moonboundelder" }, killsToReveal = 1,
+            about = "What the old man really is. Hurt him and the curse wakes up: a giant violet wolf, 450 HP, leaps, claws, and a MOON NOVA ring of explosions.",
+            weakness = "When he crouches and glows, the nova is coming - jump or run out of the ring. At half health he howls, turns red, calls two Werefasts and gets faster.",
+            counter = "Same windows as a Big Wolf: strike as he rears back before the claws come down. His size makes the swipes reach further, so stay close.",
+            drops = "A big pile of EXP gems.",
+        },
         new Entry { id = "oldman", name = "Old Man", keys = new[] { "oldman" }, inNotes = false },
+    };
+
+    private static readonly Dictionary<string, string> Quips = new Dictionary<string, string>
+    {
+        ["crabby"] = "Hides in its shell every time I show up. Relatable. I do that with my landlord.",
+        ["gnollwarrior"] = "Big sword, bigger ego. Compensating for something? Not me. The hair is natural, baby.",
+        ["gnollarcher"] = "Shoots from far away because up close it would have to admit how dandy I look.",
+        ["gnollbomber"] = "Explosive personality. Literally. I have dated worse.",
+        ["horserider"] = "A wolf riding a horse. The horse is clearly the brains of this operation.",
+        ["transformwolf"] = "Puberty hits different when you are cursed.",
+        ["sharkwolf"] = "Shark plus wolf. Whoever designed this guy owes me an apology and a sandwich.",
+        ["statue"] = "Art critic Rowdy rates it: one star. Very smashable.",
+        ["watervivarider"] = "Rides a jellyfish like a surfboard. Copycat. Counter it and watch the jelly go boom.",
+        ["wereknight"] = "Full armor on 10 HP. That is a helmet on a jelly bean.",
+        ["werefast"] = "Hyperactive little furball. Somebody switch this guy to decaf.",
+        ["bigwolf"] = "Tall, dark and hairy. Fine, he has the height. I have the hair.",
+        ["megacreature"] = "Takes a full second to start its attack. Same, buddy. Same. Every morning.",
+        ["pelican"] = "Some carry hearts. I carry charm. We are not the same.",
+        ["mantaray"] = "A flying pancake. I would register it for cash if it was not so peaceful.",
+        ["pelich"] = "Lord of the far shore? I am lord of the whole beach. Also, that name is a crime.",
+        ["moonboundelder"] = "Grandpa had ONE bad day. Lesson learned: never poke old men who live in tents.",
     };
 
     private static readonly Dictionary<int, Entry> byObject = new Dictionary<int, Entry>();

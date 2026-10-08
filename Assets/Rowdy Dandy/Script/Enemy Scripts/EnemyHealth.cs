@@ -64,6 +64,8 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] private GameObject pelicanHeartPrefab;
     [SerializeField] private GameObject transformWolf;
+    [Tooltip("The old man (object named ...OldMan...): hurting him wakes the Moonbound Elder (CursedElder) instead of spawning Transform Wolf above. Other objects using Is Old Man keep spawning their Transform Wolf object.")]
+    [SerializeField] private bool oldManBecomesElder = true;
     [SerializeField] private GameObject bloodPrefab;
     [SerializeField] private float parryDamage = 0f;
 
@@ -244,6 +246,7 @@ public class EnemyHealth : MonoBehaviour
             RunStats.RecordHit(_damage, credit.with);
             if (isCritical) RunStats.CriticalHits++;
             if (isParryTime && currentenemyHealth > 0f) RunStats.Counters++;
+            StyleRank.OnHit(this, _damage, isCritical, isParryTime, credit);
         }
 
         currentenemyHealth = Mathf.Clamp(currentenemyHealth - _damage, 0, startingenemyHealth);
@@ -312,7 +315,20 @@ public class EnemyHealth : MonoBehaviour
                 SetAnimatorTrigger("destroyed");
                 enemydead = true;
                 if (TryGetComponent(out EnemyCorpse corpse)) corpse.OnKilled();
-                ReportKill(credit);
+                KillCredit.Finish finish = isParryTime ? KillCredit.Finish.Counter : isCritical ? KillCredit.Finish.Critical : KillCredit.Finish.Normal;
+                ReportKill(credit, finish);
+                StyleRank.OnKill(this, credit, finish);
+
+                // Countering a Waterviva Rider to death sets off its jelly: a long, accelerating string of explosions
+                if (finish == KillCredit.Finish.Counter && byRowdySide)
+                {
+                    EnemyCatalog.Entry kind = EnemyCatalog.Identify(this);
+                    if (kind != null && kind.id == "watervivarider")
+                    {
+                        TimeSlowController.HitStop(0.12f, 0.05f);
+                        ExplosionChain.Play(transform.position, 30, 1.7f, 1.6f, 0.42f);
+                    }
+                }
 
                 // --- SPAWN EXP GEMS OR GIVE EXP DIRECTLY ---
                 if (giveDirectEXP)
@@ -342,10 +358,18 @@ public class EnemyHealth : MonoBehaviour
                     Instantiate(bloodKill, transform.position, Quaternion.identity);
                 }
 
-                if (isOldMan && transformWolf != null)
+                if (isOldMan)
                 {
-                    Instantiate(transformWolf, transform.position, Quaternion.identity);
-                    Destroy(gameObject);
+                    // isOldMan + transformWolf is also used on other things (WereKnight, SharkWolf, arrows, bombs...) as
+                    // "spawn this on death and vanish" - only the real old man wakes the Elder
+                    EnemyCatalog.Entry who = EnemyCatalog.Identify(this);
+                    bool realOldMan = who != null && who.id == "oldman";
+                    if (oldManBecomesElder && realOldMan && CursedElder.Spawn(transform.position) != null) Destroy(gameObject);
+                    else if (transformWolf != null)
+                    {
+                        Instantiate(transformWolf, transform.position, Quaternion.identity);
+                        Destroy(gameObject);
+                    }
                 }
 
                 if (deathSFX != null) deathSFX.Play();
@@ -365,7 +389,7 @@ public class EnemyHealth : MonoBehaviour
     }
 
     // Kill feed + stats. Drowned (or otherwise world-killed) soon after Rowdy / a cat hit it = still their kill.
-    private void ReportKill(KillCredit credit)
+    private void ReportKill(KillCredit credit, KillCredit.Finish finish)
     {
         if (isObject)
         {
@@ -400,7 +424,7 @@ public class EnemyHealth : MonoBehaviour
                 if (killer.execution) RunStats.Executions++;
                 RowdyNotes.RecordKill(this);
             }
-            KillFeed.Report(killer, victimName, portrait);
+            KillFeed.Report(killer, victimName, portrait, finish);
         }
         catch (Exception e)
         {

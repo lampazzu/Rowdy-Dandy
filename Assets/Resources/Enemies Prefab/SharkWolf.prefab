@@ -5286,8 +5286,8 @@ MonoBehaviour:
   expGemAmount: 8
   giveDirectEXP: 0
   directEXPValue: 20
-  weaponDropPrefab: {fileID: 0}
-  dropChancePercent: 30
+  weaponDropPrefab: {fileID: 3635015719697418152, guid: ba8c39d66dca7274397195e6ec0a3406, type: 3}
+  dropChancePercent: 50
   damageTextPrefab: {fileID: 0}
   critFXPrefab: {fileID: 0}
   enableParryRumble: 1

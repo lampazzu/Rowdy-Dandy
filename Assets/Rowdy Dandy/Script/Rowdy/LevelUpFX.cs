@@ -3,14 +3,18 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 // Level up moment on Rowdy: full heal, a golden pillar of light rising from his feet, gold sparks floating up,
-// "LEVEL UP!" over his head and a rising chime. Everything is generated at runtime (no prefab to set up).
+// "LEVEL UP!" over his head and a rising chime - and a golden shockwave that deals AoeDamage to every enemy
+// it reaches (each one hit gets a small explosion from the gnoll archers' explosion art, Resources/VFX/Explosion). Everything is generated at runtime (no prefab to set up).
 // PlayerStats calls LevelUpFX.Play(newLevel). Optional: put an AudioClip at Resources/LevelUpSound to replace the chime.
 public class LevelUpFX : MonoBehaviour
 {
     private static readonly Color Gold = new Color(1f, 0.82f, 0.25f, 1f);
     private static readonly Color PaleGold = new Color(1f, 0.95f, 0.65f, 1f);
 
-    private static Sprite sparkSprite, beamSprite;
+    public const float AoeDamage = 10f;
+    public const float AoeRadius = 3.4f;
+
+    private static Sprite sparkSprite, beamSprite, ringSprite;
     private static Material unlitMaterial;
     private static AudioClip chime;
 
@@ -26,6 +30,7 @@ public class LevelUpFX : MonoBehaviour
         go.transform.position = rowdy.transform.position;
         var fx = go.AddComponent<LevelUpFX>();
         fx.StartCoroutine(fx.Run(rowdy.transform, newLevel));
+        fx.StartCoroutine(fx.Shockwave(rowdy.transform.position));
 
         AudioClip clip = Resources.Load<AudioClip>("LevelUpSound");
         SoundManager.PlaySfx(clip != null ? clip : Chime, 1f);
@@ -121,6 +126,52 @@ public class LevelUpFX : MonoBehaviour
         Destroy(gameObject);
     }
 
+    // Gold ring rushing outwards; every enemy it passes takes AoeDamage (once), credited to Rowdy
+    private IEnumerator Shockwave(Vector3 center)
+    {
+        var ringObject = new GameObject("Shockwave");
+        ringObject.transform.position = center;
+        var ring = ringObject.AddComponent<SpriteRenderer>();
+        ring.sprite = RingSprite;
+        ring.sortingLayerName = "Default";
+        ring.sortingOrder = 150;
+        if (UnlitMaterial != null) ring.sharedMaterial = UnlitMaterial;
+
+        var hit = new System.Collections.Generic.HashSet<EnemyHealth>();
+        GameObject boom = Resources.Load<GameObject>("VFX/Explosion");
+        ScreenShake.Impulse(0.6f);
+
+        const float expand = 0.3f, linger = 0.25f;
+        float t = 0f;
+        while (t < expand + linger)
+        {
+            t += Time.unscaledDeltaTime;
+            float k = Mathf.Clamp01(t / expand);
+            float radius = Mathf.Lerp(0.2f, AoeRadius, 1f - (1f - k) * (1f - k));
+            float diameter = RingSprite.bounds.size.x;
+            ringObject.transform.localScale = Vector3.one * (radius * 2f / diameter);
+            float fade = 1f - Mathf.Clamp01((t - expand) / linger);
+            ring.color = new Color(Gold.r, Gold.g, Gold.b, 0.9f * fade);
+
+            foreach (Collider2D c in Physics2D.OverlapCircleAll(center, radius))
+            {
+                EnemyHealth enemy = c.GetComponentInParent<EnemyHealth>();
+                if (enemy == null || enemy.enemydead || enemy.IsObject || !enemy.CompareTag("Enemy") || !hit.Add(enemy)) continue;
+                KillCredit credit = KillCredit.Rowdy();
+                credit.with = "Level Up";
+                EnemyHealth.CreditNextHit(credit);
+                enemy.TakeDamageEnemy(AoeDamage);
+                if (boom != null)
+                {
+                    GameObject b = Instantiate(boom, enemy.transform.position, Quaternion.identity);
+                    b.transform.localScale *= 0.4f;
+                }
+            }
+            yield return null;
+        }
+        Destroy(ringObject);
+    }
+
     private SpriteRenderer MakeRenderer(string objectName, Sprite sprite, int sortingLayer, int sortingOrder, Color color)
     {
         var go = new GameObject(objectName);
@@ -146,6 +197,32 @@ public class LevelUpFX : MonoBehaviour
                 if (shader != null) unlitMaterial = new Material(shader) { name = "LevelUp (Unlit)" };
             }
             return unlitMaterial;
+        }
+    }
+
+    // 1-2 px pixel ring, 48 px across
+    private static Sprite RingSprite
+    {
+        get
+        {
+            if (ringSprite == null)
+            {
+                const int size = 48;
+                var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, name = "LevelUpRing" };
+                var px = new Color32[size * size];
+                float c = (size - 1) * 0.5f;
+                for (int y = 0; y < size; y++)
+                    for (int x = 0; x < size; x++)
+                    {
+                        float d = Mathf.Sqrt((x - c) * (x - c) + (y - c) * (y - c));
+                        byte a = d > c - 1.5f && d <= c + 0.5f ? (byte)255 : d > c - 3f && d <= c - 1.5f ? (byte)110 : (byte)0;
+                        px[y * size + x] = new Color32(255, 255, 255, a);
+                    }
+                tex.SetPixels32(px);
+                tex.Apply(false, true);
+                ringSprite = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 64f);
+            }
+            return ringSprite;
         }
     }
 

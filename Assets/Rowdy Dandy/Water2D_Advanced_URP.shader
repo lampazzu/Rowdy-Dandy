@@ -45,6 +45,10 @@ Shader "Custom/Water2D_Advanced"
         _RayScale ("Light Shafts Scale", Float) = 2.5
         _RayAmount ("Light Shafts Amount", Range(0, 1)) = 0.35
 
+        [Header(Bottom Edge)]
+        _BottomFade ("Bottom Fade Height (units, 0 = hard edge)", Float) = 1.25
+        _BottomFadeDither ("Bottom Fade Dithered (pixel look)", Range(0, 1)) = 1
+
         [Header(Underwater Caustics)]
         _CausticColor ("Caustics Color", Color) = (0.8, 0.4, 1.0, 0.3)
         _CausticScale ("Caustics Scale", Float) = 15.0
@@ -84,6 +88,7 @@ Shader "Custom/Water2D_Advanced"
                 float3 worldPos : TEXCOORD0;
                 float surfaceY : TEXCOORD1; // world Y of the surface
                 float wave : TEXCOORD2;
+                float2 uv : TEXCOORD3;      // y: 0 at the bottom edge, 1 at the surface
             };
 
             float _PixelsPerUnit, _ColorSteps, _AnimFPS;
@@ -97,6 +102,15 @@ Shader "Custom/Water2D_Advanced"
             float _StreakDepthPixels, _StreakAmount, _RayScale, _RayAmount;
             float4 _CausticColor;
             float _CausticScale, _CausticSpeed, _CausticThreshold;
+            float _BottomFade, _BottomFadeDither;
+
+            // 4x4 ordered dither threshold (0..1) for a pixel
+            float Bayer4(float2 p)
+            {
+                int x = (int)fmod(p.x, 4.0), y = (int)fmod(p.y, 4.0);
+                static const float m[16] = { 0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5 };
+                return (m[y * 4 + x] + 0.5) / 16.0;
+            }
 
             float2 Hash2D(float2 p)
             {
@@ -134,6 +148,7 @@ Shader "Custom/Water2D_Advanced"
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 o.surfaceY = mul(unity_ObjectToWorld, float4(v.vertex.x, v.surface.x, v.vertex.z, 1.0)).y;
                 o.wave = v.surface.y;
+                o.uv = v.uv;
                 return o;
             }
 
@@ -236,6 +251,22 @@ Shader "Custom/Water2D_Advanced"
 
                     // Wave slope light carries a little into the water right below
                     col.rgb *= 1.0 + shade * 0.15 * (1.0 - band);
+                }
+
+                // ---------- Bottom edge: fade into the scene instead of a hard line ----------
+                if (_BottomFade > 0.0)
+                {
+                    // Distance above the mesh bottom, from uv.y (0 at the bottom, 1 at the surface)
+                    float v01 = saturate(i.uv.y);
+                    float fromBottom = v01 < 0.999 ? v01 * (surface - px.y) / (1.0 - v01) : 1e4;
+                    float fade = saturate(fromBottom / _BottomFade);
+                    if (_BottomFadeDither > 0.5)
+                    {
+                        float2 cell = floor(px * ppu);
+                        cell = float2(fmod(cell.x + 4096.0, 4.0), fmod(cell.y + 4096.0, 4.0));
+                        clip(fade - Bayer4(cell));
+                    }
+                    else col.a *= fade;
                 }
 
                 return col;

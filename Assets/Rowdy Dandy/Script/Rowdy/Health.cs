@@ -57,6 +57,7 @@ public class Health : MonoBehaviour
             float before = currentHealth;
             currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
             RunStats.RecordDamageTaken(before - currentHealth);
+            if (before - currentHealth > 0f) StyleRank.OnPlayerHurt(); // drops two style ranks
             if (currentHealth > 0)
             {
                 anim.SetTrigger("hit");

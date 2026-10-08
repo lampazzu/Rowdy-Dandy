@@ -4,6 +4,8 @@ public enum WeaponType { Sword, Axe, Naginata, Cleaver }
 
 // Weapon lying in the world: floating weapon icon, a beam of light so it's easy to spot,
 // and a button prompt (Y on gamepad / E on keyboard) when Rowdy is close.
+// Dropped in mid-air (enemy killed while airborne) it falls to the ground first.
+// Walking over the same weapon Rowdy has equipped picks it up by itself: full durability again, "[icon] REPAIRED".
 public class WeaponDrop : MonoBehaviour
 {
     [Header("Drop Options")]
@@ -42,6 +44,15 @@ public class WeaponDrop : MonoBehaviour
     [SerializeField] private AudioClip pickupSound;
     [SerializeField, Range(0f, 2f)] private float pickupVolume = 1f;
 
+    [Header("Falling (dropped in mid-air)")]
+    [SerializeField] private float restHeight = 0.28f;
+    [SerializeField] private float fallGravity = 14f;
+
+    [Header("Auto Repair")]
+    [Tooltip("Walking over the weapon Rowdy already has equipped picks it up without pressing anything (repairs it).")]
+    [SerializeField] private bool autoRepairSameWeapon = true;
+    [SerializeField] private Color repairedColor = new Color(0.45f, 1f, 0.6f, 1f);
+
     private const float PixelsPerUnit = 64f;
     private static Material unlitSpriteMaterial;
     private static Sprite beamSprite;
@@ -62,6 +73,9 @@ public class WeaponDrop : MonoBehaviour
     private float promptAlpha;
     private float spawnPop;
     private float bobOffset;
+    private bool falling;
+    private float fallSpeed, groundY;
+    private bool pickedUp;
 
     private void Awake()
     {
@@ -95,7 +109,43 @@ public class WeaponDrop : MonoBehaviour
         {
             SoundManager.PlaySfx(dropSound, dropVolume);
             spawnPop = 1f;
+            StartFalling();
         }
+    }
+
+    // Find the floor under the drop; if it's more than a step below, fall onto it
+    private void StartFalling()
+    {
+        Vector2 from = transform.position;
+        float best = float.NegativeInfinity;
+        foreach (RaycastHit2D hit in Physics2D.RaycastAll(from + Vector2.up * 0.2f, Vector2.down, 40f))
+        {
+            Collider2D c = hit.collider;
+            if (c == null || c.isTrigger) continue;
+            if (c.attachedRigidbody != null && c.attachedRigidbody.bodyType == RigidbodyType2D.Dynamic) continue; // enemies, Rowdy, corpses
+            if (c.transform.IsChildOf(transform)) continue;
+            best = hit.point.y;
+            break;
+        }
+        if (float.IsNegativeInfinity(best)) return;
+        groundY = best + restHeight;
+        if (transform.position.y - groundY > 0.05f) { falling = true; fallSpeed = 0f; }
+        else if (transform.position.y < groundY) transform.position = new Vector3(transform.position.x, groundY, transform.position.z);
+    }
+
+    private void UpdateFall()
+    {
+        if (!falling) return;
+        fallSpeed += fallGravity * Time.deltaTime;
+        Vector3 p = transform.position;
+        p.y -= fallSpeed * Time.deltaTime;
+        if (p.y <= groundY)
+        {
+            p.y = groundY;
+            if (fallSpeed > 3f) { fallSpeed = -fallSpeed * 0.3f; spawnPop = Mathf.Max(spawnPop, 0.5f); } // one small bounce
+            else falling = false;
+        }
+        transform.position = p;
     }
 
     // The icon moves to its own child so the bob / pop / tint don't drag the beam and prompt along
@@ -179,7 +229,23 @@ public class WeaponDrop : MonoBehaviour
 
     private void Update()
     {
+        UpdateFall();
         AnimateVisuals();
+
+        // Same weapon as the one in Rowdy's hands: just walking over it repairs it
+        if (playerIsClose && autoRepairSameWeapon && !pickedUp && !PauseMenu.IsPaused)
+        {
+            WeaponManager hands = WeaponManager.Instance;
+            if (hands != null && hands.IsEquipped(weaponType))
+            {
+                pickedUp = true;
+                Sprite iconSprite = hands.GetProfile(weaponType);
+                hands.PickupWeapon(weaponType, maxDurability, pickupSound, pickupVolume);
+                IconPopup.Show(transform.position + Vector3.up * 0.6f, iconSprite, "REPAIRED", repairedColor);
+                Destroy(gameObject);
+                return;
+            }
+        }
 
         // --- PICKUP INPUT ---
         // Press E on Keyboard OR Triangle/Y on Gamepad

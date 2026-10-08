@@ -84,8 +84,8 @@ public class PlayerStats : MonoBehaviour
     {
         if (PauseMenu.IsPaused) return;
 
-        // C, or the gamepad's Select / View / Share (Rowdy Notes are on L2 / Tab)
-        if (Input.GetKeyDown(toggleUIKey) || PadInput.SelectDown)
+        // C, or the gamepad's L2 / LT (Rowdy Notes are on Select / Tab)
+        if (!RowdyNotes.IsOpen && (Input.GetKeyDown(toggleUIKey) || PadInput.L2Down))
         {
             ToggleStatsUI();
         }

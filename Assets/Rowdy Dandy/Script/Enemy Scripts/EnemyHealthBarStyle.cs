@@ -29,6 +29,20 @@ public class EnemyHealthBarStyle : ScriptableObject
     public float trailDelay = 0.3f;
     [Tooltip("How much of the bar the trail drains per second.")]
     public float trailSpeed = 1.2f;
+
+    [Header("Colour by health")]
+    [Tooltip("The fill is recoloured from this gradient: right end = full health, left end = nearly dead. Off = the fill sprite's own colours.")]
+    public bool colourByHealth = true;
+    public Gradient healthColours = DefaultGradient();
+
+    public static Gradient DefaultGradient()
+    {
+        var g = new Gradient();
+        g.SetKeys(
+            new[] { new GradientColorKey(new Color(1f, 0.18f, 0.2f), 0f), new GradientColorKey(new Color(0.85f, 0.3f, 0.95f), 0.45f), new GradientColorKey(new Color(0.3f, 0.6f, 1f), 1f) },
+            new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) });
+        return g;
+    }
 }
 
 // Small over-head health bar, created at runtime by EnemyHealth.
@@ -41,6 +55,9 @@ public class EnemyHealthBar : MonoBehaviour
     private static Material unlitSpriteMaterial;
     // Sprites cropped pixel by pixel (index = visible width in px), so the bar drains without stretching the art
     private static readonly Dictionary<Sprite, Sprite[]> croppedSprites = new Dictionary<Sprite, Sprite[]>();
+    // Greyscale copy of the fill (so it can be tinted any colour: blue at full health -> red when nearly dead)
+    private static readonly Dictionary<Sprite, Sprite> greySprites = new Dictionary<Sprite, Sprite>();
+    private Sprite fillSource;
 
     private EnemyHealth target;
     private Collider2D targetCollider;
@@ -90,7 +107,8 @@ public class EnemyHealthBar : MonoBehaviour
         transform.localScale = Vector3.one * style.scale;
 
         trailRenderer = CreateLayer("Trail", style.trailSprite, 0);
-        fillRenderer = CreateLayer("Fill", style.fillSprite, 1);
+        fillSource = style.colourByHealth ? Grey(style.fillSprite) : style.fillSprite;
+        fillRenderer = CreateLayer("Fill", fillSource, 1);
         frameRenderer = CreateLayer("Frame", style.frameSprite, 2);
 
         // Left-pivot sprites start at x = 0, shift everything so the bar is centered
@@ -183,7 +201,13 @@ public class EnemyHealthBar : MonoBehaviour
         ApplyAlpha(alpha);
         if (alpha <= 0f) return;
 
-        SetFill(fillRenderer, style.fillSprite, ratio);
+        SetFill(fillRenderer, fillSource, ratio);
+        if (style.colourByHealth && fillRenderer != null)
+        {
+            Color c = (style.healthColours ?? EnemyHealthBarStyle.DefaultGradient()).Evaluate(ratio);
+            c.a = alpha;
+            fillRenderer.color = c;
+        }
         SetFill(trailRenderer, style.trailSprite, trailRatio);
         FollowTarget();
     }
@@ -194,6 +218,45 @@ public class EnemyHealthBar : MonoBehaviour
         int pixels = Mathf.CeilToInt(ratio * source.rect.width - 0.001f); // any damage left shows at least 1px
         sr.sprite = GetCropped(source, pixels);
     }
+
+    // Luminance only, stretched so the brightest pixel is white (keeps the art's shading, loses its hue)
+    private static Sprite Grey(Sprite source)
+    {
+        if (source == null) return null;
+        if (greySprites.TryGetValue(source, out Sprite cached)) return cached;
+        Sprite result = source;
+        try
+        {
+            Rect r = source.rect;
+            int w = Mathf.RoundToInt(r.width), h = Mathf.RoundToInt(r.height);
+            RenderTexture rt = RenderTexture.GetTemporary(source.texture.width, source.texture.height, 0, RenderTextureFormat.ARGB32);
+            RenderTexture previous = RenderTexture.active; // (before Blit, which makes rt the active one)
+            Graphics.Blit(source.texture, rt);
+            RenderTexture.active = rt;
+            var tex = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, name = source.name + "_Grey" };
+            tex.ReadPixels(new Rect(r.x, r.y, w, h), 0, 0);
+            RenderTexture.active = previous;
+            RenderTexture.ReleaseTemporary(rt);
+
+            Color32[] px = tex.GetPixels32();
+            float max = 0.01f;
+            foreach (Color32 p in px) if (p.a > 0) max = Mathf.Max(max, Lum(p));
+            for (int i = 0; i < px.Length; i++)
+            {
+                byte v = (byte)Mathf.Clamp(Mathf.RoundToInt(Lum(px[i]) / max * 255f), 0, 255);
+                px[i] = new Color32(v, v, v, px[i].a);
+            }
+            tex.SetPixels32(px);
+            tex.Apply(false, false);
+            result = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0f, 0.5f), source.pixelsPerUnit, 0, SpriteMeshType.FullRect);
+            result.name = source.name + "_Grey";
+        }
+        catch (System.Exception) { result = source; }
+        greySprites[source] = result;
+        return result;
+    }
+
+    private static float Lum(Color32 p) => (0.3f * p.r + 0.59f * p.g + 0.11f * p.b) / 255f;
 
     private void FollowTarget()
     {

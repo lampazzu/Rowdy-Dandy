@@ -37,6 +37,7 @@ public class DevReset : MonoBehaviour
             PlayerPrefs.DeleteKey("WeaponMaxDurability_" + i);
         }
         RowdyNotes.ResetProgress();
+        WorldMap.ResetProgress();
         PlayerPrefs.Save();
 
         RunStats.ResetAll();

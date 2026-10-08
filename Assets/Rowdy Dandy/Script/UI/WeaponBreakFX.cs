@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // The "your weapon just broke" moment, played by WeaponManager when durability hits 0:
-// weapon-colored shards from Rowdy's hands, a short slow-mo beat, a break sound, "BROKE!" text,
+// weapon-colored shards from Rowdy's hands, a short slow-mo beat, a break sound, "[icon] BROKEN" popup,
 // and the HUD weapon icon splitting in two before the Rod pops in.
 // Creates itself automatically; add it to a scene object to tweak it in the Inspector.
 public class WeaponBreakFX : MonoBehaviour
@@ -16,7 +16,7 @@ public class WeaponBreakFX : MonoBehaviour
     [Header("Sound & Text")]
     [Tooltip("SoundManager sound name. Leave empty for none.")]
     [SerializeField] private string breakSound = "QuebraTudo";
-    [SerializeField] private string breakText = "BROKE!";
+    [SerializeField] private string breakText = "BROKEN";
     [SerializeField] private Color breakTextColor = new Color(1f, 0.35f, 0.4f, 1f);
 
     [Header("Shards")]
@@ -83,7 +83,11 @@ public class WeaponBreakFX : MonoBehaviour
 
         if (!string.IsNullOrEmpty(breakSound) && SoundManager.Instance != null) SoundManager.Instance.PlaySound(breakSound);
 
-        if (damageTextPrefab != null && !string.IsNullOrEmpty(breakText))
+        if (brokenIcon != null && !string.IsNullOrEmpty(breakText))
+        {
+            IconPopup.Show(worldPosition + Vector3.up * 0.8f, brokenIcon, breakText, breakTextColor, 1.2f); // [icon] BROKEN
+        }
+        else if (damageTextPrefab != null && !string.IsNullOrEmpty(breakText))
         {
             GameObject text = Instantiate(damageTextPrefab, worldPosition + Vector3.up * 0.8f, Quaternion.identity);
             if (text.TryGetComponent(out FloatingDamageText floating)) floating.SetupCustomText(breakText, breakTextColor, 1.6f);

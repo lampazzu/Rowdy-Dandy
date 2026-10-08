@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 // Crisp pixel-font text for UI (PixelFont's 5x7 glyphs + a 1px drop shadow), drawn into a small point-filtered texture.
@@ -33,6 +33,12 @@ public class PixelText : MonoBehaviour
     }
 
     public RectTransform Rect => (RectTransform)transform;
+
+    public void SetScale(int newScale)
+    {
+        scale = Mathf.Max(1, newScale);
+        if (texture != null) Rect.sizeDelta = new Vector2(texture.width * scale, texture.height * scale);
+    }
 
     public void SetText(string content)
     {

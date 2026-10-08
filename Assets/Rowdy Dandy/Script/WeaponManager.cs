@@ -312,6 +312,20 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    // Is this breakable weapon the one in Rowdy's hands? (weapon drops of it repair it on touch)
+    public bool IsEquipped(WeaponType type)
+    {
+        int index = GetIndexFromType(type);
+        return index != 0 && GetActiveWeaponIndex() == index;
+    }
+
+    // 0..1 durability left on a weapon slot (the Rod is always 1)
+    public float DurabilityFraction(int index)
+    {
+        if (index <= 0 || index >= 4) return 1f;
+        return maxDurability[index] > 0f ? Mathf.Clamp01(currentDurability[index] / maxDurability[index]) : 0f;
+    }
+
     public int GetActiveWeaponIndex()
     {
         if (isWK_Sword) return 1;

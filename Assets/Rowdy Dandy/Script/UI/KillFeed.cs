@@ -13,6 +13,7 @@ public class KillCredit
     public Sprite icon;      // weapon icon / cat face / water...
     public string with;      // weapon or cat name, for the stats screen
     public bool execution;   // Nick's finishing cut
+    public enum Finish { Normal, Critical, Counter }
 
     public static KillCredit Rowdy()
     {
@@ -34,7 +35,8 @@ public class KillCredit
     public static KillCredit Drowning() => new KillCredit { kind = Kind.World, name = "", icon = KillFeed.WaterIcon, with = "Water" };
 }
 
-// Counter-Strike style kill log in the top-right corner:  ROWDY [naginata] [gnoll face] GNOLL WARRIOR
+// Counter-Strike style kill log in the top-right corner:  ROWDY [naginata] > [gnoll face] GNOLL WARRIOR
+// The arrow says how it died: white = normal hit, red = critical, cyan = counter, gold = Nick's execution.
 // Built at runtime on the overlay canvas the first time something dies.
 public class KillFeed : MonoBehaviour
 {
@@ -60,17 +62,22 @@ public class KillFeed : MonoBehaviour
     }
 
     private static KillFeed instance;
-    private static Sprite waterIcon, skullIcon;
+    private static Sprite waterIcon, skullIcon, arrowIcon;
     private static readonly Dictionary<string, (string name, Sprite portrait)> identities = new Dictionary<string, (string, Sprite)>();
 
     private RectTransform area;
     private readonly List<Row> rows = new List<Row>();
 
     // ---------------------------------------------------------------- reporting
-    public static void Report(KillCredit killer, string victimName, Sprite victimPortrait)
+    public static void Report(KillCredit killer, string victimName, Sprite victimPortrait, KillCredit.Finish finish = KillCredit.Finish.Normal)
     {
-        Get().AddRow(killer, victimName, victimPortrait);
+        Get().AddRow(killer, victimName, victimPortrait, finish);
     }
+
+    public static readonly Color NormalArrow = new Color(0.95f, 0.92f, 0.98f, 1f);
+    public static readonly Color CriticalArrow = new Color32(0xFF, 0x3A, 0x3A, 0xFF);   // same red as CRITICAL!
+    public static readonly Color CounterArrow = new Color32(0x3C, 0xE8, 0xFF, 0xFF);    // same cyan as COUNTER!
+    public static readonly Color ExecutionArrow = new Color32(0xFF, 0xC9, 0x3C, 0xFF);
 
     private static KillFeed Get()
     {
@@ -103,7 +110,7 @@ public class KillFeed : MonoBehaviour
         }
     }
 
-    private void AddRow(KillCredit killer, string victimName, Sprite portrait)
+    private void AddRow(KillCredit killer, string victimName, Sprite portrait, KillCredit.Finish finish)
     {
         if (rows.Count >= MaxRows) RemoveRow(0);
 
@@ -132,6 +139,14 @@ public class KillFeed : MonoBehaviour
 
         Sprite icon = killer != null && killer.icon != null ? killer.icon : (world ? SkullIcon : null);
         if (icon != null) pieces.Add(MakeIcon(row.rect, icon, killer != null && killer.execution));
+        if (!world)
+        {
+            Color arrowColor = killer.execution ? ExecutionArrow : finish == KillCredit.Finish.Counter ? CounterArrow
+                             : finish == KillCredit.Finish.Critical ? CriticalArrow : NormalArrow;
+            Image arrow = OverlayUI.MakeImage("Arrow", row.rect, arrowColor, ArrowIcon);
+            arrow.rectTransform.sizeDelta = new Vector2(IconSize * 0.75f, IconSize * 0.75f);
+            pieces.Add(arrow.rectTransform);
+        }
         if (portrait != null) pieces.Add(MakeIcon(row.rect, portrait, false));
 
         PixelText victimText = PixelText.Create(row.rect, victimName, TextScale, VictimColor, 0f);
@@ -255,8 +270,8 @@ public class KillFeed : MonoBehaviour
 
             // Copy through a RenderTexture so it works on non-readable textures
             RenderTexture rt = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.ARGB32);
+            RenderTexture previous = RenderTexture.active; // (before Blit, which makes rt the active one)
             Graphics.Blit(source, rt);
-            RenderTexture previous = RenderTexture.active;
             RenderTexture.active = rt;
             var read = new Texture2D(w, h, TextureFormat.RGBA32, false);
             read.ReadPixels(new Rect(r.x, r.y, w, h), 0, 0);
@@ -329,6 +344,33 @@ public class KillFeed : MonoBehaviour
                 }, c => c == 'W' ? new Color32(0xC8, 0xF4, 0xFF, 0xFF) : new Color32(0x3C, 0xA8, 0xE8, 0xFF), "WaterIcon");
             }
             return waterIcon;
+        }
+    }
+
+    // White arrow, tinted per kill type
+    private static Sprite ArrowIcon
+    {
+        get
+        {
+            if (arrowIcon == null)
+            {
+                arrowIcon = OverlayUI.PixelSprite(new[]
+                {
+                    "............",
+                    "......OO....",
+                    "......OWO...",
+                    "OOOOOOOWWO..",
+                    "OWWWWWWWWWO.",
+                    "OWWWWWWWWWWO",
+                    "OWWWWWWWWWO.",
+                    "OOOOOOOWWO..",
+                    "......OWO...",
+                    "......OO....",
+                    "............",
+                    "............",
+                }, c => c == 'W' ? new Color32(0xFF, 0xFF, 0xFF, 0xFF) : new Color32(0x3A, 0x30, 0x40, 0xFF), "KillArrow");
+            }
+            return arrowIcon;
         }
     }
 

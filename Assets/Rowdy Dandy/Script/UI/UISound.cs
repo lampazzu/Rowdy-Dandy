@@ -2,7 +2,7 @@ using UnityEngine;
 
 // Menu sounds (pause menu, Rowdy Notes...), fighting-game style: a tick on every cursor move, a punchy confirm,
 // a soft back, a card flick for value / page changes. Clips live in Resources/UISounds (copied from the
-// "Sounds from hags hand" pack) - swap a file there to change a sound. Plays while the game is paused,
+// "Sounds from hags hand" pack; Move + Confirm use the user's "New UI sounds") - swap a file there to change a sound. Plays while the game is paused,
 // follows the Sound Effects volume. Created on first use.
 public static class UISound
 {
@@ -11,8 +11,8 @@ public static class UISound
     // file name in Resources/UISounds, volume, random pitch range
     private static readonly (string file, float volume, float pitchJitter)[] Cues =
     {
-        ("UI_Move", 0.55f, 0.04f),
-        ("UI_Confirm", 0.7f, 0f),
+        ("New UI sounds/UI select", 0.6f, 0.04f),
+        ("New UI sounds/Ui Confirm", 0.75f, 0f),
         ("UI_Back", 0.6f, 0f),
         ("UI_Change", 0.5f, 0.05f),
         ("UI_Page", 0.6f, 0.03f),
@@ -20,6 +20,10 @@ public static class UISound
         ("UI_Locked", 0.5f, 0f),
         ("UI_Unlock", 0.65f, 0f),
     };
+
+    // The menu clips were mixed far below the gameplay sounds (project Global Volume is 0.2): lift them all.
+    // Above 1 is fine - PlayOneShot's volume scale isn't clamped.
+    private const float Boost = 3.2f;
 
     private static AudioSource source;
     private static AudioClip[] clips;
@@ -43,7 +47,7 @@ public static class UISound
 
         var (_, volume, jitter) = Cues[i];
         source.pitch = 1f + Random.Range(-jitter, jitter);
-        source.PlayOneShot(clip, volume * GameSettings.SfxVolume);
+        source.PlayOneShot(clip, volume * Boost * GameSettings.SfxVolume);
     }
 
     private static bool Ready()

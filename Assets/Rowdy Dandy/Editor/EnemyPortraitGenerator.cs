@@ -9,7 +9,9 @@ using UnityEngine;
 // same way so they all read at the same size, like the cat faces.
 //   Upright enemies (gnolls, riders...)  -> head = top of the body
 //   Beasts (wolves, shark, birds...)     -> head = the leading end of the upper body
-// Runs by itself once when portraits are missing; re-run with Tools > Rowdy Dandy > Generate Enemy Portraits after
+// It also writes <id>_anim.png (every frame of that clip, cropped with the same head box, side by side) and
+// <id>_anim.txt (each frame's duration in seconds) - Rowdy Notes plays those as animated portraits.
+// Cats get one too (cat_Wig, cat_Samurai: the whole cat). Runs by itself once when portraits are missing; re-run with Tools > Rowdy Dandy > Generate Enemy Portraits after
 // tweaking the table below. Check Generated/EnemyPortraits_Preview.png (frame + chosen box, then the crop).
 [InitializeOnLoad]
 public static class EnemyPortraitGenerator
@@ -18,7 +20,7 @@ public static class EnemyPortraitGenerator
     private const string PreviewPath = "Assets/Rowdy Dandy/HUD and UI/Generated/EnemyPortraits_Preview.png";
     private const string Prefabs = "Assets/Resources/Enemies Prefab/";
 
-    private enum Mode { Top, Front, Bottom, LeftEnd }
+    private enum Mode { Top, Front, Bottom, LeftEnd, Whole }
 
     private class Source
     {
@@ -28,6 +30,7 @@ public static class EnemyPortraitGenerator
         public float nudgeX, nudgeY; // shift the box, fraction of the crop size (+x = towards the face side / right)
         public RectInt? manual;     // exact box in the frame's pixels (x, y from bottom-left, w = h), overrides detection
         public int forceSide;       // Front mode: -1 / +1 = the face is on the left / right (0 = guess)
+        public Color tint = Color.white; // multiplied into the result (the Moonbound Elder is a violet Big Wolf)
         public Source(string id, string path, Mode mode, float size, float nudgeX = 0f, float nudgeY = 0f)
         { this.id = id; this.path = path; this.mode = mode; this.size = size; this.nudgeX = nudgeX; this.nudgeY = nudgeY; }
     }
@@ -49,11 +52,16 @@ public static class EnemyPortraitGenerator
         new Source("wereknight", Prefabs + "Enemy_WereKnight.prefab", Mode.Top, 0.34f),
         new Source("werefast", Prefabs + "Enemy_Werefast.prefab", Mode.Front, 0.45f),
         new Source("bigwolf", Prefabs + "Enemy_BigWerewolf.prefab", Mode.Top, 0.4f, -0.5f, 0.08f),
+        new Source("moonboundelder", Prefabs + "Enemy_BigWerewolf.prefab", Mode.Top, 0.4f, -0.5f, 0.08f) { tint = new Color(1f, 0.5f, 0.85f, 1f) },
         new Source("megacreature", Prefabs + "Enemy_MegaCreature.prefab", Mode.Front, 0.45f),
         new Source("pelican", Prefabs + "Neutral_Pelican.prefab", Mode.Front, 1.5f, -0.1f) { forceSide = -1 },
         // Manta: start from its left end (the head), leave the tail out
         new Source("mantaray", Prefabs + "Neutral_MantaRay.prefab", Mode.LeftEnd, 1.5f),
-        new Source("pelich", "Assets/Rowdy Dandy/Enemies/Pelich Anus/PelichIdle.anim", Mode.Top, 0.4f),
+        // Pelich: wide enough for the whole yellow beak (it points left) up to the back of the head
+        new Source("pelich", "Assets/Rowdy Dandy/Enemies/Pelich Anus/PelichIdle.anim", Mode.Top, 0.62f, -0.24f, 0.1f),
+        // Cats (Rowdy Notes > Cats): the whole cat
+        new Source("cat_Wig", "Assets/Resources/Interactables/Wig.prefab", Mode.Whole, 1f),
+        new Source("cat_Samurai", "Assets/Resources/Interactables/SamuraiCat.prefab", Mode.Whole, 1f),
     };
 
     private static readonly string[] ClipPreference = { "idle", "walk", "moving", "move", "fly", "swim", "run" };
@@ -65,7 +73,7 @@ public static class EnemyPortraitGenerator
     }
 
     // Bump after editing the table above and the portraits rebuild on the next compile
-    private const int TableVersion = 4;
+    private const int TableVersion = 7;
     private const string VersionKey = "RowdyDandy.EnemyPortraits.Version";
 
     private static void AutoGenerate()
@@ -90,7 +98,8 @@ public static class EnemyPortraitGenerator
         {
             try
             {
-                Sprite sprite = FindSprite(source.path, out string from);
+                tintNow = source.tint;
+                Sprite sprite = FindSprite(source.path, out string from, out AnimationClip clip, out EditorCurveBinding? binding);
                 if (sprite == null) { Debug.LogWarning($"Enemy portraits: no sprite found for {source.id} ({source.path})"); continue; }
 
                 Color32[] frame = ReadSprite(sprite, out int w, out int h);
@@ -106,6 +115,7 @@ public static class EnemyPortraitGenerator
                 written.Add(file.Replace('\\', '/'));
                 previews.Add(MakePreview(frame, w, h, box, tex));
                 Object.DestroyImmediate(tex);
+                if (clip != null && binding != null) WriteAnimation(source.id, clip, binding.Value, sprite, box, written);
                 Debug.Log($"Enemy portraits: {source.id} <- {sprite.name} ({from}), box {box.x},{box.y} {box.width}px");
             }
             catch (System.Exception e)
@@ -121,14 +131,19 @@ public static class EnemyPortraitGenerator
     }
 
     // ---------------------------------------------------------------- finding the frame
-    private static Sprite FindSprite(string path, out string from)
+    private static Sprite FindSprite(string path, out string from, out AnimationClip usedClip, out EditorCurveBinding? usedBinding)
     {
         from = "";
+        usedClip = null;
+        usedBinding = null;
         if (path.EndsWith(".anim"))
         {
             var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path);
             from = clip != null ? clip.name : "";
-            return clip != null ? FirstSprite(clip, null) : null;
+            if (clip == null) return null;
+            usedBinding = SpriteBinding(clip, null);
+            usedClip = usedBinding != null ? clip : null;
+            return FirstSprite(clip, null);
         }
 
         var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
@@ -150,7 +165,7 @@ public static class EnemyPortraitGenerator
                     string n = clip.name.ToLowerInvariant();
                     if (!n.Contains(wanted) || Avoid(n)) continue;
                     Sprite s = FirstSprite(clip, rendererPath);
-                    if (s != null) { from = clip.name; return s; }
+                    if (s != null) { from = clip.name; usedClip = clip; usedBinding = SpriteBinding(clip, rendererPath); return s; }
                 }
             }
         }
@@ -162,6 +177,70 @@ public static class EnemyPortraitGenerator
     {
         foreach (string a in ClipAvoid) if (clipName.Contains(a)) return true;
         return false;
+    }
+
+    private static EditorCurveBinding? SpriteBinding(AnimationClip clip, string rendererPath)
+    {
+        EditorCurveBinding? fallback = null;
+        foreach (EditorCurveBinding binding in AnimationUtility.GetObjectReferenceCurveBindings(clip))
+        {
+            if (binding.type != typeof(SpriteRenderer) || binding.propertyName != "m_Sprite") continue;
+            if (rendererPath == null || binding.path == rendererPath) return binding;
+            if (fallback == null) fallback = binding;
+        }
+        return fallback;
+    }
+
+    // Every frame of the clip cropped with the head box (moved with each frame's pivot), as one strip + durations
+    private static void WriteAnimation(string id, AnimationClip clip, EditorCurveBinding binding, Sprite first, RectInt box, List<string> written)
+    {
+        const int MaxFrames = 24;
+        ObjectReferenceKeyframe[] keys = AnimationUtility.GetObjectReferenceCurve(clip, binding);
+        var frames = new List<(Sprite sprite, float time)>();
+        foreach (ObjectReferenceKeyframe key in keys)
+        {
+            if (!(key.value is Sprite s)) continue;
+            if (frames.Count > 0 && frames[frames.Count - 1].sprite == s) continue;
+            frames.Add((s, key.time));
+            if (frames.Count >= MaxFrames) break;
+        }
+        string strip = Path.Combine(OutputFolder, id + "_anim.png");
+        string timing = Path.Combine(OutputFolder, id + "_anim.txt");
+        if (frames.Count < 2)
+        {
+            if (File.Exists(strip)) AssetDatabase.DeleteAsset(strip.Replace('\\', '/'));
+            if (File.Exists(timing)) AssetDatabase.DeleteAsset(timing.Replace('\\', '/'));
+            return;
+        }
+
+        int size = box.width;
+        var sheet = new Texture2D(size * frames.Count, size, TextureFormat.RGBA32, false);
+        var all = new Color32[size * frames.Count * size];
+        var durations = new List<string>();
+        float fallbackStep = clip.frameRate > 0f ? 1f / clip.frameRate : 0.1f;
+        for (int i = 0; i < frames.Count; i++)
+        {
+            Color32[] px = ReadSprite(frames[i].sprite, out int w, out int h);
+            if (px != null)
+            {
+                Vector2 shift = frames[i].sprite.pivot - first.pivot;
+                var b = new RectInt(box.x + Mathf.RoundToInt(shift.x), box.y + Mathf.RoundToInt(shift.y), size, size);
+                Color32[] crop = Crop(px, w, h, b);
+                for (int y = 0; y < size; y++)
+                    for (int x = 0; x < size; x++)
+                        all[y * size * frames.Count + i * size + x] = crop[y * size + x];
+            }
+            float next = i + 1 < frames.Count ? frames[i + 1].time : clip.length;
+            float d = next - frames[i].time;
+            if (d <= 0.001f) d = fallbackStep;
+            durations.Add(d.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture));
+        }
+        sheet.SetPixels32(all);
+        sheet.Apply();
+        File.WriteAllBytes(strip, sheet.EncodeToPNG());
+        Object.DestroyImmediate(sheet);
+        File.WriteAllText(timing, string.Join(",", durations));
+        written.Add(strip.Replace('\\', '/'));
     }
 
     private static Sprite FirstSprite(AnimationClip clip, string rendererPath)
@@ -207,6 +286,17 @@ public static class EnemyPortraitGenerator
     // ---------------------------------------------------------------- head detection
     private static RectInt FindHead(Color32[] px, int w, int h, Source source)
     {
+        if (source.mode == Mode.Whole)
+        {
+            // Every opaque pixel (cats: the whole cat, sword and all), in a square with a pixel of air
+            int x0 = w, x1 = -1, y0 = h, y1 = -1;
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++)
+                    if (px[y * w + x].a >= 60) { x0 = Mathf.Min(x0, x); x1 = Mathf.Max(x1, x); y0 = Mathf.Min(y0, y); y1 = Mathf.Max(y1, y); }
+            if (x1 < 0) return new RectInt(0, 0, Mathf.Min(w, h), Mathf.Min(w, h));
+            int side = Mathf.Max(x1 - x0, y1 - y0) + 3;
+            return new RectInt((x0 + x1 + 1) / 2 - side / 2, (y0 + y1 + 1) / 2 - side / 2, side, side);
+        }
         bool[] body = LargestShape(px, w, h);
         int minX = w, maxX = -1, minY = h, maxY = -1;
         var rowCount = new int[h];
@@ -332,7 +422,17 @@ public static class EnemyPortraitGenerator
         }
     }
 
+    private static Color tintNow = Color.white;
+
     private static Color32[] Crop(Color32[] px, int w, int h, RectInt box)
+    {
+        Color32[] r = CropRaw(px, w, h, box);
+        if (tintNow != Color.white)
+            for (int i = 0; i < r.Length; i++) r[i] = (Color)r[i] * tintNow;
+        return r;
+    }
+
+    private static Color32[] CropRaw(Color32[] px, int w, int h, RectInt box)
     {
         var result = new Color32[box.width * box.height];
         for (int y = 0; y < box.height; y++)
@@ -355,6 +455,7 @@ public static class EnemyPortraitGenerator
         importer.mipmapEnabled = false;
         importer.alphaIsTransparency = true;
         importer.spritePixelsPerUnit = 64;
+        importer.maxTextureSize = 8192; // animation strips get wide
         importer.SaveAndReimport();
     }
 

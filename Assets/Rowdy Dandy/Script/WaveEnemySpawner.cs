@@ -78,6 +78,21 @@ public class WaveEnemySpawner : MonoBehaviour
         new Zone("Beach", -100000f, 104f, -100000f, 100000f, 2, 0.7f),
     };
 
+    // Area names / extents (the map labels its regions with these)
+    public IReadOnlyList<Zone> Zones => zones;
+
+    [Header("Quiet Places (no wave spawns)")]
+    [Tooltip("The start of the beach is left alone: nothing spawns while Rowdy is left of this X, and nothing is placed there.")]
+    [SerializeField] private float quietBeachUntilX = 12f;
+    [Tooltip("Standing on a checkpoint (spawner) pauses the waves, so you can catch your breath.")]
+    [SerializeField] private bool quietAtCheckpoints = true;
+    [Tooltip("How far around a checkpoint's trigger still counts as standing on it.")]
+    [SerializeField] private float checkpointQuietMargin = 1.5f;
+    [Tooltip("Pelich's arena is his alone: no wave spawns while Rowdy is in it, and none placed inside it.")]
+    [SerializeField] private bool quietInPelichArena = true;
+    [Tooltip("Arena = this far left / right of where Pelich starts.")]
+    [SerializeField] private float pelichArenaHalfWidth = 16f;
+
     [Header("Ranged Enemies (Gnoll Archer / Bomber)")]
     [Tooltip("They don't move, so they only spawn on flat ground with a clear shot at Rowdy, facing him.")]
     [SerializeField] private bool smartRangedPlacement = true;
@@ -323,6 +338,12 @@ public class WaveEnemySpawner : MonoBehaviour
 
             EnemyEntry entry = list[i];
 
+            // Resting on a checkpoint / at the start of the beach / in Pelich's arena: hold the wave
+            while (player != null && RowdyInQuietPlace())
+            {
+                yield return new WaitForSeconds(0.5f);
+            }
+
             // At the limit: wait for some to die or be cleaned up before spawning more
             while (maxAliveEnemies > 0 && AliveCount >= maxAliveEnemies)
             {
@@ -336,6 +357,32 @@ public class WaveEnemySpawner : MonoBehaviour
 
             yield return new WaitForSeconds(spawnInterval);
         }
+    }
+
+    // ---------------------------------------------------------------- quiet places
+    private Transform pelich;
+    private float pelichHomeX = float.NaN;
+    private float pelichSearchedAt = -10f;
+
+    private bool RowdyInQuietPlace()
+    {
+        Vector2 at = player.position;
+        if (InQuietArea(at)) return true;
+        return quietAtCheckpoints && RespawnTrigger.IsNear(at, checkpointQuietMargin);
+    }
+
+    private bool InQuietArea(Vector2 point)
+    {
+        if (point.x < quietBeachUntilX) return true;
+        if (!quietInPelichArena) return false;
+
+        if (float.IsNaN(pelichHomeX) && Time.time - pelichSearchedAt > 3f)
+        {
+            pelichSearchedAt = Time.time;
+            PelichBoss boss = FindFirstObjectByType<PelichBoss>(FindObjectsInactive.Include);
+            if (boss != null) { pelich = boss.transform; pelichHomeX = pelich.position.x; }
+        }
+        return !float.IsNaN(pelichHomeX) && Mathf.Abs(point.x - pelichHomeX) < pelichArenaHalfWidth;
     }
 
     private Zone CurrentZone()
@@ -397,6 +444,7 @@ public class WaveEnemySpawner : MonoBehaviour
             Debug.LogWarning("WaveEnemySpawner: Could not find suitable surface position for " + entry.enemyType + " enemy.");
             return;
         }
+        if (InQuietArea(spawnPosition)) return; // never drop one onto the quiet beach start or into Pelich's arena
 
         // 1. Instantiate enemy first
         GameObject enemy = Instantiate(entry.prefab, spawnPosition, Quaternion.identity);

@@ -169,6 +169,9 @@ public class PetFollower : MonoBehaviour
                 if (clip != null && clip.loadState == AudioDataLoadState.Unloaded) clip.LoadAudioData();
             }
         }
+
+        // Glowing outline while nobody has found him yet (see CatFX.cs)
+        if (GetComponent<LostCatGlow>() == null) gameObject.AddComponent<LostCatGlow>();
     }
 
     private void PlayVoice()
@@ -237,6 +240,7 @@ public class PetFollower : MonoBehaviour
 
             CatRoster.RecordCollected(RosterKey);
             RunStats.CatsRescued++;
+            RowdyNotes.MarkCatFound(catType.ToString(), CatName, Portrait); // unlocks its Cats page
             SoundManager.PlaySfx(collectSound, collectVolume);
 
             StartCoroutine(StartFollowing());
@@ -249,6 +253,7 @@ public class PetFollower : MonoBehaviour
         player = rowdy;
         pickupOrder = order;
         pickupCounter = Mathf.Max(pickupCounter, order);
+        RowdyNotes.MarkCatFound(catType.ToString(), CatName, Portrait);
         isFollowingPlayer = true;
         transform.position = rowdy.position + new Vector3(Random.Range(-0.4f, 0.4f), 0.6f, 0f);
     }
@@ -431,6 +436,8 @@ public class PetFollower : MonoBehaviour
         var visited = new HashSet<EnemyHealth>();
         int kills = 0;
         bool spoke = false;
+        TrailRenderer trail = CatFX.StartTrail(transform, spriteRenderer);
+        float afterimageTimer = 0f;
 
         while (target != null && kills < maxChain)
         {
@@ -450,6 +457,14 @@ public class PetFollower : MonoBehaviour
                 transform.position = Vector2.MoveTowards(transform.position, strikePos, dashSpeed * Time.deltaTime);
                 if (Vector2.Distance(transform.position, strikePos) < 0.05f) break;
 
+                // Ninja afterimages along the dash
+                afterimageTimer -= Time.deltaTime;
+                if (afterimageTimer <= 0f)
+                {
+                    afterimageTimer = 0.03f;
+                    CatFX.Afterimage(spriteRenderer, new Color(CatFX.NinjaBlue.r, CatFX.NinjaBlue.g, CatFX.NinjaBlue.b, 0.6f));
+                }
+
                 dashTimer += Time.deltaTime;
                 yield return null;
             }
@@ -464,6 +479,13 @@ public class PetFollower : MonoBehaviour
                 // Still alive and still weak enough (the player may have killed it meanwhile)
                 if (target != null && IsExecutable(target))
                 {
+                    // The cut: glowing slash, flash, hit-stop - so you can actually see what he did
+                    SpriteRenderer enemySprite = target.GetComponent<SpriteRenderer>();
+                    CatFX.Slash(target.transform.position, spriteRenderer,
+                        enemySprite != null ? enemySprite.sortingLayerID : (spriteRenderer != null ? spriteRenderer.sortingLayerID : 0),
+                        enemySprite != null ? enemySprite.sortingOrder : 0);
+                    StartCoroutine(CatFX.CutFreeze(anim, target.GetComponent<Animator>(), 0.11f));
+
                     target.ShowCustomText("EXECUTED!", new Color(1f, 0.85f, 0.3f));
                     EnemyHealth.CreditNextHit(KillCredit.Cat(this, true));
                     target.TakeDamageEnemy(target.currentenemyHealth);
@@ -478,6 +500,7 @@ public class PetFollower : MonoBehaviour
             target = FindExecutable(transform.position, chainRange, visited);
         }
 
+        CatFX.StopTrail(trail);
         targetEnemy = null;
         isFollowingPlayer = true;
         isExecuting = false;
@@ -635,7 +658,7 @@ public class PetFollower : MonoBehaviour
 
 // Remembers Rowdy's cats across scene reloads (death, checkpoint reload) for this play session.
 //  - Cats he has come back with him after a reload.
-//  - Dying costs the most recently found cat: it runs off and has to be found again.
+//  - Dying costs the most recently found cat: it gets lost and has to be found again.
 //  - Every load, the cats he doesn't have are hidden again at random reachable spots: the spots the level
 //    placed cats at, plus places Rowdy has actually stood on solid ground (so always reachable).
 public static class CatRoster
@@ -727,7 +750,7 @@ public static class CatRoster
         needsApply = false;
         string sceneName = rowdy.gameObject.scene.name;
 
-        // Death penalty: the newest cat runs off
+        // Death penalty: the newest cat gets lost
         string lostKey = null;
         if (diedBeforeReload && collected.Count > 0)
         {
@@ -764,7 +787,7 @@ public static class CatRoster
             if (!pet.IsCollected && pet.RosterKey == lostKey) lostPet = pet;
         }
 
-        // The cat that just ran off goes somewhere he has been (if we know any), the others anywhere valid
+        // The cat that just got lost goes somewhere he has been (if we know any), the others anywhere valid
         if (lostPet != null) PlaceCat(lostPet, visited != null && visited.Count > 0 ? visited : homeSpots, homeSpots, taken);
         foreach (PetFollower pet in pets)
         {
@@ -774,8 +797,12 @@ public static class CatRoster
             PlaceCat(pet, pool, homeSpots, taken);
         }
 
-        if (lostPet != null) ShowRanOffText(lostPet.CatName);
+        if (lostPet != null) LostNotice = new LostCat { name = lostPet.CatName, portrait = lostPet.Portrait, pet = lostPet };
     }
+
+    // The cat lost by the last death, picked up by CatHUD (its slot lingers and fades: "NICK GOT LOST")
+    public class LostCat { public string name; public Sprite portrait; public PetFollower pet; }
+    public static LostCat LostNotice;
 
     private static void PlaceCat(PetFollower pet, List<Vector3> pool, List<Vector3> homeSpots, List<Vector3> taken)
     {
@@ -838,12 +865,4 @@ public static class CatRoster
         return false;
     }
 
-    private static void ShowRanOffText(string catName)
-    {
-        GameObject prefab = Resources.Load<GameObject>("DamageTextPrefab");
-        if (prefab == null) return;
-        GameObject text = Object.Instantiate(prefab, rowdy.position + Vector3.up * 0.8f, Quaternion.identity);
-        if (text.TryGetComponent(out FloatingDamageText floating))
-            floating.SetupCustomText(catName + " ran off!", new Color(1f, 0.55f, 0.85f), 1.3f);
-    }
 }

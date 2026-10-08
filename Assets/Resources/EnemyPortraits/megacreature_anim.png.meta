@@ -1,0 +1,507 @@
+fileFormatVersion: 2
+guid: c9dda9d4405f2de44b124db4a6cf1ccb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3760636036870125025
+    second: megacreature_anim_0
+  - first:
+      213: -3609171825161177878
+    second: megacreature_anim_1
+  - first:
+      213: 5334638746010491487
+    second: megacreature_anim_2
+  - first:
+      213: 1069026024831170176
+    second: megacreature_anim_3
+  - first:
+      213: -1020188332329998840
+    second: megacreature_anim_4
+  - first:
+      213: -1079674251705226249
+    second: megacreature_anim_5
+  - first:
+      213: 7972846166754384080
+    second: megacreature_anim_6
+  - first:
+      213: -9128639775491704702
+    second: megacreature_anim_7
+  - first:
+      213: 6923844691252458399
+    second: megacreature_anim_8
+  - first:
+      213: -7237037158646913347
+    second: megacreature_anim_9
+  - first:
+      213: -3242535185952231667
+    second: megacreature_anim_10
+  - first:
+      213: -4157307206462792733
+    second: megacreature_anim_11
+  - first:
+      213: 5517674197790965527
+    second: megacreature_anim_12
+  - first:
+      213: 2888358114503938742
+    second: megacreature_anim_13
+  - first:
+      213: 3603536384498877613
+    second: megacreature_anim_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: megacreature_anim_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 23
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e53d230d86703430800000000000000
+      internalID: 3760636036870125025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_1
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 0
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae47be3e855a9edc0800000000000000
+      internalID: -3609171825161177878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_2
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 0
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5a9df4eca1780a40800000000000000
+      internalID: 5334638746010491487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_3
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 086b5b17181f5de00800000000000000
+      internalID: 1069026024831170176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_4
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 0
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 806e87fed1097d1f0800000000000000
+      internalID: -1020188332329998840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_5
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 0
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fb69f90df93401f0800000000000000
+      internalID: -1079674251705226249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_6
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 0
+        width: 52
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d8da32c85d35ae60800000000000000
+      internalID: 7972846166754384080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_7
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 0
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 288b0536d7e805180800000000000000
+      internalID: -9128639775491704702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_8
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 0
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f93b3160010761060800000000000000
+      internalID: 6923844691252458399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_9
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 0
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db66c843c01e09b90800000000000000
+      internalID: -7237037158646913347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_10
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 0
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0fac959d633003d0800000000000000
+      internalID: -3242535185952231667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_11
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 0
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3eb1d904f174e46c0800000000000000
+      internalID: -4157307206462792733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_12
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71f3ba1f277b29c40800000000000000
+      internalID: 5517674197790965527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_13
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 0
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b2df17e662851820800000000000000
+      internalID: 2888358114503938742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: megacreature_anim_14
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 0
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da44045df35520230800000000000000
+      internalID: 3603536384498877613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      megacreature_anim_0: 3760636036870125025
+      megacreature_anim_1: -3609171825161177878
+      megacreature_anim_10: -3242535185952231667
+      megacreature_anim_11: -4157307206462792733
+      megacreature_anim_12: 5517674197790965527
+      megacreature_anim_13: 2888358114503938742
+      megacreature_anim_14: 3603536384498877613
+      megacreature_anim_2: 5334638746010491487
+      megacreature_anim_3: 1069026024831170176
+      megacreature_anim_4: -1020188332329998840
+      megacreature_anim_5: -1079674251705226249
+      megacreature_anim_6: 7972846166754384080
+      megacreature_anim_7: -9128639775491704702
+      megacreature_anim_8: 6923844691252458399
+      megacreature_anim_9: -7237037158646913347
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

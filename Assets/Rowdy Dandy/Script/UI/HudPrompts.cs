@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Button prompts in the bottom-left corner, drawn with the HUD's pink tags:
-//   [L2] NOTES   [SELECT] STATS      (keyboard: [TAB] NOTES   [C] STATS)
+//   [SELECT] NOTES   [L2] STATS   [R2] MAP      (keyboard: [TAB] NOTES   [C] STATS   [M] MAP)
 // NOTES gets a blinking NEW tag when there's an unread Rowdy Notes page. Hidden while a menu is open.
 // Created automatically on the shared overlay canvas.
 public class HudPrompts : MonoBehaviour
@@ -18,8 +18,8 @@ public class HudPrompts : MonoBehaviour
 
     private RectTransform row;
     private CanvasGroup group;
-    private Image notesKey, statsKey, newTag;
-    private PixelText notesText, statsText;
+    private Image notesKey, statsKey, mapKey, newTag;
+    private PixelText notesText, statsText, mapText;
     private bool showingGamepad;
     private float newsTimer;
     private bool news;
@@ -45,14 +45,17 @@ public class HudPrompts : MonoBehaviour
         newTag = OverlayUI.MakeImage("New", row, Color.white, HudTag.Make("NEW"));
         statsKey = OverlayUI.MakeImage("Stats Key", row, Color.white);
         statsText = PixelText.Create(row, "STATS", TextScale, TextColor, 0f);
+        mapKey = OverlayUI.MakeImage("Map Key", row, Color.white);
+        mapText = PixelText.Create(row, "MAP", TextScale, TextColor, 0f);
         SetKeys(LastInputDevice.UsingGamepad);
     }
 
     private void SetKeys(bool gamepad)
     {
         showingGamepad = gamepad;
-        notesKey.sprite = HudTag.Make(gamepad ? "L2" : "TAB");
-        statsKey.sprite = HudTag.Make(gamepad ? "SELECT" : "C");
+        notesKey.sprite = HudTag.Make(gamepad ? "SELECT" : "TAB");
+        statsKey.sprite = HudTag.Make(gamepad ? "L2" : "C");
+        mapKey.sprite = HudTag.Make(gamepad ? "R2" : "M");
         Layout();
     }
 
@@ -64,7 +67,9 @@ public class HudPrompts : MonoBehaviour
         x = Put(notesText.Rect, notesText.Rect.sizeDelta, x) + 8f;
         x = Put(newTag.rectTransform, HudTag.UISize(newTag.sprite) * 0.75f, x) + Gap * 3f;
         x = Put(statsKey.rectTransform, HudTag.UISize(statsKey.sprite), x) + 8f;
-        Put(statsText.Rect, statsText.Rect.sizeDelta, x);
+        x = Put(statsText.Rect, statsText.Rect.sizeDelta, x) + Gap * 3f;
+        x = Put(mapKey.rectTransform, HudTag.UISize(mapKey.sprite), x) + 8f;
+        Put(mapText.Rect, mapText.Rect.sizeDelta, x);
     }
 
     private static float Put(RectTransform rect, Vector2 size, float x)
@@ -80,7 +85,7 @@ public class HudPrompts : MonoBehaviour
     {
         if (row == null) return;
 
-        bool hidden = PauseMenu.IsPaused || RowdyNotes.IsOpen || GameObject.FindGameObjectWithTag("Player") == null;
+        bool hidden = PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || GameObject.FindGameObjectWithTag("Player") == null;
         group.alpha = Mathf.MoveTowards(group.alpha, hidden ? 0f : 0.9f, Time.unscaledDeltaTime * 6f);
         if (hidden) return;
 

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 // Same pieces as the weapon slot and the HUD bars, drawn a bit smaller (pixelScale 3 vs the HUD's 4).
 // Added by Tools > Rowdy Dandy > HUD - Add Cat Panel. Name and face come from each cat's PetFollower (HUD section).
 // The face is dim while recharging and pops when the cat is ready again.
+// A cat lost by dying keeps its slot for a few seconds after the respawn: grey face, blinking "GOT LOST!",
+// then it slowly fades and slides away (plus a "[face] NICK GOT LOST!" popup over Rowdy).
 public class CatHUD : MonoBehaviour
 {
     [Header("Art (same pieces as the weapon slot and the bars)")]
@@ -27,6 +29,10 @@ public class CatHUD : MonoBehaviour
     [SerializeField] private Color rechargingTint = new Color(0.45f, 0.4f, 0.5f, 1f);
     [SerializeField] private float readyPunch = 0.15f;
     [SerializeField] private float readyPunchTime = 0.2f;
+    [Tooltip("Lost cat slot: seconds before it starts fading (counted from the respawn), then how long the fade takes")]
+    [SerializeField] private float lostHold = 3.5f;
+    [SerializeField] private float lostFade = 3f;
+    [SerializeField] private Color lostColor = new Color(1f, 0.35f, 0.45f, 1f);
 
     private class Entry
     {
@@ -37,6 +43,15 @@ public class CatHUD : MonoBehaviour
         public Image fill;
         public bool wasReady;
         public float punchTimer;
+        // lost-cat ghost slot
+        public bool lost;
+        public float lostAge;
+        public bool popupShown;
+        public string lostName;
+        public Sprite lostFace;
+        public CanvasGroup group;
+        public PixelText status;
+        public RectTransform bar;
     }
 
     private readonly List<Entry> entries = new List<Entry>();
@@ -60,8 +75,21 @@ public class CatHUD : MonoBehaviour
         AvoidStatsPanel();
 
         float dt = Time.unscaledDeltaTime;
+        for (int i = entries.Count - 1; i >= 0; i--)
+        {
+            Entry entry = entries[i];
+            if (!entry.lost) continue;
+            if (!UpdateLost(entry, dt))
+            {
+                Destroy(entry.root.gameObject);
+                entries.RemoveAt(i);
+                Layout();
+            }
+        }
+
         foreach (Entry entry in entries)
         {
+            if (entry.lost) continue;
             float fraction = entry.pet.CooldownFraction;
             entry.fill.fillAmount = fraction;
 
@@ -87,6 +115,7 @@ public class CatHUD : MonoBehaviour
 
         for (int i = entries.Count - 1; i >= 0; i--)
         {
+            if (entries[i].lost) continue;
             if (entries[i].pet == null || !entries[i].pet.IsCollected)
             {
                 if (entries[i].root != null) Destroy(entries[i].root.gameObject);
@@ -97,19 +126,68 @@ public class CatHUD : MonoBehaviour
 
         foreach (PetFollower pet in PetFollower.Pets)
         {
-            if (pet == null || !pet.IsCollected || entries.Exists(e => e.pet == pet)) continue;
+            if (pet == null || !pet.IsCollected || entries.Exists(e => e.pet == pet && !e.lost)) continue;
             entries.Add(BuildEntry(pet));
             changed = true;
         }
 
-        if (changed)
+        // The cat the last death cost: a ghost slot at the bottom
+        CatRoster.LostCat notice = CatRoster.LostNotice;
+        if (notice != null && notice.pet != null)
         {
-            float step = 22 * pixelScale + entryGap;
-            for (int i = 0; i < entries.Count; i++)
-            {
-                entries[i].root.anchoredPosition = new Vector2(0f, -i * step);
-            }
+            CatRoster.LostNotice = null;
+            Entry ghost = BuildEntry(notice.pet);
+            ghost.lost = true;
+            ghost.lostName = notice.name;
+            ghost.lostFace = notice.portrait;
+            ghost.group = ghost.root.gameObject.AddComponent<CanvasGroup>();
+            ghost.icon.color = rechargingTint;
+            ghost.bar.gameObject.SetActive(false);
+            ghost.status = PixelText.Create(ghost.root, "GOT LOST!", pixelScale, lostColor, 0f);
+            RectTransform s = ghost.status.Rect;
+            s.anchorMin = s.anchorMax = new Vector2(0f, 1f);
+            s.anchoredPosition = new Vector2(ghost.bar.anchoredPosition.x, ghost.bar.anchoredPosition.y - ghost.bar.sizeDelta.y / 2f);
+            entries.Add(ghost);
+            changed = true;
         }
+
+        if (changed) Layout();
+    }
+
+    // Collected cats first (pickup order), lost ghosts under them
+    private void Layout()
+    {
+        float step = 22 * pixelScale + entryGap;
+        int row = 0;
+        foreach (Entry e in entries) if (!e.lost) e.root.anchoredPosition = new Vector2(0f, -(row++) * step);
+        foreach (Entry e in entries) if (e.lost) e.root.anchoredPosition = new Vector2(e.root.anchoredPosition.x, -(row++) * step);
+    }
+
+    // false = finished, remove it
+    private bool UpdateLost(Entry entry, float dt)
+    {
+        entry.lostAge += dt;
+        float t = entry.lostAge;
+
+        // A readable popup once the respawn transition is over
+        if (!entry.popupShown && t > 0.9f)
+        {
+            entry.popupShown = true;
+            GameObject rowdy = GameObject.FindGameObjectWithTag("Player");
+            if (rowdy != null)
+                IconPopup.Show(rowdy.transform.position + Vector3.up * 0.9f, entry.lostFace, entry.lostName + " GOT LOST!", lostColor, 1f, 3.2f);
+        }
+
+        // Blinking status, shaking face for the first second
+        entry.status.Color = new Color(lostColor.r, lostColor.g, lostColor.b, Mathf.Repeat(t, 0.5f) < 0.33f ? 1f : 0.35f);
+        float shake = t < 1.4f && t > 0.9f ? Mathf.Round(Mathf.Sin(t * 70f) * 2f) : 0f;
+        entry.icon.rectTransform.anchoredPosition = new Vector2(shake, 0f);
+
+        float fade = Mathf.Clamp01((t - lostHold) / Mathf.Max(0.01f, lostFade));
+        entry.group.alpha = 1f - fade;
+        Vector2 p = entry.root.anchoredPosition;
+        entry.root.anchoredPosition = new Vector2(-fade * fade * 60f, p.y);
+        return fade < 1f;
     }
 
     private void AvoidStatsPanel()
@@ -154,6 +232,7 @@ public class CatHUD : MonoBehaviour
 
         // Cooldown bar: dark back, pink fill, purple frame (like the HP / XP / DUR bars)
         RectTransform bar = CreateUI("CooldownBar", entry.root);
+        entry.bar = bar;
         Place(bar, textX, slotSize - 10 * s, 76 * s, 8 * s);
         Stretch(AddImage(CreateUI("Back", bar), barBackSprite).rectTransform);
         entry.fill = AddImage(CreateUI("Fill", bar), barFillSprite);

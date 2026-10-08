@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// "Rowdy Notes": L2 (gamepad) or Tab (keyboard) opens it. Four tabs - Y / W-S / Up-Down switch them:
+// "Rowdy Notes": Select (gamepad) or Tab (keyboard) opens it. Four tabs - L1 / R1 (Q / E) switch them:
 //   ENEMIES        bestiary. A page stays black until Rowdy has met that enemy (on screen, close by); its COUNTER
 //                  section unlocks after killing EnemyCatalog.Entry.killsToReveal of them. Shows weapon drops.
 //   WEAPONS        what each weapon does per attack; unlocks the first time you pick that weapon up.
 //   GAME MECHANICS counters, surfing, durability, cats...
 //   INTERACTABLES  plants, jellies, spawners, altars...
-// L1 / R1 (or Q / E, arrows) flip pages. Progress is saved in PlayerPrefs (RD_Notes_*), like the player level.
+// Arrows / d-pad / stick flip pages. Progress is saved in PlayerPrefs (RD_Notes_*), like the player level.
 // Texts: EnemyCatalog (enemies) and NotesData (the rest). Created automatically; builds its UI the first time it opens.
 public class RowdyNotes : MonoBehaviour
 {
@@ -34,8 +34,13 @@ public class RowdyNotes : MonoBehaviour
     private static readonly Color PlateDark = new Color(0.07f, 0.02f, 0.09f, 0.95f);
     private static readonly Color Silhouette = new Color(0.02f, 0f, 0.04f, 1f);
 
-    private enum Tab { Enemies, Weapons, Mechanics, Interactables }
-    private static readonly string[] TabNames = { "ENEMIES", "WEAPONS", "GAME MECHANICS", "INTERACTABLES" };
+    // (enum values are saved in "read" flags, so new tabs go at the end; TabOrder is the order on screen)
+    private enum Tab { Enemies, Weapons, Mechanics, Interactables, Cats }
+    private static readonly Tab[] TabOrder = { Tab.Enemies, Tab.Cats, Tab.Weapons, Tab.Mechanics, Tab.Interactables };
+    private static readonly string[] TabNames = { "ENEMIES", "CATS", "WEAPONS", "GAME MECHANICS", "INTERACTABLES" };
+    private static readonly Color QuipColor = new Color32(0xFF, 0xD8, 0x6A, 0xFF);
+    private static readonly Color JellyOn = new Color32(0x5C, 0xE6, 0xFF, 0xFF);
+    private static readonly Color JellyOff = new Color(0.3f, 0.2f, 0.38f, 1f);
 
     // ---------------------------------------------------------------- saved progress
     private static string SeenKey(string id) => "RD_Notes_Seen_" + id;
@@ -43,6 +48,17 @@ public class RowdyNotes : MonoBehaviour
     private static string ViewedKey(string id) => "RD_Notes_Viewed_" + id; // enemies: 1 = page read, 2 = counter read
     private static string WeaponKey(int index) => "RD_Notes_Weapon_" + index;
     private static string ReadKey(Tab tab, string id) => "RD_Notes_Read_" + (int)tab + "_" + id;
+    private static string CatKey(string id) => "RD_Notes_Cat_" + id;
+    public static bool CatFound(string id) => PlayerPrefs.GetInt(CatKey(id), 0) == 1;
+
+    // First time Rowdy picks up a cat of this type (PetFollower)
+    public static void MarkCatFound(string id, string name, Sprite face)
+    {
+        if (CatFound(id)) return;
+        PlayerPrefs.SetInt(CatKey(id), 1);
+        PlayerPrefs.Save();
+        Toast("NEW CAT NOTE", name, face);
+    }
 
     public static bool IsSeen(EnemyCatalog.Entry e) => PlayerPrefs.GetInt(SeenKey(e.id), 0) == 1;
     public static int Kills(EnemyCatalog.Entry e) => PlayerPrefs.GetInt(KillsKey(e.id), 0);
@@ -61,6 +77,8 @@ public class RowdyNotes : MonoBehaviour
             foreach (EnemyCatalog.Entry e in EnemyCatalog.All) if (e.inNotes && HasNews(e)) return true;
             for (int i = 0; i < NotesData.Weapons.Length; i++)
                 if (WeaponFound(i) && PlayerPrefs.GetInt(ReadKey(Tab.Weapons, NotesData.Weapons[i].id), 0) == 0) return true;
+            foreach (NotesData.Topic c in NotesData.Cats)
+                if (CatFound(c.id) && PlayerPrefs.GetInt(ReadKey(Tab.Cats, c.id), 0) == 0) return true;
             return false;
         }
     }
@@ -110,6 +128,7 @@ public class RowdyNotes : MonoBehaviour
         }
         foreach (NotesData.Topic t in NotesData.Mechanics) PlayerPrefs.DeleteKey(ReadKey(Tab.Mechanics, t.id));
         foreach (NotesData.Topic t in NotesData.Interactables) PlayerPrefs.DeleteKey(ReadKey(Tab.Interactables, t.id));
+        foreach (NotesData.Topic t in NotesData.Cats) { PlayerPrefs.DeleteKey(ReadKey(Tab.Cats, t.id)); PlayerPrefs.DeleteKey(CatKey(t.id)); }
     }
 
     // ---------------------------------------------------------------- lifetime
@@ -141,6 +160,8 @@ public class RowdyNotes : MonoBehaviour
         public float progress = -1f;    // locked counter progress bar
         public string progressLabel;
         public EnemyCatalog.Entry enemy;
+        public AnimatedPortraits.Clip anim;   // animated portrait (idle / walk frames), null = still icon
+        public int[] ratings;                 // weapons: jellyfish rows
     }
 
     private List<Page> BuildPages(Tab tab)
@@ -153,7 +174,7 @@ public class RowdyNotes : MonoBehaviour
                 {
                     bool seen = IsSeen(e), revealed = CounterRevealed(e);
                     int kills = Kills(e), need = Mathf.Max(1, e.killsToReveal);
-                    var p = new Page { enemy = e, icon = e.Portrait, locked = !seen, news = HasNews(e), title = seen ? e.name : "???" };
+                    var p = new Page { enemy = e, icon = e.Portrait, locked = !seen, news = HasNews(e), title = seen ? e.name : "???", anim = AnimatedPortraits.Get(e.id) };
                     if (!seen)
                     {
                         p.sections.Add(("NOTES", "Not met yet. Keep exploring - the page fills in once you see one up close.", DimText));
@@ -171,6 +192,7 @@ public class RowdyNotes : MonoBehaviour
                             p.progress = (float)kills / need;
                             p.progressLabel = $"DEFEAT {need - kills} MORE TO REVEAL";
                         }
+                        if (!string.IsNullOrEmpty(e.Quip)) p.sections.Add((NotesData.Quip, e.Quip, QuipColor));
                     }
                     pages.Add(p);
                 }
@@ -183,12 +205,30 @@ public class RowdyNotes : MonoBehaviour
                     bool found = WeaponFound(i);
                     var p = TopicPage(Tab.Weapons, w);
                     p.locked = !found;
+                    p.ratings = found ? w.ratings : null;
                     if (!found)
                     {
                         p.title = "???";
                         p.news = false;
                         p.sections.Clear();
                         p.sections.Add(("NOTES", "Not found yet. Pick one up to learn how it fights.", DimText));
+                    }
+                    pages.Add(p);
+                }
+                break;
+
+            case Tab.Cats:
+                foreach (NotesData.Topic c in NotesData.Cats)
+                {
+                    var p = TopicPage(Tab.Cats, c);
+                    bool found = CatFound(c.id);
+                    p.locked = !found;
+                    p.news = found && PlayerPrefs.GetInt(p.readKey, 0) == 0;
+                    if (!found)
+                    {
+                        p.title = "???";
+                        p.sections.Clear();
+                        p.sections.Add(("NOTES", "Not found yet. Somewhere out there a cat is glowing, waiting for you.", DimText));
                     }
                     pages.Add(p);
                 }
@@ -207,16 +247,16 @@ public class RowdyNotes : MonoBehaviour
 
     private static Page TopicPage(Tab tab, NotesData.Topic t)
     {
-        var p = new Page { title = t.name, glyph = t.glyph, readKey = ReadKey(tab, t.id) };
+        var p = new Page { title = t.name, glyph = t.glyph, readKey = ReadKey(tab, t.id), anim = AnimatedPortraits.Get(t.animatedPortrait) };
         try { p.icon = t.icon != null ? t.icon() : null; } catch { p.icon = null; }
         p.news = PlayerPrefs.GetInt(p.readKey, 0) == 0 && tab == Tab.Weapons;
-        foreach (var (header, body) in t.sections) p.sections.Add((header, body, TextColor));
+        foreach (var (header, body) in t.sections) p.sections.Add((header, body, header == NotesData.Quip ? QuipColor : TextColor));
         return p;
     }
 
     // ---------------------------------------------------------------- state
     private Tab tab;
-    private readonly int[] pageOfTab = new int[4];
+    private readonly int[] pageOfTab = new int[5];
     private List<Page> pages = new List<Page>();
     private int page;
     private float pageChangedAt = -10f;
@@ -224,8 +264,8 @@ public class RowdyNotes : MonoBehaviour
     private float openedAt;
     private bool pendingClose;
 
-    private float navTimer, tabTimer;
-    private int heldNav, heldTab;
+    private float navTimer;
+    private int heldNav;
 
     private float scanTimer;
     private Transform rowdy;
@@ -263,7 +303,7 @@ public class RowdyNotes : MonoBehaviour
         }
         else
         {
-            if (!PauseMenu.IsPaused && (PadInput.L2Down || Input.GetKeyDown(KeyCode.Tab))) Open();
+            if (!PauseMenu.IsPaused && (PadInput.SelectDown || Input.GetKeyDown(KeyCode.Tab))) Open();
             ScanForEnemies();
         }
         UpdateToast();
@@ -277,7 +317,7 @@ public class RowdyNotes : MonoBehaviour
     private void HandleOpenInput()
     {
         if (pendingClose) return;
-        bool close = PadInput.L2Down || Input.GetKeyDown(KeyCode.JoystickButton1) ||
+        bool close = PadInput.SelectDown || Input.GetKeyDown(KeyCode.JoystickButton1) ||
                      Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Backspace) ||
                      Input.GetKeyDown(KeyCode.JoystickButton7);
         if (close && Time.unscaledTime - openedAt > 0.1f)
@@ -287,24 +327,18 @@ public class RowdyNotes : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.JoystickButton4) || Input.GetKeyDown(KeyCode.Q)) { Flip(-1); return; }
-        if (Input.GetKeyDown(KeyCode.JoystickButton5) || Input.GetKeyDown(KeyCode.E)) { Flip(+1); return; }
-        if (Input.GetKeyDown(KeyCode.JoystickButton3)) { SwitchTab(+1); return; }
+        // Tabs: L1 / R1 (Q / E)
+        if (Input.GetKeyDown(KeyCode.JoystickButton4) || Input.GetKeyDown(KeyCode.Q)) { SwitchTab(-1); return; }
+        if (Input.GetKeyDown(KeyCode.JoystickButton5) || Input.GetKeyDown(KeyCode.E)) { SwitchTab(+1); return; }
 
-        float h = 0f, v = 0f;
-        try { h = Input.GetAxisRaw("Horizontal"); v = Input.GetAxisRaw("Vertical"); } catch (System.ArgumentException) { }
+        float h = 0f;
+        try { h = Input.GetAxisRaw("Horizontal"); } catch (System.ArgumentException) { }
 
-        // Pages: arrows / A-D / stick / d-pad, with key repeat
+        // Pages (the icons along the bottom): arrows / A-D / stick / d-pad, with key repeat
         int dir = 0;
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) || h > 0.5f) dir = 1;
         else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) || h < -0.5f) dir = -1;
         if (Repeat(dir, ref heldNav, ref navTimer)) Flip(dir);
-
-        // Tabs: up / down (W-S, arrows, d-pad)
-        int tdir = 0;
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S) || v < -0.5f) tdir = 1;
-        else if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || v > 0.5f) tdir = -1;
-        if (Repeat(tdir, ref heldTab, ref tabTimer)) SwitchTab(tdir);
     }
 
     private static bool Repeat(int dir, ref int held, ref float timer)
@@ -363,7 +397,8 @@ public class RowdyNotes : MonoBehaviour
 
     private void SwitchTab(int direction)
     {
-        tab = (Tab)(((int)tab + direction + 4) % 4);
+        int at = System.Array.IndexOf(TabOrder, tab);
+        tab = TabOrder[(at + direction + TabOrder.Length) % TabOrder.Length];
         pageDirection = 0;
         UISound.Play(UISound.Cue.Change);
         ShowTab(true);
@@ -416,7 +451,7 @@ public class RowdyNotes : MonoBehaviour
         BuildStrip();
         for (int i = 0; i < tabs.Count; i++)
         {
-            bool on = i == (int)tab;
+            bool on = TabOrder[i] == tab;
             tabs[i].plate.color = on ? HotPink : new Color(0.25f, 0.1f, 0.3f, 1f);
             tabs[i].label.Color = on ? Color.white : DimText;
         }
@@ -459,7 +494,9 @@ public class RowdyNotes : MonoBehaviour
         // Right column
         foreach (GameObject go in pageContent) Destroy(go);
         pageContent.Clear();
+        jellies.Clear();
         float y = 0f;
+        if (current.ratings != null) AddRatings(current.ratings, ref y);
         foreach (var (header, body, color) in current.sections) AddSection(header, body, color, ref y);
         if (current.progress >= 0f)
         {
@@ -487,6 +524,60 @@ public class RowdyNotes : MonoBehaviour
         line.Rect.anchoredPosition = new Vector2(x, Mathf.Round(y));
         pageContent.Add(line.gameObject);
         y -= scale == TextScale ? LineHeight : line.Rect.sizeDelta.y + 4f;
+    }
+
+    // Weapon stats as jellyfish (1-10), two columns:  SPEED  [jelly x10]   POWER  [jelly x10] ...
+    private void AddRatings(int[] ratings, ref float y)
+    {
+        const float jelly = 18f, jellyGap = 3f, rowH = 30f, colW = 430f, labelW = 168f;
+        int rows = (NotesData.RatingNames.Length + 1) / 2;
+        for (int i = 0; i < NotesData.RatingNames.Length && i < ratings.Length; i++)
+        {
+            float x = (i % 2) * colW;
+            float rowY = y - (i / 2) * rowH;
+            PixelText label = PixelText.Create(textColumn, NotesData.RatingNames[i], 2, Pink, 0f);
+            label.Rect.anchorMin = label.Rect.anchorMax = new Vector2(0f, 1f);
+            label.Rect.pivot = new Vector2(0f, 0.5f);
+            label.Rect.anchoredPosition = new Vector2(x, Mathf.Round(rowY - jelly / 2f));
+            pageContent.Add(label.gameObject);
+            for (int j = 0; j < 10; j++)
+            {
+                bool on = j < ratings[i];
+                Image img = OverlayUI.MakeImage("Jelly", textColumn, on ? JellyOn : JellyOff, JellySprite);
+                img.rectTransform.anchorMin = img.rectTransform.anchorMax = new Vector2(0f, 1f);
+                img.rectTransform.pivot = new Vector2(0.5f, 1f);
+                img.rectTransform.sizeDelta = new Vector2(jelly, jelly);
+                img.rectTransform.anchoredPosition = new Vector2(x + labelW + j * (jelly + jellyGap) + jelly / 2f, Mathf.Round(rowY));
+                pageContent.Add(img.gameObject);
+                if (on) jellies.Add((img, j));
+            }
+        }
+        y -= rows * rowH + 14f;
+    }
+
+    private readonly List<(Image img, int index)> jellies = new List<(Image, int)>();
+    private static Sprite jellySprite;
+
+    // 9x9 pixel jellyfish: dome, eyes, wavy tentacles (white, tinted by the Image)
+    private static Sprite JellySprite
+    {
+        get
+        {
+            if (jellySprite == null)
+                jellySprite = OverlayUI.PixelSprite(new[]
+                {
+                    "..WWWWW..",
+                    ".WWWWWWW.",
+                    "WWWWWWWWW",
+                    "WW.WWW.WW",
+                    "WWWWWWWWW",
+                    ".W.W.W.W.",
+                    ".W..W..W.",
+                    "..W.W.W..",
+                    "..W..W...",
+                }, c => new Color32(255, 255, 255, 255), "NotesJelly");
+            return jellySprite;
+        }
     }
 
     private void AddProgressBar(float fill, ref float y)
@@ -592,6 +683,21 @@ public class RowdyNotes : MonoBehaviour
         textGroup.alpha = t;
         textColumn.anchoredPosition = new Vector2(TextX, Mathf.Round(TextY - 12f * (1f - t)));
 
+        // Animated portrait (idle / walk frames), and the jellyfish ratings bob in a wave
+        if (pages.Count > 0 && page < pages.Count && pages[page].anim != null)
+        {
+            Sprite frame = pages[page].anim.FrameAt(now - pageChangedAt);
+            portraitImage.sprite = frame;
+            portraitImage.enabled = true;
+            if (page < strip.Count) strip[page].icon.sprite = frame;
+        }
+        foreach (var (img, index) in jellies)
+        {
+            if (img == null) continue;
+            float wave = Mathf.Sin(now * 5f - index * 0.6f);
+            img.rectTransform.localScale = new Vector3(1f, 1f + 0.15f * Mathf.Max(0f, wave), 1f);
+        }
+
         // Selected icon in the strip bobs
         for (int i = 0; i < strip.Count; i++)
         {
@@ -643,19 +749,22 @@ public class RowdyNotes : MonoBehaviour
         TopLeft(underline.rectTransform, new Vector2(56f, -40f - title.Rect.sizeDelta.y - 10f));
         underline.rectTransform.sizeDelta = new Vector2(title.Rect.sizeDelta.x + 8f, 4f);
 
-        PixelText prevHint = PixelText.Create(panel, "< L1", 3, Pink, 1f);
+        PixelText prevHint = PixelText.Create(panel, "<", 3, Pink, 1f);
         indexText = PixelText.Create(panel, "01 / 16", 3, TitleColor, 0.5f);
-        PixelText nextHint = PixelText.Create(panel, "R1 >", 3, Pink, 0f);
+        PixelText nextHint = PixelText.Create(panel, ">", 3, Pink, 0f);
         foreach (PixelText p in new[] { prevHint, indexText, nextHint }) p.Rect.anchorMin = p.Rect.anchorMax = new Vector2(1f, 1f);
         indexText.Rect.anchoredPosition = new Vector2(-230f, -62f);
         prevHint.Rect.anchoredPosition = new Vector2(-320f, -62f);
         nextHint.Rect.anchoredPosition = new Vector2(-140f, -62f);
-        PixelText keys = PixelText.Create(panel, "PAGES: L1 R1 / Q E     TABS: Y / W S     CLOSE: L2 / TAB", 2, new Color(1f, 1f, 1f, 0.5f), 1f);
+        PixelText keys = PixelText.Create(panel, "TABS: L1 R1 / Q E     PAGES: ARROWS     CLOSE: SELECT / TAB", 2, new Color(1f, 1f, 1f, 0.5f), 1f);
         keys.Rect.anchorMin = keys.Rect.anchorMax = new Vector2(1f, 1f);
         keys.Rect.anchoredPosition = new Vector2(-60f, -104f);
 
         // Tab bar
-        float tx = 60f;
+        PixelText l1 = PixelText.Create(panel, "L1", 2, Pink, 0f);
+        l1.Rect.anchorMin = l1.Rect.anchorMax = new Vector2(0f, 1f);
+        l1.Rect.anchoredPosition = new Vector2(60f, -140f);
+        float tx = 60f + l1.Rect.sizeDelta.x + 14f;
         for (int i = 0; i < TabNames.Length; i++)
         {
             PixelText label = PixelText.Create(panel, TabNames[i], 2, DimText, 0.5f);
@@ -670,6 +779,9 @@ public class RowdyNotes : MonoBehaviour
             tabs.Add((plate, label));
             tx += w + 8f;
         }
+        PixelText r1 = PixelText.Create(panel, "R1", 2, Pink, 0f);
+        r1.Rect.anchorMin = r1.Rect.anchorMax = new Vector2(0f, 1f);
+        r1.Rect.anchoredPosition = new Vector2(tx + 6f, -140f);
 
         // Portrait: dark plate, pink frame, the face, a white flash on page flips
         Image frame = OverlayUI.MakeImage("Portrait Frame", panel, HotPink);
@@ -782,7 +894,7 @@ public class RowdyNotes : MonoBehaviour
         title.Rect.anchorMin = title.Rect.anchorMax = new Vector2(0f, 0.5f);
         title.Rect.anchoredPosition = new Vector2(x, -14f);
 
-        Image key = OverlayUI.MakeImage("Key", toastRect, Color.white, HudTag.Make(LastInputDevice.UsingGamepad ? "L2" : "TAB"));
+        Image key = OverlayUI.MakeImage("Key", toastRect, Color.white, HudTag.Make(LastInputDevice.UsingGamepad ? "SELECT" : "TAB"));
         key.rectTransform.anchorMin = key.rectTransform.anchorMax = new Vector2(1f, 0.5f);
         key.rectTransform.pivot = new Vector2(1f, 0.5f);
         key.rectTransform.sizeDelta = HudTag.UISize(key.sprite) * 0.75f;

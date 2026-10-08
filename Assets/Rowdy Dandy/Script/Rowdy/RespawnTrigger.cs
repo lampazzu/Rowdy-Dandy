@@ -33,6 +33,21 @@ public class RespawnTrigger : MonoBehaviour
         allRespawnPoints.Add(this);
     }
 
+    // Is this point on (or within margin of) any checkpoint's trigger? Used to pause the enemy waves while resting.
+    public static bool IsNear(Vector2 point, float margin)
+    {
+        foreach (RespawnTrigger r in allRespawnPoints)
+        {
+            if (r == null || !r.isActiveAndEnabled) continue;
+            if (!r.TryGetComponent(out Collider2D c) || !c.enabled) continue;
+            Bounds b = c.bounds;
+            b.Expand(new Vector3(margin * 2f, margin * 2f, 0f));
+            b.extents = new Vector3(b.extents.x, b.extents.y, 1000f);
+            if (b.Contains(point)) return true;
+        }
+        return false;
+    }
+
     private void OnDestroy()
     {
         // Unregister this respawn point when it is destroyed

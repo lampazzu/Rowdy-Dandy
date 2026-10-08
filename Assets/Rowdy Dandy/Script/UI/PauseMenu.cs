@@ -126,7 +126,7 @@ public class PauseMenu : MonoBehaviour
 
         if (page == Page.Closed)
         {
-            if (pausePressed && !RowdyNotes.BlocksPause) Open();
+            if (pausePressed && !RowdyNotes.BlocksPause && !WorldMap.BlocksPause) Open();
             return;
         }
 
@@ -465,7 +465,7 @@ public class PauseMenu : MonoBehaviour
         MakeHint(mainPanel.transform, -top + 34);
 
         // ---- Settings page (two columns: display + audio | gameplay + controls)
-        float leftHeight = 2 * 44 + 10 + 10 * (RowHeight + RowGap);
+        float leftHeight = 2 * 44 + 10 + 12 * (RowHeight + RowGap); // right column is the long one now (style rank rows)
         float settingsHeight = 130 + leftHeight + 70;
         settingsPanel = MakePanel("Settings", root.transform, 2 * SettingsRowWidth + 140, settingsHeight);
         top = settingsHeight / 2f;
@@ -521,6 +521,15 @@ public class PauseMenu : MonoBehaviour
         AddOption(settingsRows, settingsPanel.transform, "Crowd Limit", ref y,
             () => GameSettings.CrowdLimit <= 0 ? "Off" : GameSettings.CrowdLimit + " at once",
             d => GameSettings.SetCrowdLimit(Wrap(GameSettings.CrowdLimit + d, 9)));
+        AddOption(settingsRows, settingsPanel.transform, "Style Rank", ref y,
+            () => GameSettings.StyleRankOn ? "On" : "Off",
+            d => GameSettings.SetStyleRankOn(!GameSettings.StyleRankOn));
+        AddOption(settingsRows, settingsPanel.transform, "Rank Size", ref y,
+            () => Mathf.RoundToInt(GameSettings.StyleRankSize * 100f) + "%",
+            d => GameSettings.SetStyleRankSize(GameSettings.RankSizes[Mathf.Clamp(NearestIndex(GameSettings.RankSizes, GameSettings.StyleRankSize) + d, 0, GameSettings.RankSizes.Length - 1)]));
+        AddOption(settingsRows, settingsPanel.transform, "Rank Position", ref y,
+            () => GameSettings.RankPositions[GameSettings.StyleRankPosition],
+            d => GameSettings.SetStyleRankPosition(GameSettings.StyleRankPosition + d));
 
         y -= 16;
         AddButton(settingsRows, settingsPanel.transform, "Controls", ref y, OpenControls, SettingsRowWidth);
@@ -530,6 +539,13 @@ public class PauseMenu : MonoBehaviour
         buildColumn = 0;
 
         BuildControlsPage();
+    }
+
+    private static int NearestIndex(float[] values, float v)
+    {
+        int best = 0;
+        for (int i = 1; i < values.Length; i++) if (Mathf.Abs(values[i] - v) < Mathf.Abs(values[best] - v)) best = i;
+        return best;
     }
 
     // Next / previous entry of GameSettings.TextSizes (no wrap-around, so it's clear where the ends are)
@@ -573,6 +589,7 @@ public class PauseMenu : MonoBehaviour
             (new[] { "E" }, "Pick up weapon"),
             (new[] { "TAB" }, "Rowdy Notes"),
             (new[] { "C" }, "Stats"),
+            (new[] { "M" }, "Map"),
             (new[] { "ESC" }, "Pause"),
         };
         float y = top - 200;
@@ -604,8 +621,9 @@ public class PauseMenu : MonoBehaviour
             ("LB", PadGrey, "Switch weapon"),
             ("Y", PadY, "Pick up weapon"),
             ("DOWN + A", PadA, "Drop through platform"),
-            ("L2 / LT", PadGrey, "Rowdy Notes"),
-            ("SELECT", PadGrey, "Stats"),
+            ("L2 / LT", PadGrey, "Stats"),
+            ("SELECT", PadGrey, "Rowdy Notes"),
+            ("R2 / RT", PadGrey, "Map"),
             ("MENU", PadGrey, "Pause"),
         };
         y = top - 410;

@@ -30,6 +30,10 @@ public static class GameSettings
     // "Respect": how many of the pushy melee enemies (Big Wolf, Transform Wolf, Werefast) may press Rowdy at once;
     // the rest hang back and wait for a turn. 0 = no limit.
     public static int CrowdLimit { get; private set; } = 4;
+    // Style rank panel (StyleRank): on / off, size, which screen corner
+    public static bool StyleRankOn { get; private set; } = true;
+    public static float StyleRankSize { get; private set; } = 0.6f;
+    public static int StyleRankPosition { get; private set; } = 1; // index into RankPositions
 
     public static event Action Changed;
 
@@ -37,6 +41,8 @@ public static class GameSettings
     public static readonly FullScreenMode[] DisplayModes = { FullScreenMode.FullScreenWindow, FullScreenMode.ExclusiveFullScreen, FullScreenMode.Windowed };
     public static readonly float[] ShakeLevels = { 0f, 0.5f, 1f };
     public static readonly float[] TextSizes = { 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f };
+    public static readonly float[] RankSizes = { 0.4f, 0.5f, 0.6f, 0.75f, 0.9f, 1f };
+    public static readonly string[] RankPositions = { "Top Left", "Top Center", "Top Right", "Bottom Left", "Bottom Center", "Bottom Right" };
 
     private static List<Vector2Int> resolutions;
     private static bool loaded;
@@ -111,6 +117,9 @@ public static class GameSettings
         MessageSize = PlayerPrefs.GetFloat(Prefix + "MessageSize", 1f);
         ShowFps = PlayerPrefs.GetInt(Prefix + "ShowFps", 0) == 1;
         CrowdLimit = PlayerPrefs.GetInt(Prefix + "CrowdLimit", 4);
+        StyleRankOn = PlayerPrefs.GetInt(Prefix + "RankOn", 1) == 1;
+        StyleRankSize = PlayerPrefs.GetFloat(Prefix + "RankSize", 0.6f);
+        StyleRankPosition = Mathf.Clamp(PlayerPrefs.GetInt(Prefix + "RankPosition", 1), 0, RankPositions.Length - 1);
     }
 
     private static void Save()
@@ -131,6 +140,9 @@ public static class GameSettings
         PlayerPrefs.SetFloat(Prefix + "MessageSize", MessageSize);
         PlayerPrefs.SetInt(Prefix + "ShowFps", ShowFps ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "CrowdLimit", CrowdLimit);
+        PlayerPrefs.SetInt(Prefix + "RankOn", StyleRankOn ? 1 : 0);
+        PlayerPrefs.SetFloat(Prefix + "RankSize", StyleRankSize);
+        PlayerPrefs.SetInt(Prefix + "RankPosition", StyleRankPosition);
         PlayerPrefs.Save();
     }
 
@@ -169,6 +181,9 @@ public static class GameSettings
     public static void SetMessageSize(float v) { MessageSize = Mathf.Clamp(v, 0.25f, 3f); Commit(); }
     public static void SetShowFps(bool on) { ShowFps = on; Commit(); }
     public static void SetCrowdLimit(int n) { CrowdLimit = Mathf.Clamp(n, 0, 8); Commit(); }
+    public static void SetStyleRankOn(bool on) { StyleRankOn = on; Commit(); }
+    public static void SetStyleRankSize(float v) { StyleRankSize = Mathf.Clamp(v, 0.3f, 1.5f); Commit(); }
+    public static void SetStyleRankPosition(int i) { StyleRankPosition = (i % RankPositions.Length + RankPositions.Length) % RankPositions.Length; Commit(); }
 
     public static string DisplayModeName(FullScreenMode mode)
     {

@@ -309,9 +309,12 @@ public class EnemyMovement : MonoBehaviour
         if (keepAttackDistance == SpacingMode.Auto)
         {
             EnemyCatalog.Entry entry = health != null ? EnemyCatalog.Identify(health) : null;
-            usesSpacing = entry != null && (entry.id == "bigwolf" || entry.id == "transformwolf" || entry.id == "werefast");
+            usesSpacing = entry != null && (entry.id == "bigwolf" || entry.id == "transformwolf" || entry.id == "werefast" || entry.id == "moonboundelder");
         }
         else usesSpacing = keepAttackDistance == SpacingMode.On;
+        EnemyCatalog.Entry kind = health != null ? EnemyCatalog.Identify(health) : null;
+        lockFacingInAttack = kind != null && kind.id == "horserider";
+        if (!isOnlyAquatic) EnemyDust.Attach(gameObject); // Rowdy's running / landing dust at their feet
         usesSpacing &= melee != null && !isOnlyAquatic;
     }
 
@@ -889,8 +892,29 @@ public class EnemyMovement : MonoBehaviour
     // VELOCITY & ACCELERATION WRAPPER
     // =========================================================================
 
+    // Horse Rider: once the thrust starts it goes all the way forward - no turning around (or sliding backwards)
+    // until the attack clip is over. Auto-on for the Horse Rider (see Start), others keep their old behaviour.
+    private bool lockFacingInAttack;
+    private int attackCheckFrame = -1;
+    private bool attackCheckResult;
+
+    private bool InCommittedAttack()
+    {
+        if (!lockFacingInAttack || animator == null || !animator.isActiveAndEnabled) return false;
+        if (attackCheckFrame == Time.frameCount) return attackCheckResult;
+        attackCheckFrame = Time.frameCount;
+        attackCheckResult = false;
+        AnimatorClipInfo[] clips = animator.GetCurrentAnimatorClipInfo(0);
+        foreach (AnimatorClipInfo c in clips)
+            if (c.clip != null && c.clip.name.ToLowerInvariant().Contains("attack")) { attackCheckResult = true; break; }
+        return attackCheckResult;
+    }
+
     private void ApplyHorizontalVelocity(float targetXVelocity)
     {
+        if (InCommittedAttack() && Mathf.Abs(targetXVelocity) > 0.01f)
+            targetXVelocity = Mathf.Abs(targetXVelocity) * currentFacingDirection; // keep thrusting forward
+
         if (enableSmoothMovement)
         {
             float accelRate = (Mathf.Abs(targetXVelocity) > 0.01f) ? acceleration : deceleration;
@@ -1533,6 +1557,7 @@ public class EnemyMovement : MonoBehaviour
     private void FlipSprite(float direction)
     {
         if (direction == 0) return;
+        if (InCommittedAttack()) return; // finish the thrust first, then turn
 
         float targetDirection = Mathf.Sign(direction);
 
