@@ -235,6 +235,19 @@ public class EnemyHealth : MonoBehaviour
         expGemAmount = amount;
     }
 
+    // Night elite (WaveEnemySpawner): tougher, drops more EXP and more often a weapon
+    public bool IsElite { get; private set; }
+    public void MakeElite(float healthMultiplier, float gemMultiplier, float dropBonusPercent)
+    {
+        if (IsElite || isObject) return;
+        IsElite = true;
+        startingenemyHealth *= healthMultiplier;
+        currentenemyHealth = startingenemyHealth;
+        expGemAmount = Mathf.CeilToInt(Mathf.Max(1, expGemAmount) * gemMultiplier);
+        directEXPValue *= gemMultiplier;
+        dropChancePercent = Mathf.Min(100f, dropChancePercent + dropBonusPercent);
+    }
+
     public void AddHealthEnemy(float _value)
     {
         currentenemyHealth = Mathf.Clamp(currentenemyHealth + _value, 0, startingenemyHealth);
@@ -303,7 +316,7 @@ public class EnemyHealth : MonoBehaviour
                 }
             }
 
-            if (bloodPrefab != null)
+            if (bloodPrefab != null && GameSettings.BloodOn)
             {
                 GameObject bloodInstance = Instantiate(bloodPrefab, transform.position, Quaternion.identity);
                 Vector3 bloodScale = bloodInstance.transform.localScale;
@@ -333,6 +346,7 @@ public class EnemyHealth : MonoBehaviour
                     gameObject.AddComponent<EnemyCorpse>().OnKilled(); // walker without one (spawned oddly): still drops to the floor
                 KillCredit.Finish finish = isParryTime ? KillCredit.Finish.Counter : isCritical ? KillCredit.Finish.Critical : KillCredit.Finish.Normal;
                 ReportKill(credit, finish);
+                if (isObject) PlantJuice.OnCut(this, credit); // Blue / Orange / Purple plants: crunchy cut feedback
                 StyleRank.OnKill(this, credit, finish);
                 if (byRowdySide) RareDrops.OnEnemyKilled(this); // flying rat / cat treat fish, very rarely
                 if (!isObject) Blood.Spill(EnemyFairness.BodyCenter(this), AwayFromRowdy(), 14);
@@ -372,7 +386,7 @@ public class EnemyHealth : MonoBehaviour
                     Instantiate(weaponDropPrefab, transform.position, Quaternion.identity);
                 }
 
-                if (bloodKill != null && !isObject)
+                if (bloodKill != null && !isObject && GameSettings.BloodOn)
                 {
                     Instantiate(bloodKill, transform.position, Quaternion.identity);
                 }

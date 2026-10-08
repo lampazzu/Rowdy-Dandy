@@ -85,7 +85,7 @@ public class HudPrompts : MonoBehaviour
     {
         if (row == null) return;
 
-        bool hidden = PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || GameObject.FindGameObjectWithTag("Player") == null;
+        bool hidden = !GameSettings.ButtonHints || PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || GameObject.FindGameObjectWithTag("Player") == null;
         group.alpha = Mathf.MoveTowards(group.alpha, hidden ? 0f : 0.9f, Time.unscaledDeltaTime * 6f);
         if (hidden) return;
 

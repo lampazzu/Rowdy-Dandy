@@ -33,7 +33,12 @@ public class PlayerDamage : MonoBehaviour
     private void Awake()
     {
         owningCat = GetComponentInParent<PetFollower>(true);
+        // The 2000-damage box under the water that finishes drowned enemies: the water's kill, not Rowdy's
+        // (otherwise it's always the stats' Max Damage). Kills soon after Rowdy's hits still count as his.
+        isKillZone = owningCat == null && baseDamage >= 500f && GetComponentInParent<Health>(true) == null;
     }
+
+    private bool isKillZone;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -44,9 +49,9 @@ public class PlayerDamage : MonoBehaviour
             if (enemy != null)
             {
                 float finalDamage = CalculateTotalDamage(out bool isCrit);
-                EnemyHealth.CreditNextHit(owningCat != null ? KillCredit.Cat(owningCat) : KillCredit.Rowdy());
+                EnemyHealth.CreditNextHit(owningCat != null ? KillCredit.Cat(owningCat) : isKillZone ? KillCredit.Drowning() : KillCredit.Rowdy());
                 enemy.TakeDamageEnemy(finalDamage, isCrit);
-                if (owningCat == null) RowdyBuffs.OnRowdyHit(enemy); // Paprika's poison imbue
+                if (owningCat == null && !isKillZone) RowdyBuffs.OnRowdyHit(enemy); // Paprika's poison imbue
                 // Weapon durability is spent per swing in PlayerMovement, not per hit (cats share this script too)
             }
 

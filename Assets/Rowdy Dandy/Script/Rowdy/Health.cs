@@ -86,7 +86,7 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        if (isInvincible || DevTools.GodMode) return; // Ignore damage when invincible
+        if (isInvincible || DevTools.GodMode || CheckpointRest.Resting || FirstDrop.Running) return; // Ignore damage when invincible
 
         if (Time.time - lastDamageTime > damageCooldown)
         {

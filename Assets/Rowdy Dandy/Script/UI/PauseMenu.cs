@@ -139,7 +139,7 @@ public class PauseMenu : MonoBehaviour
 
         if (page == Page.Closed)
         {
-            bool blocked = RowdyNotes.BlocksPause || WorldMap.BlocksPause;
+            bool blocked = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause;
             if (pausePressed && !blocked) Open();
             else if (devPressed && !blocked) { Open(); ShowPage(Page.DevTools, 0); }
             return;
@@ -534,7 +534,6 @@ public class PauseMenu : MonoBehaviour
         AddButton(mainRows, mainPanel.transform, "Controls", ref y, OpenControls);
         AddButton(mainRows, mainPanel.transform, "Restart Level", ref y, RestartLevel);
         AddButton(mainRows, mainPanel.transform, "Quit Game", ref y, QuitGame);
-        MakeLabel(mainPanel.transform, "Hold START / F1: dev tools", 2, new Color(1f, 0.85f, 0.4f, 0.5f), 0.5f, new Vector2(0, -top + 66));
         MakeHint(mainPanel.transform, -top + 34);
 
         // ---- Settings page (two columns: display + audio | gameplay + controls)
@@ -617,7 +616,7 @@ public class PauseMenu : MonoBehaviour
     // ---------------------------------------------------------------- accessibility page
     private void BuildAccessibilityPage()
     {
-        const int rowsCount = 7;
+        const int rowsCount = 11;
         float height = 130 + rowsCount * (RowHeight + RowGap) + 140;
         accessPanel = MakePanel("Accessibility", root.transform, SettingsRowWidth + 120, height);
         float top = height / 2f;
@@ -638,6 +637,14 @@ public class PauseMenu : MonoBehaviour
             "Blue outline so Rowdy is easy to spot");
         AddToggle(accessRows, accessPanel.transform, "Boss Weakness Indicator", ref y, () => GameSettings.BossWeakness, GameSettings.SetBossWeakness,
             "Arrow and brackets on a boss's weak spot (Pelich's head)");
+        AddToggle(accessRows, accessPanel.transform, "Tutorial Popups", ref y, () => GameSettings.TutorialPopups, GameSettings.SetTutorialPopups,
+            "Short explanation the first time you find something new");
+        AddToggle(accessRows, accessPanel.transform, "Blood", ref y, () => GameSettings.BloodOn, GameSettings.SetBlood,
+            "Blood drops and puddles");
+        AddToggle(accessRows, accessPanel.transform, "Kill Feed", ref y, () => GameSettings.KillFeedOn, GameSettings.SetKillFeed,
+            "Who killed what, top right");
+        AddToggle(accessRows, accessPanel.transform, "Button Hints", ref y, () => GameSettings.ButtonHints, GameSettings.SetButtonHints,
+            "Notes / Stats / Map buttons, bottom left");
         y -= 10;
         AddButton(accessRows, accessPanel.transform, "Back", ref y, CloseAccessibility);
 
@@ -662,7 +669,8 @@ public class PauseMenu : MonoBehaviour
         columnX = -ColumnOffset;
         buildColumn = 0;
         AddHeader(devRows, panel, "Progress", ref y);
-        AddDevButton(panel, "Reset Game", ref y, DevTools.ResetGame, "Wipes level, weapons, notes, stats, cats", false);
+        AddDevButton(panel, "Reset Game", ref y, DevTools.ResetGame, "Wipes level, weapons, notes, stats, cats, tutorials", false);
+        AddDevButton(panel, "Reset Tutorials", ref y, Tutorials.ResetAll, "First-time popups show again", true);
         AddDevButton(panel, "Level Up", ref y, DevTools.LevelUp, "+1 level (full heal + FX)", true);
         AddDevButton(panel, "Level Down", ref y, DevTools.LevelDown, "-1 level", true);
         AddDevButton(panel, "Reset Level", ref y, DevTools.ResetLevel, "Back to level 1", true);
@@ -763,12 +771,11 @@ public class PauseMenu : MonoBehaviour
             (new[] { "J" }, "Attack  (or left click)"),
             (new[] { "SHIFT" }, "Surf dash  (or L)"),
             (new[] { "Q" }, "Switch weapon"),
-            (new[] { "E" }, "Pick up weapon"),
+            (new[] { "E" }, "Pick up / swap cat / rest"),
             (new[] { "TAB" }, "Rowdy Notes"),
             (new[] { "C" }, "Stats"),
             (new[] { "M" }, "Map"),
             (new[] { "ESC" }, "Pause"),
-            (new[] { "F1" }, "Dev tools"),
         };
         float y = top - 200;
         foreach (var entry in keyboard)
@@ -797,12 +804,12 @@ public class PauseMenu : MonoBehaviour
             ("X", PadX, "Attack"),
             ("RB", PadGrey, "Surf dash"),
             ("LB", PadGrey, "Switch weapon"),
-            ("Y", PadY, "Pick up weapon"),
+            ("Y", PadY, "Pick up / swap cat / rest"),
             ("DOWN + A", PadA, "Drop through platform"),
             ("L2 / LT", PadGrey, "Stats"),
             ("SELECT", PadGrey, "Rowdy Notes"),
             ("R2 / RT", PadGrey, "Map"),
-            ("MENU", PadGrey, "Pause  (hold: dev tools)"),
+            ("MENU", PadGrey, "Pause"),
         };
         y = top - 410;
         foreach (var entry in gamepad)

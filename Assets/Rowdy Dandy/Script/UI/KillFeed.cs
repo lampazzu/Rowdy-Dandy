@@ -71,6 +71,7 @@ public class KillFeed : MonoBehaviour
     // ---------------------------------------------------------------- reporting
     public static void Report(KillCredit killer, string victimName, Sprite victimPortrait, KillCredit.Finish finish = KillCredit.Finish.Normal)
     {
+        if (!GameSettings.KillFeedOn) return;
         Get().AddRow(killer, victimName, victimPortrait, finish);
     }
 

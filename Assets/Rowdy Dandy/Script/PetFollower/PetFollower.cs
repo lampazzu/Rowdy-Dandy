@@ -303,7 +303,7 @@ public class PetFollower : MonoBehaviour
         if (!rowdyNearby && Time.time - fullNoticeAt > 4f)
         {
             fullNoticeAt = Time.time;
-            IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, "PARTY FULL (" + CatRoster.Capacity + ") - SWAP?", new Color(1f, 0.75f, 0.9f), 0.8f, 1.6f);
+            IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, "SWAP?", new Color(1f, 0.75f, 0.9f), 0.8f, 1.6f);
         }
         rowdyNearby = true;
         nearbyRowdy = other.transform;
@@ -341,6 +341,7 @@ public class PetFollower : MonoBehaviour
         if (show && Time.frameCount - lastSwapFrame > 30 && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3)))
         {
             lastSwapFrame = Time.frameCount;
+            Interact.Use();
             CatRoster.Swap(this, nearbyRowdy);
         }
     }
@@ -361,7 +362,9 @@ public class PetFollower : MonoBehaviour
     }
 
     // Found by Rowdy (also the dev tools' Collect All Cats)
-    public void Collect(Transform rowdy)
+    public void Collect(Transform rowdy) => Collect(rowdy, false);
+
+    public void Collect(Transform rowdy, bool swapped)
     {
         if (player != null || rowdy == null) return;
         {
@@ -374,8 +377,9 @@ public class PetFollower : MonoBehaviour
             RunStats.CatsRescued++;
             RowdyNotes.MarkCatFound(catType.ToString(), CatName, Portrait); // unlocks its Cats page
             SoundManager.PlaySfx(collectSound, collectVolume);
-            IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, CatName.ToUpperInvariant() + " JOINS THE PARTY! (" + CatRoster.CatCount + "/" + CatRoster.Capacity + ")", new Color(1f, 0.75f, 0.9f), 1f, 2f);
+            IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, swapped ? "SWAPPED!" : CatName.ToUpperInvariant() + " JOINS!", new Color(1f, 0.75f, 0.9f), 1f, 2f);
             PulseRing.Spawn(transform.position, new Color(1f, 0.75f, 0.9f, 0.9f), 1f, 0.35f);
+            Tutorials.Show(Tutorials.Topic.Cat, Portrait, 0.8f);
 
             StartCoroutine(StartFollowing());
         }
@@ -1021,10 +1025,9 @@ public static class CatRoster
         {
             collected.Remove(leaving.RosterKey);
             leaving.Dismiss(newcomer.transform.position + new Vector3(0.5f, 0f, 0f));
-            IconPopup.Show(leaving.transform.position + Vector3.up * 1.1f, leaving.Portrait, leaving.CatName.ToUpperInvariant() + " WAITS HERE", new Color(0.8f, 0.75f, 0.9f), 0.8f, 1.8f);
         }
         else if (!HasRoom) return;
-        newcomer.Collect(rowdyBody);
+        newcomer.Collect(rowdyBody, leaving != null);
         UISound.Play(UISound.Cue.Confirm);
     }
 

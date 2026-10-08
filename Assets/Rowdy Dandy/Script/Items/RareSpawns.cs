@@ -143,6 +143,8 @@ public class FlyingRat : Pickup
     private void Grab()
     {
         grabbed = true;
+        Interact.Use();
+        Tutorials.Show(Tutorials.Topic.Rat, frames != null && frames.Length > 0 ? frames[0] : null, 1.6f);
         CatRoster.AddRat();
         RunStats.RatsGrabbed++;
         int rats = CatRoster.Rats;

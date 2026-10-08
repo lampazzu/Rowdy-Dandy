@@ -256,6 +256,8 @@ public class WeaponDrop : MonoBehaviour
             if (wm != null)
             {
                 pickedUp = true;
+                if (!autoPickup) Interact.Use();
+                Tutorials.Show(Tutorials.Topic.Weapon, wm.GetProfile(weaponType), 0.6f);
                 RunStats.WeaponsPickedUp++;
                 wm.PickupWeapon(weaponType, maxDurability, pickupSound, pickupVolume);
                 if (autoPickup) IconPopup.Show(transform.position + Vector3.up * 0.6f, wm.GetProfile(weaponType), "GOT IT", repairedColor);

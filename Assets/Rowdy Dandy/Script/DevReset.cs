@@ -40,6 +40,7 @@ public class DevReset : MonoBehaviour
         WorldMap.ResetProgress();
         DropLuck.Reset();
         OreNode.ForgetAllSaved();
+        Tutorials.ResetAll();
         PlayerPrefs.Save();
 
         RunStats.ResetAll();

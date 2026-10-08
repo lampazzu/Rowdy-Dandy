@@ -63,9 +63,10 @@ public static class FXSound
     private static AudioSource[] sources;
     private static int next;
 
-    public static void Play(string name, float volume = 1f, float pitch = 1f)
+    public static void Play(string name, float volume = 1f, float pitch = 1f) => Play(Clip(name), volume, pitch);
+
+    public static void Play(AudioClip clip, float volume = 1f, float pitch = 1f)
     {
-        AudioClip clip = Clip(name);
         if (clip == null) return;
         if (sources == null || sources[0] == null)
         {
@@ -385,6 +386,7 @@ public static class Blood
 
     public static void Spill(Vector3 at, float dirX, int amount, bool spatter = true)
     {
+        if (!GameSettings.BloodOn) return; // Accessibility > Blood
         ItemArt art = ItemArt.Get;
         if (spatter && art != null && art.blood != null && art.blood.Length > 0)
         {

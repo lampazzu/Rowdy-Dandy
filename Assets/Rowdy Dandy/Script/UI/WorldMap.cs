@@ -67,6 +67,7 @@ public class WorldMap : MonoBehaviour
         if (IsOpen) Close();
         built = false;
         rowdy = null;
+        seenCats.Clear();
     }
 
     // Dev reset (key 0)
@@ -114,9 +115,25 @@ public class WorldMap : MonoBehaviour
         if (!built) return;
 
         Reveal(rowdy.position, RevealRadius);
+        SpotCats();
 
         saveTimer -= 0.25f;
         if (saveTimer <= 0f) { saveTimer = 5f; SaveExplored(); }
+    }
+
+    // A cat counts as seen once it's been on screen
+    private readonly HashSet<PetFollower> seenCats = new HashSet<PetFollower>();
+
+    private void SpotCats()
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return;
+        foreach (PetFollower pet in PetFollower.Pets)
+        {
+            if (pet == null || pet.IsCollected || seenCats.Contains(pet)) continue;
+            Vector3 v = cam.WorldToViewportPoint(pet.transform.position);
+            if (v.z > 0f && v.x > 0.02f && v.x < 0.98f && v.y > 0.02f && v.y < 0.98f) seenCats.Add(pet);
+        }
     }
 
     private void Reveal(Vector2 at, float radius)
@@ -643,6 +660,16 @@ public class WorldMap : MonoBehaviour
                 AddIcon(PinKind.Skull, e.enemydead ? new Color(0.5f, 0.45f, 0.5f, 0.7f) : new Color(1f, 0.35f, 0.4f), e.transform.position, 30f, delay += 0.03f);
             else if (entry.id == "oldman" && !e.enemydead)
                 AddIcon(PinKind.Question, Pink, e.transform.position, 26f, delay += 0.03f);
+        }
+
+        // Cats Rowdy has seen but not picked up (they hide somewhere new on every load, so it's per load)
+        foreach (PetFollower pet in PetFollower.Pets)
+        {
+            if (pet == null || pet.IsCollected || !seenCats.Contains(pet)) continue;
+            Image face = OverlayUI.MakeImage("Cat Pin", content, pet.Tint, pet.Portrait);
+            face.preserveAspect = true;
+            face.rectTransform.sizeDelta = new Vector2(34f, 34f);
+            AddPin(face.rectTransform, pet.transform.position, delay += 0.03f);
         }
 
         // Rowdy last, on top

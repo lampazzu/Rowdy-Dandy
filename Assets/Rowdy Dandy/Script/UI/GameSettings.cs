@@ -42,6 +42,10 @@ public static class GameSettings
     public static bool AutoEquipWeapon { get; private set; } = false;     // broken weapon -> next weapon, never the Rod while you have one
     public static bool RowdyOutline { get; private set; } = false;        // blue outline around Rowdy
     public static bool BossWeakness { get; private set; } = false;        // arrow + brackets on a boss's weak spot (Pelich's head)
+    public static bool TutorialPopups { get; private set; } = true;       // first-time explanation cards (Tutorials)
+    public static bool BloodOn { get; private set; } = true;              // blood drops / pools / spatter
+    public static bool KillFeedOn { get; private set; } = true;           // kill feed, top right
+    public static bool ButtonHints { get; private set; } = true;          // [SELECT] NOTES  [L2] STATS  [R2] MAP, bottom left
 
     public static event Action Changed;
 
@@ -135,6 +139,10 @@ public static class GameSettings
         AutoEquipWeapon = PlayerPrefs.GetInt(Prefix + "AutoEquip", 0) == 1;
         RowdyOutline = PlayerPrefs.GetInt(Prefix + "RowdyOutline", 0) == 1;
         BossWeakness = PlayerPrefs.GetInt(Prefix + "BossWeakness", 0) == 1;
+        TutorialPopups = PlayerPrefs.GetInt(Prefix + "Tutorials", 1) == 1;
+        BloodOn = PlayerPrefs.GetInt(Prefix + "Blood", 1) == 1;
+        KillFeedOn = PlayerPrefs.GetInt(Prefix + "KillFeed", 1) == 1;
+        ButtonHints = PlayerPrefs.GetInt(Prefix + "ButtonHints", 1) == 1;
     }
 
     private static void Save()
@@ -164,6 +172,10 @@ public static class GameSettings
         PlayerPrefs.SetInt(Prefix + "AutoEquip", AutoEquipWeapon ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "RowdyOutline", RowdyOutline ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "BossWeakness", BossWeakness ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "Tutorials", TutorialPopups ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "Blood", BloodOn ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "KillFeed", KillFeedOn ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "ButtonHints", ButtonHints ? 1 : 0);
         PlayerPrefs.Save();
     }
 
@@ -211,6 +223,10 @@ public static class GameSettings
     public static void SetAutoEquipWeapon(bool on) { AutoEquipWeapon = on; Commit(); }
     public static void SetRowdyOutline(bool on) { RowdyOutline = on; Commit(); }
     public static void SetBossWeakness(bool on) { BossWeakness = on; Commit(); }
+    public static void SetTutorialPopups(bool on) { TutorialPopups = on; Commit(); }
+    public static void SetBlood(bool on) { BloodOn = on; Commit(); }
+    public static void SetKillFeed(bool on) { KillFeedOn = on; Commit(); }
+    public static void SetButtonHints(bool on) { ButtonHints = on; Commit(); }
 
     public static string DisplayModeName(FullScreenMode mode)
     {

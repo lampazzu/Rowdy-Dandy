@@ -31,6 +31,9 @@ public class RespawnTrigger : MonoBehaviour
 
         // Register this respawn point
         allRespawnPoints.Add(this);
+
+        // Interact here = rest (reload at this checkpoint, morning)
+        if (GetComponent<CheckpointRest>() == null) gameObject.AddComponent<CheckpointRest>();
     }
 
     // Is this point on (or within margin of) any checkpoint's trigger? Used to pause the enemy waves while resting.
@@ -116,6 +119,7 @@ public class RespawnTrigger : MonoBehaviour
         ScreenShake.Impulse(0.35f);
         GamepadRumble.Pulse(0.3f, 0.5f, 0.15f);
         StartCoroutine(Squash());
+        Tutorials.Show(Tutorials.Topic.Checkpoint, null, 1.2f);
 
         if (rowdy != null && rowdy.TryGetComponent(out Health health) && healFraction > 0f)
             health.AddHealth(health.startingHealth * healFraction);

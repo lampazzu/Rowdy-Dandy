@@ -176,6 +176,20 @@ public class WaveEnemySpawner : MonoBehaviour
     [Tooltip("Dead bodies of spawned enemies are cleaned up this long after dying.")]
     [SerializeField] private float corpseLifetime = 12f;
 
+    [Header("Day / Night (DayNight)")]
+    [Tooltip("Wave size, alive limit and spawn rate by day (x). Night uses the night values.")]
+    [SerializeField] private float dayCountMultiplier = 0.6f;
+    [SerializeField] private float dayAliveMultiplier = 0.6f;
+    [SerializeField] private float daySpawnIntervalMultiplier = 1.5f;
+    [SerializeField] private float nightCountMultiplier = 1.15f;
+    [Tooltip("Zone difficulty + this at night (tougher tiers can show up)")]
+    [SerializeField] private int nightDifficultyBonus = 1;
+    [Tooltip("Chance (0-1) that an enemy spawned at full night is an elite")]
+    [SerializeField, Range(0f, 1f)] private float nightEliteChance = 0.15f;
+
+    private static float Night => DayNight.NightAmount;
+    private int MaxAlive => maxAliveEnemies <= 0 ? 0 : Mathf.Max(1, Mathf.RoundToInt(maxAliveEnemies * Mathf.Lerp(dayAliveMultiplier, 1f, Night)));
+
     [Header("Debug")]
     [SerializeField] private bool drawSpawnRadius = true;
 
@@ -345,17 +359,20 @@ public class WaveEnemySpawner : MonoBehaviour
             }
 
             // At the limit: wait for some to die or be cleaned up before spawning more
-            while (maxAliveEnemies > 0 && AliveCount >= maxAliveEnemies)
+            while (MaxAlive > 0 && AliveCount >= MaxAlive)
             {
                 yield return new WaitForSeconds(0.5f);
             }
+
+            // By day only part of the wave shows up
+            if (Night < 0.5f && Random.value > dayCountMultiplier) continue;
 
             if (entry != null && entry.prefab != null)
             {
                 SpawnEnemy(entry);
             }
 
-            yield return new WaitForSeconds(spawnInterval);
+            yield return new WaitForSeconds(spawnInterval * Mathf.Lerp(daySpawnIntervalMultiplier, 1f, Night));
         }
     }
 
@@ -398,12 +415,14 @@ public class WaveEnemySpawner : MonoBehaviour
     {
         var result = new List<EnemyEntry>();
         var allowed = new List<EnemyEntry>();
-        foreach (EnemyEntry e in GetValidEnemies()) if (e.difficulty <= zone.difficulty) allowed.Add(e);
+        int tier = Mathf.Min(10, zone.difficulty + (DayNight.IsNight ? nightDifficultyBonus : 0));
+        foreach (EnemyEntry e in GetValidEnemies()) if (e.difficulty <= tier) allowed.Add(e);
         if (allowed.Count == 0) return result;
 
         float progress = Mathf.InverseLerp(1f, 10f, zone.difficulty);
         int min = Mathf.Max(1, minimumEnemiesPerWave), max = Mathf.Max(min, maximumEnemiesPerWave);
-        int count = Mathf.RoundToInt(Mathf.Lerp(min, max, progress * 0.8f) * Random.Range(0.85f, 1.15f) * Mathf.Max(0.1f, zone.countMultiplier));
+        int count = Mathf.RoundToInt(Mathf.Lerp(min, max, progress * 0.8f) * Random.Range(0.85f, 1.15f) * Mathf.Max(0.1f, zone.countMultiplier)
+                                     * (DayNight.IsNight ? nightCountMultiplier : 1f));
         count = Mathf.Clamp(count, 1, max * 2);
 
         float total = 0f;
@@ -411,7 +430,7 @@ public class WaveEnemySpawner : MonoBehaviour
         for (int i = 0; i < allowed.Count; i++)
         {
             // close to the zone's tier = common; much easier ones still show up as fodder
-            float gap = zone.difficulty - allowed[i].difficulty;
+            float gap = tier - allowed[i].difficulty;
             weights[i] = Mathf.Max(1, allowed[i].spawnWeight) * Mathf.Lerp(1f, 0.25f, Mathf.Clamp01(gap / 6f));
             total += weights[i];
         }
@@ -449,6 +468,9 @@ public class WaveEnemySpawner : MonoBehaviour
         // 1. Instantiate enemy first
         GameObject enemy = Instantiate(entry.prefab, spawnPosition, Quaternion.identity);
         Track(enemy);
+
+        // Nightfall: some come out as elites (before the ground alignment below, since elites are a bit bigger)
+        if (Night > 0.5f && Random.value < nightEliteChance * Night) EliteEnemy.Apply(enemy);
 
         // Archers / bombers stand still: turn them towards Rowdy (the art faces left at +x scale)
         if (ranged && player != null)

@@ -75,9 +75,50 @@ public class CatHUD : MonoBehaviour
         if (slotSprite != null) slicedMultiplier = referencePPU / (slotSprite.pixelsPerUnit * pixelScale);
     }
 
+    // Free party places (Magical Cat Capacity - cats): an empty slot with "+2" under the cats
+    private RectTransform freeSlot;
+    private PixelText freeText;
+    private int shownFree = -1;
+
+    private int FreePlaces => CatRoster.Capacity > 1 ? Mathf.Max(0, CatRoster.Capacity - CatRoster.CatCount) : 0;
+
+    private void UpdateFreeSlot()
+    {
+        int free = FreePlaces;
+        if (free == shownFree) return;
+        bool grew = shownFree >= 0 && free > shownFree;
+        shownFree = free;
+        if (freeSlot == null)
+        {
+            if (free <= 0) return;
+            float slotSize = 22 * pixelScale;
+            freeSlot = CreateUI("Free Places", transform);
+            Place(freeSlot, 0f, 0f, slotSize, slotSize);
+            Image slotImage = AddImage(freeSlot, slotSprite);
+            slotImage.type = Image.Type.Sliced;
+            slotImage.pixelsPerUnitMultiplier = slicedMultiplier;
+            slotImage.color = new Color(1f, 1f, 1f, 0.45f);
+            freeText = PixelText.Create(freeSlot, "", pixelScale, new Color(1f, 0.8f, 0.95f, 0.85f), 0.5f);
+            freeText.Rect.anchorMin = freeText.Rect.anchorMax = new Vector2(0.5f, 0.5f);
+            freeText.Rect.anchoredPosition = Vector2.zero;
+        }
+        freeSlot.gameObject.SetActive(free > 0);
+        freeText.SetText("+" + free);
+        if (grew) freePunch = 0.3f; // level up opened a new place
+        Layout();
+    }
+
+    private float freePunch;
+
     private void Update()
     {
         SyncEntries();
+        UpdateFreeSlot();
+        if (freeSlot != null)
+        {
+            freePunch = Mathf.Max(0f, freePunch - Time.unscaledDeltaTime);
+            freeSlot.localScale = Vector3.one * (1f + freePunch * 0.6f);
+        }
         AvoidStatsPanel();
         UpdateRats();
 
@@ -171,6 +212,7 @@ public class CatHUD : MonoBehaviour
         float step = 22 * pixelScale + entryGap;
         int row = 0;
         foreach (Entry e in entries) if (!e.lost) e.root.anchoredPosition = new Vector2(0f, -(row++) * step);
+        if (freeSlot != null && freeSlot.gameObject.activeSelf) freeSlot.anchoredPosition = new Vector2(0f, -(row++) * step);
         foreach (Entry e in entries) if (e.lost) e.root.anchoredPosition = new Vector2(e.root.anchoredPosition.x, -(row++) * step);
     }
 
@@ -232,7 +274,7 @@ public class CatHUD : MonoBehaviour
         ratPunch = Mathf.Max(0f, ratPunch - Time.unscaledDeltaTime);
         ratIcon.rectTransform.localScale = Vector3.one * (1f + ratPunch * 1.2f);
         ratIcon.color = ratPunch > 0f ? Color.Lerp(Color.white, new Color(1f, 0.85f, 0.3f), Mathf.Repeat(ratPunch * 12f, 1f)) : Color.white;
-        int rows = entries.Count;
+        int rows = entries.Count + (freeSlot != null && freeSlot.gameObject.activeSelf ? 1 : 0);
         Place(ratRow, 0f, rows * (22 * pixelScale + entryGap), 260f, 22 * pixelScale);
     }
 
