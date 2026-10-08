@@ -96,7 +96,7 @@ public class PlayerStats : MonoBehaviour
         if (PauseMenu.IsPaused) return;
 
         // C, or the gamepad's L2 / LT (Rowdy Notes are on Select / Tab)
-        if (!RowdyNotes.IsOpen && (Input.GetKeyDown(toggleUIKey) || PadInput.L2Down))
+        if (!RowdyNotes.IsOpen && (GameInput.KeyDown(toggleUIKey) || GameInput.PadDown(GameInput.Act.Stats)))
         {
             ToggleStatsUI();
         }
@@ -105,17 +105,17 @@ public class PlayerStats : MonoBehaviour
 
         if (enableDevHotkeys)
         {
-            if (Input.GetKeyDown(levelUpKey))
+            if (GameInput.KeyDown(levelUpKey))
             {
                 LevelUp();
             }
 
-            if (Input.GetKeyDown(levelDownKey))
+            if (GameInput.KeyDown(levelDownKey))
             {
                 LevelDown();
             }
 
-            if (Input.GetKeyDown(resetLevelKey))
+            if (GameInput.KeyDown(resetLevelKey))
             {
                 ResetLevelAndEXP();
             }
@@ -279,18 +279,18 @@ public class PlayerStats : MonoBehaviour
             expText.text = IsMaxLevel ? "MAX" : $"{currentEXP:F0} / {maxEXP:F0} XP";
         }
 
-        // Update Stats UI Panel text
+        // Update Stats UI Panel text: everything here comes from leveling up, so say so
         if (levelText != null)
-            levelText.text = IsMaxLevel ? $"Level: {currentLevel} (MAX)" : $"Level: {currentLevel}";
+            levelText.text = IsMaxLevel ? $"Level {currentLevel} (MAX) Bonuses" : $"Level {currentLevel} Bonuses";
 
         if (damageBonusText != null)
-            damageBonusText.text = $"Bonus Damage: +{appliedDamageBonus:F0}";
+            damageBonusText.text = $"Level Up Damage: +{appliedDamageBonus:F0}";
 
         if (critChanceText != null)
-            critChanceText.text = $"Crit Chance: +{appliedCritChanceBonus:F1}%";
+            critChanceText.text = $"Level Up Crit Chance: +{appliedCritChanceBonus:F1}%";
 
         if (critMultiplierText != null)
-            critMultiplierText.text = $"Crit Multiplier: +{appliedCritMultiplierBonus:F2}x";
+            critMultiplierText.text = $"Level Up Crit Damage: +{appliedCritMultiplierBonus:F2}x";
     }
 
     // --- SAVE / LOAD DATA ---

@@ -331,14 +331,14 @@ public class PetFollower : MonoBehaviour
             swapPrompt.enabled = show;
             if (show)
             {
-                swapPrompt.sprite = WeaponDrop.IsGamepadConnected() ? WeaponDrop.GetGamepadPrompt() : WeaponDrop.GetKeyboardPrompt();
+                swapPrompt.sprite = WeaponDrop.GetInteractPrompt();
                 float sx = Mathf.Abs(transform.lossyScale.x) > 0.0001f ? 1f / transform.lossyScale.x : 1f;
                 float sy = Mathf.Abs(transform.lossyScale.y) > 0.0001f ? 1f / transform.lossyScale.y : 1f;
                 swapPrompt.transform.localScale = new Vector3(sx, sy, 1f); // world-size, not flipped with the cat
                 swapPrompt.transform.position = transform.position + new Vector3(0f, 0.55f + Mathf.Round(Mathf.Sin(Time.time * 4f) * 2f) / 64f, 0f);
             }
         }
-        if (show && Time.frameCount - lastSwapFrame > 30 && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3)))
+        if (show && Time.frameCount - lastSwapFrame > 30 && GameInput.Down(GameInput.Act.Interact))
         {
             lastSwapFrame = Time.frameCount;
             Interact.Use();

@@ -15,15 +15,15 @@ public class SceneReset : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+        if (GameInput.KeyDown(KeyCode.Alpha1) || GameInput.KeyDown(KeyCode.Keypad1))
         {
             ResetScene();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+        else if (GameInput.KeyDown(KeyCode.Alpha2) || GameInput.KeyDown(KeyCode.Keypad2))
         {
             GoToTestCheckpoint();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+        else if (GameInput.KeyDown(KeyCode.Alpha3) || GameInput.KeyDown(KeyCode.Keypad3))
         {
             GoToCheckpoint(FindLeftmostCheckpoint());
         }

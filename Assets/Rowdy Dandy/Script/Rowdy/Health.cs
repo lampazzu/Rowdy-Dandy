@@ -110,6 +110,7 @@ public class Health : MonoBehaviour
                 lastDamageTime = Time.time;
                 if (TryGetComponent(out PlayerHitReaction reaction)) reaction.OnHit(_damage);
                 Blood.Spill(BodyCenter(), -Mathf.Sign(transform.localScale.x), 6);
+                Tutorials.Show(Tutorials.Topic.Hurt, null, 0.8f);
             }
             else if (!dead)
             {

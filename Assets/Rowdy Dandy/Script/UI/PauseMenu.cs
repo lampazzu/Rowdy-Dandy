@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 // Pause menu (Esc / gamepad Start) with Resume, Settings, Restart Level and Quit, plus a Settings page
 // (display, audio, gameplay). Created automatically for every scene; pixel font + HUD panel style.
-// Keyboard: arrows / WASD, Enter / Space, Esc.  Gamepad: D-pad, A, B, Start.  Mouse: hover + click.
+// Keyboard: arrows / WASD, Enter / Space, Esc.  Gamepad: stick / D-pad, south (A / Cross), east (B / Circle), Start.
+// Mouse: hover + click. Hints show the buttons of whatever was used last (GameInput).
 // While open, time is fully stopped (TimeSlowController and gameplay input check PauseMenu.IsPaused).
 public class PauseMenu : MonoBehaviour
 {
@@ -78,6 +79,9 @@ public class PauseMenu : MonoBehaviour
     private readonly List<Row> accessRows = new List<Row>();
     private readonly List<Row> devRows = new List<Row>();
     private PixelText accessDescription, devDescription;
+    private readonly List<PixelText> hints = new List<PixelText>();
+    private readonly List<(PixelText text, string template)> padButtons = new List<(PixelText, string)>();
+    private int hintsVersion = -1;
     private Page accessReturnPage = Page.Main;
     private int accessReturnRow;
 
@@ -133,9 +137,9 @@ public class PauseMenu : MonoBehaviour
     // ---------------------------------------------------------------- input
     private void Update()
     {
-        bool pausePressed = Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7) || Input.GetKeyDown(KeyCode.JoystickButton9);
-        bool backPressed = Input.GetKeyDown(KeyCode.JoystickButton1) || Input.GetKeyDown(KeyCode.Backspace);
-        bool devPressed = Input.GetKeyDown(KeyCode.F1) || Input.GetKeyDown(KeyCode.BackQuote);
+        bool pausePressed = GameInput.Down(GameInput.Act.Pause);
+        bool backPressed = GameInput.Down(GameInput.Act.Back);
+        bool devPressed = GameInput.Down(GameInput.Act.DevMenu);
 
         if (page == Page.Closed)
         {
@@ -146,9 +150,10 @@ public class PauseMenu : MonoBehaviour
         }
 
         if (pendingResume) return;
+        if (hintsVersion != GameInput.DeviceVersion) RefreshHints();
 
         // Still holding START from opening the menu: that's the Dev Tools shortcut
-        bool startHeld = Input.GetKey(KeyCode.JoystickButton7) || Input.GetKey(KeyCode.JoystickButton9);
+        bool startHeld = GameInput.GamepadStartHeld;
         if (!startHeld) devHoldUsed = true;
         if (page == Page.Main && !devHoldUsed && Time.unscaledTime - openedAt > DevHoldTime)
         {
@@ -172,8 +177,8 @@ public class PauseMenu : MonoBehaviour
         }
 
         List<Row> rows = CurrentRows();
-        int vertical = ReadDirection(KeyCode.UpArrow, KeyCode.W, KeyCode.DownArrow, KeyCode.S, "Vertical", ref heldVertical);
-        int horizontal = ReadDirection(KeyCode.RightArrow, KeyCode.D, KeyCode.LeftArrow, KeyCode.A, "Horizontal", ref heldHorizontal);
+        int vertical = ReadDirection(GameInput.MoveY, ref heldVertical);
+        int horizontal = ReadDirection(GameInput.MoveX, ref heldHorizontal);
 
         if (vertical != 0) MoveSelection(-vertical);
         if (horizontal != 0 && rows[selected].change != null)
@@ -185,7 +190,7 @@ public class PauseMenu : MonoBehaviour
             JumpColumn(horizontal);
         }
 
-        bool submit = Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0);
+        bool submit = GameInput.Down(GameInput.Act.Submit);
         if (submit) Activate(selected, +1);
 
         AnimateRows();
@@ -205,13 +210,9 @@ public class PauseMenu : MonoBehaviour
     }
 
     // +1 / -1 / 0 with key repeat. For up/down, up is +1.
-    private int ReadDirection(KeyCode posA, KeyCode posB, KeyCode negA, KeyCode negB, string axis, ref int held)
+    private int ReadDirection(float value, ref int held)
     {
-        float value = 0f;
-        try { value = Input.GetAxisRaw(axis); } catch (ArgumentException) { }
-        int dir = 0;
-        if (Input.GetKey(posA) || Input.GetKey(posB) || value > 0.5f) dir = 1;
-        else if (Input.GetKey(negA) || Input.GetKey(negB) || value < -0.5f) dir = -1;
+        int dir = value > 0f ? 1 : value < 0f ? -1 : 0;
 
         if (dir == 0) { held = 0; return 0; }
         if (dir != held)
@@ -743,8 +744,6 @@ public class PauseMenu : MonoBehaviour
     }
 
     // ---------------------------------------------------------------- controls page
-    private static readonly Color KeyFill = new Color32(0x14, 0x06, 0x1A, 0xFF);
-    private static readonly Color KeyEdge = new Color32(0xC9, 0xB6, 0xD6, 0xFF);
     private static readonly Color PadA = new Color32(0x5C, 0xD6, 0x5C, 0xFF);
     private static readonly Color PadB = new Color32(0xF0, 0x4A, 0x4A, 0xFF);
     private static readonly Color PadX = new Color32(0x4A, 0x9C, 0xF5, 0xFF);
@@ -762,30 +761,29 @@ public class PauseMenu : MonoBehaviour
         // ---- Keyboard (left)
         const float leftX = -390f, rightX = 390f;
         MakeLabel(panel, "KEYBOARD + MOUSE", 3, Pink, 0.5f, new Vector2(leftX, top - 140));
-        var keyboard = new (string[] keys, string action)[]
+        // Button icons (ButtonIcons): keycaps, the arrow keys, the mouse
+        string Key(string k) => ButtonIcons.Text("KB:" + k);
+        string arrows = ButtonIcons.Text("ARROWS"), click = ButtonIcons.Text("MOUSE:LEFT");
+        var keyboard = new (string keys, string action)[]
         {
-            (new[] { "A", "D" }, "Move  (or arrows)"),
-            (new[] { "SPACE" }, "Jump  (hold for higher)"),
-            (new[] { "S" }, "Duck"),
-            (new[] { "S", "+", "SPACE" }, "Drop through platform"),
-            (new[] { "J" }, "Attack  (or left click)"),
-            (new[] { "SHIFT" }, "Surf dash  (or L)"),
-            (new[] { "Q" }, "Switch weapon"),
-            (new[] { "E" }, "Pick up / swap cat / rest"),
-            (new[] { "TAB" }, "Rowdy Notes"),
-            (new[] { "C" }, "Stats"),
-            (new[] { "M" }, "Map"),
-            (new[] { "ESC" }, "Pause"),
+            (Key("A") + " " + Key("D"), "Move  (or " + arrows + ")"),
+            (Key("SPACE"), "Jump  (hold for higher)"),
+            (Key("S"), "Duck"),
+            (Key("S") + " + " + Key("SPACE"), "Drop through platform"),
+            (Key("J"), "Attack  (or " + click + ")"),
+            (Key("SHIFT"), "Surf dash  (or " + Key("L") + ")"),
+            (Key("Q"), "Switch weapon"),
+            (Key("E"), "Pick up / swap cat / rest"),
+            (Key("TAB"), "Rowdy Notes"),
+            (Key("C"), "Stats"),
+            (Key("M"), "Map"),
+            (Key("ESC"), "Pause"),
         };
         float y = top - 200;
         foreach (var entry in keyboard)
         {
-            float x = leftX - 330f;
-            foreach (string key in entry.keys)
-            {
-                if (key == "+") { MakeLabel(panel, "+", 2, TextIdle, 0f, new Vector2(x, y)); x += 22f; continue; }
-                x += MakeKeycap(panel, key, x, y) + 8f;
-            }
+            PixelText keys = PixelText.Create(panel, entry.keys, 3, TextIdle, 0f);
+            Anchor(keys.Rect, new Vector2(0.5f, 0.5f), new Vector2(leftX - 330f, y));
             PixelText action = PixelText.Create(panel, entry.action, 2, TextIdle, 0f);
             Anchor(action.Rect, new Vector2(0.5f, 0.5f), new Vector2(leftX - 80f, y));
             y -= 42f;
@@ -797,24 +795,26 @@ public class PauseMenu : MonoBehaviour
         pad.sprite = GamepadSprite();
         Anchor(pad.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(rightX, top - 282), new Vector2(56 * 6, 34 * 6));
 
-        var gamepad = new (string button, Color color, string action)[]
+        // Button icons follow the last pad used (Xbox, PlayStation, Switch): see RefreshHints
+        var gamepad = new (string button, string action)[]
         {
-            ("L-STICK", PadGrey, "Move  (down: duck)"),
-            ("A", PadA, "Jump  (hold for higher)"),
-            ("X", PadX, "Attack"),
-            ("RB", PadGrey, "Surf dash"),
-            ("LB", PadGrey, "Switch weapon"),
-            ("Y", PadY, "Pick up / swap cat / rest"),
-            ("DOWN + A", PadA, "Drop through platform"),
-            ("L2 / LT", PadGrey, "Stats"),
-            ("SELECT", PadGrey, "Rowdy Notes"),
-            ("R2 / RT", PadGrey, "Map"),
-            ("MENU", PadGrey, "Pause"),
+            ("{MOVE}", "Move  (down: duck)"),
+            ("{JUMP}", "Jump  (hold for higher)"),
+            ("{ATTACK}", "Attack"),
+            ("{SURF}", "Surf dash"),
+            ("{SWITCH}", "Switch weapon"),
+            ("{INTERACT}", "Pick up / swap cat / rest"),
+            ("{DOWN} + {JUMP}", "Drop through platform"),
+            ("{STATS}", "Stats"),
+            ("{NOTES}", "Rowdy Notes"),
+            ("{MAP}", "Map"),
+            ("{PAUSE}", "Pause"),
         };
         y = top - 410;
         foreach (var entry in gamepad)
         {
-            PixelText button = PixelText.Create(panel, entry.button, 2, entry.color, 1f);
+            PixelText button = PixelText.Create(panel, GameInput.Format(entry.button, GameInput.LastGamepad), 3, PadGrey, 1f);
+            padButtons.Add((button, entry.button));
             Anchor(button.Rect, new Vector2(0.5f, 0.5f), new Vector2(rightX - 60f, y));
             PixelText action = PixelText.Create(panel, entry.action, 2, TextIdle, 0f);
             Anchor(action.Rect, new Vector2(0.5f, 0.5f), new Vector2(rightX - 30f, y));
@@ -825,23 +825,6 @@ public class PauseMenu : MonoBehaviour
         y = -top + 130;
         AddButton(controlsRows, panel, "Back", ref y, CloseControls);
         MakeHint(panel, -top + 34);
-    }
-
-    // A key drawn as a little cap with its name; returns its width
-    private float MakeKeycap(Transform parent, string key, float x, float y)
-    {
-        PixelText label = PixelText.Create(parent, key, 2, Color.white, 0.5f);
-        float w = Mathf.Max(40f, label.Rect.sizeDelta.x + 20f), h = 36f;
-        Image edge = MakeImage("Key " + key, parent, KeyEdge);
-        Anchor(edge.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(x + w / 2f, y), new Vector2(w, h));
-        edge.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-        Image fill = MakeImage("Fill", edge.rectTransform, KeyFill);
-        Stretch(fill.rectTransform);
-        fill.rectTransform.offsetMin = new Vector2(3, 6);
-        fill.rectTransform.offsetMax = new Vector2(-3, -3);
-        label.transform.SetParent(edge.rectTransform, false);
-        Anchor(label.Rect, new Vector2(0.5f, 0.5f), new Vector2(0, 1));
-        return w;
     }
 
     // 56x34 pixel-art controller: grips, bumpers, sticks, d-pad, colored A/B/X/Y, view/menu
@@ -1063,9 +1046,25 @@ public class PauseMenu : MonoBehaviour
         pointer.onClick = onClick;
     }
 
+    private const string HintText = "{MOVE}: move   {OK}: OK   {BACK}: back";
+
     private void MakeHint(Transform parent, float y)
     {
-        MakeLabel(parent, "Arrows: move   Enter/A: OK   Esc/B: back", 2, new Color(1f, 1f, 1f, 0.55f), 0.5f, new Vector2(0, y));
+        PixelText hint = PixelText.Create(parent, GameInput.Format(HintText), 2, new Color(1f, 1f, 1f, 0.55f), 0.5f);
+        Anchor(hint.Rect, new Vector2(0.5f, 0.5f), new Vector2(0, y));
+        hints.Add(hint);
+    }
+
+    // Hints and the Controls page's gamepad column follow the device (keyboard / Xbox / PlayStation / Switch)
+    private void RefreshHints()
+    {
+        hintsVersion = GameInput.DeviceVersion;
+        string hint = GameInput.Format(HintText);
+        foreach (PixelText p in hints) if (p != null) p.SetText(hint);
+
+        GameInput.Device pad = GameInput.LastGamepad;
+        foreach (var (text, template) in padButtons)
+            if (text != null) text.SetText(GameInput.Format(template, pad));
     }
 
     private void MakeLabel(Transform parent, string text, int scale, Color color, float pivotX, Vector2 position)

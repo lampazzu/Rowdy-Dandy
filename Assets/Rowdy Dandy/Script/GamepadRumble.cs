@@ -1,28 +1,13 @@
-using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-// Controller rumble (XInput, player 1). One shared runner owns the motors and always switches them off when
+// Controller rumble (Input System: Xbox, PlayStation, Switch... the pad played with last). One shared runner owns the motors and always switches them off when
 // the pulse ends, so a rumble can't get stuck on when the enemy that started it is hit again, dies or despawns.
 // Also stops while the game is paused or loses focus.
 public class GamepadRumble : MonoBehaviour
 {
-    [StructLayout(LayoutKind.Sequential)]
-    private struct XINPUT_VIBRATION
-    {
-        public ushort wLeftMotorSpeed;
-        public ushort wRightMotorSpeed;
-    }
-
-    [DllImport("xinput1_4.dll", EntryPoint = "XInputSetState")]
-    private static extern int XInputSetState1_4(int dwUserIndex, ref XINPUT_VIBRATION pVibration);
-
-    [DllImport("xinput9_1_0.dll", EntryPoint = "XInputSetState")]
-    private static extern int XInputSetState9_1_0(int dwUserIndex, ref XINPUT_VIBRATION pVibration);
-
     private const float MaxPulse = 0.5f; // no single pulse longer than this, whatever the caller asks
 
-    private static bool useXInput14 = true;
     private static GamepadRumble instance;
     private float stopAt;
     private bool running;
@@ -61,28 +46,16 @@ public class GamepadRumble : MonoBehaviour
     private void OnApplicationQuit() => Set(0f, 0f);
     private void OnDestroy() => Set(0f, 0f);
 
+    // Low-frequency (left, heavy) and high-frequency (right, buzzy) motors, 0-1. Stopping switches every pad off.
     private static void Set(float leftMotor, float rightMotor)
     {
-        var vibration = new XINPUT_VIBRATION
+        leftMotor = Mathf.Clamp01(leftMotor);
+        rightMotor = Mathf.Clamp01(rightMotor);
+        if (leftMotor <= 0f && rightMotor <= 0f)
         {
-            wLeftMotorSpeed = (ushort)(Mathf.Clamp01(leftMotor) * 65535),
-            wRightMotorSpeed = (ushort)(Mathf.Clamp01(rightMotor) * 65535)
-        };
-
-        try
-        {
-            if (useXInput14) XInputSetState1_4(0, ref vibration);
-            else XInputSetState9_1_0(0, ref vibration);
+            foreach (Gamepad pad in Gamepad.all) pad.SetMotorSpeeds(0f, 0f);
+            return;
         }
-        catch (DllNotFoundException)
-        {
-            try
-            {
-                useXInput14 = false;
-                XInputSetState9_1_0(0, ref vibration);
-            }
-            catch { }
-        }
-        catch { }
+        Gamepad.current?.SetMotorSpeeds(leftMotor, rightMotor);
     }
 }

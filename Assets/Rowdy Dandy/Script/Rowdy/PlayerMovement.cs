@@ -497,6 +497,7 @@ public class PlayerMovement : MonoBehaviour
         if (isWatered)
         {
             hasAttackedInAir = false;
+            Tutorials.Show(Tutorials.Topic.Water, null, 0.6f);
 
             isWounded = false;
             ResetAttackState();
@@ -504,7 +505,11 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsJumping", false);
         }
 
-        float moveInput = Input.GetAxisRaw("Horizontal");
+        // First time standing on a one-way platform: how to drop through (checked a few times a second)
+        if (isGrounded && Time.frameCount % 15 == 0 && !Tutorials.Done(Tutorials.Topic.Platform) && GetOneWayPlatformUnderFeet() != null)
+            Tutorials.Show(Tutorials.Topic.Platform, null, 0.3f);
+
+        float moveInput = GameInput.MoveX;
         lastMoveInput = moveInput;
 
         if (!isSurfing)
@@ -539,7 +544,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isWatered)
         {
-            moveInput = Input.GetAxis("Horizontal");
+            moveInput = GameInput.MoveXSmoothed;
         }
 
         if (Mathf.Abs(moveInput) > 0 && isGrounded) { CreateDust(); }
@@ -570,7 +575,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Check if the player is ducking
-        if ((Input.GetKey(KeyCode.S) || Input.GetAxis("Vertical") < 0) && !isSurfing && isGrounded && !isWounded)
+        if (GameInput.HoldingDown && !isSurfing && isGrounded && !isWounded)
         {
             isDucking = true;
             SetBodyBoxHeight(duckedColliderHeight);
@@ -644,7 +649,7 @@ public class PlayerMovement : MonoBehaviour
             */
         }
 
-        if (rb.linearVelocity.x == 0f || Input.GetKeyUp(KeyCode.S))
+        if (rb.linearVelocity.x == 0f || GameInput.KeyUp(UnityEngine.InputSystem.Key.S))
         {
             isSliding = false;
             animator.ResetTrigger("Slide");
@@ -655,8 +660,8 @@ public class PlayerMovement : MonoBehaviour
         { isDucking = true; }
 
         // HERE IS THE JUMP & DROP-DOWN FUNCTIONALITY
-        bool isHoldingDown = Input.GetKey(KeyCode.S) || Input.GetAxis("Vertical") < -0.5f;
-        bool jumpPressed = Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump");
+        bool isHoldingDown = GameInput.HoldingDown;
+        bool jumpPressed = GameInput.Down(GameInput.Act.Jump);
 
         // DROP-DOWN CHECK (Down + Jump)
         if (jumpPressed && isHoldingDown && isGrounded && !isWounded)
@@ -686,7 +691,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Holding the jump key (spacebar or joystick button) to control jump height and duration
-        if ((Input.GetKey(KeyCode.Space) || Input.GetButton("Jump")) && !isAttacking && hasInitiatedJump)
+        if (GameInput.Held(GameInput.Act.Jump) && !isAttacking && hasInitiatedJump)
         {
             if (jumpTimeCounter < maxJumpTime)
             {
@@ -699,7 +704,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // End the jump when the spacebar is released, joystick button is released, or jump time exceeds max duration
-        if ((Input.GetKeyUp(KeyCode.Space) || Input.GetButtonUp("Jump")) || jumpTimeCounter >= maxJumpTime)
+        if (GameInput.Up(GameInput.Act.Jump) || jumpTimeCounter >= maxJumpTime)
         {
             isJumping = false;
             animator.SetBool("IsJumping", false); // Stop jumping animation
@@ -715,7 +720,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Implement attack animations
-        if (Input.GetKeyDown(KeyCode.J) || Input.GetMouseButtonDown(0) || Input.GetButtonDown("X"))
+        if (GameInput.Down(GameInput.Act.Attack))
         {
             bool attackStarted = false; // weapon durability: 1 per swing, no matter how many enemies it hits
 
@@ -781,7 +786,8 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("IsSliding", isSliding);
 
         //Implement surfing
-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.L) || (Input.GetButtonDown("RB"))
+        // (as before: the keyboard keys skip the checks below, the gamepad's RB needs them)
+        if (GameInput.KeyDown(UnityEngine.InputSystem.Key.LeftShift) || GameInput.KeyDown(UnityEngine.InputSystem.Key.L) || (GameInput.PadDown(GameInput.Act.SurfDash))
      && Mathf.Abs(moveInput) > 0
      && !isDucking
      && !isSurfing

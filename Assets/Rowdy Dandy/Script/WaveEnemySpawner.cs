@@ -84,6 +84,8 @@ public class WaveEnemySpawner : MonoBehaviour
     [Header("Quiet Places (no wave spawns)")]
     [Tooltip("The start of the beach is left alone: nothing spawns while Rowdy is left of this X, and nothing is placed there.")]
     [SerializeField] private float quietBeachUntilX = 12f;
+    [Tooltip("For now: the whole Beach zone (the start of the game) spawns nothing, so new players can learn the controls. The forest up top still spawns.")]
+    [SerializeField] private bool quietWholeBeach = true;
     [Tooltip("Standing on a checkpoint (spawner) pauses the waves, so you can catch your breath.")]
     [SerializeField] private bool quietAtCheckpoints = true;
     [Tooltip("How far around a checkpoint's trigger still counts as standing on it.")]
@@ -391,6 +393,7 @@ public class WaveEnemySpawner : MonoBehaviour
     private bool InQuietArea(Vector2 point)
     {
         if (point.x < quietBeachUntilX) return true;
+        if (quietWholeBeach && ZoneAt(point)?.name == "Beach") return true;
         if (!quietInPelichArena) return false;
 
         if (float.IsNaN(pelichHomeX) && Time.time - pelichSearchedAt > 3f)
@@ -400,6 +403,12 @@ public class WaveEnemySpawner : MonoBehaviour
             if (boss != null) { pelich = boss.transform; pelichHomeX = pelich.position.x; }
         }
         return !float.IsNaN(pelichHomeX) && Mathf.Abs(point.x - pelichHomeX) < pelichArenaHalfWidth;
+    }
+
+    private Zone ZoneAt(Vector2 point)
+    {
+        foreach (Zone zone in zones) if (zone != null && zone.Contains(point)) return zone;
+        return null;
     }
 
     private Zone CurrentZone()

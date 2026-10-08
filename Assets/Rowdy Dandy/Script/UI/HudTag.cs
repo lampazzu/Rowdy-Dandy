@@ -55,9 +55,19 @@ public static class HudTag
         ['8'] = new[] { "111", "1.1", "111", "1.1", "111" },
         ['9'] = new[] { "111", "1.1", "111", "..1", "11." },
         [' '] = new[] { "...", "...", "...", "...", "..." },
+        ['-'] = new[] { "...", "...", "111", "...", "..." },
+        ['+'] = new[] { "...", ".1.", "111", ".1.", "..." },
+        // PlayStation face buttons, 5 wide (GameInput.Cross / Circle / Square / Triangle)
+        ['✕'] = new[] { "1...1", ".1.1.", "..1..", ".1.1.", "1...1" },
+        ['○'] = new[] { ".111.", "1...1", "1...1", "1...1", ".111." },
+        ['□'] = new[] { "11111", "1...1", "1...1", "1...1", "11111" },
+        ['△'] = new[] { "..1..", ".1.1.", ".1.1.", "1...1", "11111" },
     };
 
     private static readonly Dictionary<string, Sprite> cache = new Dictionary<string, Sprite>();
+
+    // The 3x5 glyph for a character ('1' = ink; blank if missing). Also used for small text on ButtonIcons.
+    public static string[] SmallGlyph(char c) => Glyphs.TryGetValue(char.ToUpperInvariant(c), out string[] g) ? g : Glyphs[' '];
 
     // Size of the tag in UI pixels (at ArtScale)
     public static Vector2 UISize(Sprite tag) => new Vector2(tag.rect.width * ArtScale, tag.rect.height * ArtScale);
@@ -69,7 +79,9 @@ public static class HudTag
 
         var glyphs = new List<string[]>();
         foreach (char c in word) glyphs.Add(Glyphs.TryGetValue(c, out string[] g) ? g : Glyphs[' ']);
-        int textWidth = Mathf.Max(1, glyphs.Count * 4 - 1);
+        int textWidth = -1;
+        foreach (string[] g in glyphs) textWidth += g[0].Length + 1;
+        textWidth = Mathf.Max(1, textWidth);
         int width = Mathf.Max(9, textWidth + 6);
 
         var tex = new Texture2D(width, Height, TextureFormat.RGBA32, false)
@@ -85,11 +97,15 @@ public static class HudTag
                 Set(px, width, x, y, corner ? new Color32(0, 0, 0, 0) : edge ? Outline : y == 1 ? Highlight : y == Height - 2 ? Shadow : Plate);
             }
 
-        int startX = (width - textWidth) / 2;
-        for (int i = 0; i < glyphs.Count; i++)
+        int gxStart = (width - textWidth) / 2;
+        foreach (string[] g in glyphs)
+        {
+            int w = g[0].Length;
             for (int gy = 0; gy < 5; gy++)
-                for (int gx = 0; gx < 3; gx++)
-                    if (glyphs[i][gy][gx] == '1') Set(px, width, startX + i * 4 + gx, 1 + gy, Letter);
+                for (int gx = 0; gx < w; gx++)
+                    if (g[gy][gx] == '1') Set(px, width, gxStart + gx, 1 + gy, Letter);
+            gxStart += w + 1;
+        }
 
         tex.SetPixels32(px);
         tex.Apply(false, true);

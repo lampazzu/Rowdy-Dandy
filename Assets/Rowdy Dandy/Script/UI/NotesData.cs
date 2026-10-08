@@ -178,7 +178,7 @@ public static class NotesData
             id = "surf", name = "Surfing", glyph = "S",
             sections = new[]
             {
-                ("HOW", "Shift (or L) / RB: Rowdy hops on his board and dashes."),
+                ("HOW", "{SURF}: Rowdy hops on his board and dashes."),
                 ("ON LAND TOO", "You can surf on solid ground, not just water. The ground slows the board down if you stay on it."),
                 ("ENDLESS SURF", "Jump while surfing and the surf carries on when you land. Keep hopping and you can surf as long as you like."),
                 (Quip, "Surfing on sand is technically illegal on most beaches. Good thing nobody here can catch me."),
@@ -192,7 +192,7 @@ public static class NotesData
                 ("HOW IT WORKS", "Every swing you start costs one use, whether it hits or not. The DUR bar under the weapon name shows what's left."),
                 ("BREAKING", "At zero the weapon shatters and you're back to the Rod. A broken weapon is gone until another one drops."),
                 ("REPAIRING", "Walk over a dropped copy of the weapon you're holding and it's picked up by itself: full durability again."),
-                ("SWITCHING", "L1 / Q swaps between the weapons you're carrying. The Rod never breaks."),
+                ("SWITCHING", "{SWITCH} swaps between the weapons you're carrying. The Rod never breaks."),
                 (Quip, "Nothing lasts forever. Except the rod. And my good looks."),
             },
         },
@@ -317,7 +317,7 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT THEY ARE", "A dropped weapon floats in a beam of light. Dropped in mid-air, it falls to the ground first."),
-                ("PICKING UP", "Walk up and press Y / E. It comes with full durability and is equipped right away."),
+                ("PICKING UP", "Walk up and press {INTERACT}. It comes with full durability and is equipped right away."),
                 ("REPAIR", "Same weapon as the one in your hands? Just walk over it - REPAIRED."),
                 (Quip, "Free stuff in a beam of light. Either a gift from the gods or a trap. Worth it."),
             },
@@ -347,7 +347,7 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT IT IS", "A very rare rat with wings. Now and then one bursts out of a defeated enemy, flutters around and escapes after a while."),
-                ("REGISTER IT", "Walk up to it and press Y / E to grab it. Every registered rat is bait: when you die, one cat per rat stays with you and the rest get lost. 10 cats and 3 rats = you come back with 3 cats."),
+                ("REGISTER IT", "Walk up to it and press {INTERACT} to grab it. Every registered rat is bait: when you die, one cat per rat stays with you and the rest get lost. 10 cats and 3 rats = you come back with 3 cats."),
                 ("LUCK", "Ore gems make it show up more often."),
                 (Quip, "Cats love rats. I love cats. The rats are fine with it. Probably."),
             },
@@ -379,7 +379,7 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT THEY ARE", "Cats hiding around the map, glowing so you can spot them. Touch one and it joins the party. See the Cats tab."),
-                ("MAGICAL CAT CAPACITY", "You can have as many cats as your level (level 1 = 1 cat, up to 10). Party full? Press Y / E on a new cat to swap: the cat that's been with you longest waits there."),
+                ("MAGICAL CAT CAPACITY", "You can have as many cats as your level (level 1 = 1 cat, up to 10). Party full? Press {INTERACT} on a new cat to swap: the cat that's been with you longest waits there."),
                 ("GETTING LOST", "Die and every cat gets lost again somewhere you've been - except one per registered flying rat."),
                 (Quip, "If you love something, let it go. Then go find it. It's glowing. Easy."),
             },

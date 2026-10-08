@@ -103,7 +103,7 @@ public class FlyingRat : Pickup
         // Grab it
         bool close = rowdy != null && Vector2.Distance(transform.position, rowdy.position + Vector3.up * 0.4f) < GrabRadius;
         promptAlpha = Mathf.MoveTowards(promptAlpha, close && !PauseMenu.IsPaused ? 1f : 0f, Time.deltaTime * 6f);
-        if (close && t > 0.6f && !PauseMenu.IsPaused && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3))) Grab();
+        if (close && t > 0.6f && !PauseMenu.IsPaused && GameInput.Down(GameInput.Act.Interact)) Grab();
     }
 
     private void AnimateAura(bool visible)
@@ -119,7 +119,7 @@ public class FlyingRat : Pickup
         }
         if (prompt != null)
         {
-            prompt.sprite = WeaponDrop.IsGamepadConnected() ? WeaponDrop.GetGamepadPrompt() : WeaponDrop.GetKeyboardPrompt();
+            prompt.sprite = WeaponDrop.GetInteractPrompt();
             prompt.color = new Color(1f, 1f, 1f, promptAlpha);
             prompt.enabled = promptAlpha > 0f;
             prompt.transform.localPosition = new Vector3(0f, 0.55f + Mathf.Round(Mathf.Sin(t * 4f) * 2f) / 64f, 0f);

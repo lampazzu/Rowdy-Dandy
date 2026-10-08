@@ -103,6 +103,15 @@ public class EnemyHealth : MonoBehaviour
     public bool HasAwoken { get; private set; }
     public int AwakeFrame { get; private set; }
 
+    // The old man is parked for now: switched off on load. Set to true to bring him (and the Moonbound Elder) back.
+    public static bool OldManEnabled = false;
+
+    private void Start()
+    {
+        if (!OldManEnabled && isOldMan && name.IndexOf("OldMan", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            gameObject.SetActive(false);
+    }
+
     private void Awake()
     {
         HasAwoken = true;

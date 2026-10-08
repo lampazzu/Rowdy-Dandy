@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Button prompts in the bottom-left corner, drawn with the HUD's pink tags:
-//   [SELECT] NOTES   [L2] STATS   [R2] MAP      (keyboard: [TAB] NOTES   [C] STATS   [M] MAP)
+//   [TAB] NOTES   [C] STATS   [M] MAP   as button icons of whatever was used last (keycaps, Xbox View / LT / RT,
+//   PlayStation Share / L2 / R2, Switch - / ZL / ZR)
 // NOTES gets a blinking NEW tag when there's an unread Rowdy Notes page. Hidden while a menu is open.
 // Created automatically on the shared overlay canvas.
 public class HudPrompts : MonoBehaviour
@@ -20,7 +21,7 @@ public class HudPrompts : MonoBehaviour
     private CanvasGroup group;
     private Image notesKey, statsKey, mapKey, newTag;
     private PixelText notesText, statsText, mapText;
-    private bool showingGamepad;
+    private int shownVersion = -1;
     private float newsTimer;
     private bool news;
 
@@ -47,15 +48,15 @@ public class HudPrompts : MonoBehaviour
         statsText = PixelText.Create(row, "STATS", TextScale, TextColor, 0f);
         mapKey = OverlayUI.MakeImage("Map Key", row, Color.white);
         mapText = PixelText.Create(row, "MAP", TextScale, TextColor, 0f);
-        SetKeys(LastInputDevice.UsingGamepad);
+        SetKeys();
     }
 
-    private void SetKeys(bool gamepad)
+    private void SetKeys()
     {
-        showingGamepad = gamepad;
-        notesKey.sprite = HudTag.Make(gamepad ? "SELECT" : "TAB");
-        statsKey.sprite = HudTag.Make(gamepad ? "L2" : "C");
-        mapKey.sprite = HudTag.Make(gamepad ? "R2" : "M");
+        shownVersion = GameInput.DeviceVersion;
+        notesKey.sprite = ButtonIcons.Get(GameInput.IconId(GameInput.Act.Notes));
+        statsKey.sprite = ButtonIcons.Get(GameInput.IconId(GameInput.Act.Stats));
+        mapKey.sprite = ButtonIcons.Get(GameInput.IconId(GameInput.Act.Map));
         Layout();
     }
 
@@ -63,12 +64,12 @@ public class HudPrompts : MonoBehaviour
     private void Layout()
     {
         float x = 0f;
-        x = Put(notesKey.rectTransform, HudTag.UISize(notesKey.sprite), x) + 8f;
+        x = Put(notesKey.rectTransform, ButtonIcons.UISize(notesKey.sprite), x) + 8f;
         x = Put(notesText.Rect, notesText.Rect.sizeDelta, x) + 8f;
         x = Put(newTag.rectTransform, HudTag.UISize(newTag.sprite) * 0.75f, x) + Gap * 3f;
-        x = Put(statsKey.rectTransform, HudTag.UISize(statsKey.sprite), x) + 8f;
+        x = Put(statsKey.rectTransform, ButtonIcons.UISize(statsKey.sprite), x) + 8f;
         x = Put(statsText.Rect, statsText.Rect.sizeDelta, x) + Gap * 3f;
-        x = Put(mapKey.rectTransform, HudTag.UISize(mapKey.sprite), x) + 8f;
+        x = Put(mapKey.rectTransform, ButtonIcons.UISize(mapKey.sprite), x) + 8f;
         Put(mapText.Rect, mapText.Rect.sizeDelta, x);
     }
 
@@ -89,8 +90,7 @@ public class HudPrompts : MonoBehaviour
         group.alpha = Mathf.MoveTowards(group.alpha, hidden ? 0f : 0.9f, Time.unscaledDeltaTime * 6f);
         if (hidden) return;
 
-        bool gamepad = LastInputDevice.UsingGamepad;
-        if (gamepad != showingGamepad) SetKeys(gamepad);
+        if (GameInput.DeviceVersion != shownVersion) SetKeys();
 
         newsTimer -= Time.unscaledDeltaTime;
         if (newsTimer <= 0f)

@@ -157,6 +157,7 @@ public class RowdyNotes : MonoBehaviour
     {
         if (instance == null) Create();
         instance.toasts.Enqueue((headline, name, face));
+        Tutorials.Show(Tutorials.Topic.Notes, null, 2f);
     }
 
     // ---------------------------------------------------------------- page model
@@ -304,18 +305,21 @@ public class RowdyNotes : MonoBehaviour
     private readonly List<GameObject> pageContent = new List<GameObject>();
     private readonly List<(Image frame, Image icon, PixelText glyph, Image news)> strip = new List<(Image, Image, PixelText, Image)>();
     private readonly List<(Image plate, PixelText label)> tabs = new List<(Image, PixelText)>();
+    private PixelText keysText, prevTabText, nextTabText;
+    private int keysVersion = -1;
 
     // ---------------------------------------------------------------- update
     private void Update()
     {
         if (IsOpen)
         {
+            if (keysVersion != GameInput.DeviceVersion) RefreshKeys();
             HandleOpenInput();
             Animate();
         }
         else
         {
-            if (!PauseMenu.IsPaused && (PadInput.SelectDown || Input.GetKeyDown(KeyCode.Tab))) Open();
+            if (!PauseMenu.IsPaused && GameInput.Down(GameInput.Act.Notes)) Open();
             ScanForEnemies();
         }
         UpdateToast();
@@ -329,9 +333,7 @@ public class RowdyNotes : MonoBehaviour
     private void HandleOpenInput()
     {
         if (pendingClose) return;
-        bool close = PadInput.SelectDown || Input.GetKeyDown(KeyCode.JoystickButton1) ||
-                     Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Backspace) ||
-                     Input.GetKeyDown(KeyCode.JoystickButton7);
+        bool close = GameInput.Down(GameInput.Act.Notes) || GameInput.Down(GameInput.Act.Back) || GameInput.Down(GameInput.Act.Pause);
         if (close && Time.unscaledTime - openedAt > 0.1f)
         {
             UISound.Play(UISound.Cue.Back);
@@ -340,19 +342,23 @@ public class RowdyNotes : MonoBehaviour
         }
 
         // Tabs: L1 / R1 (Q / E)
-        if (Input.GetKeyDown(KeyCode.JoystickButton4) || Input.GetKeyDown(KeyCode.Q)) { SwitchTab(-1); return; }
-        if (Input.GetKeyDown(KeyCode.JoystickButton5) || Input.GetKeyDown(KeyCode.E)) { SwitchTab(+1); return; }
-
-        float h = 0f;
-        try { h = Input.GetAxisRaw("Horizontal"); } catch (System.ArgumentException) { }
+        if (GameInput.Down(GameInput.Act.PrevTab)) { SwitchTab(-1); return; }
+        if (GameInput.Down(GameInput.Act.NextTab)) { SwitchTab(+1); return; }
 
         // Pages (the icons along the bottom): arrows / A-D / stick / d-pad, with key repeat
-        int dir = 0;
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) || h > 0.5f) dir = 1;
-        else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) || h < -0.5f) dir = -1;
+        int dir = (int)GameInput.MoveX;
         if (Repeat(dir, ref heldNav, ref navTimer)) Flip(dir);
     }
 
+    // The key hints follow the device: "TABS: Q E   PAGES: ARROWS   CLOSE: TAB", "TABS: LB RB ... CLOSE: VIEW"...
+    private void RefreshKeys()
+    {
+        keysVersion = GameInput.DeviceVersion;
+        if (keysText == null) return;
+        keysText.SetText(GameInput.Format("TABS: {PREV} {NEXT}     PAGES: {MOVE}     CLOSE: {NOTES}"));
+        prevTabText.SetText(GameInput.Icon(GameInput.Act.PrevTab));
+        nextTabText.SetText(GameInput.Icon(GameInput.Act.NextTab));
+    }
     private static bool Repeat(int dir, ref int held, ref float timer)
     {
         if (dir == 0) { held = 0; return false; }
@@ -524,7 +530,7 @@ public class RowdyNotes : MonoBehaviour
     {
         AddLine(header, Pink, 0f, ref y, 3);
         y -= 6f;
-        foreach (string line in Wrap(body, WrapChars)) AddLine(line, color, 0f, ref y);
+        foreach (string line in Wrap(GameInput.Format(body), WrapChars)) AddLine(line, color, 0f, ref y); // {INTERACT} etc. = current buttons
         y -= 16f;
     }
 
@@ -618,7 +624,8 @@ public class RowdyNotes : MonoBehaviour
         var current = new System.Text.StringBuilder();
         foreach (string word in (text ?? "").Split(' '))
         {
-            if (current.Length > 0 && current.Length + 1 + word.Length > width)
+            // (button icons are wider than a letter: measured, not counted)
+            if (current.Length > 0 && PixelFont.CharLength(current.ToString()) + 1 + PixelFont.CharLength(word) > width)
             {
                 lines.Add(current.ToString());
                 current.Clear();
@@ -768,12 +775,12 @@ public class RowdyNotes : MonoBehaviour
         indexText.Rect.anchoredPosition = new Vector2(-230f, -62f);
         prevHint.Rect.anchoredPosition = new Vector2(-320f, -62f);
         nextHint.Rect.anchoredPosition = new Vector2(-140f, -62f);
-        PixelText keys = PixelText.Create(panel, "TABS: L1 R1 / Q E     PAGES: ARROWS     CLOSE: SELECT / TAB", 2, new Color(1f, 1f, 1f, 0.5f), 1f);
-        keys.Rect.anchorMin = keys.Rect.anchorMax = new Vector2(1f, 1f);
-        keys.Rect.anchoredPosition = new Vector2(-60f, -104f);
+        keysText = PixelText.Create(panel, "", 2, new Color(1f, 1f, 1f, 0.5f), 1f);
+        keysText.Rect.anchorMin = keysText.Rect.anchorMax = new Vector2(1f, 1f);
+        keysText.Rect.anchoredPosition = new Vector2(-60f, -104f);
 
         // Tab bar
-        PixelText l1 = PixelText.Create(panel, "L1", 2, Pink, 0f);
+        PixelText l1 = prevTabText = PixelText.Create(panel, GameInput.Icon(GameInput.Act.PrevTab), 2, Pink, 0f);
         l1.Rect.anchorMin = l1.Rect.anchorMax = new Vector2(0f, 1f);
         l1.Rect.anchoredPosition = new Vector2(60f, -140f);
         float tx = 60f + l1.Rect.sizeDelta.x + 14f;
@@ -791,9 +798,10 @@ public class RowdyNotes : MonoBehaviour
             tabs.Add((plate, label));
             tx += w + 8f;
         }
-        PixelText r1 = PixelText.Create(panel, "R1", 2, Pink, 0f);
+        PixelText r1 = nextTabText = PixelText.Create(panel, GameInput.Icon(GameInput.Act.NextTab), 2, Pink, 0f);
         r1.Rect.anchorMin = r1.Rect.anchorMax = new Vector2(0f, 1f);
         r1.Rect.anchoredPosition = new Vector2(tx + 6f, -140f);
+        RefreshKeys();
 
         // Portrait: dark plate, pink frame, the face, a white flash on page flips
         Image frame = OverlayUI.MakeImage("Portrait Frame", panel, HotPink);
@@ -906,10 +914,10 @@ public class RowdyNotes : MonoBehaviour
         title.Rect.anchorMin = title.Rect.anchorMax = new Vector2(0f, 0.5f);
         title.Rect.anchoredPosition = new Vector2(x, -14f);
 
-        Image key = OverlayUI.MakeImage("Key", toastRect, Color.white, HudTag.Make(LastInputDevice.UsingGamepad ? "SELECT" : "TAB"));
+        Image key = OverlayUI.MakeImage("Key", toastRect, Color.white, ButtonIcons.Get(GameInput.IconId(GameInput.Act.Notes)));
         key.rectTransform.anchorMin = key.rectTransform.anchorMax = new Vector2(1f, 0.5f);
         key.rectTransform.pivot = new Vector2(1f, 0.5f);
-        key.rectTransform.sizeDelta = HudTag.UISize(key.sprite) * 0.75f;
+        key.rectTransform.sizeDelta = ButtonIcons.UISize(key.sprite);
         key.rectTransform.anchoredPosition = new Vector2(-18f, 0f);
 
         float width = Mathf.Max(x + Mathf.Max(top.Rect.sizeDelta.x, title.Rect.sizeDelta.x) + 40f + key.rectTransform.sizeDelta.x, 420f);

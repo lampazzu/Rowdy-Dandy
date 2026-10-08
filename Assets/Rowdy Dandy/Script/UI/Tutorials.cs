@@ -4,14 +4,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // First-time popups: the first weapon, cat, legendary rat, checkpoint, level up and nightfall each get one small
-// card that pauses the game. Few words, a bit of Rowdy. Dismiss with A / B / Y / Space / Enter / E / Esc.
+// card that pauses the game. Few words, a bit of Rowdy. Dismiss with the face buttons / Space / Enter / E / Esc.
 // Seen ones are saved (PlayerPrefs RD_Tut_*); Accessibility > Tutorial Popups turns them off. Texts are in Texts below
 // (pixel font: A-Z 0-9 . , : ! ? % / - + < > ( ) only - no apostrophes or =).
 public class Tutorials : MonoBehaviour
 {
-    public enum Topic { Weapon, Cat, Rat, Checkpoint, LevelUp, Night }
+    public enum Topic { Weapon, Cat, Rat, Checkpoint, LevelUp, Night, Controls, Hurt, Notes, Water, Platform, WeaponBroke }
 
-    // title, line 1, line 2 ({I} = the interact button: Y on a gamepad, E on the keyboard)
+    // title, line 1, line 2 ({I} = the interact button of whatever was used last: E, Y, triangle, X)
     private static (string title, string line1, string line2) Texts(Topic topic)
     {
         switch (topic)
@@ -20,8 +20,14 @@ public class Tutorials : MonoBehaviour
             case Topic.Cat: return ("A CAT!", "CATS FIGHT FOR YOU. NO TRAINING NEEDED.", "LEVEL UP FOR MORE. DIE AND THEY WANDER OFF.");
             case Topic.Rat: return ("LEGENDARY RAT!", "EACH RAT KEEPS ONE CAT SAFE", "WHEN YOU DIE. GROSS, BUT LOYAL.");
             case Topic.Checkpoint: return ("CHECKPOINT", "PRESS {I} HERE TO REST.", "FULL HEALTH, FRESH ENEMIES, MORNING SUN.");
-            case Topic.LevelUp: return ("LEVEL UP!", "+1 CAT SLOT.", "MORE CATS, MORE CHAOS.");
+            case Topic.LevelUp: return ("LEVEL UP!", "MORE DAMAGE, CRIT CHANCE, CRIT DAMAGE + 1 CAT SLOT.", "SEE YOUR LEVEL BONUSES ANYTIME: {STATS}");
             case Topic.Night: return ("NIGHTFALL", "MORE MONSTERS. GLOWING ONES ARE ELITES.", "REST AT A CHECKPOINT TO SKIP TO MORNING.");
+            case Topic.Controls: return ("WELCOME, DANDY!", "{MOVE} MOVE, {JUMP} JUMP (HOLD IT), {ATTACK} ATTACK.", "{SURF} WHILE MOVING: SURF DASH ON YOUR BOARD.");
+            case Topic.Hurt: return ("OUCH!", "HIT ENEMIES RIGHT AS THEY ATTACK", "FOR A COUNTER: HUGE DAMAGE.");
+            case Topic.Notes: return ("ROWDY NOTES", "EVERY ENEMY, CAT AND WEAPON YOU MEET GETS A PAGE.", "READ THEM WITH {NOTES}. THE MAP IS ON {MAP}.");
+            case Topic.Water: return ("SURFS UP!", "ROWDY RIDES THE WATER. {JUMP} TO HOP OUT.", "{ATTACK} IN THE WATER LAUNCHES A JUMP ATTACK.");
+            case Topic.Platform: return ("THIN PLATFORM", "JUMP UP THROUGH IT FROM BELOW.", "HOLD {DOWN} + {JUMP} TO DROP THROUGH.");
+            case Topic.WeaponBroke: return ("IT BROKE!", "BROKEN WEAPONS ARE GONE. THE ROD NEVER BREAKS.", "ENEMIES DROP MORE. WALK OVER YOURS TO REPAIR IT.");
         }
         return ("", "", "");
     }
@@ -32,6 +38,7 @@ public class Tutorials : MonoBehaviour
 
     private static Tutorials instance;
     private static readonly List<Pending> queue = new List<Pending>();
+    private static readonly HashSet<Topic> done = new HashSet<Topic>(); // seen, cached so per-frame Show() calls stay cheap
     private static int closedFrame = -10;
 
     public static bool IsOpen { get; private set; }
@@ -44,7 +51,7 @@ public class Tutorials : MonoBehaviour
     private bool pendingClose;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    private static void ResetSession() { queue.Clear(); IsOpen = false; }
+    private static void ResetSession() { queue.Clear(); done.Clear(); IsOpen = false; }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Create()
@@ -58,10 +65,19 @@ public class Tutorials : MonoBehaviour
 
     public static bool Seen(Topic topic) => PlayerPrefs.GetInt(Prefix + topic, 0) == 1;
 
+    // Seen already (cheap: safe to call every frame)
+    public static bool Done(Topic topic)
+    {
+        if (done.Contains(topic)) return true;
+        if (!Seen(topic)) return false;
+        done.Add(topic);
+        return true;
+    }
+
     // Queue a popup (only the first time ever). delay = real seconds, so the pickup's own feedback plays first.
     public static void Show(Topic topic, Sprite icon = null, float delay = 0.5f)
     {
-        if (!GameSettings.TutorialPopups || Seen(topic)) return;
+        if (!GameSettings.TutorialPopups || Done(topic)) return;
         foreach (Pending p in queue) if (p.topic == topic) return;
         queue.Add(new Pending { topic = topic, icon = icon, showAt = Time.unscaledTime + delay });
     }
@@ -69,12 +85,14 @@ public class Tutorials : MonoBehaviour
     public static void ResetAll()
     {
         foreach (Topic t in System.Enum.GetValues(typeof(Topic))) PlayerPrefs.DeleteKey(Prefix + t);
+        done.Clear();
         PlayerPrefs.Save();
     }
 
     private void Update()
     {
         if (IsOpen) { HandleInput(); Animate(); return; }
+        if (!FirstDrop.Running && !Done(Topic.Controls) && GameObject.FindGameObjectWithTag("Player") != null) Show(Topic.Controls, null, 1f);
         if (queue.Count == 0 || !GameSettings.TutorialPopups) { if (!GameSettings.TutorialPopups) queue.Clear(); return; }
         if (PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || CheckpointRest.Resting || FirstDrop.Running) return;
         Health rowdy = FindFirstObjectByType<Health>();
@@ -96,14 +114,15 @@ public class Tutorials : MonoBehaviour
     {
         if (root == null) BuildUI();
         PlayerPrefs.SetInt(Prefix + p.topic, 1);
+        done.Add(p.topic);
         PlayerPrefs.Save();
 
         var text = Texts(p.topic);
         string button = Interact.ButtonName;
         title.SetText(text.title);
-        line1.SetText(text.line1.Replace("{I}", button));
-        line2.SetText(text.line2.Replace("{I}", button));
-        hint.SetText(LastInputDevice.UsingGamepad ? "A  GOT IT" : "SPACE  GOT IT");
+        line1.SetText(GameInput.Format(text.line1.Replace("{I}", button)));
+        line2.SetText(GameInput.Format(text.line2.Replace("{I}", button)));
+        hint.SetText(GameInput.Icon(GameInput.Act.Jump) + " GOT IT");
         iconImage.sprite = p.icon;
         iconImage.enabled = p.icon != null;
 
@@ -137,10 +156,8 @@ public class Tutorials : MonoBehaviour
     private void HandleInput()
     {
         if (pendingClose || Time.unscaledTime - openedAt < 0.45f) return; // no accidental skips mid-combat
-        bool dismiss = Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.JoystickButton1) || Input.GetKeyDown(KeyCode.JoystickButton3)
-                    || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)
-                    || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7)
-                    || Input.GetMouseButtonDown(0);
+        bool dismiss = GameInput.Down(GameInput.Act.Submit) || GameInput.PadDown(GameInput.Act.Back) || GameInput.Down(GameInput.Act.Interact)
+                    || GameInput.Down(GameInput.Act.Pause) || GameInput.MouseLeftDown;
         if (!dismiss) return;
         UISound.Play(UISound.Cue.Confirm);
         pendingClose = true;

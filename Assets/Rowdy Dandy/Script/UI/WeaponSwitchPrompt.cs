@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// Button badge on the weapon slot's corner, drawn like the HUD's own pink tags: "L1" (gamepad) or "Q" (keyboard).
+// Button badge on the weapon slot's corner, the button icon (Q keycap / LB / L1 / L) of whatever was used last.
 // Only there when another weapon can be switched to; it blinks in when one becomes available, then breathes.
 // Built at runtime by WeaponManager on the HUD's WeaponSlot (the parent of the weapon icon).
 public class WeaponSwitchPrompt : MonoBehaviour
@@ -9,7 +9,7 @@ public class WeaponSwitchPrompt : MonoBehaviour
     private WeaponManager weapons;
     private RectTransform rect;
     private Image badge;
-    private bool showingGamepad;
+    private int shownVersion = -1;
     private bool wasVisible;
     private float shownAt = -10f;
 
@@ -31,15 +31,15 @@ public class WeaponSwitchPrompt : MonoBehaviour
         rect.anchoredPosition = new Vector2(-2f * HudTag.ArtScale, 1f * HudTag.ArtScale);
         badge = GetComponent<Image>();
         badge.raycastTarget = false;
-        SetKey(LastInputDevice.UsingGamepad);
+        SetKey();
         badge.enabled = false;
     }
 
-    private void SetKey(bool gamepad)
+    private void SetKey()
     {
-        showingGamepad = gamepad;
-        badge.sprite = HudTag.Make(gamepad ? "L1" : "Q");
-        rect.sizeDelta = HudTag.UISize(badge.sprite);
+        shownVersion = GameInput.DeviceVersion;
+        badge.sprite = ButtonIcons.Get(GameInput.IconId(GameInput.Act.SwitchWeapon));
+        rect.sizeDelta = ButtonIcons.UISize(badge.sprite);
     }
 
     private void Update()
@@ -47,8 +47,7 @@ public class WeaponSwitchPrompt : MonoBehaviour
         // Gone, or left over from a recompile during Play mode (fields not built): remove
         if (weapons == null || badge == null || rect == null) { Destroy(gameObject); return; }
 
-        bool gamepad = LastInputDevice.UsingGamepad;
-        if (gamepad != showingGamepad) SetKey(gamepad);
+        if (GameInput.DeviceVersion != shownVersion) SetKey();
 
         bool visible = weapons.NextWeaponProfile != null;
         if (visible && !wasVisible) shownAt = Time.unscaledTime;
@@ -65,34 +64,8 @@ public class WeaponSwitchPrompt : MonoBehaviour
     }
 }
 
-// Which device Rowdy was last controlled with (for button prompts)
+// Which device Rowdy was last controlled with (for button prompts). GameInput.Current tells which pad family.
 public static class LastInputDevice
 {
-    private static bool gamepad;
-    private static int checkedFrame = -1;
-
-    public static bool UsingGamepad
-    {
-        get
-        {
-            if (checkedFrame == Time.frameCount) return gamepad;
-            checkedFrame = Time.frameCount;
-
-            for (KeyCode k = KeyCode.JoystickButton0; k <= KeyCode.JoystickButton19; k++)
-                if (Input.GetKeyDown(k)) { gamepad = true; return gamepad; }
-            if (PadInput.L2Down) { gamepad = true; return gamepad; }
-            if (Input.anyKeyDown) { gamepad = false; return gamepad; }
-            float h = 0f, v = 0f;
-            try
-            {
-                if (Input.GetAxisRaw("Mouse X") != 0f) { gamepad = false; return gamepad; }
-                h = Input.GetAxisRaw("Horizontal");
-                v = Input.GetAxisRaw("Vertical");
-            }
-            catch (System.ArgumentException) { }
-            // stick / d-pad moved with no keyboard key held = gamepad
-            if ((Mathf.Abs(h) > 0.5f || Mathf.Abs(v) > 0.5f) && !Input.anyKey) gamepad = true;
-            return gamepad;
-        }
-    }
+    public static bool UsingGamepad => GameInput.UsingGamepad;
 }

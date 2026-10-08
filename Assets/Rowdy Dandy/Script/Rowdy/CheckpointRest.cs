@@ -63,7 +63,7 @@ public class CheckpointRest : MonoBehaviour
         if (prompt == null) return;
         prompt.enabled = show;
         if (!show) return;
-        prompt.sprite = LastInputDevice.UsingGamepad ? WeaponDrop.GetGamepadPrompt() : WeaponDrop.GetKeyboardPrompt();
+        prompt.sprite = WeaponDrop.GetInteractPrompt();
         float bob = Mathf.Round(Mathf.Sin(Time.unscaledTime * 4f) * 2f) / 64f;
         prompt.transform.position = new Vector3(area.bounds.center.x, area.bounds.max.y + 0.45f + bob, 0f);
     }

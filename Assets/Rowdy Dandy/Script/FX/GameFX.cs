@@ -456,7 +456,7 @@ public class BloodDrop : MonoBehaviour
         Vector2 step = velocity * dt;
         if (velocity.y < 0f && SolidGround.Ray(from, step.normalized, step.magnitude + 0.01f, out RaycastHit2D hit) && hit.normal.y > 0.5f)
         {
-            BloodPool.Spawn(hit.point, hit.collider, sr.color);
+            BloodPool.Spawn(hit.point, hit.collider, sr.color, hit.normal);
             Destroy(gameObject);
             return;
         }
@@ -464,7 +464,8 @@ public class BloodDrop : MonoBehaviour
     }
 }
 
-// A flat puddle on the ground: spreads out, stays a while, fades. Neighbouring drops merge into the same puddle.
+// A flat puddle on the ground, tilted to the floor's slope: spreads out, stays a while, fades.
+// Neighbouring drops merge into the same puddle.
 public class BloodPool : MonoBehaviour
 {
     private static readonly List<BloodPool> live = new List<BloodPool>();
@@ -473,21 +474,30 @@ public class BloodPool : MonoBehaviour
     private SpriteRenderer sr;
     private float age, width = 0.1f, targetWidth, life = 14f;
     private Color color;
+    private Vector2 normal = Vector2.up;
 
-    public static void Spawn(Vector2 at, Collider2D ground, Color color)
+    public static void Spawn(Vector2 at, Collider2D ground, Color color, Vector2 normal = default)
     {
+        if (normal.sqrMagnitude < 0.01f) normal = Vector2.up;
         foreach (BloodPool p in live)
         {
-            if (p != null && Mathf.Abs(p.transform.position.y - at.y) < 0.05f && Mathf.Abs(p.transform.position.x - at.x) < 0.12f)
+            if (p == null) continue;
+            // Same puddle: close along the floor, barely off it, and the same slope
+            Vector2 offset = at - (Vector2)p.transform.position;
+            Vector2 along = new Vector2(normal.y, -normal.x);
+            if (Mathf.Abs(Vector2.Dot(offset, normal)) < 0.05f && Mathf.Abs(Vector2.Dot(offset, along)) < 0.12f && Vector2.Dot(p.normal, normal) > 0.98f)
             {
                 p.Grow();
                 return;
             }
         }
         var go = new GameObject("Blood Pool");
-        go.transform.position = new Vector3(Mathf.Round(at.x * 64f) / 64f, Mathf.Round(at.y * 64f) / 64f + 0.5f / 64f, 0f);
+        Vector2 lift = normal * (0.5f / 64f);
+        go.transform.position = new Vector3(Mathf.Round(at.x * 64f) / 64f + lift.x, Mathf.Round(at.y * 64f) / 64f + lift.y, 0f);
+        go.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(-normal.x, normal.y) * Mathf.Rad2Deg); // lies along the slope
         if (ground != null) go.transform.SetParent(ground.transform, true); // rides moving platforms
         var pool = go.AddComponent<BloodPool>();
+        pool.normal = normal;
         pool.color = Color.Lerp(color, Blood.Dark, 0.4f);
         pool.sr = go.AddComponent<SpriteRenderer>();
         pool.sr.sprite = Puddle(Random.Range(0, 3));

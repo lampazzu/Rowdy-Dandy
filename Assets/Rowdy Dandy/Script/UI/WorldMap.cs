@@ -90,7 +90,7 @@ public class WorldMap : MonoBehaviour
             return;
         }
 
-        if (!PauseMenu.IsPaused && !RowdyNotes.IsOpen && (Input.GetKeyDown(KeyCode.M) || PadInput.R2Down)) { Open(); return; }
+        if (!PauseMenu.IsPaused && !RowdyNotes.IsOpen && GameInput.Down(GameInput.Act.Map)) { Open(); return; }
         TrackExploration();
     }
 
@@ -355,7 +355,8 @@ public class WorldMap : MonoBehaviour
     private RectTransform panel, viewport, content, rowdyPin;
     private CanvasGroup panelGroup;
     private RawImage mapImage;
-    private PixelText areaText;
+    private PixelText areaText, keysText;
+    private int keysVersion = -1;
     private readonly List<(RectTransform rect, Vector2 world, float popDelay)> pins = new List<(RectTransform, Vector2, float)>();
     private readonly List<GameObject> pinObjects = new List<GameObject>();
     private int zoom = DefaultZoom;
@@ -408,8 +409,7 @@ public class WorldMap : MonoBehaviour
     {
         if (pendingClose) return;
         float now = Time.unscaledTime;
-        bool close = PadInput.R2Down || Input.GetKeyDown(KeyCode.M) || Input.GetKeyDown(KeyCode.Escape) ||
-                     Input.GetKeyDown(KeyCode.JoystickButton1) || Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.JoystickButton7);
+        bool close = GameInput.Down(GameInput.Act.Map) || GameInput.Down(GameInput.Act.Back) || GameInput.Down(GameInput.Act.Pause);
         if (close && now - openedAt > 0.1f)
         {
             UISound.Play(UISound.Cue.Back);
@@ -418,25 +418,22 @@ public class WorldMap : MonoBehaviour
         }
 
         int zoomDir = 0;
-        if (Input.GetKeyDown(KeyCode.JoystickButton5) || Input.GetKeyDown(KeyCode.E) || Input.mouseScrollDelta.y > 0.1f) zoomDir = 1;
-        if (Input.GetKeyDown(KeyCode.JoystickButton4) || Input.GetKeyDown(KeyCode.Q) || Input.mouseScrollDelta.y < -0.1f) zoomDir = -1;
+        float scroll = GameInput.MouseScroll;
+        if (GameInput.Down(GameInput.Act.NextTab) || scroll > 0.1f) zoomDir = 1;
+        if (GameInput.Down(GameInput.Act.PrevTab) || scroll < -0.1f) zoomDir = -1;
         if (zoomDir != 0)
         {
             int z = Mathf.Clamp(zoom + zoomDir, 0, Zooms.Length - 1);
             if (z != zoom) { zoom = z; UISound.Play(UISound.Cue.Change); }
         }
-        if ((Input.GetKeyDown(KeyCode.JoystickButton3) || Input.GetKeyDown(KeyCode.Space)) && rowdy != null)
+        if (GameInput.Down(GameInput.Act.MapCenter) && rowdy != null)
         {
             center = WorldToMap(rowdy.position);
             UISound.Play(UISound.Cue.Move);
         }
 
-        float h = 0f, v = 0f;
-        try { h = Input.GetAxisRaw("Horizontal"); v = Input.GetAxisRaw("Vertical"); } catch (System.ArgumentException) { }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) h = 1f;
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) h = -1f;
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) v = 1f;
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) v = -1f;
+        Vector2 stick = GameInput.MoveVector; // keys / d-pad: -1, 0, 1; the stick: analog
+        float h = stick.x, v = stick.y;
         Vector2 move = new Vector2(Mathf.Abs(h) > 0.2f ? h : 0f, Mathf.Abs(v) > 0.2f ? v : 0f);
         center += move * (700f / Zooms[zoom]) * Time.unscaledDeltaTime;
         center.x = Mathf.Clamp(center.x, 0f, texW);
@@ -445,6 +442,11 @@ public class WorldMap : MonoBehaviour
 
     private void Animate()
     {
+        if (keysText != null && keysVersion != GameInput.DeviceVersion)
+        {
+            keysVersion = GameInput.DeviceVersion;
+            keysText.SetText(GameInput.Format("MOVE: {MOVE}    ZOOM: {PREV} {NEXT}    CENTER: {CENTER}    CLOSE: {MAP}"));
+        }
         float now = Time.unscaledTime;
         float open = Ease(Mathf.Clamp01((now - openedAt) / 0.22f));
         panelGroup.alpha = open;
@@ -580,9 +582,10 @@ public class WorldMap : MonoBehaviour
         x = LegendItem(PinSprite(PinKind.Flag), Gold, "SPAWNER", x);
         x = LegendItem(PinSprite(PinKind.Skull), new Color(1f, 0.35f, 0.4f), "DANGER", x);
         LegendItem(PinSprite(PinKind.Question), Pink, "???", x);
-        PixelText keys = PixelText.Create(panel, "MOVE: STICK / ARROWS    ZOOM: L1 R1 / Q E    CENTER: Y / SPACE    CLOSE: R2 / M", 2, new Color(1f, 1f, 1f, 0.5f), 1f);
-        keys.Rect.anchorMin = keys.Rect.anchorMax = new Vector2(1f, 0f);
-        keys.Rect.anchoredPosition = new Vector2(-60f, 50f);
+        keysText = PixelText.Create(panel, "", 2, new Color(1f, 1f, 1f, 0.5f), 1f);
+        keysText.Rect.anchorMin = keysText.Rect.anchorMax = new Vector2(1f, 0f);
+        keysText.Rect.anchoredPosition = new Vector2(-60f, 50f);
+        keysVersion = -1;
 
         root.SetActive(false);
     }

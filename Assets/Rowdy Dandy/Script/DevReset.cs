@@ -21,7 +21,7 @@ public class DevReset : MonoBehaviour
     private void Update()
     {
         if (PauseMenu.IsPaused) return;
-        if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) ResetEverything();
+        if (GameInput.KeyDown(KeyCode.Alpha0) || GameInput.KeyDown(KeyCode.Keypad0)) ResetEverything();
     }
 
     public static void ResetEverything()

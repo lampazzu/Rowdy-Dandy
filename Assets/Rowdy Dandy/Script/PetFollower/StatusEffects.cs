@@ -64,6 +64,8 @@ public class RowdyBuffs : MonoBehaviour
     private void OnDestroy() { if (instance == this) instance = null; }
 
     private Vector3 Center => bodyCollider != null ? bodyCollider.bounds.center : transform.position + Vector3.up * 0.4f;
+    // Where the block shield is drawn: halfway up from his middle to his head, so it covers his upper body instead of his legs
+    private Vector3 ShieldSpot => Vector3.Lerp(Center, HeadTop, 0.5f);
     private Vector3 HeadTop => bodyCollider != null ? new Vector3(bodyCollider.bounds.center.x, bodyCollider.bounds.max.y, 0f) : transform.position + Vector3.up * 0.9f;
 
     // ================================================================ armor (The Peak)
@@ -75,7 +77,7 @@ public class RowdyBuffs : MonoBehaviour
         b.armorOwner = owner;
         b.shieldPop = 0.35f;
         ItemArt art = ItemArt.Get;
-        if (art != null) SheetFX.Play(art.vfxBlock, 10, b.Center, 22f, 64f, b.body != null ? b.body.sortingOrder + 3 : 90, b.transform, false, null, 0.55f);
+        if (art != null) SheetFX.Play(art.vfxBlock, 10, b.ShieldSpot, 22f, 64f, b.body != null ? b.body.sortingOrder + 3 : 90, b.transform, false, null, 0.55f);
         PulseRing.Spawn(b.Center, new Color(0.6f, 0.9f, 1f, 0.9f), 1.1f, 0.35f);
         FXSound.Play("ShieldUp", 0.9f, 1.1f);
         IconPopup.Show(b.HeadTop + Vector3.up * 0.3f, b.ShieldFrame(0), "ARMOR X" + hits, new Color(0.65f, 0.9f, 1f), 0.9f, 1.3f);
@@ -95,7 +97,7 @@ public class RowdyBuffs : MonoBehaviour
         PulseRing.Spawn(b.Center, new Color(0.7f, 0.95f, 1f, 1f), 0.9f, 0.25f);
         FXParticle.Burst(b.Center, new Color(0.75f, 0.95f, 1f), 10, 1.5f, 3.5f, 6f, 0.45f);
         ItemArt art = ItemArt.Get;
-        if (art != null) SheetFX.Play(art.vfxBlock, 10, b.Center, 28f, 64f, b.body != null ? b.body.sortingOrder + 3 : 90, b.transform, false, null, 0.45f);
+        if (art != null) SheetFX.Play(art.vfxBlock, 10, b.ShieldSpot, 28f, 64f, b.body != null ? b.body.sortingOrder + 3 : 90, b.transform, false, null, 0.45f);
         if (b.charges > 0)
         {
             FXSound.Play("ShieldBreak", 0.6f, 1.45f);
@@ -274,6 +276,8 @@ public class StatusEffects : MonoBehaviour
     private void OnDestroy() => stunned.Remove(gameObject);
 
     private Vector3 Center => EnemyFairness.BodyCenter(this);
+    // Where the block shield is drawn: halfway up from his middle to his head, so it covers his upper body instead of his legs
+    private Vector3 ShieldSpot => Vector3.Lerp(Center, HeadTop, 0.5f);
     private Vector3 HeadTop => transform.position + Vector3.up * EnemyFairness.HeadHeight(this);
 
     // ---------------------------------------------------------------- poison

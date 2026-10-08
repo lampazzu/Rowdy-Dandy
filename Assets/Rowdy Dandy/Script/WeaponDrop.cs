@@ -58,8 +58,6 @@ public class WeaponDrop : MonoBehaviour
     private static Sprite beamSprite;
     private static int beamSpriteKey;
     private static Sprite sparkleSprite;
-    private static Sprite gamepadPromptSprite;
-    private static Sprite keyboardPromptSprite;
 
     private bool playerIsClose = false;
     private Vector3 iconBaseScale;
@@ -118,12 +116,14 @@ public class WeaponDrop : MonoBehaviour
     {
         Vector2 from = transform.position;
         float best = float.NegativeInfinity;
+        // SolidGround skips characters and corpses too: dying enemies turn kinematic, and the drop used to "land" on the
+        // body of the enemy that dropped it and hang in the air
         foreach (RaycastHit2D hit in Physics2D.RaycastAll(from + Vector2.up * 0.2f, Vector2.down, 40f))
         {
             Collider2D c = hit.collider;
-            if (c == null || c.isTrigger) continue;
-            if (c.attachedRigidbody != null && c.attachedRigidbody.bodyType == RigidbodyType2D.Dynamic) continue; // enemies, Rowdy, corpses
-            if (c.transform.IsChildOf(transform)) continue;
+            if (!SolidGround.IsGround(c) || c.transform.IsChildOf(transform)) continue;
+            if (hit.distance <= 0.0001f && c.usedByEffector) continue; // inside a one-way platform
+            if (c.GetComponentInParent<EnemyHealth>() != null || c.GetComponentInParent<Health>() != null) continue;
             best = hit.point.y;
             break;
         }
@@ -248,9 +248,9 @@ public class WeaponDrop : MonoBehaviour
         }
 
         // --- PICKUP INPUT ---
-        // Press E on Keyboard OR Triangle/Y on Gamepad (or just walk over it: Accessibility > Auto Pick Up Weapons)
+        // Interact button: E / Y / Triangle / X (Switch) (or just walk over it: Accessibility > Auto Pick Up Weapons)
         bool autoPickup = GameSettings.AutoPickupWeapons && !pickedUp;
-        if (playerIsClose && !PauseMenu.IsPaused && (autoPickup || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3)))
+        if (playerIsClose && !PauseMenu.IsPaused && (autoPickup || GameInput.Down(GameInput.Act.Interact)))
         {
             WeaponManager wm = FindFirstObjectByType<WeaponManager>();
             if (wm != null)
@@ -313,8 +313,7 @@ public class WeaponDrop : MonoBehaviour
         // --- BUTTON PROMPT ---
         if (promptRenderer != null)
         {
-            bool gamepad = IsGamepadConnected();
-            promptRenderer.sprite = gamepad ? GetGamepadPrompt() : GetKeyboardPrompt();
+            promptRenderer.sprite = GetInteractPrompt();
 
             promptAlpha = Mathf.MoveTowards(promptAlpha, playerIsClose && !PauseMenu.IsPaused ? 1f : 0f, Time.deltaTime * 6f);
             promptRenderer.color = new Color(1f, 1f, 1f, promptAlpha);
@@ -328,19 +327,10 @@ public class WeaponDrop : MonoBehaviour
 
     private static float Snap(float v) => Mathf.Round(v * PixelsPerUnit) / PixelsPerUnit;
 
-    private static float gamepadCheckTime = -10f;
-    private static bool gamepadCached;
-
-    public static bool IsGamepadConnected()
+    // The interact button of whatever Rowdy was last controlled with: E keycap, Xbox Y, PlayStation triangle, Switch X
+    public static Sprite GetInteractPrompt()
     {
-        if (Time.unscaledTime - gamepadCheckTime < 1f) return gamepadCached;
-        gamepadCheckTime = Time.unscaledTime;
-        gamepadCached = false;
-        foreach (string name in Input.GetJoystickNames())
-        {
-            if (!string.IsNullOrEmpty(name)) { gamepadCached = true; break; }
-        }
-        return gamepadCached;
+        return ButtonIcons.Get(GameInput.IconId(GameInput.Act.Interact), new Vector2(0.5f, 0f)); // feet on the anchor
     }
 
     // ------------------------------------------------------------------ generated pixel art
@@ -402,91 +392,5 @@ public class WeaponDrop : MonoBehaviour
         tex.Apply(false);
         sparkleSprite = Sprite.Create(tex, new Rect(0, 0, 3, 3), new Vector2(0.5f, 0.5f), PixelsPerUnit, 0, SpriteMeshType.FullRect);
         return sparkleSprite;
-    }
-
-    // Round yellow Y button (Xbox colors) with the pixel-font letter
-    public static Sprite GetGamepadPrompt()
-    {
-        if (gamepadPromptSprite != null) return gamepadPromptSprite;
-
-        const int size = 13;
-        Color32 outline = new Color32(20, 6, 26, 255);
-        Color32 face = new Color32(240, 190, 40, 255);
-        Color32 shade = new Color32(190, 130, 20, 255);
-        Color32 light = new Color32(255, 230, 130, 255);
-        Color32 clear = new Color32(0, 0, 0, 0);
-
-        var pixels = new Color32[size * size];
-        float c = (size - 1) * 0.5f;
-        for (int y = 0; y < size; y++)
-        {
-            for (int x = 0; x < size; x++)
-            {
-                float dx = x - c, dy = y - c;
-                float dist = Mathf.Sqrt(dx * dx + dy * dy);
-                Color32 col = clear;
-                if (dist <= c + 0.3f) col = outline;
-                if (dist <= c - 0.7f) col = dy < -2.5f ? shade : face; // y = 0 is the bottom row
-                if (dist <= c - 0.7f && dy > 2.5f && dx < 1f) col = light;
-                pixels[y * size + x] = col;
-            }
-        }
-        StampLetter(pixels, size, size, "Y", outline);
-
-        Texture2D tex = NewTexture(size, size, "PromptButtonY");
-        tex.SetPixels32(pixels);
-        tex.Apply(false);
-        gamepadPromptSprite = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0f), PixelsPerUnit, 0, SpriteMeshType.FullRect);
-        return gamepadPromptSprite;
-    }
-
-    // Light keycap with E
-    public static Sprite GetKeyboardPrompt()
-    {
-        if (keyboardPromptSprite != null) return keyboardPromptSprite;
-
-        const int w = 13, h = 13;
-        Color32 outline = new Color32(20, 6, 26, 255);
-        Color32 face = new Color32(225, 220, 235, 255);
-        Color32 side = new Color32(140, 130, 160, 255);
-        Color32 clear = new Color32(0, 0, 0, 0);
-
-        var pixels = new Color32[w * h];
-        for (int y = 0; y < h; y++)
-        {
-            for (int x = 0; x < w; x++)
-            {
-                bool corner = (x == 0 || x == w - 1) && (y == 0 || y == h - 1);
-                Color32 col = corner ? clear : outline;
-                if (x > 0 && x < w - 1 && y > 0 && y < h - 1) col = y <= 2 ? side : face; // thicker bottom = keycap depth
-                pixels[y * w + x] = col;
-            }
-        }
-        StampLetter(pixels, w, h, "E", outline, 1);
-
-        Texture2D tex = NewTexture(w, h, "PromptKeyE");
-        tex.SetPixels32(pixels);
-        tex.Apply(false);
-        keyboardPromptSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0f), PixelsPerUnit, 0, SpriteMeshType.FullRect);
-        return keyboardPromptSprite;
-    }
-
-    // Copies a pixel-font letter (5x7) into the middle of a pixel buffer
-    private static void StampLetter(Color32[] pixels, int w, int h, string letter, Color32 color, int raise = 0)
-    {
-        Texture2D glyph = PixelFont.Render(letter, PixelFont.Edge.DropShadow);
-        Color32[] g = glyph.GetPixels32();
-        int gw = PixelFont.GlyphW, gh = PixelFont.GlyphH;
-        int x0 = (w - gw) / 2, y0 = (h - gh) / 2 + raise;
-        for (int y = 0; y < gh; y++)
-        {
-            for (int x = 0; x < gw; x++)
-            {
-                // Render's texture is (5+1)x(7+1) with the ink starting at the top-left
-                Color32 p = g[(glyph.height - 1 - y) * glyph.width + x];
-                if (p.a == 255 && p.r == 255) pixels[(y0 + gh - 1 - y) * w + x0 + x] = color;
-            }
-        }
-        Destroy(glyph);
     }
 }

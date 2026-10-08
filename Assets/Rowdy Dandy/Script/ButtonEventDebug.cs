@@ -26,7 +26,7 @@ public class ButtonEventDebug : MonoBehaviour
     {
         foreach (var pair in buttonEventPairs)
         {
-            if (Input.GetKeyDown(pair.button))
+            if (GameInput.KeyDown(pair.button))
             {
                 pair.unityEvent.Invoke(pair.button);
                 Debug.Log("Button " + pair.button + " pressed!");

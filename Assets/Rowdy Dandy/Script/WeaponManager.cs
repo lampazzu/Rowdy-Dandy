@@ -176,13 +176,13 @@ public class WeaponManager : MonoBehaviour
     {
         if (PauseMenu.IsPaused) return;
 
-        if (Input.GetKeyDown(KeyCode.Alpha7) && unlockedWeapons[0]) SetWeaponToAxe();
-        if (Input.GetKeyDown(KeyCode.Alpha8) && unlockedWeapons[1]) SetWeaponToSword();
-        if (Input.GetKeyDown(KeyCode.Alpha9) && unlockedWeapons[2]) SetWeaponToNaginata();
+        if (GameInput.KeyDown(KeyCode.Alpha7) && unlockedWeapons[0]) SetWeaponToAxe();
+        if (GameInput.KeyDown(KeyCode.Alpha8) && unlockedWeapons[1]) SetWeaponToSword();
+        if (GameInput.KeyDown(KeyCode.Alpha9) && unlockedWeapons[2]) SetWeaponToNaginata();
         // (0 used to pick the Cleaver; it's the dev "reset everything" key now, see DevReset)
 
         // Q on keyboard (was Left Ctrl), L1 / LB on gamepad
-        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.JoystickButton4))
+        if (GameInput.Down(GameInput.Act.SwitchWeapon))
         {
             CycleWeapon();
         }
@@ -267,6 +267,7 @@ public class WeaponManager : MonoBehaviour
             RunStats.WeaponsBroken++;
             PlayBreakMoment(activeIndex); // before the switch, while the HUD still shows the broken weapon
             onWeaponBroken?.Invoke();
+            Tutorials.Show(Tutorials.Topic.WeaponBroke, null, 1.2f);
             // Accessibility > Auto Equip Weapon: straight to the next weapon he has; otherwise back to the Rod
             int next = GameSettings.AutoEquipWeapon ? BestOtherWeapon(activeIndex) : -1;
             if (next > 0) SetWeaponByIndex(next);
