@@ -1,0 +1,923 @@
+fileFormatVersion: 2
+guid: e772aa61a51a1514f82ca222547ec242
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6805822259444506866
+    second: TDF_Matinta@Projectile_0
+  - first:
+      213: -1443749596850223244
+    second: TDF_Matinta@Projectile_1
+  - first:
+      213: 65241424698937441
+    second: TDF_Matinta@Projectile_2
+  - first:
+      213: -1916918423084843948
+    second: TDF_Matinta@Projectile_3
+  - first:
+      213: -8920963107326825621
+    second: TDF_Matinta@Projectile_4
+  - first:
+      213: 8671957613096582933
+    second: TDF_Matinta@Projectile_5
+  - first:
+      213: -4892828575311347675
+    second: TDF_Matinta@Projectile_6
+  - first:
+      213: -8412061344497223023
+    second: TDF_Matinta@Projectile_7
+  - first:
+      213: -110253793906833875
+    second: TDF_Matinta@Projectile_8
+  - first:
+      213: 8559559479501879246
+    second: TDF_Matinta@Projectile_9
+  - first:
+      213: 7697747493054427428
+    second: TDF_Matinta@Projectile_10
+  - first:
+      213: -2013463694664964990
+    second: TDF_Matinta@Projectile_11
+  - first:
+      213: 2118843288166143225
+    second: TDF_Matinta@Projectile_12
+  - first:
+      213: -8047929494382443262
+    second: TDF_Matinta@Projectile_13
+  - first:
+      213: 1644789761096993518
+    second: TDF_Matinta@Projectile_14
+  - first:
+      213: -2102120911771531372
+    second: TDF_Matinta@Projectile_15
+  - first:
+      213: -4319478354168145999
+    second: TDF_Matinta@Projectile_16
+  - first:
+      213: 2502905104001414717
+    second: TDF_Matinta@Projectile_17
+  - first:
+      213: 3152836304025766488
+    second: TDF_Matinta@Projectile_18
+  - first:
+      213: 8004742039973243628
+    second: TDF_Matinta@Projectile_19
+  - first:
+      213: 4521253095640302082
+    second: TDF_Matinta@Projectile_20
+  - first:
+      213: -5922283719297067341
+    second: TDF_Matinta@Projectile_21
+  - first:
+      213: 2779229949151583801
+    second: TDF_Matinta@Projectile_22
+  - first:
+      213: -6370975254031027203
+    second: TDF_Matinta@Projectile_23
+  - first:
+      213: 3983808709057609605
+    second: TDF_Matinta@Projectile_24
+  - first:
+      213: 2109313271062401760
+    second: TDF_Matinta@Projectile_25
+  - first:
+      213: 1432319977430295297
+    second: TDF_Matinta@Projectile_26
+  - first:
+      213: -1809320349661780109
+    second: TDF_Matinta@Projectile_27
+  - first:
+      213: -8188440209083707321
+    second: TDF_Matinta@Projectile_28
+  - first:
+      213: 7804549777852070853
+    second: TDF_Matinta@Projectile_29
+  - first:
+      213: -3583043651697145011
+    second: TDF_Matinta@Projectile_30
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_0
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 163
+        width: 75
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0f1d5db6bcdc81a0800000000000000
+      internalID: -6805822259444506866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_1
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 224
+        width: 35
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47701271465c6fbe0800000000000000
+      internalID: -1443749596850223244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_2
+      rect:
+        serializedVersion: 2
+        x: 1270
+        y: 248
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16012d7eab8c7e000800000000000000
+      internalID: 65241424698937441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_3
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 53
+        width: 209
+        height: 184
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45c30a8b9dcb565e0800000000000000
+      internalID: -1916918423084843948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_4
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 222
+        width: 39
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6b6b65b15f523480800000000000000
+      internalID: -8920963107326825621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_5
+      rect:
+        serializedVersion: 2
+        x: 1488
+        y: 227
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51fbddbc08bf85870800000000000000
+      internalID: 8671957613096582933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_6
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 80
+        width: 115
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 520cfa5855e291cb0800000000000000
+      internalID: -4892828575311347675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_7
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 170
+        width: 31
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19ab274b6ca524b80800000000000000
+      internalID: -8412061344497223023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_8
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 154
+        width: 93
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d264b0332cc487ef0800000000000000
+      internalID: -110253793906833875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_9
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 202
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec779810ff9a9c670800000000000000
+      internalID: 8559559479501879246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_10
+      rect:
+        serializedVersion: 2
+        x: 1112
+        y: 187
+        width: 32
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 421b92e7f84e3da60800000000000000
+      internalID: 7697747493054427428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_11
+      rect:
+        serializedVersion: 2
+        x: 569
+        y: 176
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 284695fff6dbe04e0800000000000000
+      internalID: -2013463694664964990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_12
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 171
+        width: 15
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f41dd59eb4a76d10800000000000000
+      internalID: 2118843288166143225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_13
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 157
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20502fdb3c2005090800000000000000
+      internalID: -8047929494382443262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_14
+      rect:
+        serializedVersion: 2
+        x: 669
+        y: 147
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eeac260c29773d610800000000000000
+      internalID: 1644789761096993518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_15
+      rect:
+        serializedVersion: 2
+        x: 701
+        y: 156
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49700f21b24c3d2e0800000000000000
+      internalID: -2102120911771531372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_16
+      rect:
+        serializedVersion: 2
+        x: 708
+        y: 145
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b791dc82512e04c0800000000000000
+      internalID: -4319478354168145999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_17
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 63
+        width: 74
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d36348e5eea1cb220800000000000000
+      internalID: 2502905104001414717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_18
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 108
+        width: 34
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85a49600aef11cb20800000000000000
+      internalID: 3152836304025766488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_19
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 94
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ceaad33797e861f60800000000000000
+      internalID: 8004742039973243628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_20
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 48
+        width: 66
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20286416cb7bebe30800000000000000
+      internalID: 4521253095640302082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_21
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 89
+        width: 31
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b6183cb552dfcda0800000000000000
+      internalID: -5922283719297067341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_22
+      rect:
+        serializedVersion: 2
+        x: 1093
+        y: 95
+        width: 13
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93e9e4ce9eec19620800000000000000
+      internalID: 2779229949151583801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_23
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 72
+        width: 26
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df33da6e2cfb597a0800000000000000
+      internalID: -6370975254031027203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_24
+      rect:
+        serializedVersion: 2
+        x: 747
+        y: 82
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58f7c7ce9e4594730800000000000000
+      internalID: 3983808709057609605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_25
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 64
+        width: 46
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e211b19e39c54d10800000000000000
+      internalID: 2109313271062401760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_26
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 27
+        width: 24
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 103ad634e6f90e310800000000000000
+      internalID: 1432319977430295297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_27
+      rect:
+        serializedVersion: 2
+        x: 1126
+        y: 36
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37726896ab004e6e0800000000000000
+      internalID: -1809320349661780109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_28
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 10
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7405a099301dc5e80800000000000000
+      internalID: -8188440209083707321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_29
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 36
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cbf9b43ca45f4c60800000000000000
+      internalID: 7804549777852070853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TDF_Matinta@Projectile_30
+      rect:
+        serializedVersion: 2
+        x: 1459
+        y: 15
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4b8fd558c8764ec0800000000000000
+      internalID: -3583043651697145011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TDF_Matinta@Projectile_0: -6805822259444506866
+      TDF_Matinta@Projectile_1: -1443749596850223244
+      TDF_Matinta@Projectile_10: 7697747493054427428
+      TDF_Matinta@Projectile_11: -2013463694664964990
+      TDF_Matinta@Projectile_12: 2118843288166143225
+      TDF_Matinta@Projectile_13: -8047929494382443262
+      TDF_Matinta@Projectile_14: 1644789761096993518
+      TDF_Matinta@Projectile_15: -2102120911771531372
+      TDF_Matinta@Projectile_16: -4319478354168145999
+      TDF_Matinta@Projectile_17: 2502905104001414717
+      TDF_Matinta@Projectile_18: 3152836304025766488
+      TDF_Matinta@Projectile_19: 8004742039973243628
+      TDF_Matinta@Projectile_2: 65241424698937441
+      TDF_Matinta@Projectile_20: 4521253095640302082
+      TDF_Matinta@Projectile_21: -5922283719297067341
+      TDF_Matinta@Projectile_22: 2779229949151583801
+      TDF_Matinta@Projectile_23: -6370975254031027203
+      TDF_Matinta@Projectile_24: 3983808709057609605
+      TDF_Matinta@Projectile_25: 2109313271062401760
+      TDF_Matinta@Projectile_26: 1432319977430295297
+      TDF_Matinta@Projectile_27: -1809320349661780109
+      TDF_Matinta@Projectile_28: -8188440209083707321
+      TDF_Matinta@Projectile_29: 7804549777852070853
+      TDF_Matinta@Projectile_3: -1916918423084843948
+      TDF_Matinta@Projectile_30: -3583043651697145011
+      TDF_Matinta@Projectile_4: -8920963107326825621
+      TDF_Matinta@Projectile_5: 8671957613096582933
+      TDF_Matinta@Projectile_6: -4892828575311347675
+      TDF_Matinta@Projectile_7: -8412061344497223023
+      TDF_Matinta@Projectile_8: -110253793906833875
+      TDF_Matinta@Projectile_9: 8559559479501879246
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

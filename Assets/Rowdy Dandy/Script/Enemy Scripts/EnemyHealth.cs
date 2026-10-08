@@ -99,8 +99,14 @@ public class EnemyHealth : MonoBehaviour
     public Quaternion initialrotationenemy;
     public AnimatorOverrideController[] hitOverrideControllers;
 
+    // When this enemy woke up (Spike uses it to tell contact boxes from attack hitboxes)
+    public bool HasAwoken { get; private set; }
+    public int AwakeFrame { get; private set; }
+
     private void Awake()
     {
+        HasAwoken = true;
+        AwakeFrame = Time.frameCount;
         anima = GetComponent<Animator>();
         redco = GetComponent<SpriteRenderer>();
         currentenemyHealth = startingenemyHealth;
@@ -318,6 +324,7 @@ public class EnemyHealth : MonoBehaviour
                 KillCredit.Finish finish = isParryTime ? KillCredit.Finish.Counter : isCritical ? KillCredit.Finish.Critical : KillCredit.Finish.Normal;
                 ReportKill(credit, finish);
                 StyleRank.OnKill(this, credit, finish);
+                if (byRowdySide) RareDrops.OnEnemyKilled(this); // flying rat / cat treat fish, very rarely
 
                 // Countering a Waterviva Rider to death sets off its jelly: a long, accelerating string of explosions
                 if (finish == KillCredit.Finish.Counter && byRowdySide)
@@ -348,7 +355,7 @@ public class EnemyHealth : MonoBehaviour
                 }
 
                 // --- SPAWN WEAPON DROP ON DEATH ---
-                if (weaponDropPrefab != null && UnityEngine.Random.Range(0f, 100f) <= dropChancePercent)
+                if (weaponDropPrefab != null && UnityEngine.Random.Range(0f, 100f) <= dropChancePercent * DropLuck.Multiplier) // ore gems raise the luck
                 {
                     Instantiate(weaponDropPrefab, transform.position, Quaternion.identity);
                 }

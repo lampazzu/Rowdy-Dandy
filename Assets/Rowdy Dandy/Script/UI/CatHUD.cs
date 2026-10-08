@@ -55,6 +55,12 @@ public class CatHUD : MonoBehaviour
     }
 
     private readonly List<Entry> entries = new List<Entry>();
+
+    // Registered flying rats (each one keeps a cat from getting lost): [rat] x2 under the cats
+    private RectTransform ratRow;
+    private Image ratIcon;
+    private PixelText ratText;
+    private int shownRats = -1;
     private RectTransform rect;
     private float baseY;
     private float slicedMultiplier = 1f;
@@ -73,6 +79,7 @@ public class CatHUD : MonoBehaviour
     {
         SyncEntries();
         AvoidStatsPanel();
+        UpdateRats();
 
         float dt = Time.unscaledDeltaTime;
         for (int i = entries.Count - 1; i >= 0; i--)
@@ -188,6 +195,35 @@ public class CatHUD : MonoBehaviour
         Vector2 p = entry.root.anchoredPosition;
         entry.root.anchoredPosition = new Vector2(-fade * fade * 60f, p.y);
         return fade < 1f;
+    }
+
+    private void UpdateRats()
+    {
+        int rats = CatRoster.Rats;
+        if (ratRow == null)
+        {
+            if (rats <= 0) return;
+            ratRow = CreateUI("Rats", transform);
+            ratIcon = AddImage(CreateUI("Rat", ratRow), null);
+            ratIcon.preserveAspect = true;
+            ItemArt art = ItemArt.Get;
+            Sprite[] frames = art != null ? ItemArt.Frames(art.flyingRat, 10, 2, new Vector2(0.5f, 0.5f), 64f) : null;
+            if (frames != null) ratIcon.sprite = frames[0];
+            Place(ratIcon.rectTransform, 0f, 0f, 22 * pixelScale, 14 * pixelScale);
+            ratText = PixelText.Create(ratRow, "", pixelScale, new Color(0.75f, 0.92f, 1f), 0f);
+            ratText.Rect.anchorMin = ratText.Rect.anchorMax = new Vector2(0f, 1f);
+        }
+        ratRow.gameObject.SetActive(rats > 0);
+        int key = rats * 100 + CatRoster.CatCount;
+        if (key != shownRats)
+        {
+            shownRats = key;
+            bool safe = rats >= CatRoster.CatCount && CatRoster.CatCount > 0;
+            ratText.SetText("X" + rats + (safe ? "  CATS SAFE" : ""));
+            ratText.Rect.anchoredPosition = new Vector2(24 * pixelScale, -7 * pixelScale);
+        }
+        int rows = entries.Count;
+        Place(ratRow, 0f, rows * (22 * pixelScale + entryGap), 200f, 14 * pixelScale);
     }
 
     private void AvoidStatsPanel()

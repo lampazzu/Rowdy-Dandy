@@ -1,0 +1,663 @@
+fileFormatVersion: 2
+guid: 728d529c4b98b5446965f1f8d2dfdf8a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7325598919771812470
+    second: TBZG_VFX_MagicalHit_0
+  - first:
+      213: -3948568620206729571
+    second: TBZG_VFX_MagicalHit_1
+  - first:
+      213: -8430198013992309789
+    second: TBZG_VFX_MagicalHit_2
+  - first:
+      213: -2382223431874589496
+    second: TBZG_VFX_MagicalHit_3
+  - first:
+      213: -7649173640644782500
+    second: TBZG_VFX_MagicalHit_4
+  - first:
+      213: 4529432227872080395
+    second: TBZG_VFX_MagicalHit_5
+  - first:
+      213: -5326344367301980288
+    second: TBZG_VFX_MagicalHit_6
+  - first:
+      213: 9064197004674875432
+    second: TBZG_VFX_MagicalHit_7
+  - first:
+      213: -120543836792344647
+    second: TBZG_VFX_MagicalHit_8
+  - first:
+      213: -4998693899305861647
+    second: TBZG_VFX_MagicalHit_9
+  - first:
+      213: 2640795247543201822
+    second: TBZG_VFX_MagicalHit_10
+  - first:
+      213: 2236206433125498925
+    second: TBZG_VFX_MagicalHit_11
+  - first:
+      213: -2306398269499609330
+    second: TBZG_VFX_MagicalHit_12
+  - first:
+      213: 4452231822154155770
+    second: TBZG_VFX_MagicalHit_13
+  - first:
+      213: -2789448393239031413
+    second: TBZG_VFX_MagicalHit_14
+  - first:
+      213: 6687519222875881568
+    second: TBZG_VFX_MagicalHit_15
+  - first:
+      213: 1917950822630701392
+    second: TBZG_VFX_MagicalHit_16
+  - first:
+      213: -5080082696194241477
+    second: TBZG_VFX_MagicalHit_17
+  - first:
+      213: -6831654392145658222
+    second: TBZG_VFX_MagicalHit_18
+  - first:
+      213: 186775969058297436
+    second: TBZG_VFX_MagicalHit_19
+  - first:
+      213: -224149171544618945
+    second: TBZG_VFX_MagicalHit_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_0
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 26
+        width: 135
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8d040c589e365a90800000000000000
+      internalID: -7325598919771812470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_1
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 22
+        width: 157
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d96d255a2cdd339c0800000000000000
+      internalID: -3948568620206729571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_2
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 22
+        width: 181
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ebe8c5429be10b80800000000000000
+      internalID: -8430198013992309789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_3
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 128
+        width: 7
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ccc0870964a0fed0800000000000000
+      internalID: -2382223431874589496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_4
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 75
+        width: 98
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c561614d91da8d590800000000000000
+      internalID: -7649173640644782500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_5
+      rect:
+        serializedVersion: 2
+        x: 1151
+        y: 38
+        width: 45
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0285800d96cbde30800000000000000
+      internalID: 4529432227872080395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_6
+      rect:
+        serializedVersion: 2
+        x: 1215
+        y: 106
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08f0093a4060516b0800000000000000
+      internalID: -5326344367301980288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_7
+      rect:
+        serializedVersion: 2
+        x: 1226
+        y: 100
+        width: 24
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8204ecdc62f7acd70800000000000000
+      internalID: 9064197004674875432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_8
+      rect:
+        serializedVersion: 2
+        x: 1323
+        y: 20
+        width: 129
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bf2124e40eb35ef0800000000000000
+      internalID: -120543836792344647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_9
+      rect:
+        serializedVersion: 2
+        x: 1601
+        y: 51
+        width: 12
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fd36fef16211aab0800000000000000
+      internalID: -4998693899305861647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_10
+      rect:
+        serializedVersion: 2
+        x: 1817
+        y: 88
+        width: 8
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e103a5e394df5a420800000000000000
+      internalID: 2640795247543201822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_11
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 38
+        width: 59
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2083ea27e9980f10800000000000000
+      internalID: 2236206433125498925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_12
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 81
+        width: 21
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0f66e36ef60effd0800000000000000
+      internalID: -2306398269499609330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_13
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 67
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af64039d04189cd30800000000000000
+      internalID: 4452231822154155770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_14
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 55
+        width: 8
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8114b92773e949d0800000000000000
+      internalID: -2789448393239031413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_15
+      rect:
+        serializedVersion: 2
+        x: 956
+        y: 63
+        width: 15
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0600d1c1d47decc50800000000000000
+      internalID: 6687519222875881568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_16
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 32
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05932978c1eed9a10800000000000000
+      internalID: 1917950822630701392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_17
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 16
+        width: 87
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3ccbb704bbef79b0800000000000000
+      internalID: -5080082696194241477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_18
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 27
+        width: 13
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29ebbe7a6861131a0800000000000000
+      internalID: -6831654392145658222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_19
+      rect:
+        serializedVersion: 2
+        x: 1134
+        y: 40
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c569c4811cf879200800000000000000
+      internalID: 186775969058297436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_MagicalHit_20
+      rect:
+        serializedVersion: 2
+        x: 1105
+        y: 18
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f38826d1489a3ecf0800000000000000
+      internalID: -224149171544618945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TBZG_VFX_MagicalHit_0: -7325598919771812470
+      TBZG_VFX_MagicalHit_1: -3948568620206729571
+      TBZG_VFX_MagicalHit_10: 2640795247543201822
+      TBZG_VFX_MagicalHit_11: 2236206433125498925
+      TBZG_VFX_MagicalHit_12: -2306398269499609330
+      TBZG_VFX_MagicalHit_13: 4452231822154155770
+      TBZG_VFX_MagicalHit_14: -2789448393239031413
+      TBZG_VFX_MagicalHit_15: 6687519222875881568
+      TBZG_VFX_MagicalHit_16: 1917950822630701392
+      TBZG_VFX_MagicalHit_17: -5080082696194241477
+      TBZG_VFX_MagicalHit_18: -6831654392145658222
+      TBZG_VFX_MagicalHit_19: 186775969058297436
+      TBZG_VFX_MagicalHit_2: -8430198013992309789
+      TBZG_VFX_MagicalHit_20: -224149171544618945
+      TBZG_VFX_MagicalHit_3: -2382223431874589496
+      TBZG_VFX_MagicalHit_4: -7649173640644782500
+      TBZG_VFX_MagicalHit_5: 4529432227872080395
+      TBZG_VFX_MagicalHit_6: -5326344367301980288
+      TBZG_VFX_MagicalHit_7: 9064197004674875432
+      TBZG_VFX_MagicalHit_8: -120543836792344647
+      TBZG_VFX_MagicalHit_9: -4998693899305861647
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,611 @@
+fileFormatVersion: 2
+guid: 4bd41b7632b94b946a70d3d5eac35545
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5603649600312370714
+    second: TBZG_VFX_Poison_0
+  - first:
+      213: 4105452308462571246
+    second: TBZG_VFX_Poison_1
+  - first:
+      213: 5508394232179156634
+    second: TBZG_VFX_Poison_2
+  - first:
+      213: 7513714971610498906
+    second: TBZG_VFX_Poison_3
+  - first:
+      213: -3557559157583297316
+    second: TBZG_VFX_Poison_4
+  - first:
+      213: -4174814274132592215
+    second: TBZG_VFX_Poison_5
+  - first:
+      213: -8814089533106163204
+    second: TBZG_VFX_Poison_6
+  - first:
+      213: -3990757735784442139
+    second: TBZG_VFX_Poison_7
+  - first:
+      213: -2951960060622982667
+    second: TBZG_VFX_Poison_8
+  - first:
+      213: -8432155176204146325
+    second: TBZG_VFX_Poison_9
+  - first:
+      213: -2574987638389506530
+    second: TBZG_VFX_Poison_10
+  - first:
+      213: 7471312240314744631
+    second: TBZG_VFX_Poison_11
+  - first:
+      213: 5389950705547624789
+    second: TBZG_VFX_Poison_12
+  - first:
+      213: 6759251943695364467
+    second: TBZG_VFX_Poison_13
+  - first:
+      213: -3398291744539483144
+    second: TBZG_VFX_Poison_14
+  - first:
+      213: 3700018475434615328
+    second: TBZG_VFX_Poison_15
+  - first:
+      213: -3867534818404771838
+    second: TBZG_VFX_Poison_16
+  - first:
+      213: 113000268662726186
+    second: TBZG_VFX_Poison_17
+  - first:
+      213: -7959562250456677396
+    second: TBZG_VFX_Poison_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_0
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 137
+        width: 22
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a16e0604f9924cd40800000000000000
+      internalID: 5603649600312370714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_1
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 120
+        width: 18
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eee08387f1f79f830800000000000000
+      internalID: 4105452308462571246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_2
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 65
+        width: 108
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9669d39e5fb17c40800000000000000
+      internalID: 5508394232179156634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_3
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 50
+        width: 134
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a57c06215f3164860800000000000000
+      internalID: 7513714971610498906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_4
+      rect:
+        serializedVersion: 2
+        x: 1102
+        y: 31
+        width: 133
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd44fc08bc201aec0800000000000000
+      internalID: -3557559157583297316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_5
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 73
+        width: 78
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a9b81b69841016c0800000000000000
+      internalID: -4174814274132592215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_6
+      rect:
+        serializedVersion: 2
+        x: 1313
+        y: 22
+        width: 62
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf1f7b8c4401ea580800000000000000
+      internalID: -8814089533106163204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_7
+      rect:
+        serializedVersion: 2
+        x: 1382
+        y: 11
+        width: 72
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e61de5bbfafd98c0800000000000000
+      internalID: -3990757735784442139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_8
+      rect:
+        serializedVersion: 2
+        x: 1389
+        y: 94
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f13d6b07f78807d0800000000000000
+      internalID: -2951960060622982667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_9
+      rect:
+        serializedVersion: 2
+        x: 1554
+        y: 65
+        width: 56
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b69616fea87fafa80800000000000000
+      internalID: -8432155176204146325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_10
+      rect:
+        serializedVersion: 2
+        x: 1838
+        y: 76
+        width: 20
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1e75c0c26ec34cd0800000000000000
+      internalID: -2574987638389506530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_11
+      rect:
+        serializedVersion: 2
+        x: 1632
+        y: 64
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73ffcf9d5ee6fa760800000000000000
+      internalID: 7471312240314744631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_12
+      rect:
+        serializedVersion: 2
+        x: 1762
+        y: 25
+        width: 44
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55148090c93fcca40800000000000000
+      internalID: 5389950705547624789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_13
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 48
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 371b45ba4dfadcd50800000000000000
+      internalID: 6759251943695364467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_14
+      rect:
+        serializedVersion: 2
+        x: 1390
+        y: 42
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f3e49bc9a7d6d0d0800000000000000
+      internalID: -3398291744539483144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_15
+      rect:
+        serializedVersion: 2
+        x: 1558
+        y: 17
+        width: 52
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 022a9aa233b195330800000000000000
+      internalID: 3700018475434615328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_16
+      rect:
+        serializedVersion: 2
+        x: 1846
+        y: 18
+        width: 175
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2085780e291c35ac0800000000000000
+      internalID: -3867534818404771838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_17
+      rect:
+        serializedVersion: 2
+        x: 1621
+        y: 13
+        width: 31
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2e5a294525719100800000000000000
+      internalID: 113000268662726186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Poison_18
+      rect:
+        serializedVersion: 2
+        x: 1818
+        y: 12
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce3cbe50e44f98190800000000000000
+      internalID: -7959562250456677396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TBZG_VFX_Poison_0: 5603649600312370714
+      TBZG_VFX_Poison_1: 4105452308462571246
+      TBZG_VFX_Poison_10: -2574987638389506530
+      TBZG_VFX_Poison_11: 7471312240314744631
+      TBZG_VFX_Poison_12: 5389950705547624789
+      TBZG_VFX_Poison_13: 6759251943695364467
+      TBZG_VFX_Poison_14: -3398291744539483144
+      TBZG_VFX_Poison_15: 3700018475434615328
+      TBZG_VFX_Poison_16: -3867534818404771838
+      TBZG_VFX_Poison_17: 113000268662726186
+      TBZG_VFX_Poison_18: -7959562250456677396
+      TBZG_VFX_Poison_2: 5508394232179156634
+      TBZG_VFX_Poison_3: 7513714971610498906
+      TBZG_VFX_Poison_4: -3557559157583297316
+      TBZG_VFX_Poison_5: -4174814274132592215
+      TBZG_VFX_Poison_6: -8814089533106163204
+      TBZG_VFX_Poison_7: -3990757735784442139
+      TBZG_VFX_Poison_8: -2951960060622982667
+      TBZG_VFX_Poison_9: -8432155176204146325
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

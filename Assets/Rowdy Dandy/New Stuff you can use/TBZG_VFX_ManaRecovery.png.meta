@@ -1,0 +1,1079 @@
+fileFormatVersion: 2
+guid: 08c9a1c024bcf2d4f8da218c07e5c0dc
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6945999932205696585
+    second: TBZG_VFX_ManaRecovery_0
+  - first:
+      213: 7844918893363409632
+    second: TBZG_VFX_ManaRecovery_1
+  - first:
+      213: 8654815808117793244
+    second: TBZG_VFX_ManaRecovery_2
+  - first:
+      213: 630040928290039109
+    second: TBZG_VFX_ManaRecovery_3
+  - first:
+      213: -2252266333624967132
+    second: TBZG_VFX_ManaRecovery_4
+  - first:
+      213: 4593335702353597727
+    second: TBZG_VFX_ManaRecovery_5
+  - first:
+      213: -1756332078377578300
+    second: TBZG_VFX_ManaRecovery_6
+  - first:
+      213: 3553665064957666023
+    second: TBZG_VFX_ManaRecovery_7
+  - first:
+      213: 6335471257944909145
+    second: TBZG_VFX_ManaRecovery_8
+  - first:
+      213: -8809468548464559084
+    second: TBZG_VFX_ManaRecovery_9
+  - first:
+      213: -7953136680369833713
+    second: TBZG_VFX_ManaRecovery_10
+  - first:
+      213: -5279207801051094761
+    second: TBZG_VFX_ManaRecovery_11
+  - first:
+      213: 2480476780490630723
+    second: TBZG_VFX_ManaRecovery_12
+  - first:
+      213: -4457502466565219047
+    second: TBZG_VFX_ManaRecovery_13
+  - first:
+      213: 8817358413889401935
+    second: TBZG_VFX_ManaRecovery_14
+  - first:
+      213: -5809010545251721257
+    second: TBZG_VFX_ManaRecovery_15
+  - first:
+      213: -1342101150545198318
+    second: TBZG_VFX_ManaRecovery_16
+  - first:
+      213: 6762520504544736939
+    second: TBZG_VFX_ManaRecovery_17
+  - first:
+      213: 2653365023576689167
+    second: TBZG_VFX_ManaRecovery_18
+  - first:
+      213: -3297432314665204683
+    second: TBZG_VFX_ManaRecovery_19
+  - first:
+      213: 1439611924094222650
+    second: TBZG_VFX_ManaRecovery_20
+  - first:
+      213: -8604687766294460843
+    second: TBZG_VFX_ManaRecovery_21
+  - first:
+      213: 8483497136474869702
+    second: TBZG_VFX_ManaRecovery_22
+  - first:
+      213: -2695479004527814477
+    second: TBZG_VFX_ManaRecovery_23
+  - first:
+      213: -5338041092111812494
+    second: TBZG_VFX_ManaRecovery_24
+  - first:
+      213: -8298641121096350557
+    second: TBZG_VFX_ManaRecovery_25
+  - first:
+      213: -6908475101100455920
+    second: TBZG_VFX_ManaRecovery_26
+  - first:
+      213: -4977609090123845647
+    second: TBZG_VFX_ManaRecovery_27
+  - first:
+      213: 4456510035123748100
+    second: TBZG_VFX_ManaRecovery_28
+  - first:
+      213: -5652670701542063635
+    second: TBZG_VFX_ManaRecovery_29
+  - first:
+      213: 2656195127161241219
+    second: TBZG_VFX_ManaRecovery_30
+  - first:
+      213: -6339565110245540514
+    second: TBZG_VFX_ManaRecovery_31
+  - first:
+      213: -1494390708990435363
+    second: TBZG_VFX_ManaRecovery_32
+  - first:
+      213: 62855348771086064
+    second: TBZG_VFX_ManaRecovery_33
+  - first:
+      213: -353503503937894562
+    second: TBZG_VFX_ManaRecovery_34
+  - first:
+      213: 63708871411308117
+    second: TBZG_VFX_ManaRecovery_35
+  - first:
+      213: -5296768212456845508
+    second: TBZG_VFX_ManaRecovery_36
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_0
+      rect:
+        serializedVersion: 2
+        x: 1363
+        y: 126
+        width: 68
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b9fdf6fcd9da9f90800000000000000
+      internalID: -6945999932205696585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_1
+      rect:
+        serializedVersion: 2
+        x: 1570
+        y: 122
+        width: 53
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e23daa5b20cedc60800000000000000
+      internalID: 7844918893363409632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_2
+      rect:
+        serializedVersion: 2
+        x: 1586
+        y: 164
+        width: 33
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd1eb4f4f151c1870800000000000000
+      internalID: 8654815808117793244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_3
+      rect:
+        serializedVersion: 2
+        x: 1796
+        y: 135
+        width: 46
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5456facd2ea5eb800800000000000000
+      internalID: 630040928290039109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_4
+      rect:
+        serializedVersion: 2
+        x: 1811
+        y: 166
+        width: 20
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42066bcd3b75eb0e0800000000000000
+      internalID: -2252266333624967132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_5
+      rect:
+        serializedVersion: 2
+        x: 2012
+        y: 111
+        width: 44
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f15d7e81c7ecebf30800000000000000
+      internalID: 4593335702353597727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_6
+      rect:
+        serializedVersion: 2
+        x: 718
+        y: 57
+        width: 54
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c05ea8b74140a7e0800000000000000
+      internalID: -1756332078377578300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_7
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 115
+        width: 13
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e264876c87215130800000000000000
+      internalID: 3553665064957666023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_8
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 92
+        width: 38
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 955e086da8d1ce750800000000000000
+      internalID: 6335471257944909145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_9
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 138
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41c3bcc970b7eb580800000000000000
+      internalID: -8809468548464559084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_10
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 120
+        width: 36
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f093d64a358c0a190800000000000000
+      internalID: -7953136680369833713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_11
+      rect:
+        serializedVersion: 2
+        x: 1156
+        y: 96
+        width: 51
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 711e0e2b97c7cb6b0800000000000000
+      internalID: -5279207801051094761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_12
+      rect:
+        serializedVersion: 2
+        x: 1611
+        y: 130
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 346afbe5d7c6c6220800000000000000
+      internalID: 2480476780490630723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_13
+      rect:
+        serializedVersion: 2
+        x: 1613
+        y: 118
+        width: 23
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91dd3fe9f15c322c0800000000000000
+      internalID: -4457502466565219047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_14
+      rect:
+        serializedVersion: 2
+        x: 1789
+        y: 76
+        width: 49
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f44fd25d2cc8d5a70800000000000000
+      internalID: 8817358413889401935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_15
+      rect:
+        serializedVersion: 2
+        x: 1359
+        y: 100
+        width: 12
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dfd5c1cfaf326fa0800000000000000
+      internalID: -5809010545251721257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_16
+      rect:
+        serializedVersion: 2
+        x: 1382
+        y: 100
+        width: 34
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2134c154d16ef5de0800000000000000
+      internalID: -1342101150545198318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_17
+      rect:
+        serializedVersion: 2
+        x: 1414
+        y: 113
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba63fabc19c49dd50800000000000000
+      internalID: 6762520504544736939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_18
+      rect:
+        serializedVersion: 2
+        x: 1572
+        y: 85
+        width: 31
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0a0cb94e65a2d420800000000000000
+      internalID: 2653365023576689167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_19
+      rect:
+        serializedVersion: 2
+        x: 1844
+        y: 121
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5348c75c7ca2d32d0800000000000000
+      internalID: -3297432314665204683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_20
+      rect:
+        serializedVersion: 2
+        x: 2011
+        y: 119
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a318d06ea678af310800000000000000
+      internalID: 1439611924094222650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_21
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 44
+        width: 58
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5568edee012069880800000000000000
+      internalID: -8604687766294460843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_22
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 103
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cfc0a8b2bf6bb570800000000000000
+      internalID: 8483497136474869702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_23
+      rect:
+        serializedVersion: 2
+        x: 1143
+        y: 88
+        width: 30
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b8989b602cb79ad0800000000000000
+      internalID: -2695479004527814477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_24
+      rect:
+        serializedVersion: 2
+        x: 1366
+        y: 99
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 278bc3ca8e77be5b0800000000000000
+      internalID: -5338041092111812494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_25
+      rect:
+        serializedVersion: 2
+        x: 1396
+        y: 96
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a44a925edd45dc80800000000000000
+      internalID: -8298641121096350557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_26
+      rect:
+        serializedVersion: 2
+        x: 1604
+        y: 89
+        width: 27
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 018c64b8f7a2020a0800000000000000
+      internalID: -6908475101100455920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_27
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 42
+        width: 31
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ffa960b7eafbeab0800000000000000
+      internalID: -4977609090123845647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_28
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 84
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40db38de344b8dd30800000000000000
+      internalID: 4456510035123748100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_29
+      rect:
+        serializedVersion: 2
+        x: 1365
+        y: 85
+        width: 26
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de1c35232fdad81b0800000000000000
+      internalID: -5652670701542063635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_30
+      rect:
+        serializedVersion: 2
+        x: 1391
+        y: 89
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38eb1902563bcd420800000000000000
+      internalID: 2656195127161241219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_31
+      rect:
+        serializedVersion: 2
+        x: 1820
+        y: 92
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5dba55ee175508a0800000000000000
+      internalID: -6339565110245540514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_32
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 2
+        width: 34
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddf1bfa519bd24be0800000000000000
+      internalID: -1494390708990435363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_33
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 41
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fedbbf4b9e4fd000800000000000000
+      internalID: 62855348771086064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_34
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 33
+        width: 30
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e570de4af6a181bf0800000000000000
+      internalID: -353503503937894562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_35
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 16
+        width: 36
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 556138981e652e000800000000000000
+      internalID: 63708871411308117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_ManaRecovery_36
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 33
+        width: 14
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3fcdeecf591e76b0800000000000000
+      internalID: -5296768212456845508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TBZG_VFX_ManaRecovery_0: -6945999932205696585
+      TBZG_VFX_ManaRecovery_1: 7844918893363409632
+      TBZG_VFX_ManaRecovery_10: -7953136680369833713
+      TBZG_VFX_ManaRecovery_11: -5279207801051094761
+      TBZG_VFX_ManaRecovery_12: 2480476780490630723
+      TBZG_VFX_ManaRecovery_13: -4457502466565219047
+      TBZG_VFX_ManaRecovery_14: 8817358413889401935
+      TBZG_VFX_ManaRecovery_15: -5809010545251721257
+      TBZG_VFX_ManaRecovery_16: -1342101150545198318
+      TBZG_VFX_ManaRecovery_17: 6762520504544736939
+      TBZG_VFX_ManaRecovery_18: 2653365023576689167
+      TBZG_VFX_ManaRecovery_19: -3297432314665204683
+      TBZG_VFX_ManaRecovery_2: 8654815808117793244
+      TBZG_VFX_ManaRecovery_20: 1439611924094222650
+      TBZG_VFX_ManaRecovery_21: -8604687766294460843
+      TBZG_VFX_ManaRecovery_22: 8483497136474869702
+      TBZG_VFX_ManaRecovery_23: -2695479004527814477
+      TBZG_VFX_ManaRecovery_24: -5338041092111812494
+      TBZG_VFX_ManaRecovery_25: -8298641121096350557
+      TBZG_VFX_ManaRecovery_26: -6908475101100455920
+      TBZG_VFX_ManaRecovery_27: -4977609090123845647
+      TBZG_VFX_ManaRecovery_28: 4456510035123748100
+      TBZG_VFX_ManaRecovery_29: -5652670701542063635
+      TBZG_VFX_ManaRecovery_3: 630040928290039109
+      TBZG_VFX_ManaRecovery_30: 2656195127161241219
+      TBZG_VFX_ManaRecovery_31: -6339565110245540514
+      TBZG_VFX_ManaRecovery_32: -1494390708990435363
+      TBZG_VFX_ManaRecovery_33: 62855348771086064
+      TBZG_VFX_ManaRecovery_34: -353503503937894562
+      TBZG_VFX_ManaRecovery_35: 63708871411308117
+      TBZG_VFX_ManaRecovery_36: -5296768212456845508
+      TBZG_VFX_ManaRecovery_4: -2252266333624967132
+      TBZG_VFX_ManaRecovery_5: 4593335702353597727
+      TBZG_VFX_ManaRecovery_6: -1756332078377578300
+      TBZG_VFX_ManaRecovery_7: 3553665064957666023
+      TBZG_VFX_ManaRecovery_8: 6335471257944909145
+      TBZG_VFX_ManaRecovery_9: -8809468548464559084
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

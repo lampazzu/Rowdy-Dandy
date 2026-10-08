@@ -1,9 +1,27 @@
 using System.Collections;
 using UnityEngine;
 
+// EXP gem: a fountain out of the enemy (arcs up, bounces once on the ground), hovers, then homes in on Rowdy.
+// Picking several up in a row plays a climbing chime (GemChime).
 [RequireComponent(typeof(CircleCollider2D))]
 public class EXPGem : MonoBehaviour
 {
+    // The pickup sound, shared with the other pickups (ore gems, rat, fish) so they chime together
+    private static AudioClip sharedSound;
+    public static AudioClip SharedCollectSound
+    {
+        get
+        {
+            if (sharedSound == null)
+            {
+                GameObject prefab = Resources.Load<GameObject>("Systems/EXPgem");
+                if (prefab != null && prefab.TryGetComponent(out EXPGem gem)) sharedSound = gem.collectSFX;
+            }
+            return sharedSound;
+        }
+        private set => sharedSound = value;
+    }
+
     [Header("EXP Value")]
     [SerializeField] private float expValue = 15f;
 
@@ -11,6 +29,10 @@ public class EXPGem : MonoBehaviour
     [SerializeField] private float burstForceMin = 2.5f;
     [SerializeField] private float burstForceMax = 4.5f;
     [SerializeField] private float burstDuration = 0.35f;
+    [Tooltip("Fountain: launch speed up, sideways spread, gravity")]
+    [SerializeField] private Vector2 fountainUp = new Vector2(3.5f, 5.5f);
+    [SerializeField] private float fountainSpread = 1.8f;
+    [SerializeField] private float fountainGravity = 15f;
 
     [Header("Magnet / Collection Phase")]
     [SerializeField] private float magnetRadius = 4f;
@@ -52,6 +74,7 @@ public class EXPGem : MonoBehaviour
     {
         circleCollider = GetComponent<CircleCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        if (collectSFX != null) SharedCollectSound = collectSFX;
 
         // Auto-configure trigger collider if not set in Inspector
         circleCollider.isTrigger = true;
@@ -67,10 +90,8 @@ public class EXPGem : MonoBehaviour
             playerTransform = player.transform;
         }
 
-        // Setup Ejection (Explosion outwards)
-        Vector2 randomDir = Random.insideUnitCircle.normalized;
-        float randomForce = Random.Range(burstForceMin, burstForceMax);
-        burstVelocity = randomDir * randomForce;
+        // Fountain: up and out in an arc
+        burstVelocity = new Vector2(Random.Range(-fountainSpread, fountainSpread), Random.Range(fountainUp.x, fountainUp.y));
 
         transform.localScale = spawnScale;
         currentFlySpeed = initialSpeed;
@@ -83,15 +104,24 @@ public class EXPGem : MonoBehaviour
     {
         isBursting = true;
         float elapsed = 0f;
+        float groundY = GroundBelow();
+        bool bounced = false;
 
-        while (elapsed < burstDuration)
+        // Arc under gravity until it lands (one small bounce), at most ~1.2 s
+        while (elapsed < 1.2f)
         {
-            // Decelerate the burst over time
-            float progress = elapsed / burstDuration;
-            transform.position += burstVelocity * (1f - progress) * Time.deltaTime;
+            burstVelocity.y -= fountainGravity * Time.deltaTime;
+            Vector3 p = transform.position + burstVelocity * Time.deltaTime;
+            if (burstVelocity.y < 0f && p.y <= groundY)
+            {
+                p.y = groundY;
+                if (!bounced && burstVelocity.y < -2f) { burstVelocity = new Vector3(burstVelocity.x * 0.5f, -burstVelocity.y * 0.3f, 0f); bounced = true; }
+                else { transform.position = p; break; }
+            }
+            transform.position = p;
 
             // Scale pop-in animation
-            transform.localScale = Vector3.Lerp(spawnScale, targetScale, progress);
+            transform.localScale = Vector3.Lerp(spawnScale, targetScale, Mathf.Clamp01(elapsed / burstDuration));
 
             elapsed += Time.deltaTime;
             yield return null;
@@ -100,6 +130,19 @@ public class EXPGem : MonoBehaviour
         transform.localScale = targetScale;
         initialPosition = transform.position;
         isBursting = false;
+    }
+
+    // Top of the solid ground under the gem (falls back to a short drop if there's none)
+    private float GroundBelow()
+    {
+        foreach (RaycastHit2D hit in Physics2D.RaycastAll((Vector2)transform.position + Vector2.up * 0.3f, Vector2.down, 30f))
+        {
+            Collider2D c = hit.collider;
+            if (c == null || c.isTrigger) continue;
+            if (c.attachedRigidbody != null && c.attachedRigidbody.bodyType == RigidbodyType2D.Dynamic) continue;
+            return hit.point.y + 0.15f;
+        }
+        return transform.position.y - 1f;
     }
 
     private void Update()
@@ -155,11 +198,8 @@ public class EXPGem : MonoBehaviour
             PlayerStats.Instance.AddEXP(expValue);
         }
 
-        // Play SFX (Works even if GameObject is destroyed immediately)
-        if (collectSFX != null)
-        {
-            AudioSource.PlayClipAtPoint(collectSFX, transform.position, soundVolume);
-        }
+        // Chime: each gem in a quick streak plays a step higher
+        GemChime.Play(collectSFX, soundVolume);
 
         // Optional particle hit effect
         if (collectParticlePrefab != null)

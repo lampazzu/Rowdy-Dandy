@@ -1,0 +1,871 @@
+fileFormatVersion: 2
+guid: d7dd2c5efb3cbcf48bf8a0c95983abaf
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1866340315259178067
+    second: TBZG_VFX_Ail_0
+  - first:
+      213: -9215928778903234598
+    second: TBZG_VFX_Ail_1
+  - first:
+      213: -6690072395391655050
+    second: TBZG_VFX_Ail_2
+  - first:
+      213: -8477077485948965757
+    second: TBZG_VFX_Ail_3
+  - first:
+      213: 1674646703628274724
+    second: TBZG_VFX_Ail_4
+  - first:
+      213: 4805922142521354083
+    second: TBZG_VFX_Ail_5
+  - first:
+      213: 3819284331666502739
+    second: TBZG_VFX_Ail_6
+  - first:
+      213: 559195409159216273
+    second: TBZG_VFX_Ail_7
+  - first:
+      213: 2016675273436529185
+    second: TBZG_VFX_Ail_8
+  - first:
+      213: -7513823464586717888
+    second: TBZG_VFX_Ail_9
+  - first:
+      213: -1136132606923726232
+    second: TBZG_VFX_Ail_10
+  - first:
+      213: -275730731424138837
+    second: TBZG_VFX_Ail_11
+  - first:
+      213: -2797532512330233601
+    second: TBZG_VFX_Ail_12
+  - first:
+      213: 6069135992708977655
+    second: TBZG_VFX_Ail_13
+  - first:
+      213: 3349913602056644726
+    second: TBZG_VFX_Ail_14
+  - first:
+      213: -3347490539639004978
+    second: TBZG_VFX_Ail_15
+  - first:
+      213: 1816090951961671513
+    second: TBZG_VFX_Ail_16
+  - first:
+      213: 5132447982227038721
+    second: TBZG_VFX_Ail_17
+  - first:
+      213: -4249451310906478926
+    second: TBZG_VFX_Ail_18
+  - first:
+      213: -7777557912435691721
+    second: TBZG_VFX_Ail_19
+  - first:
+      213: 8190079139112755365
+    second: TBZG_VFX_Ail_20
+  - first:
+      213: -6275564053233709169
+    second: TBZG_VFX_Ail_21
+  - first:
+      213: -6105209474061737414
+    second: TBZG_VFX_Ail_22
+  - first:
+      213: -2379556339484400603
+    second: TBZG_VFX_Ail_23
+  - first:
+      213: 6669290270892371568
+    second: TBZG_VFX_Ail_24
+  - first:
+      213: -8099500755772093650
+    second: TBZG_VFX_Ail_25
+  - first:
+      213: 7028513746325123647
+    second: TBZG_VFX_Ail_26
+  - first:
+      213: 88140696110319933
+    second: TBZG_VFX_Ail_27
+  - first:
+      213: 8936364747361648320
+    second: TBZG_VFX_Ail_28
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_0
+      rect:
+        serializedVersion: 2
+        x: 711
+        y: 29
+        width: 63
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da37cfe1f5d6916e0800000000000000
+      internalID: -1866340315259178067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_1
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 20
+        width: 83
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad75c2a8a917a1080800000000000000
+      internalID: -9215928778903234598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_2
+      rect:
+        serializedVersion: 2
+        x: 1129
+        y: 23
+        width: 89
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 673a8071a961823a0800000000000000
+      internalID: -6690072395391655050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_3
+      rect:
+        serializedVersion: 2
+        x: 1346
+        y: 24
+        width: 102
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38cec84a0fe5b5a80800000000000000
+      internalID: -8477077485948965757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_4
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 23
+        width: 111
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42cca06ed4a8d3710800000000000000
+      internalID: 1674646703628274724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_5
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 23
+        width: 108
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3676b2bc9b012b240800000000000000
+      internalID: 4805922142521354083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_6
+      rect:
+        serializedVersion: 2
+        x: 1990
+        y: 64
+        width: 30
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 354723d3dd2d00530800000000000000
+      internalID: 3819284331666502739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_7
+      rect:
+        serializedVersion: 2
+        x: 1998
+        y: 72
+        width: 45
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19cd6fa0349a2c700800000000000000
+      internalID: 559195409159216273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_8
+      rect:
+        serializedVersion: 2
+        x: 1999
+        y: 95
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1228f74f97bacfb10800000000000000
+      internalID: 2016675273436529185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_9
+      rect:
+        serializedVersion: 2
+        x: 2043
+        y: 72
+        width: 60
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04550507e5989b790800000000000000
+      internalID: -7513823464586717888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_10
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 31
+        width: 47
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 862a29ad965ab30f0800000000000000
+      internalID: -1136132606923726232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_11
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 31
+        width: 47
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba93ec35c586c2cf0800000000000000
+      internalID: -275730731424138837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_12
+      rect:
+        serializedVersion: 2
+        x: 1656
+        y: 87
+        width: 11
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff843f2800b2d29d0800000000000000
+      internalID: -2797532512330233601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_13
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 37
+        width: 37
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f3d4fa9707e93450800000000000000
+      internalID: 6069135992708977655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_14
+      rect:
+        serializedVersion: 2
+        x: 1891
+        y: 74
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 678e5d62ca84d7e20800000000000000
+      internalID: 3349913602056644726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_15
+      rect:
+        serializedVersion: 2
+        x: 1880
+        y: 52
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec026d707135b81d0800000000000000
+      internalID: -3347490539639004978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_16
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 41
+        width: 27
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 957f977491d043910800000000000000
+      internalID: 1816090951961671513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_17
+      rect:
+        serializedVersion: 2
+        x: 2002
+        y: 40
+        width: 56
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10220d83f3e1a3740800000000000000
+      internalID: 5132447982227038721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_18
+      rect:
+        serializedVersion: 2
+        x: 2055
+        y: 50
+        width: 25
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bee91b1c8ae605c0800000000000000
+      internalID: -4249451310906478926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_19
+      rect:
+        serializedVersion: 2
+        x: 2075
+        y: 54
+        width: 24
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73fed313940901490800000000000000
+      internalID: -7777557912435691721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_20
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 31
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a02729859109a170800000000000000
+      internalID: 8190079139112755365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_21
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 32
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8f4bc13eb7b8e8a0800000000000000
+      internalID: -6275564053233709169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_22
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 26
+        width: 30
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3263338450f54ba0800000000000000
+      internalID: -6105209474061737414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_23
+      rect:
+        serializedVersion: 2
+        x: 2051
+        y: 27
+        width: 31
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 524e00edd1e1afed0800000000000000
+      internalID: -2379556339484400603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_24
+      rect:
+        serializedVersion: 2
+        x: 2076
+        y: 37
+        width: 16
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07e228c7a241e8c50800000000000000
+      internalID: 6669290270892371568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_25
+      rect:
+        serializedVersion: 2
+        x: 1890
+        y: 25
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2b4232c9fac89f80800000000000000
+      internalID: -8099500755772093650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_26
+      rect:
+        serializedVersion: 2
+        x: 2028
+        y: 29
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f32b8ac730c4a8160800000000000000
+      internalID: 7028513746325123647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_27
+      rect:
+        serializedVersion: 2
+        x: 2047
+        y: 23
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3949e10f73293100800000000000000
+      internalID: 88140696110319933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Ail_28
+      rect:
+        serializedVersion: 2
+        x: 2058
+        y: 23
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ce70dd0468540c70800000000000000
+      internalID: 8936364747361648320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TBZG_VFX_Ail_0: -1866340315259178067
+      TBZG_VFX_Ail_1: -9215928778903234598
+      TBZG_VFX_Ail_10: -1136132606923726232
+      TBZG_VFX_Ail_11: -275730731424138837
+      TBZG_VFX_Ail_12: -2797532512330233601
+      TBZG_VFX_Ail_13: 6069135992708977655
+      TBZG_VFX_Ail_14: 3349913602056644726
+      TBZG_VFX_Ail_15: -3347490539639004978
+      TBZG_VFX_Ail_16: 1816090951961671513
+      TBZG_VFX_Ail_17: 5132447982227038721
+      TBZG_VFX_Ail_18: -4249451310906478926
+      TBZG_VFX_Ail_19: -7777557912435691721
+      TBZG_VFX_Ail_2: -6690072395391655050
+      TBZG_VFX_Ail_20: 8190079139112755365
+      TBZG_VFX_Ail_21: -6275564053233709169
+      TBZG_VFX_Ail_22: -6105209474061737414
+      TBZG_VFX_Ail_23: -2379556339484400603
+      TBZG_VFX_Ail_24: 6669290270892371568
+      TBZG_VFX_Ail_25: -8099500755772093650
+      TBZG_VFX_Ail_26: 7028513746325123647
+      TBZG_VFX_Ail_27: 88140696110319933
+      TBZG_VFX_Ail_28: 8936364747361648320
+      TBZG_VFX_Ail_3: -8477077485948965757
+      TBZG_VFX_Ail_4: 1674646703628274724
+      TBZG_VFX_Ail_5: 4805922142521354083
+      TBZG_VFX_Ail_6: 3819284331666502739
+      TBZG_VFX_Ail_7: 559195409159216273
+      TBZG_VFX_Ail_8: 2016675273436529185
+      TBZG_VFX_Ail_9: -7513823464586717888
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

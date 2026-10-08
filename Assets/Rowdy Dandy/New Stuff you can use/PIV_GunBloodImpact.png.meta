@@ -1,19 +1,28 @@
 fileFormatVersion: 2
-guid: f94b383c196af5b45873f7cfdffa4b44
+guid: 7bf719e765002d14eaa75802cf407235
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -646772631708074395
-    second: moonboundelder_anim_0
+      213: 8034980872254244112
+    second: PIV_GunBloodImpact_0
   - first:
-      213: -6673892987665557716
-    second: moonboundelder_anim_1
+      213: -2787282224592670643
+    second: PIV_GunBloodImpact_1
   - first:
-      213: 5419126508023720581
-    second: moonboundelder_anim_2
+      213: -2880849488296987851
+    second: PIV_GunBloodImpact_2
   - first:
-      213: 8249526610962856779
-    second: moonboundelder_anim_3
+      213: -8197430227986940708
+    second: PIV_GunBloodImpact_3
+  - first:
+      213: -3307591299572951924
+    second: PIV_GunBloodImpact_4
+  - first:
+      213: 4513694994692492049
+    second: PIV_GunBloodImpact_5
+  - first:
+      213: -473036979700927114
+    second: PIV_GunBloodImpact_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +55,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -55,12 +64,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,10 +90,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 8192
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -109,13 +118,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: moonboundelder_anim_0
+      name: PIV_GunBloodImpact_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 0
-        width: 22
-        height: 22
+        x: 6
+        y: 4
+        width: 9
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +133,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 56e789cd7b33607f0800000000000000
-      internalID: -646772631708074395
+      spriteID: 015c5cb388cf18f60800000000000000
+      internalID: 8034980872254244112
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: moonboundelder_anim_1
+      name: PIV_GunBloodImpact_1
       rect:
         serializedVersion: 2
         x: 25
-        y: 0
-        width: 20
-        height: 22
+        y: 2
+        width: 15
+        height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,20 +155,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c27593100b19163a0800000000000000
-      internalID: -6673892987665557716
+      spriteID: d40b46a95959159d0800000000000000
+      internalID: -2787282224592670643
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: moonboundelder_anim_2
+      name: PIV_GunBloodImpact_2
       rect:
         serializedVersion: 2
-        x: 47
+        x: 48
         y: 0
-        width: 20
-        height: 22
+        width: 19
+        height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,20 +177,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 58a28a7e8da943b40800000000000000
-      internalID: 5419126508023720581
+      spriteID: 53331be57aa2508d0800000000000000
+      internalID: -2880849488296987851
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: moonboundelder_anim_3
+      name: PIV_GunBloodImpact_3
       rect:
         serializedVersion: 2
-        x: 67
-        y: 0
-        width: 21
-        height: 22
+        x: 73
+        y: 2
+        width: 17
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -190,8 +199,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b4bb29baeb43c7270800000000000000
-      internalID: 8249526610962856779
+      spriteID: cdcf9c5b3a0ec3e80800000000000000
+      internalID: -8197430227986940708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_GunBloodImpact_4
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 8
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8418c6cc331912d0800000000000000
+      internalID: -3307591299572951924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_GunBloodImpact_5
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 1
+        width: 17
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11bca1fdeadd3ae30800000000000000
+      internalID: 4513694994692492049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_GunBloodImpact_6
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 0
+        width: 61
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6757d4b8f5f6f69f0800000000000000
+      internalID: -473036979700927114
       vertices: []
       indices: 
       edges: []
@@ -200,7 +275,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -210,10 +285,13 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      moonboundelder_anim_0: -646772631708074395
-      moonboundelder_anim_1: -6673892987665557716
-      moonboundelder_anim_2: 5419126508023720581
-      moonboundelder_anim_3: 8249526610962856779
+      PIV_GunBloodImpact_0: 8034980872254244112
+      PIV_GunBloodImpact_1: -2787282224592670643
+      PIV_GunBloodImpact_2: -2880849488296987851
+      PIV_GunBloodImpact_3: -8197430227986940708
+      PIV_GunBloodImpact_4: -3307591299572951924
+      PIV_GunBloodImpact_5: 4513694994692492049
+      PIV_GunBloodImpact_6: -473036979700927114
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

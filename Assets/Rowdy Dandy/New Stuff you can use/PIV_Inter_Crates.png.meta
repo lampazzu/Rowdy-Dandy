@@ -1,0 +1,611 @@
+fileFormatVersion: 2
+guid: 80da231a62d872444aa81008509a5b06
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8195863800142060286
+    second: PIV_Inter_Crates_0
+  - first:
+      213: -3775270430872488211
+    second: PIV_Inter_Crates_1
+  - first:
+      213: 7714970299599650411
+    second: PIV_Inter_Crates_2
+  - first:
+      213: 4628511671347375231
+    second: PIV_Inter_Crates_3
+  - first:
+      213: -4038917288956795845
+    second: PIV_Inter_Crates_4
+  - first:
+      213: -7511532201061609922
+    second: PIV_Inter_Crates_5
+  - first:
+      213: 2332951522085605338
+    second: PIV_Inter_Crates_6
+  - first:
+      213: 8207246091474441656
+    second: PIV_Inter_Crates_7
+  - first:
+      213: -316657193099009662
+    second: PIV_Inter_Crates_8
+  - first:
+      213: 4251686637700893753
+    second: PIV_Inter_Crates_9
+  - first:
+      213: 5042343653430976462
+    second: PIV_Inter_Crates_10
+  - first:
+      213: -7115859819250816352
+    second: PIV_Inter_Crates_11
+  - first:
+      213: 2683467139368167486
+    second: PIV_Inter_Crates_12
+  - first:
+      213: 7579237002345957355
+    second: PIV_Inter_Crates_13
+  - first:
+      213: -6276702759788366665
+    second: PIV_Inter_Crates_14
+  - first:
+      213: -8475864290463754017
+    second: PIV_Inter_Crates_15
+  - first:
+      213: -6400336287874314746
+    second: PIV_Inter_Crates_16
+  - first:
+      213: -1364246525370155931
+    second: PIV_Inter_Crates_17
+  - first:
+      213: -263962252696560876
+    second: PIV_Inter_Crates_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 60
+        width: 45
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 205ac0d1c41724e80800000000000000
+      internalID: -8195863800142060286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_1
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 60
+        width: 45
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de63fcc9b8b8b9bc0800000000000000
+      internalID: -3775270430872488211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_2
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 0
+        width: 47
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6e7350ac94111b60800000000000000
+      internalID: 7714970299599650411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_3
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 0
+        width: 73
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7ce86997d6cb3040800000000000000
+      internalID: 4628511671347375231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_4
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 36
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b34eb82ff12e2f7c0800000000000000
+      internalID: -4038917288956795845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_5
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 0
+        width: 74
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3e80dcc24da1c790800000000000000
+      internalID: -7511532201061609922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_6
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 22
+        width: 26
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adf8e108c0f406020800000000000000
+      internalID: 2332951522085605338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_7
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 24
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b51c8a16def5e170800000000000000
+      internalID: 8207246091474441656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_8
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 28
+        width: 22
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 281e2c9e5f10b9bf0800000000000000
+      internalID: -316657193099009662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_9
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 31
+        width: 51
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93ccf687876010b30800000000000000
+      internalID: 4251686637700893753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_10
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 0
+        width: 74
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecfd23a56d00af540800000000000000
+      internalID: 5042343653430976462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_11
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 21
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0aa641222336f3d90800000000000000
+      internalID: -7115859819250816352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_12
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 0
+        width: 74
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e38297845279d3520800000000000000
+      internalID: 2683467139368167486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_13
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 17
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be7c359a5ebde2960800000000000000
+      internalID: 7579237002345957355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_14
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 19
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b4b91a681ca4e8a0800000000000000
+      internalID: -6276702759788366665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_15
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 16
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd85d7ab55eaf5a80800000000000000
+      internalID: -8475864290463754017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_16
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 18
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60e853e7e007d27a0800000000000000
+      internalID: -6400336287874314746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_17
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 74
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56c30456309311de0800000000000000
+      internalID: -1364246525370155931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Inter_Crates_18
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 0
+        width: 73
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41bd8edcab7365cf0800000000000000
+      internalID: -263962252696560876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      PIV_Inter_Crates_0: -8195863800142060286
+      PIV_Inter_Crates_1: -3775270430872488211
+      PIV_Inter_Crates_10: 5042343653430976462
+      PIV_Inter_Crates_11: -7115859819250816352
+      PIV_Inter_Crates_12: 2683467139368167486
+      PIV_Inter_Crates_13: 7579237002345957355
+      PIV_Inter_Crates_14: -6276702759788366665
+      PIV_Inter_Crates_15: -8475864290463754017
+      PIV_Inter_Crates_16: -6400336287874314746
+      PIV_Inter_Crates_17: -1364246525370155931
+      PIV_Inter_Crates_18: -263962252696560876
+      PIV_Inter_Crates_2: 7714970299599650411
+      PIV_Inter_Crates_3: 4628511671347375231
+      PIV_Inter_Crates_4: -4038917288956795845
+      PIV_Inter_Crates_5: -7511532201061609922
+      PIV_Inter_Crates_6: 2332951522085605338
+      PIV_Inter_Crates_7: 8207246091474441656
+      PIV_Inter_Crates_8: -316657193099009662
+      PIV_Inter_Crates_9: 4251686637700893753
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,897 @@
+fileFormatVersion: 2
+guid: 3ad921f9a3b8ad845a5f1183f6e5e6b0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -542180389712441059
+    second: TBZG_VFX_Decay_0
+  - first:
+      213: 1252777848915569082
+    second: TBZG_VFX_Decay_1
+  - first:
+      213: -3413639301165996363
+    second: TBZG_VFX_Decay_2
+  - first:
+      213: -5488070491923964993
+    second: TBZG_VFX_Decay_3
+  - first:
+      213: 8405704015885077810
+    second: TBZG_VFX_Decay_4
+  - first:
+      213: 3933543279286315673
+    second: TBZG_VFX_Decay_5
+  - first:
+      213: -5152188789264287535
+    second: TBZG_VFX_Decay_6
+  - first:
+      213: -6133227743547099261
+    second: TBZG_VFX_Decay_7
+  - first:
+      213: -2803391205040281290
+    second: TBZG_VFX_Decay_8
+  - first:
+      213: -4855511704576786712
+    second: TBZG_VFX_Decay_9
+  - first:
+      213: -416867871442681434
+    second: TBZG_VFX_Decay_10
+  - first:
+      213: -2361893742500999175
+    second: TBZG_VFX_Decay_11
+  - first:
+      213: -8445531715564066588
+    second: TBZG_VFX_Decay_12
+  - first:
+      213: -4509723975232853182
+    second: TBZG_VFX_Decay_13
+  - first:
+      213: -562813007484645629
+    second: TBZG_VFX_Decay_14
+  - first:
+      213: -825119349852626615
+    second: TBZG_VFX_Decay_15
+  - first:
+      213: 2432284396192607479
+    second: TBZG_VFX_Decay_16
+  - first:
+      213: 8548737736276389359
+    second: TBZG_VFX_Decay_17
+  - first:
+      213: 34018757686320658
+    second: TBZG_VFX_Decay_18
+  - first:
+      213: 7848063715110458583
+    second: TBZG_VFX_Decay_19
+  - first:
+      213: 794389670427548335
+    second: TBZG_VFX_Decay_20
+  - first:
+      213: 4559698349580425874
+    second: TBZG_VFX_Decay_21
+  - first:
+      213: -8421336525563654027
+    second: TBZG_VFX_Decay_22
+  - first:
+      213: -7635725263854225442
+    second: TBZG_VFX_Decay_23
+  - first:
+      213: 3458395694565069674
+    second: TBZG_VFX_Decay_24
+  - first:
+      213: 6022307765578388085
+    second: TBZG_VFX_Decay_25
+  - first:
+      213: -908010151729738146
+    second: TBZG_VFX_Decay_26
+  - first:
+      213: 3951691873969877629
+    second: TBZG_VFX_Decay_27
+  - first:
+      213: -2736530505612490450
+    second: TBZG_VFX_Decay_28
+  - first:
+      213: 3226266400192068180
+    second: TBZG_VFX_Decay_29
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_0
+      rect:
+        serializedVersion: 2
+        x: 1126
+        y: 40
+        width: 94
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d11d103eec9c978f0800000000000000
+      internalID: -542180389712441059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_1
+      rect:
+        serializedVersion: 2
+        x: 1346
+        y: 37
+        width: 94
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab9271be0d2c26110800000000000000
+      internalID: 1252777848915569082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_2
+      rect:
+        serializedVersion: 2
+        x: 1597
+        y: 141
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b620be442150a0d0800000000000000
+      internalID: -3413639301165996363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_3
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 42
+        width: 64
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbb9192f6f476d3b0800000000000000
+      internalID: -5488070491923964993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_4
+      rect:
+        serializedVersion: 2
+        x: 1609
+        y: 128
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23d87e1644f07a470800000000000000
+      internalID: 8405704015885077810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_5
+      rect:
+        serializedVersion: 2
+        x: 1637
+        y: 122
+        width: 14
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99a6c7e85c0c69630800000000000000
+      internalID: 3933543279286315673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_6
+      rect:
+        serializedVersion: 2
+        x: 1650
+        y: 122
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d8f628f79fbf78b0800000000000000
+      internalID: -5152188789264287535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_7
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 21
+        width: 104
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 387fd4bccd562eaa0800000000000000
+      internalID: -6133227743547099261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_8
+      rect:
+        serializedVersion: 2
+        x: 1989
+        y: 22
+        width: 104
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 639ae115d8a5819d0800000000000000
+      internalID: -2803391205040281290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_9
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 40
+        width: 34
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8eef2fd84d1cd9cb0800000000000000
+      internalID: -4855511704576786712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_10
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 37
+        width: 63
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a1c26c21ecf63af0800000000000000
+      internalID: -416867871442681434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_11
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 45
+        width: 46
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ff8201b72ed83fd0800000000000000
+      internalID: -2361893742500999175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_12
+      rect:
+        serializedVersion: 2
+        x: 1212
+        y: 99
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e8228aa6a17bca80800000000000000
+      internalID: -8445531715564066588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_13
+      rect:
+        serializedVersion: 2
+        x: 1328
+        y: 106
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24bee2520fd3a61c0800000000000000
+      internalID: -4509723975232853182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_14
+      rect:
+        serializedVersion: 2
+        x: 1335
+        y: 101
+        width: 20
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30f88e53d8c7038f0800000000000000
+      internalID: -562813007484645629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_15
+      rect:
+        serializedVersion: 2
+        x: 1542
+        y: 109
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 941abbea2569c84f0800000000000000
+      internalID: -825119349852626615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_16
+      rect:
+        serializedVersion: 2
+        x: 1580
+        y: 59
+        width: 59
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fc29c385c531c120800000000000000
+      internalID: 2432284396192607479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_17
+      rect:
+        serializedVersion: 2
+        x: 1740
+        y: 104
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fed2bb09da733a670800000000000000
+      internalID: 8548737736276389359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_18
+      rect:
+        serializedVersion: 2
+        x: 1950
+        y: 104
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21ed79f31ebd87000800000000000000
+      internalID: 34018757686320658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_19
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 37
+        width: 53
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d49ac93e5ce9ec60800000000000000
+      internalID: 7848063715110458583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_20
+      rect:
+        serializedVersion: 2
+        x: 1558
+        y: 95
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: faad217423d360b00800000000000000
+      internalID: 794389670427548335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_21
+      rect:
+        serializedVersion: 2
+        x: 1563
+        y: 99
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29a1da99d7d474f30800000000000000
+      internalID: 4559698349580425874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_22
+      rect:
+        serializedVersion: 2
+        x: 1572
+        y: 93
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57091c35c07612b80800000000000000
+      internalID: -8421336525563654027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_23
+      rect:
+        serializedVersion: 2
+        x: 1571
+        y: 51
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed73e7d0454780690800000000000000
+      internalID: -7635725263854225442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_24
+      rect:
+        serializedVersion: 2
+        x: 1578
+        y: 52
+        width: 14
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a639a439f80beff20800000000000000
+      internalID: 3458395694565069674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_25
+      rect:
+        serializedVersion: 2
+        x: 1606
+        y: 58
+        width: 21
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57250675109839350800000000000000
+      internalID: 6022307765578388085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_26
+      rect:
+        serializedVersion: 2
+        x: 1640
+        y: 34
+        width: 12
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5e43bde3991663f0800000000000000
+      internalID: -908010151729738146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_27
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 39
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d72b5c982da37d630800000000000000
+      internalID: 3951691873969877629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_28
+      rect:
+        serializedVersion: 2
+        x: 1570
+        y: 41
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2982fff004e50ad0800000000000000
+      internalID: -2736530505612490450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Decay_29
+      rect:
+        serializedVersion: 2
+        x: 1194
+        y: 31
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45af93e823006cc20800000000000000
+      internalID: 3226266400192068180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TBZG_VFX_Decay_0: -542180389712441059
+      TBZG_VFX_Decay_1: 1252777848915569082
+      TBZG_VFX_Decay_10: -416867871442681434
+      TBZG_VFX_Decay_11: -2361893742500999175
+      TBZG_VFX_Decay_12: -8445531715564066588
+      TBZG_VFX_Decay_13: -4509723975232853182
+      TBZG_VFX_Decay_14: -562813007484645629
+      TBZG_VFX_Decay_15: -825119349852626615
+      TBZG_VFX_Decay_16: 2432284396192607479
+      TBZG_VFX_Decay_17: 8548737736276389359
+      TBZG_VFX_Decay_18: 34018757686320658
+      TBZG_VFX_Decay_19: 7848063715110458583
+      TBZG_VFX_Decay_2: -3413639301165996363
+      TBZG_VFX_Decay_20: 794389670427548335
+      TBZG_VFX_Decay_21: 4559698349580425874
+      TBZG_VFX_Decay_22: -8421336525563654027
+      TBZG_VFX_Decay_23: -7635725263854225442
+      TBZG_VFX_Decay_24: 3458395694565069674
+      TBZG_VFX_Decay_25: 6022307765578388085
+      TBZG_VFX_Decay_26: -908010151729738146
+      TBZG_VFX_Decay_27: 3951691873969877629
+      TBZG_VFX_Decay_28: -2736530505612490450
+      TBZG_VFX_Decay_29: 3226266400192068180
+      TBZG_VFX_Decay_3: -5488070491923964993
+      TBZG_VFX_Decay_4: 8405704015885077810
+      TBZG_VFX_Decay_5: 3933543279286315673
+      TBZG_VFX_Decay_6: -5152188789264287535
+      TBZG_VFX_Decay_7: -6133227743547099261
+      TBZG_VFX_Decay_8: -2803391205040281290
+      TBZG_VFX_Decay_9: -4855511704576786712
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

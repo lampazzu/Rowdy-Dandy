@@ -103,6 +103,18 @@ public class RowdyNotes : MonoBehaviour
         Toast("NEW ROWDY NOTE", entry.name, entry.Portrait);
     }
 
+    // First time Rowdy gets a pickup that has an Interactables page (flying rat, cat treat...): toast + NEW
+    public static void MarkTopicNews(string id)
+    {
+        string key = "RD_Notes_Found_" + id;
+        if (PlayerPrefs.GetInt(key, 0) == 1) return;
+        PlayerPrefs.SetInt(key, 1);
+        PlayerPrefs.DeleteKey(ReadKey(Tab.Interactables, id));
+        PlayerPrefs.Save();
+        foreach (NotesData.Topic t in NotesData.Interactables)
+            if (t.id == id) { Sprite icon = null; try { icon = t.icon != null ? t.icon() : null; } catch { } Toast("NEW ROWDY NOTE", t.name, icon); break; }
+    }
+
     public static void MarkWeaponFound(int index)
     {
         if (index <= 0 || index >= NotesData.Weapons.Length || PlayerPrefs.GetInt(WeaponKey(index), 0) == 1) return;
@@ -127,7 +139,7 @@ public class RowdyNotes : MonoBehaviour
             PlayerPrefs.DeleteKey(ReadKey(Tab.Weapons, NotesData.Weapons[i].id));
         }
         foreach (NotesData.Topic t in NotesData.Mechanics) PlayerPrefs.DeleteKey(ReadKey(Tab.Mechanics, t.id));
-        foreach (NotesData.Topic t in NotesData.Interactables) PlayerPrefs.DeleteKey(ReadKey(Tab.Interactables, t.id));
+        foreach (NotesData.Topic t in NotesData.Interactables) { PlayerPrefs.DeleteKey(ReadKey(Tab.Interactables, t.id)); PlayerPrefs.DeleteKey("RD_Notes_Found_" + t.id); }
         foreach (NotesData.Topic t in NotesData.Cats) { PlayerPrefs.DeleteKey(ReadKey(Tab.Cats, t.id)); PlayerPrefs.DeleteKey(CatKey(t.id)); }
     }
 
@@ -249,7 +261,7 @@ public class RowdyNotes : MonoBehaviour
     {
         var p = new Page { title = t.name, glyph = t.glyph, readKey = ReadKey(tab, t.id), anim = AnimatedPortraits.Get(t.animatedPortrait) };
         try { p.icon = t.icon != null ? t.icon() : null; } catch { p.icon = null; }
-        p.news = PlayerPrefs.GetInt(p.readKey, 0) == 0 && tab == Tab.Weapons;
+        p.news = PlayerPrefs.GetInt(p.readKey, 0) == 0 && (tab == Tab.Weapons || PlayerPrefs.GetInt("RD_Notes_Found_" + t.id, 0) == 1);
         foreach (var (header, body) in t.sections) p.sections.Add((header, body, header == NotesData.Quip ? QuipColor : TextColor));
         return p;
     }

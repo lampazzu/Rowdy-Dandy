@@ -315,6 +315,7 @@ public class EnemyMovement : MonoBehaviour
         EnemyCatalog.Entry kind = health != null ? EnemyCatalog.Identify(health) : null;
         lockFacingInAttack = kind != null && kind.id == "horserider";
         if (!isOnlyAquatic) EnemyDust.Attach(gameObject); // Rowdy's running / landing dust at their feet
+        EnemyAlert.Attach(gameObject);                    // "!" once when it notices Rowdy
         usesSpacing &= melee != null && !isOnlyAquatic;
     }
 

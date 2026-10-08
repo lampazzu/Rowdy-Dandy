@@ -1,0 +1,403 @@
+fileFormatVersion: 2
+guid: 71d9703ca55c2ae4c8584095c105471d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 217592346457887751
+    second: FX_CapeloboSlash_0
+  - first:
+      213: 2449648756926783336
+    second: FX_CapeloboSlash_1
+  - first:
+      213: 5594880129606879934
+    second: FX_CapeloboSlash_2
+  - first:
+      213: 1618341969786687959
+    second: FX_CapeloboSlash_3
+  - first:
+      213: -743527913672789225
+    second: FX_CapeloboSlash_4
+  - first:
+      213: 468305075071449099
+    second: FX_CapeloboSlash_5
+  - first:
+      213: -7325990473840613218
+    second: FX_CapeloboSlash_6
+  - first:
+      213: -1311870251176143208
+    second: FX_CapeloboSlash_7
+  - first:
+      213: 7408597734119413685
+    second: FX_CapeloboSlash_8
+  - first:
+      213: -2620457377892142258
+    second: FX_CapeloboSlash_9
+  - first:
+      213: 4718715055851647592
+    second: FX_CapeloboSlash_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 6
+        width: 48
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7045774161b050300800000000000000
+      internalID: 217592346457887751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_1
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 6
+        width: 45
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86f191dc096eef120800000000000000
+      internalID: 2449648756926783336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_2
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 7
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eba0c1eb5d105ad40800000000000000
+      internalID: 5594880129606879934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_3
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 11
+        width: 35
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d1dd3a7271857610800000000000000
+      internalID: 1618341969786687959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_4
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 10
+        width: 21
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71332f84d457ea5f0800000000000000
+      internalID: -743527913672789225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_5
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 45
+        width: 28
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b08752e0cf0cf7600800000000000000
+      internalID: 468305075071449099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_6
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 39
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e98a5d29a7ad45a90800000000000000
+      internalID: -7325990473840613218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 15
+        width: 18
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8965e3705fc4bcde0800000000000000
+      internalID: -1311870251176143208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_8
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 10
+        width: 16
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b793f10360a0d660800000000000000
+      internalID: 7408597734119413685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_9
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 33
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e43ffa906e342abd0800000000000000
+      internalID: -2620457377892142258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_CapeloboSlash_10
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 28
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 862335ca75e3c7140800000000000000
+      internalID: 4718715055851647592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      FX_CapeloboSlash_0: 217592346457887751
+      FX_CapeloboSlash_1: 2449648756926783336
+      FX_CapeloboSlash_10: 4718715055851647592
+      FX_CapeloboSlash_2: 5594880129606879934
+      FX_CapeloboSlash_3: 1618341969786687959
+      FX_CapeloboSlash_4: -743527913672789225
+      FX_CapeloboSlash_5: 468305075071449099
+      FX_CapeloboSlash_6: -7325990473840613218
+      FX_CapeloboSlash_7: -1311870251176143208
+      FX_CapeloboSlash_8: 7408597734119413685
+      FX_CapeloboSlash_9: -2620457377892142258
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

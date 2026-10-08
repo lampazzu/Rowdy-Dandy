@@ -1,0 +1,637 @@
+fileFormatVersion: 2
+guid: 35b7df4dc9dff894db6175f8d1e3e04b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4983268913933887616
+    second: PIV_Flying_Rat_0
+  - first:
+      213: 8675673440375073304
+    second: PIV_Flying_Rat_1
+  - first:
+      213: 8545240628439540794
+    second: PIV_Flying_Rat_2
+  - first:
+      213: 2330634125284341202
+    second: PIV_Flying_Rat_3
+  - first:
+      213: -1025187503038244643
+    second: PIV_Flying_Rat_4
+  - first:
+      213: 2854997685082275410
+    second: PIV_Flying_Rat_5
+  - first:
+      213: -5871561784322368967
+    second: PIV_Flying_Rat_6
+  - first:
+      213: 6044124782340058251
+    second: PIV_Flying_Rat_7
+  - first:
+      213: -2974092291760296548
+    second: PIV_Flying_Rat_8
+  - first:
+      213: 5339678399739111040
+    second: PIV_Flying_Rat_9
+  - first:
+      213: 4811654006597946595
+    second: PIV_Flying_Rat_10
+  - first:
+      213: -8813951941456856434
+    second: PIV_Flying_Rat_11
+  - first:
+      213: 6498038634574588491
+    second: PIV_Flying_Rat_12
+  - first:
+      213: 4891051633501883009
+    second: PIV_Flying_Rat_13
+  - first:
+      213: 128192729414346721
+    second: PIV_Flying_Rat_14
+  - first:
+      213: -5300344039118125337
+    second: PIV_Flying_Rat_15
+  - first:
+      213: 7988275438419141484
+    second: PIV_Flying_Rat_16
+  - first:
+      213: 3536843503801773727
+    second: PIV_Flying_Rat_17
+  - first:
+      213: 4222210348567679124
+    second: PIV_Flying_Rat_18
+  - first:
+      213: 7231787454845274956
+    second: PIV_Flying_Rat_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 53
+        width: 20
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 088a64bbca0282540800000000000000
+      internalID: 4983268913933887616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_1
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 52
+        width: 22
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81ae8d0470f266870800000000000000
+      internalID: 8675673440375073304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_2
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 53
+        width: 20
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a34ef52b31bc69670800000000000000
+      internalID: 8545240628439540794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_3
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 51
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d5f9f28363185020800000000000000
+      internalID: 2330634125284341202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_4
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 51
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd85c3dc56dc5c1f0800000000000000
+      internalID: -1025187503038244643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_5
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 54
+        width: 27
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25e34e5a44dfe9720800000000000000
+      internalID: 2854997685082275410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_6
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 53
+        width: 20
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93ad4b08aa5048ea0800000000000000
+      internalID: -5871561784322368967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_7
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 54
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8ca385677b01e350800000000000000
+      internalID: 6044124782340058251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_8
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 0
+        width: 36
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9d666c61d6e9b6d0800000000000000
+      internalID: -2974092291760296548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_9
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 0
+        width: 37
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 086a647b6395a1a40800000000000000
+      internalID: 5339678399739111040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_10
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 0
+        width: 39
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ec0b5563dd66c240800000000000000
+      internalID: 4811654006597946595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_11
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 1
+        width: 48
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8a7916586d8ea580800000000000000
+      internalID: -8813951941456856434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_12
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 30
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4a2596c5bbad2a50800000000000000
+      internalID: 6498038634574588491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_13
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 0
+        width: 39
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18a49f8fb8180e340800000000000000
+      internalID: 4891051633501883009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_14
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 30
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e7a783bb9e67c100800000000000000
+      internalID: 128192729414346721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_15
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 0
+        width: 42
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e64109cd256176b0800000000000000
+      internalID: -5300344039118125337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_16
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 0
+        width: 15
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6363f2003e0cde60800000000000000
+      internalID: 7988275438419141484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_17
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 0
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9ea04e7d64651130800000000000000
+      internalID: 3536843503801773727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_18
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 2
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 490da5911fd489a30800000000000000
+      internalID: 4222210348567679124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PIV_Flying_Rat_19
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 4
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4bcd21ef587c5460800000000000000
+      internalID: 7231787454845274956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      PIV_Flying_Rat_0: 4983268913933887616
+      PIV_Flying_Rat_1: 8675673440375073304
+      PIV_Flying_Rat_10: 4811654006597946595
+      PIV_Flying_Rat_11: -8813951941456856434
+      PIV_Flying_Rat_12: 6498038634574588491
+      PIV_Flying_Rat_13: 4891051633501883009
+      PIV_Flying_Rat_14: 128192729414346721
+      PIV_Flying_Rat_15: -5300344039118125337
+      PIV_Flying_Rat_16: 7988275438419141484
+      PIV_Flying_Rat_17: 3536843503801773727
+      PIV_Flying_Rat_18: 4222210348567679124
+      PIV_Flying_Rat_19: 7231787454845274956
+      PIV_Flying_Rat_2: 8545240628439540794
+      PIV_Flying_Rat_3: 2330634125284341202
+      PIV_Flying_Rat_4: -1025187503038244643
+      PIV_Flying_Rat_5: 2854997685082275410
+      PIV_Flying_Rat_6: -5871561784322368967
+      PIV_Flying_Rat_7: 6044124782340058251
+      PIV_Flying_Rat_8: -2974092291760296548
+      PIV_Flying_Rat_9: 5339678399739111040
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

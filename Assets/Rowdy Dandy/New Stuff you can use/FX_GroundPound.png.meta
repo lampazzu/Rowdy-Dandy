@@ -1,0 +1,1573 @@
+fileFormatVersion: 2
+guid: a151ba29d8a54f345b687e259fa2efdb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3907211211297115866
+    second: FX_GroundPound_0
+  - first:
+      213: -6583818342656577252
+    second: FX_GroundPound_1
+  - first:
+      213: 9187588306808281302
+    second: FX_GroundPound_2
+  - first:
+      213: -3414129172369733511
+    second: FX_GroundPound_3
+  - first:
+      213: 4922715398142988585
+    second: FX_GroundPound_4
+  - first:
+      213: -3338947809413151685
+    second: FX_GroundPound_5
+  - first:
+      213: 4773690102725002930
+    second: FX_GroundPound_6
+  - first:
+      213: 2097577013768401220
+    second: FX_GroundPound_7
+  - first:
+      213: -2027998413352954226
+    second: FX_GroundPound_8
+  - first:
+      213: 2499231336698321114
+    second: FX_GroundPound_9
+  - first:
+      213: -2564402287431518550
+    second: FX_GroundPound_10
+  - first:
+      213: -573772683531123712
+    second: FX_GroundPound_11
+  - first:
+      213: -2580625547372702644
+    second: FX_GroundPound_12
+  - first:
+      213: -1487150549793271209
+    second: FX_GroundPound_13
+  - first:
+      213: -8731593409360162793
+    second: FX_GroundPound_14
+  - first:
+      213: -3221261351159598956
+    second: FX_GroundPound_15
+  - first:
+      213: 1187339913958809036
+    second: FX_GroundPound_16
+  - first:
+      213: -7366240530052379438
+    second: FX_GroundPound_17
+  - first:
+      213: -6824623390213868774
+    second: FX_GroundPound_18
+  - first:
+      213: -4482749712932401840
+    second: FX_GroundPound_19
+  - first:
+      213: 2439401194624256770
+    second: FX_GroundPound_20
+  - first:
+      213: 1325039826434473457
+    second: FX_GroundPound_21
+  - first:
+      213: -9002067406405236878
+    second: FX_GroundPound_22
+  - first:
+      213: -6512236825726517111
+    second: FX_GroundPound_23
+  - first:
+      213: -3428670817641055048
+    second: FX_GroundPound_24
+  - first:
+      213: -6842161101994992793
+    second: FX_GroundPound_25
+  - first:
+      213: -4752226930980136296
+    second: FX_GroundPound_26
+  - first:
+      213: -8024993917129046477
+    second: FX_GroundPound_27
+  - first:
+      213: -1110319111785231996
+    second: FX_GroundPound_28
+  - first:
+      213: -2025523276818753021
+    second: FX_GroundPound_29
+  - first:
+      213: 8029567313391354464
+    second: FX_GroundPound_30
+  - first:
+      213: 6104948635480588188
+    second: FX_GroundPound_31
+  - first:
+      213: 3941586027821261803
+    second: FX_GroundPound_32
+  - first:
+      213: -3157291910616485014
+    second: FX_GroundPound_33
+  - first:
+      213: -8675098730800381078
+    second: FX_GroundPound_34
+  - first:
+      213: -7495047759458306754
+    second: FX_GroundPound_35
+  - first:
+      213: 2074428201568609126
+    second: FX_GroundPound_36
+  - first:
+      213: 8680802203263124876
+    second: FX_GroundPound_37
+  - first:
+      213: 5356284526809461549
+    second: FX_GroundPound_38
+  - first:
+      213: -5699326193000066903
+    second: FX_GroundPound_39
+  - first:
+      213: 6161978741750191485
+    second: FX_GroundPound_40
+  - first:
+      213: -2547147432913155552
+    second: FX_GroundPound_41
+  - first:
+      213: -114448311965314393
+    second: FX_GroundPound_42
+  - first:
+      213: 2398181547827784153
+    second: FX_GroundPound_43
+  - first:
+      213: -4052327848995079943
+    second: FX_GroundPound_44
+  - first:
+      213: 2772265746082645951
+    second: FX_GroundPound_45
+  - first:
+      213: -6978969497706455706
+    second: FX_GroundPound_46
+  - first:
+      213: 3047243499572343541
+    second: FX_GroundPound_47
+  - first:
+      213: -5943770053129871189
+    second: FX_GroundPound_48
+  - first:
+      213: 7416506520444073645
+    second: FX_GroundPound_49
+  - first:
+      213: -3628152626765060381
+    second: FX_GroundPound_50
+  - first:
+      213: -6557258634692591173
+    second: FX_GroundPound_51
+  - first:
+      213: 4410999714328251737
+    second: FX_GroundPound_52
+  - first:
+      213: -5473871161252213054
+    second: FX_GroundPound_53
+  - first:
+      213: -4927279674494834257
+    second: FX_GroundPound_54
+  - first:
+      213: 8907706472542536780
+    second: FX_GroundPound_55
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FX_GroundPound_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1
+        width: 124
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6213638ca1cc6c9c0800000000000000
+      internalID: -3907211211297115866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_1
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 1
+        width: 123
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c11f044991491a4a0800000000000000
+      internalID: -6583818342656577252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_2
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 99
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d817d913eed08f70800000000000000
+      internalID: 9187588306808281302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_3
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 92
+        width: 6
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9788a974b939e90d0800000000000000
+      internalID: -3414129172369733511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_4
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 99
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92198aca29ff05440800000000000000
+      internalID: 4922715398142988585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_5
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 107
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b344c5868aca9a1d0800000000000000
+      internalID: -3338947809413151685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_6
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 101
+        width: 9
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b6c8b83bdd8f3240800000000000000
+      internalID: 4773690102725002930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_7
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 96
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 441b0ba3e271c1d10800000000000000
+      internalID: 2097577013768401220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_8
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 2
+        width: 123
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e869a07103a1bd3e0800000000000000
+      internalID: -2027998413352954226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_9
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 3
+        width: 123
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad89d63c8ad0fa220800000000000000
+      internalID: 2499231336698321114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_10
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 72
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa6f174d4b9696cd0800000000000000
+      internalID: -2564402287431518550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_11
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 82
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0040e48c8cc8908f0800000000000000
+      internalID: -573772683531123712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_12
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 83
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c445d86ccb6cf2cd0800000000000000
+      internalID: -2580625547372702644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_13
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 4
+        width: 123
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7529b0844749c5be0800000000000000
+      internalID: -1487150549793271209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_14
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 33
+        width: 57
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71012ff5e0623d680800000000000000
+      internalID: -8731593409360162793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_15
+      rect:
+        serializedVersion: 2
+        x: 650
+        y: 12
+        width: 116
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 490ff6b3ed7cb43d0800000000000000
+      internalID: -3221261351159598956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_16
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 61
+        width: 53
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccd58276c574a7010800000000000000
+      internalID: 1187339913958809036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_17
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 33
+        width: 57
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dc8424144bd5c990800000000000000
+      internalID: -7366240530052379438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_18
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 12
+        width: 115
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a13fa7c5f211a41a0800000000000000
+      internalID: -6824623390213868774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_19
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 61
+        width: 53
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05d0eaff2e21ac1c0800000000000000
+      internalID: -4482749712932401840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_20
+      rect:
+        serializedVersion: 2
+        x: 899
+        y: 33
+        width: 57
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20b0e36467e7ad120800000000000000
+      internalID: 2439401194624256770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_21
+      rect:
+        serializedVersion: 2
+        x: 907
+        y: 12
+        width: 115
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fd3fd7a3bc736210800000000000000
+      internalID: 1325039826434473457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_22
+      rect:
+        serializedVersion: 2
+        x: 956
+        y: 61
+        width: 53
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 277081d836b321380800000000000000
+      internalID: -9002067406405236878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_23
+      rect:
+        serializedVersion: 2
+        x: 1027
+        y: 33
+        width: 57
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9808a5d3c13ef95a0800000000000000
+      internalID: -6512236825726517111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_24
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 12
+        width: 115
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bcb1c6ae0aea60d0800000000000000
+      internalID: -3428670817641055048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_25
+      rect:
+        serializedVersion: 2
+        x: 1084
+        y: 61
+        width: 53
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76bd793aab2cb01a0800000000000000
+      internalID: -6842161101994992793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_26
+      rect:
+        serializedVersion: 2
+        x: 1155
+        y: 33
+        width: 57
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89a52eed8c2bc0eb0800000000000000
+      internalID: -4752226930980136296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_27
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 12
+        width: 115
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3364ad4fc8e71a090800000000000000
+      internalID: -8024993917129046477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_28
+      rect:
+        serializedVersion: 2
+        x: 1212
+        y: 61
+        width: 53
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 489c6ba86aa5790f0800000000000000
+      internalID: -1110319111785231996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_29
+      rect:
+        serializedVersion: 2
+        x: 1283
+        y: 33
+        width: 57
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30adee8bf45e3e3e0800000000000000
+      internalID: -2025523276818753021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_30
+      rect:
+        serializedVersion: 2
+        x: 1291
+        y: 12
+        width: 115
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06287c6dde0ce6f60800000000000000
+      internalID: 8029567313391354464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_31
+      rect:
+        serializedVersion: 2
+        x: 1340
+        y: 61
+        width: 53
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9f73d5407229b450800000000000000
+      internalID: 6104948635480588188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_32
+      rect:
+        serializedVersion: 2
+        x: 1411
+        y: 33
+        width: 57
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be3edefdb9353b630800000000000000
+      internalID: 3941586027821261803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_33
+      rect:
+        serializedVersion: 2
+        x: 1419
+        y: 12
+        width: 115
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a637d7f3cbb0f24d0800000000000000
+      internalID: -3157291910616485014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_34
+      rect:
+        serializedVersion: 2
+        x: 1468
+        y: 61
+        width: 53
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a63833fbaabdb9780800000000000000
+      internalID: -8675098730800381078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_35
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 6
+        width: 44
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3576e2f5cd3cf790800000000000000
+      internalID: -7495047759458306754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_36
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 5
+        width: 45
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 663ac826579d9cc10800000000000000
+      internalID: 2074428201568609126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_37
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 9
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c854dea6c97687870800000000000000
+      internalID: 8680802203263124876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_38
+      rect:
+        serializedVersion: 2
+        x: 776
+        y: 6
+        width: 44
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d233668f568555a40800000000000000
+      internalID: 5356284526809461549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_39
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 5
+        width: 45
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a0d627160de7e0b0800000000000000
+      internalID: -5699326193000066903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_40
+      rect:
+        serializedVersion: 2
+        x: 867
+        y: 9
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d75578f940fb38550800000000000000
+      internalID: 6161978741750191485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_41
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 6
+        width: 44
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02ac9a6b7e6b6acd0800000000000000
+      internalID: -2547147432913155552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_42
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 5
+        width: 45
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a21a2cddd5696ef0800000000000000
+      internalID: -114448311965314393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_43
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 9
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d9eb21696d084120800000000000000
+      internalID: 2398181547827784153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_44
+      rect:
+        serializedVersion: 2
+        x: 1032
+        y: 6
+        width: 44
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f8b93f9a4d33c7c0800000000000000
+      internalID: -4052327848995079943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_45
+      rect:
+        serializedVersion: 2
+        x: 1076
+        y: 5
+        width: 45
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb74d3a0201197620800000000000000
+      internalID: 2772265746082645951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_46
+      rect:
+        serializedVersion: 2
+        x: 1123
+        y: 9
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66d9beec738b52f90800000000000000
+      internalID: -6978969497706455706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_47
+      rect:
+        serializedVersion: 2
+        x: 1160
+        y: 6
+        width: 44
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f2b02061dbf94a20800000000000000
+      internalID: 3047243499572343541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_48
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 5
+        width: 45
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba0e69cc0ac738da0800000000000000
+      internalID: -5943770053129871189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_49
+      rect:
+        serializedVersion: 2
+        x: 1251
+        y: 9
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da6ff61d269bce660800000000000000
+      internalID: 7416506520444073645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_50
+      rect:
+        serializedVersion: 2
+        x: 1288
+        y: 6
+        width: 44
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e6a4c2a86636adc0800000000000000
+      internalID: -3628152626765060381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_51
+      rect:
+        serializedVersion: 2
+        x: 1332
+        y: 5
+        width: 45
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb109ca7300fff4a0800000000000000
+      internalID: -6557258634692591173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_52
+      rect:
+        serializedVersion: 2
+        x: 1379
+        y: 9
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95d82e4aed4073d30800000000000000
+      internalID: 4410999714328251737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_53
+      rect:
+        serializedVersion: 2
+        x: 1416
+        y: 6
+        width: 44
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ce8e4f3e27e804b0800000000000000
+      internalID: -5473871161252213054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_54
+      rect:
+        serializedVersion: 2
+        x: 1460
+        y: 5
+        width: 45
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa9abbced39ce9bb0800000000000000
+      internalID: -4927279674494834257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_GroundPound_55
+      rect:
+        serializedVersion: 2
+        x: 1507
+        y: 9
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c44885b77d78e9b70800000000000000
+      internalID: 8907706472542536780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      FX_GroundPound_0: -3907211211297115866
+      FX_GroundPound_1: -6583818342656577252
+      FX_GroundPound_10: -2564402287431518550
+      FX_GroundPound_11: -573772683531123712
+      FX_GroundPound_12: -2580625547372702644
+      FX_GroundPound_13: -1487150549793271209
+      FX_GroundPound_14: -8731593409360162793
+      FX_GroundPound_15: -3221261351159598956
+      FX_GroundPound_16: 1187339913958809036
+      FX_GroundPound_17: -7366240530052379438
+      FX_GroundPound_18: -6824623390213868774
+      FX_GroundPound_19: -4482749712932401840
+      FX_GroundPound_2: 9187588306808281302
+      FX_GroundPound_20: 2439401194624256770
+      FX_GroundPound_21: 1325039826434473457
+      FX_GroundPound_22: -9002067406405236878
+      FX_GroundPound_23: -6512236825726517111
+      FX_GroundPound_24: -3428670817641055048
+      FX_GroundPound_25: -6842161101994992793
+      FX_GroundPound_26: -4752226930980136296
+      FX_GroundPound_27: -8024993917129046477
+      FX_GroundPound_28: -1110319111785231996
+      FX_GroundPound_29: -2025523276818753021
+      FX_GroundPound_3: -3414129172369733511
+      FX_GroundPound_30: 8029567313391354464
+      FX_GroundPound_31: 6104948635480588188
+      FX_GroundPound_32: 3941586027821261803
+      FX_GroundPound_33: -3157291910616485014
+      FX_GroundPound_34: -8675098730800381078
+      FX_GroundPound_35: -7495047759458306754
+      FX_GroundPound_36: 2074428201568609126
+      FX_GroundPound_37: 8680802203263124876
+      FX_GroundPound_38: 5356284526809461549
+      FX_GroundPound_39: -5699326193000066903
+      FX_GroundPound_4: 4922715398142988585
+      FX_GroundPound_40: 6161978741750191485
+      FX_GroundPound_41: -2547147432913155552
+      FX_GroundPound_42: -114448311965314393
+      FX_GroundPound_43: 2398181547827784153
+      FX_GroundPound_44: -4052327848995079943
+      FX_GroundPound_45: 2772265746082645951
+      FX_GroundPound_46: -6978969497706455706
+      FX_GroundPound_47: 3047243499572343541
+      FX_GroundPound_48: -5943770053129871189
+      FX_GroundPound_49: 7416506520444073645
+      FX_GroundPound_5: -3338947809413151685
+      FX_GroundPound_50: -3628152626765060381
+      FX_GroundPound_51: -6557258634692591173
+      FX_GroundPound_52: 4410999714328251737
+      FX_GroundPound_53: -5473871161252213054
+      FX_GroundPound_54: -4927279674494834257
+      FX_GroundPound_55: 8907706472542536780
+      FX_GroundPound_6: 4773690102725002930
+      FX_GroundPound_7: 2097577013768401220
+      FX_GroundPound_8: -2027998413352954226
+      FX_GroundPound_9: 2499231336698321114
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -16,11 +16,26 @@ public class PlayerDetector : MonoBehaviour
 
 
 
+    private EnemyHealth owner;
+    private bool blockedOffscreen;
+
+    private void Awake() => owner = GetComponentInParent<EnemyHealth>();
+
+    // Rowdy was inside while the enemy was off screen: go once it comes into view
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (blockedOffscreen && collision.CompareTag("Player")) OnTriggerEnter2D(collision);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // Check if the object colliding has the "Player" tag
         if (collision.CompareTag("Player"))
         {
+            // Enemies (Sharkwolf) never start this from off screen
+            if (!isFrecha && owner != null && !EnemyFairness.OnScreen(EnemyFairness.BodyCenter(owner), 0.01f)) { blockedOffscreen = true; return; }
+            blockedOffscreen = false;
+
             // Trigger the animation regardless of whether it's a charge attack
             anima.SetTrigger("shark attack");
 

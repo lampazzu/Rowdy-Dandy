@@ -25,6 +25,9 @@ public static class AnimatedPortraits
 
     private static readonly Dictionary<string, Clip> cache = new Dictionary<string, Clip>();
 
+    // Portraits built at runtime (the Moonbound Elder's come from its sprite sheet)
+    public static void Register(string id, Clip clip) => cache[id] = clip;
+
     public static Clip Get(string id)
     {
         if (string.IsNullOrEmpty(id)) return null;
@@ -216,7 +219,7 @@ public static class EnemyCatalog
         new Entry
         {
             id = "moonboundelder", name = "Moonbound Elder", keys = new[] { "moonboundelder" }, killsToReveal = 1,
-            about = "What the old man really is. Hurt him and the curse wakes up: a giant violet wolf, 450 HP, leaps, claws, and a MOON NOVA ring of explosions.",
+            about = "What the old man really is. Hurt him and the curse wakes up: a huge shadow werewolf that crawls out of the ground. 450 HP, leaps, claws, and a MOON NOVA ring of explosions.",
             weakness = "When he crouches and glows, the nova is coming - jump or run out of the ring. At half health he howls, turns red, calls two Werefasts and gets faster.",
             counter = "Same windows as a Big Wolf: strike as he rears back before the claws come down. His size makes the swipes reach further, so stay close.",
             drops = "A big pile of EXP gems.",

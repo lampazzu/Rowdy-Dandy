@@ -138,7 +138,7 @@ public static class NotesData
                 ("HOW", "Shift (or L) / RB: Rowdy hops on his board and dashes."),
                 ("ON LAND TOO", "You can surf on solid ground, not just water. The ground slows the board down if you stay on it."),
                 ("ENDLESS SURF", "Jump while surfing and the surf carries on when you land. Keep hopping and you can surf as long as you like."),
-                (Quip, "Surfing on sand is technically illegal in nine galaxies. Good thing we're in none of them."),
+                (Quip, "Surfing on sand is technically illegal on most beaches. Good thing nobody here can catch me."),
             },
         },
         new Topic
@@ -300,11 +300,43 @@ public static class NotesData
         },
         new Topic
         {
+            id = "flyingrat", name = "Flying Rat", glyph = "R", icon = () => SheetIcon(ItemArt.Get != null ? ItemArt.Get.flyingRat : null, 10, 2, 0),
+            sections = new[]
+            {
+                ("WHAT IT IS", "A very rare rat with wings. Now and then one bursts out of a defeated enemy, flutters around and escapes after a while."),
+                ("REGISTER IT", "Touch it to register it. Every registered rat is bait: when you die, the cats are safe as long as you have a rat for each of them. 2 rats and 2 cats = nobody gets lost; only a 3rd cat would be at risk."),
+                ("LUCK", "Ore gems make it show up more often."),
+                (Quip, "Cats love rats. I love cats. The rats are fine with it. Probably."),
+            },
+        },
+        new Topic
+        {
+            id = "cattreat", name = "Cat Treat", glyph = "F", icon = () => SheetIcon(ItemArt.Get != null ? ItemArt.Get.fish : null, ItemArt.Get != null ? Mathf.Max(1, ItemArt.Get.fishFrames) : 1, 1, 0),
+            sections = new[]
+            {
+                ("WHAT IT IS", "A tiny fish, a very rare drop. It flops around on the ground until you grab it."),
+                ("WHAT IT DOES", "Feeds every cat you have: their cooldowns refill at once and stay halved for a while. No cats? It's a snack: +5 HP."),
+                (Quip, "Raw fish off the floor. Gourmet, if you're a cat."),
+            },
+        },
+        new Topic
+        {
+            id = "ores", name = "Ore Rocks", glyph = "O", icon = () => SheetIcon(ItemArt.Get != null ? ItemArt.Get.oreBreak : null, 10, 1, 0),
+            sections = new[]
+            {
+                ("WHAT THEY ARE", "Dark rocks with gems inside, scattered around the level. Three hits break one into a fountain of gems."),
+                ("GEMS", "Emerald, sapphire, ruby and the rare crystal. Each one you pick up adds a little drop luck (+0.5% to +1.5%)."),
+                ("DROP LUCK", "Raises the chance of weapon drops, flying rats and cat treats. A broken rock stays broken, so the luck out there is limited."),
+                (Quip, "Smashing rocks for jewelry. My grandma would be proud. Or worried."),
+            },
+        },
+        new Topic
+        {
             id = "catpickup", name = "Lost Cats", glyph = "C", icon = () => CatIcon("Interactables/SamuraiCat"),
             sections = new[]
             {
                 ("WHAT THEY ARE", "Cats hiding around the map, glowing so you can spot them. Touch one to bring it along. See the Cats tab."),
-                ("GETTING LOST", "Die and your newest cat gets lost again somewhere you've been."),
+                ("GETTING LOST", "Die and your newest cat gets lost again somewhere you've been - unless you have registered a flying rat for every cat."),
                 (Quip, "If you love something, let it go. Then go find it. It's glowing. Easy."),
             },
         },
@@ -314,7 +346,7 @@ public static class NotesData
             sections = new[]
             {
                 ("WHO", "An old man living in a tent by the mountain. He looks harmless."),
-                ("CAREFUL", "Hurt him and the curse wakes up: the Moonbound Elder. Huge, fast, explosive. You were warned."),
+                ("CAREFUL", "Hurt him and the curse wakes up: the Moonbound Elder, a huge shadow werewolf. You were warned."),
                 (Quip, "Note to self: do not poke old men who live alone in tents. Ever."),
             },
         },
@@ -325,6 +357,12 @@ public static class NotesData
     {
         WeaponManager weapons = WeaponManager.Instance;
         return weapons != null ? weapons.GetProfileByIndex(index) : null;
+    }
+
+    private static Sprite SheetIcon(Texture2D sheet, int columns, int rows, int frame)
+    {
+        Sprite[] frames = ItemArt.Frames(sheet, columns, rows, new Vector2(0.5f, 0.5f), 64f);
+        return frames != null && frame < frames.Length ? frames[frame] : null;
     }
 
     private static Sprite PrefabIcon(string resourcePath)

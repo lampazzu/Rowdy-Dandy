@@ -17,6 +17,18 @@ public class MeleeEnemy : MonoBehaviour
     private bool isPlayerInsight = false;
     [SerializeField] private bool isGnollWarrior = false;
 
+    [Header("Fairness (see EnemyFairness)")]
+    [Tooltip("Archers / bombers: seconds the red aim trace shows before the shot. -1 = auto (0.45).")]
+    [SerializeField] private float telegraphTime = -1f;
+    [Tooltip("Melee enemies only start an attack while on screen (archers / bombers shoot from anywhere, with an aim trace).")]
+    [SerializeField] private bool onlyAttackOnScreen = true;
+    private bool ranged, rangedChecked, telling;
+
+    // Rowdy is inside the attack box right now (EnemyAlert uses it: archers don't chase, this is their aggro)
+    public bool SeesPlayer { get; private set; }
+    private float aliveSince;
+    private EnemyHealth health;
+
     private float cooldownTimer = Mathf.Infinity;
     private Animator anim;
 
@@ -53,21 +65,42 @@ public class MeleeEnemy : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        health = GetComponent<EnemyHealth>();
+    }
+
+    private void OnEnable()
+    {
+        aliveSince = Time.time; // spawn / wake-up grace
+        telling = false;
+    }
+
+    private void OnDisable()
+    {
+        telling = false;
     }
 
     private void Update()
     {
         cooldownTimer += Time.deltaTime;
 
-        // Attack only when player is in sight
-        if (PlayerInSight())
+        // Attack only when player is in sight. Melee: never from off screen / right after spawning.
+        // Archers / bombers: anywhere, but a red aim trace shows first.
+        SeesPlayer = PlayerInSight();
+        if (!telling && SeesPlayer)
         {
             if (cooldownTimer >= attackCooldown)
             {
-                // Attack
-                cooldownTimer = 0;
-                string selectedAttack = SelectAttackAnimation();
-                anim.SetTrigger(selectedAttack);
+                if (!rangedChecked) { rangedChecked = true; ranged = EnemyFairness.IsRanged(health); }
+                bool allowed = ranged ? Time.time - aliveSince >= EnemyFairness.SpawnGrace
+                                      : !onlyAttackOnScreen || EnemyFairness.CanStartMeleeAttack(this, aliveSince);
+                if (allowed)
+                {
+                    cooldownTimer = 0;
+                    string selectedAttack = SelectAttackAnimation();
+                    float aim = telegraphTime >= 0f ? telegraphTime : 0.45f;
+                    if (ranged && aim > 0f) StartCoroutine(AimThenShoot(selectedAttack, aim));
+                    else anim.SetTrigger(selectedAttack);
+                }
             }
         }
         // GnollWarrior jumping behavior
@@ -89,6 +122,16 @@ public class MeleeEnemy : MonoBehaviour
         }
         int layer = isPhasingDead ? ignorePlayerLayerIndex : enemyLayerIndex;
         if (gameObject.layer != layer) gameObject.layer = layer;
+    }
+
+    // Archers / bombers: red aim trace first, then the shot (cancelled if it dies meanwhile)
+    private IEnumerator AimThenShoot(string trigger, float aim)
+    {
+        telling = true;
+        EnemyFairness.AimTrace(this, aim);
+        yield return new WaitForSeconds(aim);
+        telling = false;
+        if (health == null || !health.enemydead) anim.SetTrigger(trigger);
     }
 
     private bool PlayerInSight()

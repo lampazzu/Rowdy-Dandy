@@ -1,0 +1,1209 @@
+fileFormatVersion: 2
+guid: 218dabfed753d434d8850961db4d35ee
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3091301949108017510
+    second: TBZG_VFX_PhysicalHit_0
+  - first:
+      213: 5326683543562610762
+    second: TBZG_VFX_PhysicalHit_1
+  - first:
+      213: -5608852330255531305
+    second: TBZG_VFX_PhysicalHit_2
+  - first:
+      213: -3800013050884034191
+    second: TBZG_VFX_PhysicalHit_3
+  - first:
+      213: -4287744090465450453
+    second: TBZG_VFX_PhysicalHit_4
+  - first:
+      213: -739546710037865837
+    second: TBZG_VFX_PhysicalHit_5
+  - first:
+      213: 6803834355783463088
+    second: TBZG_VFX_PhysicalHit_6
+  - first:
+      213: -8297541991273317981
+    second: TBZG_VFX_PhysicalHit_7
+  - first:
+      213: -7883962783038505374
+    second: TBZG_VFX_PhysicalHit_8
+  - first:
+      213: -6535296098933917535
+    second: TBZG_VFX_PhysicalHit_9
+  - first:
+      213: 4561474270296203957
+    second: TBZG_VFX_PhysicalHit_10
+  - first:
+      213: 2417969753158383479
+    second: TBZG_VFX_PhysicalHit_11
+  - first:
+      213: -3765206981715284511
+    second: TBZG_VFX_PhysicalHit_12
+  - first:
+      213: 6286305101615529074
+    second: TBZG_VFX_PhysicalHit_13
+  - first:
+      213: 6518062841964680635
+    second: TBZG_VFX_PhysicalHit_14
+  - first:
+      213: 7659186231656190299
+    second: TBZG_VFX_PhysicalHit_15
+  - first:
+      213: -7186595483798130314
+    second: TBZG_VFX_PhysicalHit_16
+  - first:
+      213: -2011751552893419086
+    second: TBZG_VFX_PhysicalHit_17
+  - first:
+      213: 3645988454506616646
+    second: TBZG_VFX_PhysicalHit_18
+  - first:
+      213: -8838019591608215499
+    second: TBZG_VFX_PhysicalHit_19
+  - first:
+      213: 3443464459021734910
+    second: TBZG_VFX_PhysicalHit_20
+  - first:
+      213: -6966262125688492122
+    second: TBZG_VFX_PhysicalHit_21
+  - first:
+      213: 2973344112429714131
+    second: TBZG_VFX_PhysicalHit_22
+  - first:
+      213: 1440543695918642888
+    second: TBZG_VFX_PhysicalHit_23
+  - first:
+      213: 5243785988628777509
+    second: TBZG_VFX_PhysicalHit_24
+  - first:
+      213: 3334559907684294259
+    second: TBZG_VFX_PhysicalHit_25
+  - first:
+      213: -3484406475794565662
+    second: TBZG_VFX_PhysicalHit_26
+  - first:
+      213: 8589839186520156602
+    second: TBZG_VFX_PhysicalHit_27
+  - first:
+      213: -6652934316192081331
+    second: TBZG_VFX_PhysicalHit_28
+  - first:
+      213: 8471622669889830687
+    second: TBZG_VFX_PhysicalHit_29
+  - first:
+      213: 7528009523310245062
+    second: TBZG_VFX_PhysicalHit_30
+  - first:
+      213: -4712079695205755100
+    second: TBZG_VFX_PhysicalHit_31
+  - first:
+      213: 5626645725211795826
+    second: TBZG_VFX_PhysicalHit_32
+  - first:
+      213: -2345517993710809881
+    second: TBZG_VFX_PhysicalHit_33
+  - first:
+      213: 455267680132774330
+    second: TBZG_VFX_PhysicalHit_34
+  - first:
+      213: 6743269983155985056
+    second: TBZG_VFX_PhysicalHit_35
+  - first:
+      213: -6473941655202072568
+    second: TBZG_VFX_PhysicalHit_36
+  - first:
+      213: -7718465944013217560
+    second: TBZG_VFX_PhysicalHit_37
+  - first:
+      213: 3494254639382850911
+    second: TBZG_VFX_PhysicalHit_38
+  - first:
+      213: 3459370855569150963
+    second: TBZG_VFX_PhysicalHit_39
+  - first:
+      213: -2847042221316779981
+    second: TBZG_VFX_PhysicalHit_40
+  - first:
+      213: -8293527802327090984
+    second: TBZG_VFX_PhysicalHit_41
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_0
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 37
+        width: 55
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6695e0a8eb286ea20800000000000000
+      internalID: 3091301949108017510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_1
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 32
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a48e7fcf57e2ce940800000000000000
+      internalID: 5326683543562610762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_2
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 80
+        width: 23
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d24f79c58a5922b0800000000000000
+      internalID: -5608852330255531305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_3
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 67
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17175387344a34bc0800000000000000
+      internalID: -3800013050884034191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_4
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 26
+        width: 134
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b26c608977fde74c0800000000000000
+      internalID: -4287744090465450453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_5
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 22
+        width: 155
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39a526d7f2a9cb5f0800000000000000
+      internalID: -739546710037865837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_6
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 26
+        width: 46
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b0721f5c431c6e50800000000000000
+      internalID: 6803834355783463088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_7
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 22
+        width: 31
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a9344d658539dc80800000000000000
+      internalID: -8297541991273317981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_8
+      rect:
+        serializedVersion: 2
+        x: 711
+        y: 69
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26ef69eae99869290800000000000000
+      internalID: -7883962783038505374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_9
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 107
+        width: 30
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a83c01d2d6fd45a0800000000000000
+      internalID: -6535296098933917535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_10
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 76
+        width: 20
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b2e61d5eac9d4f30800000000000000
+      internalID: 4561474270296203957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_11
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 118
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 777f4a6fdaa5e8120800000000000000
+      internalID: 2417969753158383479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_12
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 27
+        width: 42
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ed2a05f23c4fbbc0800000000000000
+      internalID: -3765206981715284511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_13
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 115
+        width: 35
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27cf4830f217d3750800000000000000
+      internalID: 6286305101615529074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_14
+      rect:
+        serializedVersion: 2
+        x: 726
+        y: 48
+        width: 27
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb55afede9fc47a50800000000000000
+      internalID: 6518062841964680635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_15
+      rect:
+        serializedVersion: 2
+        x: 732
+        y: 80
+        width: 10
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b511e6e2c45ea4a60800000000000000
+      internalID: 7659186231656190299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_16
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 70
+        width: 19
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67139c3db75144c90800000000000000
+      internalID: -7186595483798130314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_17
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 60
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b182711f92d414e0800000000000000
+      internalID: -2011751552893419086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_18
+      rect:
+        serializedVersion: 2
+        x: 741
+        y: 83
+        width: 10
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 647da0e9e27299230800000000000000
+      internalID: 3645988454506616646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_19
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 56
+        width: 102
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 538df3cd10c095580800000000000000
+      internalID: -8838019591608215499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_20
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 28
+        width: 9
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef35ca46ea4a9cf20800000000000000
+      internalID: 3443464459021734910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_21
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 106
+        width: 36
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6af641a618dd25f90800000000000000
+      internalID: -6966262125688492122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_22
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 21
+        width: 52
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3da4f5087b0734920800000000000000
+      internalID: 2973344112429714131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_23
+      rect:
+        serializedVersion: 2
+        x: 889
+        y: 55
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c6b8aeebd6ddf310800000000000000
+      internalID: 1440543695918642888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_24
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 61
+        width: 75
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52a836ae29ba5c840800000000000000
+      internalID: 5243785988628777509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_25
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 55
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37e18cb919cb64e20800000000000000
+      internalID: 3334559907684294259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_26
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 52
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e5b13d75c6e4afc0800000000000000
+      internalID: -3484406475794565662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_27
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 58
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab9a34eaa3d353770800000000000000
+      internalID: 8589839186520156602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_28
+      rect:
+        serializedVersion: 2
+        x: 961
+        y: 38
+        width: 33
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4a5d59fc770ca3a0800000000000000
+      internalID: -6652934316192081331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_29
+      rect:
+        serializedVersion: 2
+        x: 967
+        y: 53
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1ffde50fef319570800000000000000
+      internalID: 8471622669889830687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_30
+      rect:
+        serializedVersion: 2
+        x: 985
+        y: 71
+        width: 56
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c43aaeb6ccd87860800000000000000
+      internalID: 7528009523310245062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_31
+      rect:
+        serializedVersion: 2
+        x: 1013
+        y: 120
+        width: 34
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4271eed9b745b9eb0800000000000000
+      internalID: -4712079695205755100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_32
+      rect:
+        serializedVersion: 2
+        x: 1031
+        y: 121
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2712830d97cd51e40800000000000000
+      internalID: 5626645725211795826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_33
+      rect:
+        serializedVersion: 2
+        x: 1039
+        y: 120
+        width: 31
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ec8492dfcb037fd0800000000000000
+      internalID: -2345517993710809881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_34
+      rect:
+        serializedVersion: 2
+        x: 1105
+        y: 18
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab9b7000b8f615600800000000000000
+      internalID: 455267680132774330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_35
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 27
+        width: 31
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0aa11928258e49d50800000000000000
+      internalID: 6743269983155985056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_36
+      rect:
+        serializedVersion: 2
+        x: 1148
+        y: 76
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80873117d50f726a0800000000000000
+      internalID: -6473941655202072568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_37
+      rect:
+        serializedVersion: 2
+        x: 1154
+        y: 46
+        width: 20
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e0642c3e1082e490800000000000000
+      internalID: -7718465944013217560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_38
+      rect:
+        serializedVersion: 2
+        x: 1173
+        y: 32
+        width: 27
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5dec27c4161e7030800000000000000
+      internalID: 3494254639382850911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_39
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 81
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f3d980f677220030800000000000000
+      internalID: 3459370855569150963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_40
+      rect:
+        serializedVersion: 2
+        x: 1187
+        y: 99
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 330dfd91f264d78d0800000000000000
+      internalID: -2847042221316779981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_PhysicalHit_41
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 20
+        width: 236
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d8b77f976877ec80800000000000000
+      internalID: -8293527802327090984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TBZG_VFX_PhysicalHit_0: 3091301949108017510
+      TBZG_VFX_PhysicalHit_1: 5326683543562610762
+      TBZG_VFX_PhysicalHit_10: 4561474270296203957
+      TBZG_VFX_PhysicalHit_11: 2417969753158383479
+      TBZG_VFX_PhysicalHit_12: -3765206981715284511
+      TBZG_VFX_PhysicalHit_13: 6286305101615529074
+      TBZG_VFX_PhysicalHit_14: 6518062841964680635
+      TBZG_VFX_PhysicalHit_15: 7659186231656190299
+      TBZG_VFX_PhysicalHit_16: -7186595483798130314
+      TBZG_VFX_PhysicalHit_17: -2011751552893419086
+      TBZG_VFX_PhysicalHit_18: 3645988454506616646
+      TBZG_VFX_PhysicalHit_19: -8838019591608215499
+      TBZG_VFX_PhysicalHit_2: -5608852330255531305
+      TBZG_VFX_PhysicalHit_20: 3443464459021734910
+      TBZG_VFX_PhysicalHit_21: -6966262125688492122
+      TBZG_VFX_PhysicalHit_22: 2973344112429714131
+      TBZG_VFX_PhysicalHit_23: 1440543695918642888
+      TBZG_VFX_PhysicalHit_24: 5243785988628777509
+      TBZG_VFX_PhysicalHit_25: 3334559907684294259
+      TBZG_VFX_PhysicalHit_26: -3484406475794565662
+      TBZG_VFX_PhysicalHit_27: 8589839186520156602
+      TBZG_VFX_PhysicalHit_28: -6652934316192081331
+      TBZG_VFX_PhysicalHit_29: 8471622669889830687
+      TBZG_VFX_PhysicalHit_3: -3800013050884034191
+      TBZG_VFX_PhysicalHit_30: 7528009523310245062
+      TBZG_VFX_PhysicalHit_31: -4712079695205755100
+      TBZG_VFX_PhysicalHit_32: 5626645725211795826
+      TBZG_VFX_PhysicalHit_33: -2345517993710809881
+      TBZG_VFX_PhysicalHit_34: 455267680132774330
+      TBZG_VFX_PhysicalHit_35: 6743269983155985056
+      TBZG_VFX_PhysicalHit_36: -6473941655202072568
+      TBZG_VFX_PhysicalHit_37: -7718465944013217560
+      TBZG_VFX_PhysicalHit_38: 3494254639382850911
+      TBZG_VFX_PhysicalHit_39: 3459370855569150963
+      TBZG_VFX_PhysicalHit_4: -4287744090465450453
+      TBZG_VFX_PhysicalHit_40: -2847042221316779981
+      TBZG_VFX_PhysicalHit_41: -8293527802327090984
+      TBZG_VFX_PhysicalHit_5: -739546710037865837
+      TBZG_VFX_PhysicalHit_6: 6803834355783463088
+      TBZG_VFX_PhysicalHit_7: -8297541991273317981
+      TBZG_VFX_PhysicalHit_8: -7883962783038505374
+      TBZG_VFX_PhysicalHit_9: -6535296098933917535
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

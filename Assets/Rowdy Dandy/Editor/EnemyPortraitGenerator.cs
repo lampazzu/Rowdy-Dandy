@@ -52,7 +52,6 @@ public static class EnemyPortraitGenerator
         new Source("wereknight", Prefabs + "Enemy_WereKnight.prefab", Mode.Top, 0.34f),
         new Source("werefast", Prefabs + "Enemy_Werefast.prefab", Mode.Front, 0.45f),
         new Source("bigwolf", Prefabs + "Enemy_BigWerewolf.prefab", Mode.Top, 0.4f, -0.5f, 0.08f),
-        new Source("moonboundelder", Prefabs + "Enemy_BigWerewolf.prefab", Mode.Top, 0.4f, -0.5f, 0.08f) { tint = new Color(1f, 0.5f, 0.85f, 1f) },
         new Source("megacreature", Prefabs + "Enemy_MegaCreature.prefab", Mode.Front, 0.45f),
         new Source("pelican", Prefabs + "Neutral_Pelican.prefab", Mode.Front, 1.5f, -0.1f) { forceSide = -1 },
         // Manta: start from its left end (the head), leave the tail out

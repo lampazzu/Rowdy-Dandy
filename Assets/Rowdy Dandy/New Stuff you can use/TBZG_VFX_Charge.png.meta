@@ -1,0 +1,1235 @@
+fileFormatVersion: 2
+guid: abe7377c4ecec42459b92dffa460a977
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8079254466824264509
+    second: TBZG_VFX_Charge_0
+  - first:
+      213: 230601947296502065
+    second: TBZG_VFX_Charge_1
+  - first:
+      213: 4747156219383255939
+    second: TBZG_VFX_Charge_2
+  - first:
+      213: -6163623073505754223
+    second: TBZG_VFX_Charge_3
+  - first:
+      213: 1616637722917521097
+    second: TBZG_VFX_Charge_4
+  - first:
+      213: 1356536617185863182
+    second: TBZG_VFX_Charge_5
+  - first:
+      213: -811772588926955667
+    second: TBZG_VFX_Charge_6
+  - first:
+      213: 8951418578529567267
+    second: TBZG_VFX_Charge_7
+  - first:
+      213: 6153375566189477394
+    second: TBZG_VFX_Charge_8
+  - first:
+      213: 8108015160111590396
+    second: TBZG_VFX_Charge_9
+  - first:
+      213: -2444728044592355463
+    second: TBZG_VFX_Charge_10
+  - first:
+      213: 6267905195343938302
+    second: TBZG_VFX_Charge_11
+  - first:
+      213: -6532802027244482703
+    second: TBZG_VFX_Charge_12
+  - first:
+      213: 26332986934602449
+    second: TBZG_VFX_Charge_13
+  - first:
+      213: 1508542515848380279
+    second: TBZG_VFX_Charge_14
+  - first:
+      213: -1963702094257657932
+    second: TBZG_VFX_Charge_15
+  - first:
+      213: -4842715732328275352
+    second: TBZG_VFX_Charge_16
+  - first:
+      213: 1269515308996871129
+    second: TBZG_VFX_Charge_17
+  - first:
+      213: 583163856622587793
+    second: TBZG_VFX_Charge_18
+  - first:
+      213: -1203389357228117279
+    second: TBZG_VFX_Charge_19
+  - first:
+      213: 9073501558698743784
+    second: TBZG_VFX_Charge_20
+  - first:
+      213: -9036283896674758499
+    second: TBZG_VFX_Charge_21
+  - first:
+      213: -7878553778674943619
+    second: TBZG_VFX_Charge_22
+  - first:
+      213: -6566973119885313698
+    second: TBZG_VFX_Charge_23
+  - first:
+      213: 3221541477136117876
+    second: TBZG_VFX_Charge_24
+  - first:
+      213: 3657696542371893741
+    second: TBZG_VFX_Charge_25
+  - first:
+      213: -5531942251769059557
+    second: TBZG_VFX_Charge_26
+  - first:
+      213: 3638855217392010614
+    second: TBZG_VFX_Charge_27
+  - first:
+      213: -466416208873330122
+    second: TBZG_VFX_Charge_28
+  - first:
+      213: 3497743351125416864
+    second: TBZG_VFX_Charge_29
+  - first:
+      213: 7126851883676987202
+    second: TBZG_VFX_Charge_30
+  - first:
+      213: -3676551980647531848
+    second: TBZG_VFX_Charge_31
+  - first:
+      213: 2151626199283534305
+    second: TBZG_VFX_Charge_32
+  - first:
+      213: 2044831380445315416
+    second: TBZG_VFX_Charge_33
+  - first:
+      213: 7159817556903227943
+    second: TBZG_VFX_Charge_34
+  - first:
+      213: 6298776877865846708
+    second: TBZG_VFX_Charge_35
+  - first:
+      213: -6462372536765865358
+    second: TBZG_VFX_Charge_36
+  - first:
+      213: -3452423754788160300
+    second: TBZG_VFX_Charge_37
+  - first:
+      213: 3004180129588438790
+    second: TBZG_VFX_Charge_38
+  - first:
+      213: -751569359281913024
+    second: TBZG_VFX_Charge_39
+  - first:
+      213: 1841147229444225178
+    second: TBZG_VFX_Charge_40
+  - first:
+      213: 6290883684394725647
+    second: TBZG_VFX_Charge_41
+  - first:
+      213: 8788497549258308239
+    second: TBZG_VFX_Charge_42
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_0
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 73
+        width: 52
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c4a3fe3ed8b0ef80800000000000000
+      internalID: -8079254466824264509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_1
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 48
+        width: 35
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1311f11df33433300800000000000000
+      internalID: 230601947296502065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_2
+      rect:
+        serializedVersion: 2
+        x: 1166
+        y: 154
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38310a51e6941e140800000000000000
+      internalID: 4747156219383255939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_3
+      rect:
+        serializedVersion: 2
+        x: 1769
+        y: 119
+        width: 12
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 193c94e8879667aa0800000000000000
+      internalID: -6163623073505754223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_4
+      rect:
+        serializedVersion: 2
+        x: 1788
+        y: 144
+        width: 7
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c6cef491737f6610800000000000000
+      internalID: 1616637722917521097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_5
+      rect:
+        serializedVersion: 2
+        x: 1811
+        y: 125
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e066c28bdd263d210800000000000000
+      internalID: 1356536617185863182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_6
+      rect:
+        serializedVersion: 2
+        x: 1848
+        y: 119
+        width: 8
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6f0c9e91210cb4f0800000000000000
+      internalID: -811772588926955667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_7
+      rect:
+        serializedVersion: 2
+        x: 1998
+        y: 146
+        width: 6
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 322461145c3d93c70800000000000000
+      internalID: 8951418578529567267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_8
+      rect:
+        serializedVersion: 2
+        x: 2008
+        y: 154
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21eba48b97e256550800000000000000
+      internalID: 6153375566189477394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_9
+      rect:
+        serializedVersion: 2
+        x: 2050
+        y: 143
+        width: 9
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfbeeeb74d4758070800000000000000
+      internalID: 8108015160111590396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_10
+      rect:
+        serializedVersion: 2
+        x: 1356
+        y: 18
+        width: 71
+        height: 131
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97723a1dbc4921ed0800000000000000
+      internalID: -2444728044592355463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_11
+      rect:
+        serializedVersion: 2
+        x: 1551
+        y: 89
+        width: 23
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef20d4ef0921cf650800000000000000
+      internalID: 6267905195343938302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_12
+      rect:
+        serializedVersion: 2
+        x: 1575
+        y: 142
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17f04222b23d655a0800000000000000
+      internalID: -6532802027244482703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_13
+      rect:
+        serializedVersion: 2
+        x: 1614
+        y: 95
+        width: 29
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1daac1c46bd8d5000800000000000000
+      internalID: 26332986934602449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_14
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 6
+        width: 40
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77f77b1fc6b6fe410800000000000000
+      internalID: 1508542515848380279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_15
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 9
+        width: 39
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b7e41379578fb4e0800000000000000
+      internalID: -1963702094257657932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_16
+      rect:
+        serializedVersion: 2
+        x: 1143
+        y: 92
+        width: 8
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 862a06203b73bccb0800000000000000
+      internalID: -4842715732328275352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_17
+      rect:
+        serializedVersion: 2
+        x: 1151
+        y: 10
+        width: 38
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d3cda582793e9110800000000000000
+      internalID: 1269515308996871129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_18
+      rect:
+        serializedVersion: 2
+        x: 1169
+        y: 61
+        width: 43
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19f06d71070d71800800000000000000
+      internalID: 583163856622587793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_19
+      rect:
+        serializedVersion: 2
+        x: 1359
+        y: 119
+        width: 8
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e2bee361c3bc4fe0800000000000000
+      internalID: -1203389357228117279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_20
+      rect:
+        serializedVersion: 2
+        x: 1407
+        y: 94
+        width: 13
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e7113b189d8bed70800000000000000
+      internalID: 9073501558698743784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_21
+      rect:
+        serializedVersion: 2
+        x: 1593
+        y: 100
+        width: 6
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d905e191caba89280800000000000000
+      internalID: -9036283896674758499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_22
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 6
+        width: 30
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d79b446a411c9a290800000000000000
+      internalID: -7878553778674943619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_23
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 59
+        width: 23
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5972b3adbc6dd4a0800000000000000
+      internalID: -6566973119885313698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_24
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 91
+        width: 7
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 470b2eda7e635bc20800000000000000
+      internalID: 3221541477136117876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_25
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 74
+        width: 7
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de1504040afb2c230800000000000000
+      internalID: 3657696542371893741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_26
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 53
+        width: 7
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b17a45dd4d79a33b0800000000000000
+      internalID: -5531942251769059557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_27
+      rect:
+        serializedVersion: 2
+        x: 1593
+        y: 74
+        width: 7
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6754abd6a8fcf7230800000000000000
+      internalID: 3638855217392010614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_28
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 50
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63aee90ede4f689f0800000000000000
+      internalID: -466416208873330122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_29
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 39
+        width: 6
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ab9057cb0b7a8030800000000000000
+      internalID: 3497743351125416864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_30
+      rect:
+        serializedVersion: 2
+        x: 1351
+        y: 48
+        width: 9
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24fe36d470aa7e260800000000000000
+      internalID: 7126851883676987202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_31
+      rect:
+        serializedVersion: 2
+        x: 1562
+        y: 49
+        width: 13
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8babe3be3734afcc0800000000000000
+      internalID: -3676551980647531848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_32
+      rect:
+        serializedVersion: 2
+        x: 1626
+        y: 63
+        width: 8
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e908b1e0ac1cdd10800000000000000
+      internalID: 2151626199283534305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_33
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 6
+        width: 30
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 851c3097e43b06c10800000000000000
+      internalID: 2044831380445315416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_34
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 23
+        width: 7
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72272d73228cc5360800000000000000
+      internalID: 7159817556903227943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_35
+      rect:
+        serializedVersion: 2
+        x: 494
+        y: 19
+        width: 7
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b743a4b230c96750800000000000000
+      internalID: 6298776877865846708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_36
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 6
+        width: 27
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 272a4dbba6a0156a0800000000000000
+      internalID: -6462372536765865358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_37
+      rect:
+        serializedVersion: 2
+        x: 753
+        y: 35
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4dc3bb103e68610d0800000000000000
+      internalID: -3452423754788160300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_38
+      rect:
+        serializedVersion: 2
+        x: 1401
+        y: 17
+        width: 14
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 607e76939edf0b920800000000000000
+      internalID: 3004180129588438790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_39
+      rect:
+        serializedVersion: 2
+        x: 1582
+        y: 23
+        width: 9
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0430fe356a3e195f0800000000000000
+      internalID: -751569359281913024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_40
+      rect:
+        serializedVersion: 2
+        x: 1602
+        y: 19
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a98b73e76a11d8910800000000000000
+      internalID: 1841147229444225178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_41
+      rect:
+        serializedVersion: 2
+        x: 1623
+        y: 36
+        width: 7
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f01f5a36165bd4750800000000000000
+      internalID: 6290883684394725647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TBZG_VFX_Charge_42
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 7
+        width: 9
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8abee425f307f970800000000000000
+      internalID: 8788497549258308239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TBZG_VFX_Charge_0: -8079254466824264509
+      TBZG_VFX_Charge_1: 230601947296502065
+      TBZG_VFX_Charge_10: -2444728044592355463
+      TBZG_VFX_Charge_11: 6267905195343938302
+      TBZG_VFX_Charge_12: -6532802027244482703
+      TBZG_VFX_Charge_13: 26332986934602449
+      TBZG_VFX_Charge_14: 1508542515848380279
+      TBZG_VFX_Charge_15: -1963702094257657932
+      TBZG_VFX_Charge_16: -4842715732328275352
+      TBZG_VFX_Charge_17: 1269515308996871129
+      TBZG_VFX_Charge_18: 583163856622587793
+      TBZG_VFX_Charge_19: -1203389357228117279
+      TBZG_VFX_Charge_2: 4747156219383255939
+      TBZG_VFX_Charge_20: 9073501558698743784
+      TBZG_VFX_Charge_21: -9036283896674758499
+      TBZG_VFX_Charge_22: -7878553778674943619
+      TBZG_VFX_Charge_23: -6566973119885313698
+      TBZG_VFX_Charge_24: 3221541477136117876
+      TBZG_VFX_Charge_25: 3657696542371893741
+      TBZG_VFX_Charge_26: -5531942251769059557
+      TBZG_VFX_Charge_27: 3638855217392010614
+      TBZG_VFX_Charge_28: -466416208873330122
+      TBZG_VFX_Charge_29: 3497743351125416864
+      TBZG_VFX_Charge_3: -6163623073505754223
+      TBZG_VFX_Charge_30: 7126851883676987202
+      TBZG_VFX_Charge_31: -3676551980647531848
+      TBZG_VFX_Charge_32: 2151626199283534305
+      TBZG_VFX_Charge_33: 2044831380445315416
+      TBZG_VFX_Charge_34: 7159817556903227943
+      TBZG_VFX_Charge_35: 6298776877865846708
+      TBZG_VFX_Charge_36: -6462372536765865358
+      TBZG_VFX_Charge_37: -3452423754788160300
+      TBZG_VFX_Charge_38: 3004180129588438790
+      TBZG_VFX_Charge_39: -751569359281913024
+      TBZG_VFX_Charge_4: 1616637722917521097
+      TBZG_VFX_Charge_40: 1841147229444225178
+      TBZG_VFX_Charge_41: 6290883684394725647
+      TBZG_VFX_Charge_42: 8788497549258308239
+      TBZG_VFX_Charge_5: 1356536617185863182
+      TBZG_VFX_Charge_6: -811772588926955667
+      TBZG_VFX_Charge_7: 8951418578529567267
+      TBZG_VFX_Charge_8: 6153375566189477394
+      TBZG_VFX_Charge_9: 8108015160111590396
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

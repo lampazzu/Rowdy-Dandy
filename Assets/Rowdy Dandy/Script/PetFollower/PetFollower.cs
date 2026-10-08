@@ -118,6 +118,18 @@ public class PetFollower : MonoBehaviour
     public Sprite Portrait => portrait != null ? portrait : (TryGetComponent(out SpriteRenderer sr) ? sr.sprite : null);
     public bool IsCollected => player != null;
 
+    // Cat treat fish: ready right now, and cooldowns halved for TreatDuration seconds
+    private const float TreatDuration = 12f;
+    private float fedUntil = -10f;
+    public bool IsFed => Time.time < fedUntil;
+    private float Cooldown => IsFed ? attackCooldown * 0.5f : attackCooldown;
+
+    public void Treat()
+    {
+        fedUntil = Time.time + TreatDuration;
+        if (!isExecuting) { canAttack = true; cooldownEnd = Time.time; }
+    }
+
     // 1 = ready, 0 = just used (or mid execution chain)
     public float CooldownFraction
     {
@@ -125,7 +137,7 @@ public class PetFollower : MonoBehaviour
         {
             if (isExecuting) return 0f;
             if (canAttack || attackCooldown <= 0f) return 1f;
-            return 1f - Mathf.Clamp01((cooldownEnd - Time.time) / attackCooldown);
+            return 1f - Mathf.Clamp01((cooldownEnd - Time.time) / Cooldown);
         }
     }
 
@@ -400,12 +412,13 @@ public class PetFollower : MonoBehaviour
     private IEnumerator AttackEnemy()
     {
         canAttack = false;
-        cooldownEnd = Time.time + attackCooldown;
+        float cooldown = Cooldown;
+        cooldownEnd = Time.time + cooldown;
 
         anim.SetTrigger("Attack");
         PlayVoice();
 
-        yield return new WaitForSeconds(attackCooldown);
+        while (Time.time < cooldownEnd) yield return null; // (a treat can cut it short)
 
         if (targetEnemy != null && targetEnemy.gameObject != null)
         {
@@ -507,8 +520,8 @@ public class PetFollower : MonoBehaviour
         SetTriggerIfExists("back to idle");
 
         // Cooldown starts once he's done, so a long chain doesn't eat into it
-        cooldownEnd = Time.time + attackCooldown;
-        yield return new WaitForSeconds(attackCooldown);
+        cooldownEnd = Time.time + Cooldown;
+        while (Time.time < cooldownEnd) yield return null; // (a treat can cut it short)
         canAttack = true;
     }
 
@@ -670,6 +683,11 @@ public static class CatRoster
     private static readonly Vector3 HoverAboveFeet = new Vector3(0f, 0.35f, 0f);
 
     private static readonly List<string> collected = new List<string>(); // pickup order
+
+    // Registered flying rats: each one is bait that keeps one cat from getting lost on death
+    public static int Rats { get; private set; }
+    public static void AddRat() => Rats++;
+    public static int CatCount => collected.Count;
     private static readonly Dictionary<string, List<Vector3>> visitedSpots = new Dictionary<string, List<Vector3>>();
     private static bool needsApply = true;
     private static bool diedBeforeReload;
@@ -686,6 +704,7 @@ public static class CatRoster
     {
         collected.Clear();
         visitedSpots.Clear();
+        Rats = 0;
         needsApply = true;
         diedBeforeReload = false;
         lastTickFrame = -1;
@@ -706,6 +725,7 @@ public static class CatRoster
     // Dev reset (key 0): forget every collected cat and the remembered hiding spots
     public static void ClearAll()
     {
+        Rats = 0;
         collected.Clear();
         visitedSpots.Clear();
         needsApply = true;
@@ -750,9 +770,9 @@ public static class CatRoster
         needsApply = false;
         string sceneName = rowdy.gameObject.scene.name;
 
-        // Death penalty: the newest cat gets lost
+        // Death penalty: the newest cat gets lost - unless there's a registered rat for every cat
         string lostKey = null;
-        if (diedBeforeReload && collected.Count > 0)
+        if (diedBeforeReload && collected.Count > Rats)
         {
             lostKey = collected[collected.Count - 1];
             collected.RemoveAt(collected.Count - 1);

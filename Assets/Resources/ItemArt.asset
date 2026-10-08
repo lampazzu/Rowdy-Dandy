@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44448b7c019318f47b127f316d3f741e, type: 3}
+  m_Name: ItemArt
+  m_EditorClassIdentifier: Assembly-CSharp::ItemArt
+  werewolf: {fileID: 2800000, guid: 47568c9b27b89a54798a99968c9028b1, type: 3}
+  flyingRat: {fileID: 2800000, guid: 35b7df4dc9dff894db6175f8d1e3e04b, type: 3}
+  oreBreak: {fileID: 2800000, guid: c36b735ef21f07f44a36e9162eb8315d, type: 3}
+  emerald: {fileID: 2800000, guid: f0569a5d8f9742d43ba24a2bca9c26cb, type: 3}
+  sapphire: {fileID: 2800000, guid: 6052440175651fc458dd29acba8aa5a2, type: 3}
+  ruby: {fileID: 2800000, guid: e2cde0e475ba0fb4abda5c7b97be6e40, type: 3}
+  crystals: {fileID: 2800000, guid: 3decb6e7423483844911a36161687ae2, type: 3}
+  scatterOres: 1
+  oresPerLevel: 14
+  fish: {fileID: 2800000, guid: b6432bd466cffaa42bcf0c88a4bf68a5, type: 3}
+  fishFrames: 2

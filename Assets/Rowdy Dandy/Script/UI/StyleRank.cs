@@ -17,7 +17,7 @@ public class StyleRank : MonoBehaviour
 {
     // ---------------------------------------------------------------- tuning
     private static readonly string[] Letters = { "D", "C", "B", "A", "S", "SS", "SSS" };
-    private static readonly string[] Titles = { "DOPEY", "CHILL", "BODACIOUS", "AWESOME", "SUPERB", "SPACE SURFER", "SPACE DANDY!" };
+    private static readonly string[] Titles = { "DOPEY", "CHILL", "BODACIOUS", "AWESOME", "SUPERB", "TUBULAR", "ROWDY DANDY!" };
     private static readonly Color[] RankColors =
     {
         new Color(0.62f, 0.68f, 0.9f), new Color(0.35f, 0.9f, 1f), new Color(0.45f, 1f, 0.5f), new Color(1f, 0.9f, 0.3f),

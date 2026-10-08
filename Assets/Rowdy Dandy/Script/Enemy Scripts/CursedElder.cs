@@ -2,9 +2,11 @@ using System.Collections;
 using UnityEngine;
 
 // THE MOONBOUND ELDER - what the old man really is. Hurt him and the curse wakes up.
-// Built at runtime from the Big Wolf (Resources/Enemies Prefab/Enemy_BigWerewolf): its AI, leaps, claws and counter
-// windows stay, and on top of that:
-//   - 1.5x bigger, violet skin, a pulsing moon-glow outline (red in phase 2), 450 HP, faster
+// Built at runtime from the Big Wolf (Resources/Enemies Prefab/Enemy_BigWerewolf): its AI, leaps, claws, hitboxes and
+// counter windows stay, but it LOOKS like the TDF shadow werewolf (ItemArt.werewolf, 15 frames: 0-3 rising out of the
+// ground, 4-11 prowl loop, 12-13 lunge, 14 recover) - the Big Wolf animator still runs and picks which frames show.
+//   - 1.5x bigger, a pulsing moon-glow outline (red in phase 2), 450 HP, faster
+//   - crawls up out of the ground when it appears, sinks back into it when it dies
 //   - MOON NOVA: crouches and glows (telegraph), then a ring of explosions around him. Jump away or eat 15.
 //   - HOWL at half health: hit-stop, "AWOOOO!", calls two Werefasts and goes red, faster, novas more often
 //   - dies in a long chain of explosions and a shower of EXP
@@ -17,7 +19,9 @@ public class CursedElder : MonoBehaviour
     [SerializeField] private float size = 1.5f;
     [SerializeField] private float maxHealth = 450f;
     [SerializeField] private float speedMultiplier = 1.35f;
-    [SerializeField] private Color skin = new Color(1f, 0.5f, 0.85f, 1f);
+    [SerializeField] private Color skin = Color.white;
+    [Tooltip("How tall the werewolf art is drawn, x the body collider height.")]
+    [SerializeField] private float artHeight = 1.25f;
     [SerializeField] private Color glow = new Color(0.65f, 0.55f, 1f, 1f);
     [SerializeField] private Color rageGlow = new Color(1f, 0.25f, 0.35f, 1f);
     [SerializeField] private int expGems = 30;
@@ -40,6 +44,33 @@ public class CursedElder : MonoBehaviour
     private float novaTimer = 3f;
     private float baseAnimSpeed = 1f;
     private float flash; // 0..1 extra white on the outline (telegraph)
+
+    // TDF werewolf frames
+    private const int CellW = 156, CellH = 108;
+    private const float CreaturePixels = 66f; // visible height of the wolf inside a cell
+    private Sprite[] frames;
+    private float spawnedAt, diedAt = -1f;
+
+    // Rowdy Notes / kill feed: portrait + animated portrait from the same sheet (no generated PNGs needed)
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void RegisterPortrait()
+    {
+        ItemArt art = ItemArt.Get;
+        EnemyCatalog.Entry entry = EnemyCatalog.Get("moonboundelder");
+        if (art == null || art.werewolf == null || entry == null) return;
+        Texture2D tex = art.werewolf;
+        tex.filterMode = FilterMode.Point;
+        var clip = new AnimatedPortraits.Clip { frames = new Sprite[8], durations = new float[8] };
+        for (int i = 0; i < 8; i++)
+        {
+            // square around the wolf in prowl frames 4-11
+            clip.frames[i] = Sprite.Create(tex, new Rect((4 + i) * CellW + 32, 0, 92, 92), new Vector2(0.5f, 0.5f), 64f);
+            clip.durations[i] = 0.1f;
+            clip.length += 0.1f;
+        }
+        entry.fallbackPortrait = clip.frames[0];
+        AnimatedPortraits.Register("moonboundelder", clip);
+    }
 
     public static GameObject Spawn(Vector3 position)
     {
@@ -80,6 +111,8 @@ public class CursedElder : MonoBehaviour
         if (movement != null) movement.moveSpeed *= speedMultiplier;
         if (animator != null) { baseAnimSpeed = animator.speed * 1.12f; animator.speed = baseAnimSpeed; }
         if (body != null) body.color = skin;
+        SetupFrames();
+        spawnedAt = Time.time;
         BuildOutline();
 
         // The reveal
@@ -110,7 +143,62 @@ public class CursedElder : MonoBehaviour
             StartCoroutine(MoonNova());
     }
 
-    private void LateUpdate() => UpdateOutline();
+    private void LateUpdate()
+    {
+        ShowFrame();
+        UpdateOutline();
+    }
+
+    private void SetupFrames()
+    {
+        ItemArt art = ItemArt.Get;
+        if (art == null || art.werewolf == null || body == null) return;
+        float colliderHeight = 1f;
+        foreach (Collider2D c in GetComponents<Collider2D>()) if (c.enabled && !c.isTrigger) { colliderHeight = c.bounds.size.y; break; }
+        // pixels per unit so the wolf is artHeight x the body collider tall, whatever the root scale is
+        float ppu = CreaturePixels * Mathf.Abs(transform.lossyScale.y) / Mathf.Max(0.1f, colliderHeight * artHeight);
+        frames = ItemArt.Frames(art.werewolf, 15, 1, new Vector2(0.5f, 9f / CellH), ppu);
+        body.sprite = frames[0];
+    }
+
+    // The Big Wolf animator keeps running (hitboxes, counter windows live in its clips); here its current
+    // clip picks which werewolf frames to draw, after it has set its own sprite this frame.
+    private void ShowFrame()
+    {
+        if (frames == null || body == null) return;
+        float now = Time.time;
+
+        if (diedAt >= 0f) // sinking back into the ground: 3, 2, 1, 0
+        {
+            int k = Mathf.Clamp(3 - (int)((now - diedAt) / 0.12f), 0, 3);
+            body.sprite = frames[k];
+            body.color = new Color(skin.r, skin.g, skin.b, Mathf.Clamp01(1.4f - (now - diedAt) / 0.8f));
+            return;
+        }
+        if (now - spawnedAt < 0.6f) { body.sprite = frames[Mathf.Clamp((int)((now - spawnedAt) / 0.15f), 0, 3)]; return; } // rising
+
+        string clip = "";
+        if (animator != null && animator.isActiveAndEnabled)
+        {
+            AnimatorClipInfo[] info = animator.GetCurrentAnimatorClipInfo(0);
+            if (info.Length > 0 && info[0].clip != null) clip = info[0].clip.name.ToLowerInvariant();
+        }
+        float normalized = animator != null && animator.isActiveAndEnabled ? Mathf.Repeat(animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f) : 0f;
+
+        if (clip.Contains("attack") || clip.Contains("slash") || clip.Contains("swipe") || clip.Contains("claw"))
+            body.sprite = frames[normalized < 0.45f ? 12 : normalized < 0.8f ? 13 : 14];
+        else if (clip.Contains("jump") || clip.Contains("leap") || clip.Contains("fall") || clip.Contains("air"))
+            body.sprite = frames[13];
+        else if (clip.Contains("hit") || clip.Contains("hurt"))
+            body.sprite = frames[14];
+        else
+        {
+            // prowl loop, faster while moving
+            float speed = TryGetComponent(out Rigidbody2D rb) ? Mathf.Abs(rb.linearVelocity.x) : 0f;
+            float fps = speed > 0.3f ? 12f : 7f;
+            body.sprite = frames[4 + (int)(now * fps) % 8];
+        }
+    }
 
     // ---------------------------------------------------------------- moves
     private IEnumerator MoonNova()
@@ -188,6 +276,7 @@ public class CursedElder : MonoBehaviour
     private IEnumerator Die()
     {
         dead = true;
+        diedAt = Time.time;
         if (outline != null) foreach (SpriteRenderer o in outline) if (o != null) o.enabled = false;
         ExplosionChain.Play(transform.position + Vector3.up * 0.4f, 26, 1.4f, 2f, 0.45f);
         SoundManager.PlaySfx(Resources.Load<AudioClip>("Sounds/Howl"), 0.7f);
@@ -200,6 +289,7 @@ public class CursedElder : MonoBehaviour
         if (body == null) return;
         Vector2[] offsets = { Vector2.left, Vector2.right, Vector2.up, Vector2.down, new Vector2(-1, -1), new Vector2(1, 1) };
         outline = new SpriteRenderer[offsets.Length];
+        // 1 art pixel of the drawn sprite, in this object's local space
         float px = 1f / (body.sprite != null ? body.sprite.pixelsPerUnit : 64f);
         for (int i = 0; i < offsets.Length; i++)
         {

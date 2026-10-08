@@ -1,0 +1,819 @@
+fileFormatVersion: 2
+guid: c36b735ef21f07f44a36e9162eb8315d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8286392546419274681
+    second: DMG_OreBreak_0
+  - first:
+      213: 7249098623976439337
+    second: DMG_OreBreak_1
+  - first:
+      213: -2794635939744435506
+    second: DMG_OreBreak_2
+  - first:
+      213: 727800353326475595
+    second: DMG_OreBreak_3
+  - first:
+      213: 6436490914023935272
+    second: DMG_OreBreak_4
+  - first:
+      213: 780546082017230663
+    second: DMG_OreBreak_5
+  - first:
+      213: 357999626647502679
+    second: DMG_OreBreak_6
+  - first:
+      213: -5078756710772115050
+    second: DMG_OreBreak_7
+  - first:
+      213: -6082860861676398952
+    second: DMG_OreBreak_8
+  - first:
+      213: -2334477640970241484
+    second: DMG_OreBreak_9
+  - first:
+      213: -1297410335000817846
+    second: DMG_OreBreak_10
+  - first:
+      213: -7389216744373049318
+    second: DMG_OreBreak_11
+  - first:
+      213: 2373324702961749979
+    second: DMG_OreBreak_12
+  - first:
+      213: -9041813134565808703
+    second: DMG_OreBreak_13
+  - first:
+      213: -4228394317780757504
+    second: DMG_OreBreak_14
+  - first:
+      213: 3232279652371241774
+    second: DMG_OreBreak_15
+  - first:
+      213: -7528753710898958796
+    second: DMG_OreBreak_16
+  - first:
+      213: -239943756326508149
+    second: DMG_OreBreak_17
+  - first:
+      213: 2733458907451762102
+    second: DMG_OreBreak_18
+  - first:
+      213: 8513001792872512290
+    second: DMG_OreBreak_19
+  - first:
+      213: -3774386359034160606
+    second: DMG_OreBreak_20
+  - first:
+      213: -2527613843807801401
+    second: DMG_OreBreak_21
+  - first:
+      213: -4195217635410020177
+    second: DMG_OreBreak_22
+  - first:
+      213: 8163849878787153149
+    second: DMG_OreBreak_23
+  - first:
+      213: -3968662156822481806
+    second: DMG_OreBreak_24
+  - first:
+      213: 7807518067048403374
+    second: DMG_OreBreak_25
+  - first:
+      213: 3065708904510926151
+    second: DMG_OreBreak_26
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DMG_OreBreak_0
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 12
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74c0c39d1e1d00d80800000000000000
+      internalID: -8286392546419274681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_1
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 14
+        width: 123
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92e73e78ac8f99460800000000000000
+      internalID: 7249098623976439337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 63
+        width: 36
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec23efe5b657739d0800000000000000
+      internalID: -2794635939744435506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_3
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 12
+        width: 122
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b49ad67b09aa91a00800000000000000
+      internalID: 727800353326475595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_4
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 95
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82d0d626262035950800000000000000
+      internalID: 6436490914023935272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_5
+      rect:
+        serializedVersion: 2
+        x: 435
+        y: 83
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74fb57da68e05da00800000000000000
+      internalID: 780546082017230663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_6
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 77
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75ffb0083ced7f400800000000000000
+      internalID: 357999626647502679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_7
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 57
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 699fbc11ea1a489b0800000000000000
+      internalID: -5078756710772115050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_8
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 64
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 896d6a15646559ba0800000000000000
+      internalID: -6082860861676398952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_9
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 56
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43a70e144f44a9fd0800000000000000
+      internalID: -2334477640970241484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_10
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 66
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4f0b5e9c2caefde0800000000000000
+      internalID: -1297410335000817846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_11
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 69
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a18a64f458a347990800000000000000
+      internalID: -7389216744373049318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_12
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 9
+        width: 110
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdfc1b03e3ebfe020800000000000000
+      internalID: 2373324702961749979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_13
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 7
+        width: 142
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c56eb41cd6058280800000000000000
+      internalID: -9041813134565808703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_14
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 46
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 004d56e55c9b155c0800000000000000
+      internalID: -4228394317780757504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_15
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 12
+        width: 110
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2b9f4ee73d5bdc20800000000000000
+      internalID: 3232279652371241774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_16
+      rect:
+        serializedVersion: 2
+        x: 726
+        y: 57
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43ea674936e748790800000000000000
+      internalID: -7528753710898958796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_17
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 58
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b89e516cc6c8bacf0800000000000000
+      internalID: -239943756326508149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_18
+      rect:
+        serializedVersion: 2
+        x: 863
+        y: 13
+        width: 110
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b52ac2d4623fe520800000000000000
+      internalID: 2733458907451762102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_19
+      rect:
+        serializedVersion: 2
+        x: 1004
+        y: 13
+        width: 110
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22bfd6cd602442670800000000000000
+      internalID: 8513001792872512290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_20
+      rect:
+        serializedVersion: 2
+        x: 1145
+        y: 13
+        width: 110
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22a50b0aa9fae9bc0800000000000000
+      internalID: -3774386359034160606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_21
+      rect:
+        serializedVersion: 2
+        x: 1286
+        y: 13
+        width: 110
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cfe976d99c1cecd0800000000000000
+      internalID: -2527613843807801401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_22
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 46
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa87eeda9c797c5c0800000000000000
+      internalID: -4195217635410020177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_23
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 48
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfc59b8f532db4170800000000000000
+      internalID: 8163849878787153149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_24
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 37
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2747f059bca7ce8c0800000000000000
+      internalID: -3968662156822481806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_25
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 12
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea15dd3e050e95c60800000000000000
+      internalID: 7807518067048403374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMG_OreBreak_26
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 16
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74d202e71069b8a20800000000000000
+      internalID: 3065708904510926151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      DMG_OreBreak_0: -8286392546419274681
+      DMG_OreBreak_1: 7249098623976439337
+      DMG_OreBreak_10: -1297410335000817846
+      DMG_OreBreak_11: -7389216744373049318
+      DMG_OreBreak_12: 2373324702961749979
+      DMG_OreBreak_13: -9041813134565808703
+      DMG_OreBreak_14: -4228394317780757504
+      DMG_OreBreak_15: 3232279652371241774
+      DMG_OreBreak_16: -7528753710898958796
+      DMG_OreBreak_17: -239943756326508149
+      DMG_OreBreak_18: 2733458907451762102
+      DMG_OreBreak_19: 8513001792872512290
+      DMG_OreBreak_2: -2794635939744435506
+      DMG_OreBreak_20: -3774386359034160606
+      DMG_OreBreak_21: -2527613843807801401
+      DMG_OreBreak_22: -4195217635410020177
+      DMG_OreBreak_23: 8163849878787153149
+      DMG_OreBreak_24: -3968662156822481806
+      DMG_OreBreak_25: 7807518067048403374
+      DMG_OreBreak_26: 3065708904510926151
+      DMG_OreBreak_3: 727800353326475595
+      DMG_OreBreak_4: 6436490914023935272
+      DMG_OreBreak_5: 780546082017230663
+      DMG_OreBreak_6: 357999626647502679
+      DMG_OreBreak_7: -5078756710772115050
+      DMG_OreBreak_8: -6082860861676398952
+      DMG_OreBreak_9: -2334477640970241484
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
