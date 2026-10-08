@@ -35,6 +35,10 @@ public static class RunStats
     public static int JellyBounces;
     public static int WeaponsPickedUp;
     public static int StatuesSmashed;
+    // boons
+    public static int BoonsTaken;
+    public static int Transformations;
+    public static float BoonDamage;
     public static readonly Dictionary<string, int> KillsByEnemy = new Dictionary<string, int>();
 
     public static void ResetAll() => ResetSession(); // dev reset (key 0)
@@ -46,6 +50,8 @@ public static class RunStats
         CatsRescued = CatsLost = WeaponsBroken = LevelUps = CurrentStreak = BestStreak = 0;
         MaxHit = TotalDamage = DamageTaken = PlayTime = Healed = OverhealGained = 0f;
         HitsBlocked = EnemiesPoisoned = EnemiesStunned = DecayBursts = Checkpoints = RatsGrabbed = JellyBounces = WeaponsPickedUp = StatuesSmashed = 0;
+        BoonsTaken = Transformations = 0;
+        BoonDamage = 0f;
         MaxHitWith = "";
         KillsByEnemy.Clear();
     }

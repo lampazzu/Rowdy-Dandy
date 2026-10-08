@@ -111,6 +111,7 @@ public class OreNode : MonoBehaviour
         {
             OreGem.Spawn(home + Vector3.up * 0.4f, RandomKind(), i);
         }
+        HairGel.TryDrop(home + Vector3.up * 0.5f); // super rare boon reroll (2% .. 10% with luck)
 
         Sprite[] frames = ItemArt.Frames(ItemArt.Get.oreBreak, 10, 1, new Vector2(0.5f, 0.1f), PixelsPerUnit);
         for (int f = 1; f < frames.Length; f++)

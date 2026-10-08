@@ -42,6 +42,7 @@ public class Health : MonoBehaviour
         redboy = GetComponent<SpriteRenderer>();
         if (GetComponent<RowdyAura>() == null) gameObject.AddComponent<RowdyAura>();
         if (GetComponent<RowdyBuffs>() == null) gameObject.AddComponent<RowdyBuffs>();
+        if (GetComponent<BoonRunner>() == null) gameObject.AddComponent<BoonRunner>(); // level-up boons + the werewolf
     }
 
     public void AddHealth(float _value) => AddHealth(_value, false);
@@ -87,6 +88,7 @@ public class Health : MonoBehaviour
     public void TakeDamage(float _damage)
     {
         if (isInvincible || DevTools.GodMode || CheckpointRest.Resting || FirstDrop.Running) return; // Ignore damage when invincible
+        if (Time.time < invulnerableUntil) return; // Nine Lives grace
 
         if (Time.time - lastDamageTime > damageCooldown)
         {
@@ -97,12 +99,24 @@ public class Health : MonoBehaviour
                 return;
             }
 
+            _damage = BoonRunner.ModifyIncoming(_damage); // Fur Coat, Glass Jaw, werewolf hide
+
             float before = currentHealth;
             float soaked = Mathf.Min(Overheal, Mathf.Max(0f, _damage));
+            // Nine Lives: the hit that would kill him leaves him standing instead
+            if (!dead && _damage > 0f && currentHealth - (_damage - soaked) <= 0f && BoonRunner.PreventDeath(this))
+            {
+                Overheal = 0f;
+                lastDamageTime = Time.time;
+                RunStats.RecordDamageTaken(before - currentHealth);
+                StyleRank.OnPlayerHurt();
+                BoonRunner.OnPlayerHurt();
+                return;
+            }
             Overheal -= soaked;
             currentHealth = Mathf.Clamp(currentHealth - (_damage - soaked), 0, startingHealth);
             RunStats.RecordDamageTaken(before - currentHealth + soaked);
-            if (before - currentHealth + soaked > 0f) StyleRank.OnPlayerHurt(); // drops two style ranks
+            if (before - currentHealth + soaked > 0f) { StyleRank.OnPlayerHurt(); BoonRunner.OnPlayerHurt(); } // drops two style ranks
             if (currentHealth > 0)
             {
                 anim.SetTrigger("hit");
@@ -132,6 +146,11 @@ public class Health : MonoBehaviour
         Collider2D c = GetComponent<Collider2D>();
         return c != null ? c.bounds.center : transform.position + Vector3.up * 0.4f;
     }
+
+    // Boons (Nine Lives): a short window where nothing hurts, and setting the health directly
+    private float invulnerableUntil;
+    public void GrantInvulnerability(float seconds) => invulnerableUntil = Mathf.Max(invulnerableUntil, Time.time + seconds);
+    public void SetHealth(float value) => currentHealth = Mathf.Clamp(value, 1f, startingHealth);
 
     public void TriggerInvincibility()
     {

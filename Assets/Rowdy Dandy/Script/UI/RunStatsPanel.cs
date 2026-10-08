@@ -128,6 +128,7 @@ public class RunStatsPanel : MonoBehaviour
                     ("Critical Hits", () => RunStats.CriticalHits.ToString(), Color.white),
                     ("Counters", () => RunStats.Counters.ToString(), Color.white),
                     ("Weapons Broken", () => RunStats.WeaponsBroken.ToString(), Color.white),
+                    ("Boon Damage", () => Number(RunStats.BoonDamage), new Color(1f, 0.45f, 0.8f)),
                 }),
                 ("SURVIVAL", Green, new (string, Func<string>, Color)[]
                 {
@@ -154,8 +155,10 @@ public class RunStatsPanel : MonoBehaviour
                     ("Cats Lost", () => RunStats.CatsLost.ToString(), Red),
                     ("Rats Registered", () => RunStats.RatsGrabbed.ToString(), Gold),
                 }),
-                ("LOOT & WORLD", Blue, new (string, Func<string>, Color)[]
+                ("LOOT + WORLD", Blue, new (string, Func<string>, Color)[]
                 {
+                    ("Boons Taken", () => Boons.OwnedIds.Count + " (" + RunStats.BoonsTaken + " this run)", new Color(1f, 0.45f, 0.8f)),
+                    ("Werewolf Nights", () => RunStats.Transformations.ToString(), Red),
                     ("Weapons Picked Up", () => RunStats.WeaponsPickedUp.ToString(), Color.white),
                     ("Things Smashed", () => RunStats.ObjectsSmashed.ToString(), Color.white),
                     ("Statues Smashed", () => RunStats.StatuesSmashed.ToString(), Color.white),

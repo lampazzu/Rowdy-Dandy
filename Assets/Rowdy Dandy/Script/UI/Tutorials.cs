@@ -9,7 +9,7 @@ using UnityEngine.UI;
 // (pixel font: A-Z 0-9 . , : ! ? % / - + < > ( ) only - no apostrophes or =).
 public class Tutorials : MonoBehaviour
 {
-    public enum Topic { Weapon, Cat, Rat, Checkpoint, LevelUp, Night, Controls, Hurt, Notes, Water, Platform, WeaponBroke }
+    public enum Topic { Weapon, Cat, Rat, Checkpoint, LevelUp, Night, Controls, Hurt, Notes, Water, Platform, WeaponBroke, Boons, Werewolf }
 
     // title, line 1, line 2 ({I} = the interact button of whatever was used last: E, Y, triangle, X)
     private static (string title, string line1, string line2) Texts(Topic topic)
@@ -28,6 +28,8 @@ public class Tutorials : MonoBehaviour
             case Topic.Water: return ("SURFS UP!", "ROWDY RIDES THE WATER. {JUMP} TO HOP OUT.", "{ATTACK} IN THE WATER LAUNCHES A JUMP ATTACK.");
             case Topic.Platform: return ("THIN PLATFORM", "JUMP UP THROUGH IT FROM BELOW.", "HOLD {DOWN} + {JUMP} TO DROP THROUGH.");
             case Topic.WeaponBroke: return ("IT BROKE!", "BROKEN WEAPONS ARE GONE. THE ROD NEVER BREAKS.", "ENEMIES DROP MORE. WALK OVER YOURS TO REPAIR IT.");
+            case Topic.Boons: return ("BOONS!", "EVERY LEVEL UP, A PATRON OFFERS YOU A BOON. BUILD YOUR STYLE.", "ONE PER SLOT, PASSIVES STACK. SEE YOUR BUILD: {STATS}");
+            case Topic.Werewolf: return ("CALL OF THE MOON", "WHEN THE MOON METER IS FULL, PRESS {WOLF} TO GO WEREWOLF.", "FIGHTING FILLS IT. THE NIGHT FILLS IT TWICE AS FAST.");
         }
         return ("", "", "");
     }

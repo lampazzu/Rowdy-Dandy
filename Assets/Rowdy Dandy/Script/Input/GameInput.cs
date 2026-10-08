@@ -27,7 +27,8 @@ public static class GameInput
     public enum Act
     {
         Jump, Attack, SurfDash, SwitchWeapon, Interact, Stats, Map, Notes, Pause,
-        Submit, Back, PrevTab, NextTab, MapCenter, DevMenu
+        Submit, Back, PrevTab, NextTab, MapCenter, DevMenu,
+        Werewolf // Call of the Moon boon: B / Circle, K on the keyboard
     }
 
     // Which buttons the prompts show: what Rowdy was last controlled with
@@ -62,6 +63,7 @@ public static class GameInput
         b[(int)Act.NextTab] = new Binding { keys = new[] { Key.E }, pad = p => p.rightShoulder };
         b[(int)Act.MapCenter] = new Binding { keys = new[] { Key.Space }, pad = p => p.buttonNorth };
         b[(int)Act.DevMenu] = new Binding { keys = new[] { Key.F1, Key.Backquote } };
+        b[(int)Act.Werewolf] = new Binding { keys = new[] { Key.K }, pad = p => p.buttonEast };
         return b;
     }
 
@@ -365,7 +367,7 @@ public static class GameInput
                 switch (a)
                 {
                     case Act.Jump: case Act.Submit: return "A";
-                    case Act.Back: return "B";
+                    case Act.Back: case Act.Werewolf: return "B";
                     case Act.Attack: return "X";
                     case Act.Interact: case Act.MapCenter: return "Y";
                     case Act.SwitchWeapon: case Act.PrevTab: return "LB";
@@ -380,7 +382,7 @@ public static class GameInput
                 switch (a)
                 {
                     case Act.Jump: case Act.Submit: return Cross.ToString();
-                    case Act.Back: return Circle.ToString();
+                    case Act.Back: case Act.Werewolf: return Circle.ToString();
                     case Act.Attack: return Square.ToString();
                     case Act.Interact: case Act.MapCenter: return Triangle.ToString();
                     case Act.SwitchWeapon: case Act.PrevTab: return "L1";
@@ -395,7 +397,7 @@ public static class GameInput
                 switch (a)
                 {
                     case Act.Jump: case Act.Submit: return "B";
-                    case Act.Back: return "A";
+                    case Act.Back: case Act.Werewolf: return "A";
                     case Act.Attack: return "Y";
                     case Act.Interact: case Act.MapCenter: return "X";
                     case Act.SwitchWeapon: case Act.PrevTab: return "L";
@@ -421,6 +423,7 @@ public static class GameInput
             case Act.Notes: return "TAB";
             case Act.Pause: return "ESC";
             case Act.DevMenu: return "F1";
+            case Act.Werewolf: return "K";
         }
         return "?";
     }
@@ -472,6 +475,6 @@ public static class GameInput
         ("{JUMP}", Act.Jump), ("{ATTACK}", Act.Attack), ("{SURF}", Act.SurfDash), ("{SWITCH}", Act.SwitchWeapon),
         ("{INTERACT}", Act.Interact), ("{STATS}", Act.Stats), ("{MAP}", Act.Map), ("{NOTES}", Act.Notes),
         ("{PAUSE}", Act.Pause), ("{OK}", Act.Submit), ("{BACK}", Act.Back), ("{PREV}", Act.PrevTab),
-        ("{NEXT}", Act.NextTab), ("{CENTER}", Act.MapCenter),
+        ("{NEXT}", Act.NextTab), ("{CENTER}", Act.MapCenter), ("{WOLF}", Act.Werewolf),
     };
 }

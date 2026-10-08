@@ -21,6 +21,7 @@ public class LevelUpFX : MonoBehaviour
     public static void Play(int newLevel)
     {
         if (newLevel >= 2) Tutorials.Show(Tutorials.Topic.LevelUp, null, 2.4f); // first level up: +1 cat slot
+        Boons.OnLevelUp(); // the boon picker opens once this moment has played
         GameObject rowdy = GameObject.FindGameObjectWithTag("Player");
         if (rowdy == null) return;
 

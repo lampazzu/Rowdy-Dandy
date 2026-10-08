@@ -228,10 +228,25 @@ public class RowdyBuffs : MonoBehaviour
 }
 
 // --------------------------------------------------------------------------------------------------- on enemies
+// Runs after the enemy AI (it sets velocities in its own updates), so stun / slow get the last word.
+[DefaultExecutionOrder(50)]
 public class StatusEffects : MonoBehaviour
 {
     private static readonly HashSet<GameObject> stunned = new HashSet<GameObject>();
-    private static Sprite[] stunFrames;
+    private static Sprite[] stunFrames, charmFrames, fearFrames, slowFrames;
+
+    // Boons reuse the stun (the AI stops) with their own look: charmed (pink hearts), feared, rooted (vines)
+    public enum HoldKind { Stun, Charm, Fear, Root }
+    private HoldKind holdKind;
+    private float heartTimer, holdStartedAt;
+    private readonly List<SpriteRenderer> rootVines = new List<SpriteRenderer>();
+
+    // slow (Undertow)
+    private float slowUntil, slowFactor = 1f;
+    private SpriteRenderer slowIcon;
+
+    public bool IsPoisoned => Time.time < poisonUntil;
+    public bool IsSlowed => Time.time < slowUntil;
 
     private EnemyHealth health;
     private SpriteRenderer body;
@@ -273,7 +288,7 @@ public class StatusEffects : MonoBehaviour
     }
 
     private void OnDisable() => EndStun();
-    private void OnDestroy() => stunned.Remove(gameObject);
+    private void OnDestroy() { stunned.Remove(gameObject); OnDestroyBoonBits(); }
 
     private Vector3 Center => EnemyFairness.BodyCenter(this);
     // Where the block shield is drawn: halfway up from his middle to his head, so it covers his upper body instead of his legs
@@ -299,9 +314,69 @@ public class StatusEffects : MonoBehaviour
     }
 
     // ---------------------------------------------------------------- stun
+    public void Charm(float seconds)
+    {
+        bool fresh = holdKind != HoldKind.Charm || !IsStunned(gameObject);
+        Stun(seconds);
+        holdKind = HoldKind.Charm;
+        if (fresh) holdStartedAt = Time.time;
+        BoonArt art = BoonArt.Get;
+        if (art != null) BoonArt.Play(art.charmSfx, 0.25f, Random.Range(1.1f, 1.3f));
+    }
+
+    public void Fear(float seconds)
+    {
+        bool fresh = holdKind != HoldKind.Fear || !IsStunned(gameObject);
+        Stun(seconds);
+        holdKind = HoldKind.Fear;
+        if (fresh) holdStartedAt = Time.time;
+    }
+
+    public void Root(float seconds)
+    {
+        Stun(seconds);
+        holdKind = HoldKind.Root;
+        if (rootVines.Count > 0) return;
+        BoonArt art = BoonArt.Get;
+        Sprite vine = art != null && art.earthPillar != null ? ItemArt.Frames(art.earthPillar, 1, 1, new Vector2(0.5f, 0f), 64f)[0] : null;
+        if (vine == null) return;
+        Bounds b = body != null ? body.bounds : new Bounds(transform.position, Vector3.one * 0.6f);
+        for (int i = 0; i < 3; i++)
+        {
+            var go = new GameObject("Root Vine");
+            go.transform.position = new Vector3(b.center.x + (i - 1) * b.extents.x * 0.7f, b.min.y - 0.03f, 0f);
+            go.transform.rotation = Quaternion.Euler(0f, 0f, (i - 1) * -18f);
+            go.transform.localScale = new Vector3(0.8f, 0f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = vine;
+            sr.sortingLayerID = body != null ? body.sortingLayerID : 0;
+            sr.sortingOrder = (body != null ? body.sortingOrder : 0) + 1;
+            sr.color = new Color(0.55f, 0.85f, 0.4f);
+            if (ItemArt.Lit != null) sr.sharedMaterial = ItemArt.Lit;
+            rootVines.Add(sr);
+        }
+    }
+
+    // Undertow: moves at (1 - factor) speed for a while
+    public void Slow(float seconds, float factor)
+    {
+        if (health != null && health.enemydead) return;
+        slowUntil = Mathf.Max(slowUntil, Time.time + seconds);
+        slowFactor = Mathf.Clamp01(1f - factor);
+        if (slowIcon == null)
+        {
+            var go = new GameObject("Slow Icon");
+            slowIcon = go.AddComponent<SpriteRenderer>();
+            slowIcon.sortingLayerID = body != null ? body.sortingLayerID : 0;
+            slowIcon.sortingOrder = (body != null ? body.sortingOrder : 0) + 29;
+            if (CatFX.Unlit != null) slowIcon.sharedMaterial = CatFX.Unlit;
+        }
+    }
+
     public void Stun(float seconds)
     {
         if (health != null && health.enemydead) return;
+        holdKind = HoldKind.Stun;
         stunUntil = Mathf.Max(stunUntil, Time.time + seconds);
         stunFlash = 0.15f;
         stunned.Add(gameObject);
@@ -342,6 +417,37 @@ public class StatusEffects : MonoBehaviour
         holdPose = false;
         stunFlash = 0f;
         if (stunIcon != null) stunIcon.enabled = false;
+        foreach (SpriteRenderer v in rootVines) if (v != null) Destroy(v.gameObject);
+        rootVines.Clear();
+        if (holdKind != HoldKind.Stun && body != null && !DecayInfected) body.color = baseColor;
+        holdKind = HoldKind.Stun;
+    }
+
+    private Sprite[] HoldFrames()
+    {
+        BoonArt art = BoonArt.Get;
+        switch (holdKind)
+        {
+            case HoldKind.Charm:
+                if (charmFrames == null && art != null && art.charm != null) charmFrames = ItemArt.Frames(art.charm, 9, 1, new Vector2(0.5f, 0f), 64f);
+                return charmFrames;
+            case HoldKind.Fear:
+                if (fearFrames == null && art != null && art.fear != null) fearFrames = ItemArt.Frames(art.fear, 9, 1, new Vector2(0.5f, 0f), 64f);
+                return fearFrames;
+            case HoldKind.Root:
+                return null; // the vines are the icon
+        }
+        return StunFrames;
+    }
+
+    private static Sprite[] SlowFrames
+    {
+        get
+        {
+            BoonArt art = BoonArt.Get;
+            if (slowFrames == null && art != null && art.slow != null) slowFrames = ItemArt.Frames(art.slow, 4, 1, new Vector2(0.5f, 0.5f), 64f);
+            return slowFrames;
+        }
     }
 
     // The idle / walk state names used across the enemy animators (they aren't all called Idle)
@@ -431,22 +537,63 @@ public class StatusEffects : MonoBehaviour
         if (isStunned && (dead || Time.time >= stunUntil)) { EndStun(); isStunned = false; }
         if (isStunned && stunIcon != null)
         {
-            Sprite[] f = StunFrames;
+            Sprite[] f = HoldFrames();
             stunIcon.enabled = f != null;
-            if (f != null) stunIcon.sprite = f[(int)(Time.time * 18f) % f.Length];
+            if (f != null)
+            {
+                // charm / fear sheets play through once and hold their last frames
+                int frame;
+                if (holdKind == HoldKind.Stun) frame = (int)(Time.time * 18f) % f.Length;
+                else
+                {
+                    int played = (int)((Time.time - holdStartedAt) * 16f);
+                    frame = played < f.Length ? played : f.Length - 4 + (played % 4);
+                }
+                stunIcon.sprite = f[Mathf.Clamp(frame, 0, f.Length - 1)];
+            }
             stunIcon.transform.position = HeadTop + new Vector3(0f, 0.05f, 0f);
         }
+        if (isStunned && holdKind == HoldKind.Charm)
+        {
+            heartTimer -= Time.deltaTime;
+            if (heartTimer <= 0f)
+            {
+                heartTimer = 0.3f;
+                BoonFX.Sparkles(HeadTop + new Vector3(Random.Range(-0.2f, 0.2f), 0.1f, 0f), new Color(1f, 0.45f, 0.8f), 1, 0.05f, 0.6f);
+            }
+        }
+        if (rootVines.Count > 0)
+            foreach (SpriteRenderer v in rootVines)
+                if (v != null) v.transform.localScale = new Vector3(0.8f, Mathf.MoveTowards(v.transform.localScale.y, 0.45f, Time.deltaTime * 4f), 1f);
 
-        // Tint: green while poisoned, white flash when stunned
+        // Slow: little dust swirl under the feet
+        bool slowed = IsSlowed && !dead;
+        if (slowIcon != null)
+        {
+            Sprite[] sf = SlowFrames;
+            slowIcon.enabled = slowed && sf != null;
+            if (slowIcon.enabled)
+            {
+                slowIcon.sprite = sf[(int)(Time.time * 10f) % sf.Length];
+                Bounds b = body != null ? body.bounds : new Bounds(transform.position, Vector3.one * 0.5f);
+                slowIcon.transform.position = new Vector3(b.center.x, b.min.y + 0.05f, 0f);
+            }
+        }
+
+        // Tint: green while poisoned, white flash when stunned, pink charmed, violet feared, blue slowed
         if (DecayInfected) return; // the fuse owns the colour
-        if (body != null && (poisoned || stunFlash > 0f || tinting))
+        bool holdTint = isStunned && (holdKind == HoldKind.Charm || holdKind == HoldKind.Fear);
+        if (body != null && (poisoned || stunFlash > 0f || tinting || holdTint || slowed))
         {
             stunFlash = Mathf.Max(0f, stunFlash - Time.deltaTime);
             Color c = baseColor;
-            if (poisoned) c = Color.Lerp(baseColor, new Color(0.55f, 1f, 0.45f), 0.45f + 0.15f * Mathf.Sin(Time.time * 10f));
+            if (slowed) c = Color.Lerp(c, new Color(0.55f, 0.8f, 1f), 0.35f);
+            if (poisoned) c = Color.Lerp(c, new Color(0.55f, 1f, 0.45f), 0.45f + 0.15f * Mathf.Sin(Time.time * 10f));
+            if (holdTint && holdKind == HoldKind.Charm) c = Color.Lerp(c, new Color(1f, 0.55f, 0.85f), 0.4f + 0.15f * Mathf.Sin(Time.time * 8f));
+            if (holdTint && holdKind == HoldKind.Fear) c = Color.Lerp(c, new Color(0.6f, 0.4f, 0.9f), 0.45f);
             if (stunFlash > 0f) c = Color.Lerp(c, new Color(1f, 0.95f, 0.5f), stunFlash / 0.15f);
             body.color = c;
-            tinting = poisoned || stunFlash > 0f;
+            tinting = poisoned || stunFlash > 0f || holdTint || slowed;
             if (!tinting) body.color = baseColor;
         }
     }
@@ -455,6 +602,15 @@ public class StatusEffects : MonoBehaviour
     {
         if (stunned.Contains(gameObject) && rb != null && rb.bodyType == RigidbodyType2D.Dynamic)
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        else if (IsSlowed && rb != null && rb.bodyType == RigidbodyType2D.Dynamic)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x * slowFactor, rb.linearVelocity.y);
+    }
+
+    private void OnDestroyBoonBits()
+    {
+        if (slowIcon != null) Destroy(slowIcon.gameObject);
+        if (stunIcon != null) Destroy(stunIcon.gameObject);
+        foreach (SpriteRenderer v in rootVines) if (v != null) Destroy(v.gameObject);
     }
 }
 

@@ -266,6 +266,7 @@ public class WeaponManager : MonoBehaviour
             SaveWeaponData();
             RunStats.WeaponsBroken++;
             PlayBreakMoment(activeIndex); // before the switch, while the HUD still shows the broken weapon
+            BoonRunner.OnWeaponBroken(transform.position); // Weapon Snob: it explodes
             onWeaponBroken?.Invoke();
             Tutorials.Show(Tutorials.Topic.WeaponBroke, null, 1.2f);
             // Accessibility > Auto Equip Weapon: straight to the next weapon he has; otherwise back to the Rod

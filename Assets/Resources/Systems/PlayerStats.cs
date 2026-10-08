@@ -198,6 +198,7 @@ public class PlayerStats : MonoBehaviour
     {
         currentLevel = 1;
         currentEXP = 0f;
+        Boons.ClearAll(); // boons come from level ups
         SaveEXPData();
         ApplyCurrentLevelStats();
         CatRoster.EnforceCapacity();

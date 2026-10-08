@@ -143,7 +143,7 @@ public class PauseMenu : MonoBehaviour
 
         if (page == Page.Closed)
         {
-            bool blocked = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause;
+            bool blocked = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput;
             if (pausePressed && !blocked) Open();
             else if (devPressed && !blocked) { Open(); ShowPage(Page.DevTools, 0); }
             return;
@@ -658,7 +658,7 @@ public class PauseMenu : MonoBehaviour
     // Testing helpers only - everything a player shouldn't see in the normal settings (Crowd Limit lives here).
     private void BuildDevToolsPage()
     {
-        float columnHeight = 2 * 44 + 10 + 10 * (RowHeight + RowGap);
+        float columnHeight = 3 * 44 + 10 + 12 * (RowHeight + RowGap);
         float height = 130 + columnHeight + 120;
         devPanel = MakePanel("DevTools", root.transform, 2 * SettingsRowWidth + 140, height);
         float top = height / 2f;
@@ -680,6 +680,9 @@ public class PauseMenu : MonoBehaviour
         AddDevButton(panel, "First Checkpoint", ref y, DevTools.GoToFirstCheckpoint, "Reload at the start of the map", false);
         AddDevButton(panel, "Last Checkpoint", ref y, DevTools.GoToLastCheckpoint, "Reload at the right-most checkpoint (Pelich)", false);
         AddDevButton(panel, "Saved Checkpoint", ref y, DevTools.GoToSavedCheckpoint, "Reload at the checkpoint you touched last", false);
+        AddHeader(devRows, panel, "Boons", ref y);
+        AddDevButton(panel, "Offer A Boon", ref y, Boons.DevOfferPick, "Opens the boon picker (one extra pick)", false);
+        AddDevButton(panel, "Hair Gel +3", ref y, () => Boons.AddRerolls(3), "Three rerolls for the boon cards", true);
 
         // Right: spawns + cheats
         y = top - 130;
@@ -694,6 +697,8 @@ public class PauseMenu : MonoBehaviour
         AddToggle(devRows, panel, "God Mode", ref y, () => DevTools.GodMode, v => DevTools.GodMode = v, "Rowdy takes no damage");
         AddDevButton(panel, "Heal +50", ref y, DevTools.Heal, "Heals, and overheals past full", false);
         AddDevButton(panel, "Kill Nearby Enemies", ref y, DevTools.KillNearby, "Everything within 12 units", false);
+        AddDevButton(panel, "Fill Moon Meter", ref y, Werewolf.Fill, "Call of the Moon is ready (needs the boon)", true);
+        AddDevButton(panel, "Clear Boons", ref y, Boons.ClearAll, "Forget every boon and pick", true);
         AddOption(devRows, panel, "Crowd Limit", ref y,
             () => GameSettings.CrowdLimit <= 0 ? "Off" : GameSettings.CrowdLimit + " at once",
             d => GameSettings.SetCrowdLimit(Wrap(GameSettings.CrowdLimit + d, 9)));
@@ -774,6 +779,7 @@ public class PauseMenu : MonoBehaviour
             (Key("SHIFT"), "Surf dash  (or " + Key("L") + ")"),
             (Key("Q"), "Switch weapon"),
             (Key("E"), "Pick up / swap cat / rest"),
+            (Key("K"), "Werewolf  (Call of the Moon boon)"),
             (Key("TAB"), "Rowdy Notes"),
             (Key("C"), "Stats"),
             (Key("M"), "Map"),
@@ -804,13 +810,14 @@ public class PauseMenu : MonoBehaviour
             ("{SURF}", "Surf dash"),
             ("{SWITCH}", "Switch weapon"),
             ("{INTERACT}", "Pick up / swap cat / rest"),
+            ("{WOLF}", "Werewolf  (boon)"),
             ("{DOWN} + {JUMP}", "Drop through platform"),
             ("{STATS}", "Stats"),
             ("{NOTES}", "Rowdy Notes"),
             ("{MAP}", "Map"),
             ("{PAUSE}", "Pause"),
         };
-        y = top - 410;
+        y = top - 402;
         foreach (var entry in gamepad)
         {
             PixelText button = PixelText.Create(panel, GameInput.Format(entry.button, GameInput.LastGamepad), 3, PadGrey, 1f);
@@ -818,7 +825,7 @@ public class PauseMenu : MonoBehaviour
             Anchor(button.Rect, new Vector2(0.5f, 0.5f), new Vector2(rightX - 60f, y));
             PixelText action = PixelText.Create(panel, entry.action, 2, TextIdle, 0f);
             Anchor(action.Rect, new Vector2(0.5f, 0.5f), new Vector2(rightX - 30f, y));
-            y -= 34f;
+            y -= 31f;
         }
 
         // Back

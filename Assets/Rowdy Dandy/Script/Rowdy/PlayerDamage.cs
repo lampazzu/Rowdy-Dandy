@@ -36,9 +36,10 @@ public class PlayerDamage : MonoBehaviour
         // The 2000-damage box under the water that finishes drowned enemies: the water's kill, not Rowdy's
         // (otherwise it's always the stats' Max Damage). Kills soon after Rowdy's hits still count as his.
         isKillZone = owningCat == null && baseDamage >= 500f && GetComponentInParent<Health>(true) == null;
+        isRowdys = owningCat == null && GetComponentInParent<Health>(true) != null; // his weapon hitboxes (boons apply)
     }
 
-    private bool isKillZone;
+    private bool isKillZone, isRowdys;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -49,9 +50,14 @@ public class PlayerDamage : MonoBehaviour
             if (enemy != null)
             {
                 float finalDamage = CalculateTotalDamage(out bool isCrit);
+                bool rowdyHit = isRowdys;
+                if (rowdyHit) finalDamage = BoonRunner.ModifyRowdyHit(enemy, finalDamage, ref isCrit); // boons: damage multipliers, Admire Yourself
+                else if (owningCat != null) finalDamage *= Boons.CatDamageMultiplier;                // Pack Leader, Wolf Pack
                 EnemyHealth.CreditNextHit(owningCat != null ? KillCredit.Cat(owningCat) : isKillZone ? KillCredit.Drowning() : KillCredit.Rowdy());
                 enemy.TakeDamageEnemy(finalDamage, isCrit);
                 if (owningCat == null && !isKillZone) RowdyBuffs.OnRowdyHit(enemy); // Paprika's poison imbue
+                if (rowdyHit) BoonRunner.AfterRowdyHit(enemy, finalDamage, isCrit);
+                else if (owningCat != null) BoonRunner.OnCatHit(owningCat, enemy);
                 // Weapon durability is spent per swing in PlayerMovement, not per hit (cats share this script too)
             }
 
@@ -95,6 +101,7 @@ public class PlayerDamage : MonoBehaviour
         float totalCritChance = critChance;
         foreach (float mod in critChanceModifiers)
             totalCritChance += mod;
+        if (isRowdys) totalCritChance += Boons.CritChanceBonus; // Glamour Puss
 
         isCrit = false;
         if (totalCritChance > 0f)

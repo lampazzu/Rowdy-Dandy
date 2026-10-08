@@ -209,6 +209,30 @@ public static class NotesData
         },
         new Topic
         {
+            id = "boons", name = "Boons And Patrons", glyph = "B", icon = () => BoonIcons.Get(BoonCatalog.Get("hairflip")),
+            sections = new[]
+            {
+                ("LEVEL UP = BOON", "Every level up, three patrons each offer you a boon. Take one. They stay with you, even when you die."),
+                ("THE PATRONS", "The Pompadour (gorgeous), Riptide (surf), Howl (the moon), Mama Rot (poison), DJ Fever (lightning and disco), Madame Meow (cats) and The Hammock (great deals with a catch)."),
+                ("SLOTS", "Attack, Dash, Jump, Cats and Special hold one boon each - a new one replaces the old. Passives stack."),
+                ("RARITY AND DUOS", "Common, Rare, Epic: same boon, bigger numbers. A boon you own can come back as an UPGRADE. Mix two patrons and a DUO boon may show up."),
+                ("YOUR BUILD", "{STATS} shows every boon you have. The HUD shows your slots at the bottom left."),
+                (Quip, "Seven strangers offering me free power. Totally normal. Very normal beach."),
+            },
+        },
+        new Topic
+        {
+            id = "werewolf", name = "Call Of The Moon", glyph = "W", icon = () => BoonIcons.Get(BoonCatalog.Get("moon")),
+            sections = new[]
+            {
+                ("THE MOON METER", "With Howl's boon, the moon in your Special slot fills up as you fight. At night it fills twice as fast."),
+                ("TRANSFORM", "When it's full, press {WOLF}. Rowdy howls, every enemy near him panics, and he's a werewolf for a while."),
+                ("AS A WOLF", "More damage, more speed, less damage taken, claw swipes on every attack, every hit heals a little, and weapons don't wear out. Kills keep the night going longer."),
+                (Quip, "I'm not hairy. I'm voluminous."),
+            },
+        },
+        new Topic
+        {
             id = "water", name = "Water And Drowning", glyph = "W", icon = () => KillFeed.WaterIcon,
             sections = new[]
             {
@@ -371,6 +395,17 @@ public static class NotesData
                 ("GEMS", "Emerald, sapphire, ruby and the rare crystal. Each one you pick up adds a little drop luck (+0.5% to +1.5%)."),
                 ("DROP LUCK", "Raises the chance of weapon drops, flying rats and cat treats. A broken rock stays broken, so the luck out there is limited."),
                 (Quip, "Smashing rocks for jewelry. My grandma would be proud. Or worried."),
+            },
+        },
+        new Topic
+        {
+            id = "hairgel", name = "Hair Gel", glyph = "G", icon = () => HairGel.JarSprite,
+            sections = new[]
+            {
+                ("WHAT IT IS", "A tiny jar that very rarely pops out of a broken ore rock, sparkling in every colour."),
+                ("WHAT IT DOES", "Each jar is one REROLL of the boon cards: {INTERACT} on the level up screen deals you three new ones."),
+                ("HOW RARE", "2% per rock. Drop luck from ore gems raises it, up to 10% at the most luck."),
+                (Quip, "Premium product. Holds through hurricanes, werewolves and bad decisions."),
             },
         },
         new Topic

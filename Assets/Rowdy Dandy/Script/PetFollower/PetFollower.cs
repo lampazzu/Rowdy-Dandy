@@ -149,11 +149,17 @@ public class PetFollower : MonoBehaviour
             }
         }
     }
-    private float Cooldown => IsFed ? BaseCooldown * 0.5f : BaseCooldown;
+    private float Cooldown => (IsFed ? BaseCooldown * 0.5f : BaseCooldown) * Boons.CatCooldownMultiplier; // Catnip Frenzy, Wolf Pack
 
     public void Treat()
     {
         fedUntil = Time.time + TreatDuration;
+        if (!isExecuting) { canAttack = true; cooldownEnd = Time.time; }
+    }
+
+    // Cat Call boon: ready right now (like a treat, without the faster cooldowns)
+    public void WakeUp()
+    {
         if (!isExecuting) { canAttack = true; cooldownEnd = Time.time; }
     }
 
@@ -543,6 +549,7 @@ public class PetFollower : MonoBehaviour
 
         anim.SetTrigger("Attack");
         PlayVoice();
+        BoonRunner.OnCatPower(this); // Compost, Cat Scratch Fever
 
         while (Time.time < cooldownEnd) yield return null; // (a treat can cut it short)
 
@@ -606,6 +613,7 @@ public class PetFollower : MonoBehaviour
     {
         SetTriggerIfExists("Attack");
         PlayVoice();
+        BoonRunner.OnCatPower(this); // Compost, Cat Scratch Fever
         PulseRing.Spawn(transform.position, new Color(tint.r, tint.g, tint.b, 0.9f), 0.6f, 0.3f);
         CatFX.Afterimage(spriteRenderer, new Color(1f, 1f, 1f, 0.7f), 0.2f);
     }
@@ -768,6 +776,7 @@ public class PetFollower : MonoBehaviour
                     target.ShowCustomText("EXECUTED!", new Color(1f, 0.85f, 0.3f));
                     EnemyHealth.CreditNextHit(KillCredit.Cat(this, true));
                     target.TakeDamageEnemy(target.currentenemyHealth);
+                    if (kills == 0) BoonRunner.OnCatPower(this); // Compost, Cat Scratch Fever (once per chain)
                     onExecute?.Invoke();
                     kills++;
                 }
@@ -799,7 +808,7 @@ public class PetFollower : MonoBehaviour
         float health = enemy.currentenemyHealth;
         if (health <= 0f) return false;
 
-        return health <= enemy.startingenemyHealth * executeHealthPercent || health <= executeHealthPoints;
+        return health <= enemy.startingenemyHealth * executeHealthPercent * Boons.ExecuteThresholdMultiplier || health <= executeHealthPoints; // Pack Leader: 20%
     }
 
     // Closest executable enemy around 'center' that no other samurai is already going for
