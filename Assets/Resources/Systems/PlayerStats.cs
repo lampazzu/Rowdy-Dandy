@@ -19,6 +19,17 @@ public class PlayerStats : MonoBehaviour
 {
     public static PlayerStats Instance { get; private set; }
 
+    // Highest level (also the most cats Rowdy can have: Magical Cat Capacity = his level, see CatRoster)
+    public const int MaxLevel = 10;
+    public static int Level => Instance != null ? Instance.currentLevel : Mathf.Clamp(PlayerPrefs.GetInt("PlayerLevel", 1), 1, MaxLevel);
+    public bool IsMaxLevel => currentLevel >= MaxLevel;
+
+    [Header("Placeholder scaling (levels with no Level Progression entry)")]
+    [Tooltip("Gains per level for levels the list above doesn't cover (placeholders until the real numbers are tuned)")]
+    [SerializeField] private float placeholderDamageGain = 6f;
+    [SerializeField] private float placeholderCritChanceGain = 5f;
+    [SerializeField] private float placeholderCritMultiplierGain = 0.1f;
+
     [Header("Target Damage Hitboxes")]
     [SerializeField] private List<PlayerDamage> targetPlayerDamages = new List<PlayerDamage>();
 
@@ -119,7 +130,7 @@ public class PlayerStats : MonoBehaviour
         float requiredEXP = GetRequiredEXPForCurrentLevel();
 
         bool leveledUp = false;
-        while (currentEXP >= requiredEXP)
+        while (currentEXP >= requiredEXP && currentLevel < MaxLevel)
         {
             currentEXP -= requiredEXP;
             currentLevel++;
@@ -128,6 +139,7 @@ public class PlayerStats : MonoBehaviour
             Debug.Log($"<color=cyan>[PlayerStats]</color> Leveled UP! Current Level: {currentLevel}");
             requiredEXP = GetRequiredEXPForCurrentLevel();
         }
+        if (currentLevel >= MaxLevel) currentEXP = 0f; // maxed out: the bar just stays full
 
         SaveEXPData();
         ApplyCurrentLevelStats();
@@ -151,6 +163,7 @@ public class PlayerStats : MonoBehaviour
 
     public void LevelUp()
     {
+        if (currentLevel >= MaxLevel) return;
         currentLevel++;
         currentEXP = 0f;
         SaveEXPData();
@@ -168,12 +181,13 @@ public class PlayerStats : MonoBehaviour
             SaveEXPData();
             Debug.Log($"<color=orange>[PlayerStats]</color> Dev Leveled Down. Current Level: {currentLevel}");
             ApplyCurrentLevelStats();
+            CatRoster.EnforceCapacity(); // fewer cat slots now
         }
     }
 
     public void SetLevel(int targetLevel)
     {
-        currentLevel = Mathf.Max(1, targetLevel);
+        currentLevel = Mathf.Clamp(targetLevel, 1, MaxLevel);
         currentEXP = 0f;
         SaveEXPData();
         Debug.Log($"<color=cyan>[PlayerStats]</color> Level set to: {currentLevel}");
@@ -186,6 +200,7 @@ public class PlayerStats : MonoBehaviour
         currentEXP = 0f;
         SaveEXPData();
         ApplyCurrentLevelStats();
+        CatRoster.EnforceCapacity();
     }
 
     // --- INTERNAL STAT & UI UPDATES ---
@@ -196,11 +211,21 @@ public class PlayerStats : MonoBehaviour
         float newCritChanceBonus = 0f;
         float newCritMultiplierBonus = 0f;
 
-        for (int i = 0; i < currentLevel - 1 && i < levelProgression.Count; i++)
+        for (int i = 0; i < currentLevel - 1; i++)
         {
-            newDamageBonus += levelProgression[i].baseDamageGain;
-            newCritChanceBonus += levelProgression[i].critChanceGain;
-            newCritMultiplierBonus += levelProgression[i].critMultiplierGain;
+            if (i < levelProgression.Count)
+            {
+                newDamageBonus += levelProgression[i].baseDamageGain;
+                newCritChanceBonus += levelProgression[i].critChanceGain;
+                newCritMultiplierBonus += levelProgression[i].critMultiplierGain;
+            }
+            else
+            {
+                // placeholder scaling until the list has entries for these levels
+                newDamageBonus += placeholderDamageGain;
+                newCritChanceBonus += placeholderCritChanceGain;
+                newCritMultiplierBonus += placeholderCritMultiplierGain;
+            }
         }
 
         foreach (PlayerDamage pd in targetPlayerDamages)
@@ -246,17 +271,17 @@ public class PlayerStats : MonoBehaviour
         float maxEXP = GetRequiredEXPForCurrentLevel();
         if (expBarFillImage != null)
         {
-            expBarFillImage.fillAmount = Mathf.Clamp01(currentEXP / maxEXP);
+            expBarFillImage.fillAmount = IsMaxLevel ? 1f : Mathf.Clamp01(currentEXP / maxEXP);
         }
 
         if (expText != null)
         {
-            expText.text = $"{currentEXP:F0} / {maxEXP:F0} XP";
+            expText.text = IsMaxLevel ? "MAX" : $"{currentEXP:F0} / {maxEXP:F0} XP";
         }
 
         // Update Stats UI Panel text
         if (levelText != null)
-            levelText.text = $"Level: {currentLevel}";
+            levelText.text = IsMaxLevel ? $"Level: {currentLevel} (MAX)" : $"Level: {currentLevel}";
 
         if (damageBonusText != null)
             damageBonusText.text = $"Bonus Damage: +{appliedDamageBonus:F0}";
@@ -279,7 +304,7 @@ public class PlayerStats : MonoBehaviour
 
     private void LoadEXPData()
     {
-        currentLevel = PlayerPrefs.GetInt("PlayerLevel", 1);
+        currentLevel = Mathf.Clamp(PlayerPrefs.GetInt("PlayerLevel", 1), 1, MaxLevel);
         currentEXP = PlayerPrefs.GetFloat("PlayerEXP", 0f);
     }
 

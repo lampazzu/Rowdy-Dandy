@@ -61,6 +61,16 @@ public class RespawnTrigger : MonoBehaviour
             // Deactivate all other respawn points
             DeactivateAllRespawnPoints();
 
+            // Already the saved checkpoint (Rowdy respawned on it)?
+            bool wasAlreadySaved = false;
+            if (PlayerPrefs.HasKey("RespawnX") && TryGetComponent(out Collider2D own))
+            {
+                Bounds b = own.bounds;
+                b.Expand(new Vector3(3f, 3f, 0f));
+                b.extents = new Vector3(b.extents.x, b.extents.y, 1000f);
+                wasAlreadySaved = b.Contains(new Vector3(PlayerPrefs.GetFloat("RespawnX"), PlayerPrefs.GetFloat("RespawnY"), 0f));
+            }
+
             // Save the player's current position as the new respawn point
             Vector2 spawnPoint = other.transform.position;
             PlayerPrefs.SetFloat("RespawnX", spawnPoint.x);
@@ -79,9 +89,49 @@ public class RespawnTrigger : MonoBehaviour
                 anim.SetBool("isActivated", true);
             }
 
-            // Additional actions or function calls
-            OnRespawnPointActivated();
+            // Additional actions or function calls (not when he just respawned here: it was already his checkpoint)
+            if (!wasAlreadySaved) OnRespawnPointActivated(other);
         }
+    }
+
+    [Header("Activation juice")]
+    [Tooltip("Fraction of Rowdy's max health restored when a checkpoint is activated")]
+    [SerializeField, Range(0f, 1f)] private float healFraction = 0.2f;
+
+    // "CHECKPOINT!" banner, heal, golden rings + pixel fountain, a little hit-stop and shake
+    private void OnRespawnPointActivated(Collider2D rowdy)
+    {
+        Collider2D own = GetComponent<Collider2D>();
+        Vector3 center = own != null ? own.bounds.center : transform.position;
+        Vector3 top = own != null ? new Vector3(center.x, own.bounds.max.y, 0f) : transform.position + Vector3.up;
+
+        RunStats.Checkpoints++;
+        IconPopup.Show(top + Vector3.up * 0.5f, null, "CHECKPOINT!", new Color(1f, 0.85f, 0.3f), 1.6f, 2.2f);
+        PulseRing.Spawn(center, new Color(1f, 0.85f, 0.35f, 1f), 1.8f, 0.5f);
+        PulseRing.Spawn(center, new Color(1f, 1f, 1f, 0.8f), 3.2f, 0.8f);
+        FXParticle.Burst(top, new Color(1f, 0.85f, 0.35f), 26, 2f, 5f, 6f, 1f, true);
+        FXParticle.Burst(center, new Color(1f, 1f, 1f), 10, 1f, 3f, -1f, 0.8f);
+        FXSound.Play("Checkpoint", 0.9f, 1f);
+        TimeSlowController.HitStop(0.08f, 0.1f);
+        ScreenShake.Impulse(0.35f);
+        GamepadRumble.Pulse(0.3f, 0.5f, 0.15f);
+        StartCoroutine(Squash());
+
+        if (rowdy != null && rowdy.TryGetComponent(out Health health) && healFraction > 0f)
+            health.AddHealth(health.startingHealth * healFraction);
+    }
+
+    // The checkpoint itself bounces
+    private System.Collections.IEnumerator Squash()
+    {
+        Vector3 baseScale = transform.localScale;
+        for (float t = 0f; t < 1f; t += Time.unscaledDeltaTime / 0.35f)
+        {
+            float k = Mathf.Sin(t * Mathf.PI * 2f) * (1f - t) * 0.25f;
+            transform.localScale = new Vector3(baseScale.x * (1f + k), baseScale.y * (1f - k), baseScale.z);
+            yield return null;
+        }
+        transform.localScale = baseScale;
     }
 
     private void DeactivateAllRespawnPoints()
@@ -107,9 +157,4 @@ public class RespawnTrigger : MonoBehaviour
         }
     }
 
-    private void OnRespawnPointActivated()
-    {
-        // Custom actions that occur upon activation (e.g., UI notification, achievement, etc.)
-        Debug.Log("Respawn point activated!");
-    }
 }

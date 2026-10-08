@@ -101,7 +101,7 @@ public class CatHUD : MonoBehaviour
             entry.fill.fillAmount = fraction;
 
             bool ready = fraction >= 1f;
-            entry.icon.color = ready ? Color.white : rechargingTint;
+            entry.icon.color = ready ? entry.pet.Tint : rechargingTint * entry.pet.Tint;
             if (ready && !entry.wasReady) entry.punchTimer = readyPunchTime;
             entry.wasReady = ready;
 
@@ -139,11 +139,14 @@ public class CatHUD : MonoBehaviour
         }
 
         // The cat the last death cost: a ghost slot at the bottom
-        CatRoster.LostCat notice = CatRoster.LostNotice;
-        if (notice != null && notice.pet != null)
+        int lostCount = CatRoster.LostNotices.Count;
+        for (int n = 0; n < lostCount; n++)
         {
-            CatRoster.LostNotice = null;
+            CatRoster.LostCat notice = CatRoster.LostNotices[n];
+            if (notice == null || notice.pet == null) continue;
             Entry ghost = BuildEntry(notice.pet);
+            ghost.popupShown = n > 0; // one popup for the whole batch
+            if (n == 0 && lostCount > 1) { notice = new CatRoster.LostCat { name = lostCount + " CATS", portrait = notice.portrait, pet = notice.pet }; }
             ghost.lost = true;
             ghost.lostName = notice.name;
             ghost.lostFace = notice.portrait;
@@ -157,6 +160,7 @@ public class CatHUD : MonoBehaviour
             entries.Add(ghost);
             changed = true;
         }
+        CatRoster.LostNotices.Clear();
 
         if (changed) Layout();
     }
@@ -206,10 +210,10 @@ public class CatHUD : MonoBehaviour
             ratRow = CreateUI("Rats", transform);
             ratIcon = AddImage(CreateUI("Rat", ratRow), null);
             ratIcon.preserveAspect = true;
-            ItemArt art = ItemArt.Get;
-            Sprite[] frames = art != null ? ItemArt.Frames(art.flyingRat, 10, 2, new Vector2(0.5f, 0.5f), 64f) : null;
-            if (frames != null) ratIcon.sprite = frames[0];
-            Place(ratIcon.rectTransform, 0f, 0f, 22 * pixelScale, 14 * pixelScale);
+            ratFrames = RatHudFrames();
+            if (ratFrames != null) ratIcon.sprite = ratFrames[0];
+            // The rat is only ~20 x 14 px of its 57 x 50 frame: cropped, it shows about as big as a cat's face
+            Place(ratIcon.rectTransform, 1f * pixelScale, 4f * pixelScale, 20 * pixelScale, 15 * pixelScale);
             ratText = PixelText.Create(ratRow, "", pixelScale, new Color(0.75f, 0.92f, 1f), 0f);
             ratText.Rect.anchorMin = ratText.Rect.anchorMax = new Vector2(0f, 1f);
         }
@@ -217,13 +221,39 @@ public class CatHUD : MonoBehaviour
         int key = rats * 100 + CatRoster.CatCount;
         if (key != shownRats)
         {
+            if (shownRats >= 0 && rats > shownRats / 100) ratPunch = 0.35f; // a new rat: punch
             shownRats = key;
             bool safe = rats >= CatRoster.CatCount && CatRoster.CatCount > 0;
             ratText.SetText("X" + rats + (safe ? "  CATS SAFE" : ""));
-            ratText.Rect.anchoredPosition = new Vector2(24 * pixelScale, -7 * pixelScale);
+            ratText.Rect.anchoredPosition = new Vector2(24 * pixelScale, -11 * pixelScale);
         }
+        // Flaps in the HUD too
+        if (ratFrames != null) ratIcon.sprite = ratFrames[new[] { 0, 1, 2, 1 }[(int)(Time.unscaledTime * 8f) % 4]];
+        ratPunch = Mathf.Max(0f, ratPunch - Time.unscaledDeltaTime);
+        ratIcon.rectTransform.localScale = Vector3.one * (1f + ratPunch * 1.2f);
+        ratIcon.color = ratPunch > 0f ? Color.Lerp(Color.white, new Color(1f, 0.85f, 0.3f), Mathf.Repeat(ratPunch * 12f, 1f)) : Color.white;
         int rows = entries.Count;
-        Place(ratRow, 0f, rows * (22 * pixelScale + entryGap), 200f, 14 * pixelScale);
+        Place(ratRow, 0f, rows * (22 * pixelScale + entryGap), 260f, 22 * pixelScale);
+    }
+
+    private Sprite[] ratFrames;
+    private float ratPunch;
+
+    // The flying frames of PIV_Flying_Rat cropped tight around the rat (top row, frames 0-2)
+    private static Sprite[] RatHudFrames()
+    {
+        ItemArt art = ItemArt.Get;
+        if (art == null || art.flyingRat == null) return null;
+        Texture2D tex = art.flyingRat;
+        float fw = tex.width / 10f;
+        float sx = tex.width / 575f, sy = tex.height / 99f; // in case the import shrank it
+        var frames = new Sprite[3];
+        for (int f = 0; f < 3; f++)
+        {
+            var r = new Rect(Mathf.Round(f * fw + 15f * sx), Mathf.Round(tex.height - 46f * sy), Mathf.Round(20f * sx), Mathf.Round(15f * sy));
+            frames[f] = Sprite.Create(tex, r, new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect);
+        }
+        return frames;
     }
 
     private void AvoidStatsPanel()

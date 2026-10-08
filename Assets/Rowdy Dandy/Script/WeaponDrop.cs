@@ -248,13 +248,17 @@ public class WeaponDrop : MonoBehaviour
         }
 
         // --- PICKUP INPUT ---
-        // Press E on Keyboard OR Triangle/Y on Gamepad
-        if (playerIsClose && !PauseMenu.IsPaused && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3)))
+        // Press E on Keyboard OR Triangle/Y on Gamepad (or just walk over it: Accessibility > Auto Pick Up Weapons)
+        bool autoPickup = GameSettings.AutoPickupWeapons && !pickedUp;
+        if (playerIsClose && !PauseMenu.IsPaused && (autoPickup || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3)))
         {
             WeaponManager wm = FindFirstObjectByType<WeaponManager>();
             if (wm != null)
             {
+                pickedUp = true;
+                RunStats.WeaponsPickedUp++;
                 wm.PickupWeapon(weaponType, maxDurability, pickupSound, pickupVolume);
+                if (autoPickup) IconPopup.Show(transform.position + Vector3.up * 0.6f, wm.GetProfile(weaponType), "GOT IT", repairedColor);
                 Destroy(gameObject);
             }
         }
@@ -325,7 +329,7 @@ public class WeaponDrop : MonoBehaviour
     private static float gamepadCheckTime = -10f;
     private static bool gamepadCached;
 
-    private static bool IsGamepadConnected()
+    public static bool IsGamepadConnected()
     {
         if (Time.unscaledTime - gamepadCheckTime < 1f) return gamepadCached;
         gamepadCheckTime = Time.unscaledTime;
@@ -399,7 +403,7 @@ public class WeaponDrop : MonoBehaviour
     }
 
     // Round yellow Y button (Xbox colors) with the pixel-font letter
-    private static Sprite GetGamepadPrompt()
+    public static Sprite GetGamepadPrompt()
     {
         if (gamepadPromptSprite != null) return gamepadPromptSprite;
 
@@ -435,7 +439,7 @@ public class WeaponDrop : MonoBehaviour
     }
 
     // Light keycap with E
-    private static Sprite GetKeyboardPrompt()
+    public static Sprite GetKeyboardPrompt()
     {
         if (keyboardPromptSprite != null) return keyboardPromptSprite;
 

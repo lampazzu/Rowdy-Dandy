@@ -25,6 +25,25 @@ public class ItemArt : ScriptableObject
     public Texture2D fish;
     public int fishFrames = 2;
 
+    [Header("Effects (TBZG_VFX_*: 10 frames of 214 x 172)")]
+    public Texture2D vfxHeal;
+    public Texture2D vfxPoison;
+    public Texture2D vfxDecay;
+    public Texture2D vfxBlock;
+
+    [Header("Status icons (STS_Stun: 18 frames of 19 x 21, STS_Shield: 6 frames of 24 x 22, last 3 = cracking)")]
+    public Texture2D stsStun;
+    public Texture2D stsShield;
+
+    [Header("Ground pound (FX_GroundPound: 12 frames of 128 x 128) - Mushidon's stomp")]
+    public Texture2D groundPound;
+
+    [Header("Blood spatter (VFX_BloodA/B/C: 4 frames of 156 x 94)")]
+    public Texture2D[] blood;
+
+    [Header("Pointer arrow (TBZG_Pointer: 6 frames of 48 x 64) - Pelich's weak spot")]
+    public Texture2D pointer;
+
     // ---------------------------------------------------------------- runtime access
     private static ItemArt instance;
     private static bool loaded;

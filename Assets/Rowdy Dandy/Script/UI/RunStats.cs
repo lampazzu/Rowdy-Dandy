@@ -23,6 +23,18 @@ public static class RunStats
     public static float TotalDamage;
     public static float DamageTaken;
     public static float PlayTime;    // seconds, paused time not counted
+    // mega list 4 additions
+    public static float Healed;
+    public static float OverhealGained;
+    public static int HitsBlocked;     // The Peak's armor
+    public static int EnemiesPoisoned; // Paprika
+    public static int EnemiesStunned;  // Mushidon
+    public static int DecayBursts;     // Lallo
+    public static int Checkpoints;
+    public static int RatsGrabbed;
+    public static int JellyBounces;
+    public static int WeaponsPickedUp;
+    public static int StatuesSmashed;
     public static readonly Dictionary<string, int> KillsByEnemy = new Dictionary<string, int>();
 
     public static void ResetAll() => ResetSession(); // dev reset (key 0)
@@ -32,7 +44,8 @@ public static class RunStats
     {
         Kills = ObjectsSmashed = Deaths = CriticalHits = Counters = Executions = CatKills = 0;
         CatsRescued = CatsLost = WeaponsBroken = LevelUps = CurrentStreak = BestStreak = 0;
-        MaxHit = TotalDamage = DamageTaken = PlayTime = 0f;
+        MaxHit = TotalDamage = DamageTaken = PlayTime = Healed = OverhealGained = 0f;
+        HitsBlocked = EnemiesPoisoned = EnemiesStunned = DecayBursts = Checkpoints = RatsGrabbed = JellyBounces = WeaponsPickedUp = StatuesSmashed = 0;
         MaxHitWith = "";
         KillsByEnemy.Clear();
     }

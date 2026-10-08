@@ -23,3 +23,15 @@ MonoBehaviour:
   oresPerLevel: 14
   fish: {fileID: 2800000, guid: b6432bd466cffaa42bcf0c88a4bf68a5, type: 3}
   fishFrames: 2
+  vfxHeal: {fileID: 2800000, guid: a017f5c0c2a92d846989c836ee84b872, type: 3}
+  vfxPoison: {fileID: 2800000, guid: 4bd41b7632b94b946a70d3d5eac35545, type: 3}
+  vfxDecay: {fileID: 2800000, guid: 3ad921f9a3b8ad845a5f1183f6e5e6b0, type: 3}
+  vfxBlock: {fileID: 2800000, guid: 38e0e69039fc3094cad96f8cb9c41508, type: 3}
+  stsStun: {fileID: 2800000, guid: 31aac4f1e78aabe408502e0e7661e9f2, type: 3}
+  stsShield: {fileID: 2800000, guid: 7686aeeecef25fd4f9a26bbae7379fa1, type: 3}
+  groundPound: {fileID: 2800000, guid: a151ba29d8a54f345b687e259fa2efdb, type: 3}
+  blood:
+  - {fileID: 2800000, guid: d40de555dbe489d43929eaeee83ac593, type: 3}
+  - {fileID: 2800000, guid: 25b5dfd215adb2448ae2be893cec577e, type: 3}
+  - {fileID: 2800000, guid: 72724ebe4c187b240b102dad9c222bd6, type: 3}
+  pointer: {fileID: 2800000, guid: 3a58fadf692bcb44a9201239802e2152, type: 3}

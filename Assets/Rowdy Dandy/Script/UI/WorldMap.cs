@@ -464,8 +464,34 @@ public class WorldMap : MonoBehaviour
 
     private Vector2 MapToWorld(Vector2 m) => new Vector2(m.x / PxPerUnit + world.xMin, m.y / PxPerUnit + world.yMin);
 
+    // Landmark areas that aren't spawn zones: "Mountain Pass" = around the gate with the golden statues that the
+    // shamans' altars open (object "AnimationPillar"). Found once per scene.
+    private struct Landmark { public string name; public Rect area; }
+    private static readonly List<Landmark> landmarks = new List<Landmark>();
+    private static int landmarksScene = -1;
+
+    private static List<Landmark> Landmarks
+    {
+        get
+        {
+            int scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle;
+            if (scene == landmarksScene) return landmarks;
+            landmarksScene = scene;
+            landmarks.Clear();
+            foreach (Transform t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                if (t.name != "AnimationPillar") continue;
+                Vector2 p = t.position;
+                landmarks.Add(new Landmark { name = "MOUNTAIN PASS", area = new Rect(p.x - 12f, p.y - 10f, 24f, 22f) });
+                break;
+            }
+            return landmarks;
+        }
+    }
+
     private string AreaAt(Vector2 w)
     {
+        foreach (Landmark l in Landmarks) if (l.area.Contains(w)) return l.name;
         WaveEnemySpawner spawner = FindFirstObjectByType<WaveEnemySpawner>();
         if (spawner == null || spawner.Zones == null) return null;
         foreach (WaveEnemySpawner.Zone z in spawner.Zones)
@@ -478,7 +504,8 @@ public class WorldMap : MonoBehaviour
         if (string.IsNullOrEmpty(n)) return "";
         int p = n.IndexOf('(');
         if (p > 0) n = n.Substring(0, p);
-        return n.Trim().ToUpperInvariant();
+        n = n.Trim().ToUpperInvariant();
+        return n == "BEFORE PELICH" ? "GNOLL TOWER" : n; // (old zone name, in case a scene still has it saved)
     }
 
     private void BuildUI()
@@ -587,6 +614,12 @@ public class WorldMap : MonoBehaviour
                 PixelText label = PixelText.Create(content, name, 3, new Color(1f, 1f, 1f, 0.55f), 0.5f);
                 AddPin(label.Rect, c, 0f);
             }
+        }
+        foreach (Landmark l in Landmarks)
+        {
+            if (!AnyExplored(l.area.xMin, l.area.xMax, l.area.yMin, l.area.yMax)) continue;
+            PixelText label = PixelText.Create(content, l.name, 3, new Color(1f, 0.85f, 0.4f, 0.75f), 0.5f);
+            AddPin(label.Rect, new Vector2(l.area.center.x, l.area.yMax - 2f), 0f);
         }
 
         // Spawners: gold = the one you'd respawn at

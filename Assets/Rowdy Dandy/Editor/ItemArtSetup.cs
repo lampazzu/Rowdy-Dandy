@@ -36,8 +36,27 @@ public static class ItemArtSetup
         changed |= Fill(ref art.crystals, NewStuff + "DMG_Ore@Crystals.png");
         changed |= Fill(ref art.fish, "Assets/Resources/Pickups/CatTreat_Fish.png");
 
-        foreach (Texture2D t in new[] { art.werewolf, art.flyingRat, art.oreBreak, art.emerald, art.sapphire, art.ruby, art.crystals, art.fish })
+        changed |= Fill(ref art.vfxHeal, NewStuff + "TBZG_VFX_Heal.png");
+        changed |= Fill(ref art.vfxPoison, NewStuff + "TBZG_VFX_Poison.png");
+        changed |= Fill(ref art.vfxDecay, NewStuff + "TBZG_VFX_Decay.png");
+        changed |= Fill(ref art.vfxBlock, NewStuff + "TBZG_VFX_Block.png");
+        changed |= Fill(ref art.stsStun, NewStuff + "STS_Stun.png");
+        changed |= Fill(ref art.stsShield, NewStuff + "STS_Shield.png");
+        changed |= Fill(ref art.groundPound, NewStuff + "FX_GroundPound.png");
+        changed |= Fill(ref art.pointer, NewStuff + "TBZG_Pointer.png");
+        if (art.blood == null || art.blood.Length == 0)
+        {
+            art.blood = new Texture2D[3];
+            Fill(ref art.blood[0], NewStuff + "VFX_BloodA.png");
+            Fill(ref art.blood[1], NewStuff + "VFX_BloodB.png");
+            Fill(ref art.blood[2], NewStuff + "VFX_BloodC.png");
+            changed = true;
+        }
+
+        foreach (Texture2D t in new[] { art.werewolf, art.flyingRat, art.oreBreak, art.emerald, art.sapphire, art.ruby, art.crystals, art.fish,
+                                        art.vfxHeal, art.vfxPoison, art.vfxDecay, art.vfxBlock, art.stsStun, art.stsShield, art.groundPound, art.pointer })
             PixelImport(t);
+        if (art.blood != null) foreach (Texture2D t in art.blood) PixelImport(t);
 
         if (changed)
         {

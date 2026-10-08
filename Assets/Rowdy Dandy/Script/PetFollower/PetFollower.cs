@@ -5,7 +5,8 @@ using UnityEngine.Events;
 
 public class PetFollower : MonoBehaviour
 {
-    public enum CatType { Wig, Samurai }
+    // Paprika / Mushidon / Peak / Lallo: see StatusEffects.cs (placeholder art = tinted Wig)
+    public enum CatType { Wig, Samurai, Paprika, Mushidon, Peak, Lallo }
 
     private static readonly List<PetFollower> ActivePets = new List<PetFollower>();
     public static IReadOnlyList<PetFollower> Pets => ActivePets;
@@ -25,6 +26,14 @@ public class PetFollower : MonoBehaviour
     [SerializeField] private string catName = "";
     [Tooltip("16x16 face for the HUD slot. Empty = the cat's own sprite.")]
     [SerializeField] private Sprite portrait;
+    [Tooltip("Colour the placeholder art is tinted with (sprite + HUD face). White = untouched art.")]
+    [SerializeField] private Color tint = Color.white;
+
+    [Header("Ability (Paprika / Mushidon / The Peak / Lallo)")]
+    [Tooltip("Seconds before the ability can be used again. -1 = the cat's default (Paprika 14, Mushidon 9, Peak 10 after the armor breaks, Lallo 12 after the burst)")]
+    [SerializeField] private float abilityCooldown = -1f;
+    [Tooltip("Paprika: how long the poison imbue lasts")]
+    [SerializeField] private float poisonDuration = 6f;
 
     [Header("Voice")]
     [Tooltip("One is picked at random on attack (never the same twice in a row)")]
@@ -114,15 +123,33 @@ public class PetFollower : MonoBehaviour
 
     // For the cat HUD (CatHUD)
     public CatType Type => catType;
-    public string CatName => string.IsNullOrEmpty(catName) ? catType.ToString() : catName;
+    public string CatName => string.IsNullOrEmpty(catName) ? DefaultName : catName;
+    private string DefaultName => catType == CatType.Peak ? "The Peak" : catType.ToString();
     public Sprite Portrait => portrait != null ? portrait : (TryGetComponent(out SpriteRenderer sr) ? sr.sprite : null);
+    public Color Tint => tint;
     public bool IsCollected => player != null;
+    public bool IsAbilityCat => catType >= CatType.Paprika;
 
     // Cat treat fish: ready right now, and cooldowns halved for TreatDuration seconds
     private const float TreatDuration = 12f;
     private float fedUntil = -10f;
     public bool IsFed => Time.time < fedUntil;
-    private float Cooldown => IsFed ? attackCooldown * 0.5f : attackCooldown;
+    private float BaseCooldown
+    {
+        get
+        {
+            if (!IsAbilityCat) return attackCooldown;
+            if (abilityCooldown >= 0f) return abilityCooldown;
+            switch (catType)
+            {
+                case CatType.Paprika: return 14f;
+                case CatType.Mushidon: return 9f;
+                case CatType.Peak: return 10f;
+                default: return 12f;
+            }
+        }
+    }
+    private float Cooldown => IsFed ? BaseCooldown * 0.5f : BaseCooldown;
 
     public void Treat()
     {
@@ -130,11 +157,19 @@ public class PetFollower : MonoBehaviour
         if (!isExecuting) { canAttack = true; cooldownEnd = Time.time; }
     }
 
+    private bool abilityRunning;
+
     // 1 = ready, 0 = just used (or mid execution chain)
     public float CooldownFraction
     {
         get
         {
+            // ability cats show what their buff has left while it's on
+            if (catType == CatType.Lallo && RowdyBuffs.DecayArmedBy == this) return 1f;
+            if (catType == CatType.Peak && RowdyBuffs.ShieldOwner == this) return RowdyBuffs.ShieldCharges / (float)RowdyBuffs.ArmorHits;
+            if (catType == CatType.Paprika && RowdyBuffs.PoisonOwner == this) return RowdyBuffs.PoisonLeftFraction;
+            if (IsAbilityCat && abilityRunning && Time.time >= cooldownEnd) return 0f;
+            if (IsAbilityCat && abilityRunning) return 1f - Mathf.Clamp01((cooldownEnd - Time.time) / Mathf.Max(0.01f, Cooldown));
             if (isExecuting) return 0f;
             if (canAttack || attackCooldown <= 0f) return 1f;
             return 1f - Mathf.Clamp01((cooldownEnd - Time.time) / Cooldown);
@@ -184,6 +219,12 @@ public class PetFollower : MonoBehaviour
 
         // Glowing outline while nobody has found him yet (see CatFX.cs)
         if (GetComponent<LostCatGlow>() == null) gameObject.AddComponent<LostCatGlow>();
+
+        if (spriteRenderer != null && tint != Color.white) spriteRenderer.color = tint;
+
+        // Ability cats reuse Wig's art / animator: his attack clip's damage box stays harmless on them
+        if (IsAbilityCat)
+            foreach (PlayerDamage box in GetComponentsInChildren<PlayerDamage>(true)) Destroy(box);
     }
 
     private void PlayVoice()
@@ -216,10 +257,16 @@ public class PetFollower : MonoBehaviour
             return;
         }
 
+        UpdateSwapPrompt();
+
         if (player == null)
             return;
 
-        if (canAttack)
+        if (IsAbilityCat)
+        {
+            if (!abilityRunning) TryStartAbility();
+        }
+        else if (canAttack)
         {
             if (catType == CatType.Samurai) TryStartExecution();
             else DetectNearestEnemy();
@@ -239,21 +286,96 @@ public class PetFollower : MonoBehaviour
         UpdateDepth();
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (player != null)
-            return;
+    // Found by Rowdy: joins if there's room in the party (Magical Cat Capacity = his level), otherwise he can swap
+    // one of his cats for this one with the interact button (Y / E)
+    private bool rowdyNearby;
+    private Transform nearbyRowdy;
+    private SpriteRenderer swapPrompt;
+    private float fullNoticeAt = -10f;
+    private static int lastSwapFrame = -100;
 
-        if (other.CompareTag("Player"))
+    private void OnTriggerEnter2D(Collider2D other) => OnTriggerStay2D(other);
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (player != null || !other.CompareTag("Player")) return;
+        if (CatRoster.HasRoom) { Collect(other.transform); return; }
+        if (!rowdyNearby && Time.time - fullNoticeAt > 4f)
         {
-            player = other.transform;
+            fullNoticeAt = Time.time;
+            IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, "PARTY FULL (" + CatRoster.Capacity + ") - SWAP?", new Color(1f, 0.75f, 0.9f), 0.8f, 1.6f);
+        }
+        rowdyNearby = true;
+        nearbyRowdy = other.transform;
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player")) rowdyNearby = false;
+    }
+
+    private void UpdateSwapPrompt()
+    {
+        bool show = player == null && rowdyNearby && !CatRoster.HasRoom && !PauseMenu.IsPaused;
+        if (show && swapPrompt == null)
+        {
+            var go = new GameObject("Swap Prompt");
+            go.transform.SetParent(transform, false);
+            swapPrompt = go.AddComponent<SpriteRenderer>();
+            swapPrompt.sortingLayerName = "Default";
+            swapPrompt.sortingOrder = 120;
+            if (CatFX.Unlit != null) swapPrompt.sharedMaterial = CatFX.Unlit;
+        }
+        if (swapPrompt != null)
+        {
+            swapPrompt.enabled = show;
+            if (show)
+            {
+                swapPrompt.sprite = WeaponDrop.IsGamepadConnected() ? WeaponDrop.GetGamepadPrompt() : WeaponDrop.GetKeyboardPrompt();
+                float sx = Mathf.Abs(transform.lossyScale.x) > 0.0001f ? 1f / transform.lossyScale.x : 1f;
+                float sy = Mathf.Abs(transform.lossyScale.y) > 0.0001f ? 1f / transform.lossyScale.y : 1f;
+                swapPrompt.transform.localScale = new Vector3(sx, sy, 1f); // world-size, not flipped with the cat
+                swapPrompt.transform.position = transform.position + new Vector3(0f, 0.55f + Mathf.Round(Mathf.Sin(Time.time * 4f) * 2f) / 64f, 0f);
+            }
+        }
+        if (show && Time.frameCount - lastSwapFrame > 30 && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton3)))
+        {
+            lastSwapFrame = Time.frameCount;
+            CatRoster.Swap(this, nearbyRowdy);
+        }
+    }
+
+    // Leaves the party (swapped out): stays here, waiting to be picked up again
+    public void Dismiss(Vector3 at)
+    {
+        StopAllCoroutines();
+        player = null;
+        isFollowingPlayer = false;
+        targetEnemy = null;
+        isExecuting = false;
+        abilityRunning = false;
+        canAttack = true;
+        rowdyNearby = true; // Rowdy is standing right here
+        transform.position = at;
+        if (spriteRenderer != null) { spriteRenderer.sortingLayerID = baseSortingLayer; spriteRenderer.sortingOrder = baseSortingOrder; }
+    }
+
+    // Found by Rowdy (also the dev tools' Collect All Cats)
+    public void Collect(Transform rowdy)
+    {
+        if (player != null || rowdy == null) return;
+        {
+            player = rowdy;
             pickupOrder = ++pickupCounter;
             isFollowingPlayer = true;
 
+            rowdyNearby = false;
             CatRoster.RecordCollected(RosterKey);
             RunStats.CatsRescued++;
             RowdyNotes.MarkCatFound(catType.ToString(), CatName, Portrait); // unlocks its Cats page
             SoundManager.PlaySfx(collectSound, collectVolume);
+            IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, CatName.ToUpperInvariant() + " JOINS THE PARTY! (" + CatRoster.CatCount + "/" + CatRoster.Capacity + ")", new Color(1f, 0.75f, 0.9f), 1f, 2f);
+            PulseRing.Spawn(transform.position, new Color(1f, 0.75f, 0.9f, 0.9f), 1f, 0.35f);
 
             StartCoroutine(StartFollowing());
         }
@@ -427,6 +549,146 @@ public class PetFollower : MonoBehaviour
         }
 
         canAttack = true;
+    }
+
+    // ---------------------------------------------------------------- Paprika / Mushidon / The Peak / Lallo
+
+    private void TryStartAbility()
+    {
+        switch (catType)
+        {
+            case CatType.Paprika:
+                if (EnemyNear(detectionRange, false)) StartCoroutine(PaprikaRoutine());
+                break;
+            case CatType.Mushidon:
+                if (EnemyNear(detectionRange, true) && IsRowdyGrounded()) StartCoroutine(MushidonRoutine());
+                break;
+            case CatType.Peak:
+                if (RowdyBuffs.ShieldCharges <= 0) StartCoroutine(PeakRoutine());
+                break;
+            case CatType.Lallo:
+                if (RowdyBuffs.DecayArmedBy == null) StartCoroutine(LalloRoutine());
+                break;
+        }
+    }
+
+    private bool EnemyNear(float range, bool groundedOnly)
+    {
+        foreach (Collider2D hit in Physics2D.OverlapCircleAll(player.position, range, LayerMask.GetMask("Enemy")))
+        {
+            EnemyHealth e = hit.GetComponentInParent<EnemyHealth>();
+            if (e == null || e.enemydead || e.IsObject || e.NoPetFollow) continue;
+            if (!groundedOnly) return true;
+            if (SolidGround.Under(hit)) return true;
+        }
+        return false;
+    }
+
+    private bool IsRowdyGrounded()
+    {
+        PlayerMovement pm = player != null ? player.GetComponentInParent<PlayerMovement>() : null;
+        return pm == null || pm.IsGrounded;
+    }
+
+    private IEnumerator Cooldown_()
+    {
+        cooldownEnd = Time.time + Cooldown;
+        while (Time.time < cooldownEnd) yield return null; // (a treat can cut it short)
+        abilityRunning = false;
+    }
+
+    // A happy hop + the placeholder attack clip, and a flash in the cat's colour
+    private void CastFlourish(string voiceLine = null)
+    {
+        SetTriggerIfExists("Attack");
+        PlayVoice();
+        PulseRing.Spawn(transform.position, new Color(tint.r, tint.g, tint.b, 0.9f), 0.6f, 0.3f);
+        CatFX.Afterimage(spriteRenderer, new Color(1f, 1f, 1f, 0.7f), 0.2f);
+    }
+
+    private IEnumerator PaprikaRoutine()
+    {
+        abilityRunning = true;
+        cooldownEnd = float.MaxValue;
+        CastFlourish();
+        RowdyBuffs.StartPoison(this, poisonDuration);
+        while (RowdyBuffs.PoisonActive && RowdyBuffs.PoisonOwner == this) yield return null;
+        yield return Cooldown_();
+    }
+
+    private IEnumerator PeakRoutine()
+    {
+        abilityRunning = true;
+        cooldownEnd = float.MaxValue;
+        CastFlourish();
+        RowdyBuffs.GiveArmor(this);
+        // the cooldown only starts once the armor is broken
+        while (RowdyBuffs.ShieldCharges > 0 && player != null) yield return null;
+        yield return Cooldown_();
+    }
+
+    private IEnumerator LalloRoutine()
+    {
+        abilityRunning = true;
+        cooldownEnd = float.MaxValue;
+        RowdyBuffs.ArmDecay(this);
+        // ready until Rowdy's next kill sets it off
+        while (RowdyBuffs.DecayArmedBy == this && player != null) yield return null;
+        CastFlourish();
+        yield return Cooldown_();
+    }
+
+    // Leaps up over Rowdy, slams down on the ground next to him: stomp
+    private IEnumerator MushidonRoutine()
+    {
+        abilityRunning = true;
+        isExecuting = true;
+        isFollowingPlayer = false;
+        cooldownEnd = float.MaxValue;
+        CastFlourish();
+
+        float baseY = transform.localScale.y;
+        Vector3 start = transform.position;
+        Vector3 apex = player.position + new Vector3(0f, 2.2f, 0f);
+        for (float t = 0f; t < 1f; t += Time.deltaTime / 0.28f)
+        {
+            float e = 1f - (1f - t) * (1f - t);
+            transform.position = Vector3.Lerp(start, apex, e);
+            transform.localScale = new Vector3(transform.localScale.x, baseY * Mathf.Lerp(1.2f, 1f, t), transform.localScale.z);
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.08f); // hang time
+
+        // Ground right under Rowdy
+        Vector3 land = player.position;
+        if (SolidGround.Ray(player.position + Vector3.up * 0.5f, Vector2.down, 6f, out RaycastHit2D hit)) land = hit.point;
+        Vector3 from = transform.position;
+        Vector3 to = new Vector3(player.position.x + (player.localScale.x >= 0f ? 0.5f : -0.5f), land.y + 0.15f, 0f);
+        for (float t = 0f; t < 1f; t += Time.deltaTime / 0.11f)
+        {
+            transform.position = Vector3.Lerp(from, to, t * t);
+            if (Random.value < 0.6f) CatFX.Afterimage(spriteRenderer, new Color(tint.r, tint.g, tint.b, 0.5f), 0.18f);
+            yield return null;
+        }
+        transform.position = to;
+
+        int count = CatPowers.Stomp(new Vector3(to.x, land.y, 0f), this);
+        if (count > 0) IconPopup.Show(to + Vector3.up * 0.8f, null, count > 1 ? "STUNNED X" + count + "!" : "STUNNED!", new Color(1f, 0.9f, 0.45f), 1f, 1.2f);
+
+        // squash on the landing
+        Vector3 baseScale = new Vector3(transform.localScale.x, baseY, transform.localScale.z);
+        for (float t = 0f; t < 1f; t += Time.deltaTime / 0.25f)
+        {
+            float squash = Mathf.Sin(t * Mathf.PI) * 0.35f;
+            transform.localScale = new Vector3(baseScale.x * (1f + squash), baseScale.y * (1f - squash), baseScale.z);
+            yield return null;
+        }
+        transform.localScale = baseScale;
+
+        isExecuting = false;
+        isFollowingPlayer = true;
+        SetTriggerIfExists("back to idle");
+        yield return Cooldown_();
     }
 
     // ---------------------------------------------------------------- Samurai
@@ -654,6 +916,7 @@ public class PetFollower : MonoBehaviour
             targetEnemy = null;
         }
         isExecuting = false;
+        abilityRunning = false;
     }
 
     private void OnDrawGizmosSelected()
@@ -704,6 +967,7 @@ public static class CatRoster
     {
         collected.Clear();
         visitedSpots.Clear();
+        LostNotices.Clear();
         Rats = 0;
         needsApply = true;
         diedBeforeReload = false;
@@ -735,6 +999,45 @@ public static class CatRoster
     public static void RecordCollected(string key)
     {
         if (!collected.Contains(key)) collected.Add(key);
+    }
+
+    // ---- Magical Cat Capacity: as many cats as Rowdy's level (level 1 = 1 cat ... level 10 = 10 cats)
+    public const int MaxCats = 10;
+    public static int Capacity => Mathf.Clamp(PlayerStats.Level, 1, MaxCats);
+    public static bool HasRoom => collected.Count < Capacity;
+
+    // Party full: the newcomer takes the place of the cat that has been with him longest, which stays behind here
+    public static void Swap(PetFollower newcomer, Transform rowdyBody)
+    {
+        if (newcomer == null || newcomer.IsCollected || rowdyBody == null) return;
+        PetFollower leaving = null;
+        foreach (string key in collected)
+        {
+            foreach (PetFollower pet in PetFollower.Pets)
+                if (pet != null && pet.IsCollected && pet.RosterKey == key) { leaving = pet; break; }
+            if (leaving != null) break;
+        }
+        if (leaving != null)
+        {
+            collected.Remove(leaving.RosterKey);
+            leaving.Dismiss(newcomer.transform.position + new Vector3(0.5f, 0f, 0f));
+            IconPopup.Show(leaving.transform.position + Vector3.up * 1.1f, leaving.Portrait, leaving.CatName.ToUpperInvariant() + " WAITS HERE", new Color(0.8f, 0.75f, 0.9f), 0.8f, 1.8f);
+        }
+        else if (!HasRoom) return;
+        newcomer.Collect(rowdyBody);
+        UISound.Play(UISound.Cue.Confirm);
+    }
+
+    // Level went down (dev tools): the newest cats beyond the capacity leave
+    public static void EnforceCapacity()
+    {
+        while (collected.Count > Capacity)
+        {
+            string key = collected[collected.Count - 1];
+            collected.RemoveAt(collected.Count - 1);
+            foreach (PetFollower pet in PetFollower.Pets)
+                if (pet != null && pet.IsCollected && pet.RosterKey == key) { pet.Dismiss(pet.transform.position); break; }
+        }
     }
 
     // Called by every cat's Update; runs once per frame
@@ -770,14 +1073,18 @@ public static class CatRoster
         needsApply = false;
         string sceneName = rowdy.gameObject.scene.name;
 
-        // Death penalty: the newest cat gets lost - unless there's a registered rat for every cat
-        string lostKey = null;
-        if (diedBeforeReload && collected.Count > Rats)
+        // Death penalty: ALL cats get lost, except one per registered flying rat (the ones found first stay).
+        // Also never more cats than the Magical Cat Capacity.
+        var lostKeys = new List<string>();
+        int keep = Mathf.Min(collected.Count, Capacity);
+        if (diedBeforeReload) keep = Mathf.Min(keep, Rats);
+        while (collected.Count > keep)
         {
-            lostKey = collected[collected.Count - 1];
+            lostKeys.Insert(0, collected[collected.Count - 1]);
             collected.RemoveAt(collected.Count - 1);
-            RunStats.CatsLost++;
+            if (diedBeforeReload) RunStats.CatsLost++;
         }
+        bool died = diedBeforeReload;
         diedBeforeReload = false;
 
         var pets = new List<PetFollower>();
@@ -801,28 +1108,29 @@ public static class CatRoster
         visitedSpots.TryGetValue(sceneName, out List<Vector3> visited);
 
         var taken = new List<Vector3>();
-        PetFollower lostPet = null;
-        foreach (PetFollower pet in pets)
-        {
-            if (!pet.IsCollected && pet.RosterKey == lostKey) lostPet = pet;
-        }
+        var lostPets = new List<PetFollower>();
+        foreach (string key in lostKeys)
+            foreach (PetFollower pet in pets)
+                if (!pet.IsCollected && pet.RosterKey == key) { lostPets.Add(pet); break; }
 
-        // The cat that just got lost goes somewhere he has been (if we know any), the others anywhere valid
-        if (lostPet != null) PlaceCat(lostPet, visited != null && visited.Count > 0 ? visited : homeSpots, homeSpots, taken);
+        // The cats that just got lost go somewhere he has been (if we know any), the others anywhere valid
+        foreach (PetFollower lost in lostPets) PlaceCat(lost, visited != null && visited.Count > 0 ? visited : homeSpots, homeSpots, taken);
         foreach (PetFollower pet in pets)
         {
-            if (pet.IsCollected || pet == lostPet) continue;
+            if (pet.IsCollected || lostPets.Contains(pet)) continue;
             var pool = new List<Vector3>(homeSpots);
             if (visited != null) pool.AddRange(visited);
             PlaceCat(pet, pool, homeSpots, taken);
         }
 
-        if (lostPet != null) LostNotice = new LostCat { name = lostPet.CatName, portrait = lostPet.Portrait, pet = lostPet };
+        if (died)
+            foreach (PetFollower lost in lostPets)
+                LostNotices.Add(new LostCat { name = lost.CatName, portrait = lost.Portrait, pet = lost });
     }
 
-    // The cat lost by the last death, picked up by CatHUD (its slot lingers and fades: "NICK GOT LOST")
+    // The cats lost by the last death, picked up by CatHUD (their slots linger and fade: "NICK GOT LOST")
     public class LostCat { public string name; public Sprite portrait; public PetFollower pet; }
-    public static LostCat LostNotice;
+    public static readonly List<LostCat> LostNotices = new List<LostCat>();
 
     private static void PlaceCat(PetFollower pet, List<Vector3> pool, List<Vector3> homeSpots, List<Vector3> taken)
     {

@@ -81,6 +81,8 @@ public class MeleeEnemy : MonoBehaviour
 
     private void Update()
     {
+        if (StatusEffects.IsStunned(gameObject)) { SeesPlayer = false; return; } // Mushidon's stomp
+
         cooldownTimer += Time.deltaTime;
 
         // Attack only when player is in sight. Melee: never from off screen / right after spawning.

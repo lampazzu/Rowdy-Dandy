@@ -240,7 +240,8 @@ public class EnemyHealth : MonoBehaviour
         currentenemyHealth = Mathf.Clamp(currentenemyHealth + _value, 0, startingenemyHealth);
     }
 
-    public void TakeDamageEnemy(float _damage, bool isCritical = false)
+    // quiet: damage over time (poison ticks) - no flinch animation, no hurt sounds, no blood burst
+    public void TakeDamageEnemy(float _damage, bool isCritical = false, bool quiet = false)
     {
         KillCredit credit = nextHitCredit;
         nextHitCredit = null;
@@ -270,8 +271,13 @@ public class EnemyHealth : MonoBehaviour
             }
         }
 
-        if (currentenemyHealth > 0)
+        if (currentenemyHealth > 0 && quiet)
         {
+            // poison tick: just the number
+        }
+        else if (currentenemyHealth > 0)
+        {
+            if (!isObject && _damage > 0f) Blood.Spill(EnemyFairness.BodyCenter(this), AwayFromRowdy(), isCritical ? 9 : 5);
             isBeingHit = true;
             onHurtWolf.Invoke();
             SoundEffect.PlayUnboundSounds(onHurtWolf);
@@ -316,15 +322,21 @@ public class EnemyHealth : MonoBehaviour
         {
             if (!enemydead)
             {
+                if (TryGetComponent(out StatusEffects status)) status.EndStun(); // a stunned enemy still plays its death
                 onEnemyKill.Invoke();
                 SoundEffect.PlayUnboundSounds(onEnemyKill);
                 SetAnimatorTrigger("destroyed");
                 enemydead = true;
                 if (TryGetComponent(out EnemyCorpse corpse)) corpse.OnKilled();
+                else if (!isObject && TryGetComponent(out Rigidbody2D body) && body.bodyType == RigidbodyType2D.Dynamic && body.gravityScale >= 0.5f
+                         && GetComponent<EnemyMovement>() != null && GetComponentInChildren<Effector2D>(true) == null)
+                    gameObject.AddComponent<EnemyCorpse>().OnKilled(); // walker without one (spawned oddly): still drops to the floor
                 KillCredit.Finish finish = isParryTime ? KillCredit.Finish.Counter : isCritical ? KillCredit.Finish.Critical : KillCredit.Finish.Normal;
                 ReportKill(credit, finish);
                 StyleRank.OnKill(this, credit, finish);
                 if (byRowdySide) RareDrops.OnEnemyKilled(this); // flying rat / cat treat fish, very rarely
+                if (!isObject) Blood.Spill(EnemyFairness.BodyCenter(this), AwayFromRowdy(), 14);
+                RowdyBuffs.OnEnemyKilled(this, byRowdySide); // Lallo's decay explosion, if armed
 
                 // Countering a Waterviva Rider to death sets off its jelly: a long, accelerating string of explosions
                 if (finish == KillCredit.Finish.Counter && byRowdySide)
@@ -403,6 +415,7 @@ public class EnemyHealth : MonoBehaviour
             if (credit != null && credit.kind != KillCredit.Kind.World)
             {
                 RunStats.ObjectsSmashed++;
+                if (name.IndexOf("Statue", StringComparison.OrdinalIgnoreCase) >= 0) RunStats.StatuesSmashed++;
                 RowdyNotes.RecordKill(this); // statues have a page too (plants don't match any entry)
             }
             return;
@@ -437,6 +450,19 @@ public class EnemyHealth : MonoBehaviour
         {
             Debug.LogWarning("Kill feed: " + e.Message, this); // never let the UI break a kill
         }
+    }
+
+    private static Transform rowdyCache;
+    // Blood flies away from Rowdy
+    private float AwayFromRowdy()
+    {
+        if (rowdyCache == null)
+        {
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null) rowdyCache = p.transform;
+        }
+        if (rowdyCache == null) return 0f;
+        return transform.position.x >= rowdyCache.position.x ? 1f : -1f;
     }
 
     private void SpawnDamageText(float damage)

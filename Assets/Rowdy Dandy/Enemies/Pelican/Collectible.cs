@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Heart dropped by pelicans: heals Rowdy on touch (not at full health - then it waits for later).
+// Heart dropped by pelicans: heals Rowdy on touch. At full health the extra becomes OVERHEAL (up to +100, decays fast).
 // Dressed up like the weapon drops: pops out with a little hop, a pink beam with rising sparkles once it rests,
 // a heartbeat pulse, and a "+10 HP" popup with a burst of pink pixels when it's taken.
 public class Collectible : MonoBehaviour
@@ -60,7 +60,7 @@ public class Collectible : MonoBehaviour
         if (playerHealth != null)
         {
             // Ignore collision if player health is full
-            gameObject.layer = playerHealth.currentHealth >= playerHealth.startingHealth ? ignorePlayerLayer : originalLayer;
+            gameObject.layer = playerHealth.CanTakeOverheal ? originalLayer : ignorePlayerLayer; // full health still takes it (overheal) until the overheal is maxed
         }
 
         Animate();
@@ -100,10 +100,9 @@ public class Collectible : MonoBehaviour
     {
         Health health = other.GetComponent<Health>();
 
-        if (health != null && health.currentHealth < health.startingHealth)
+        if (health != null && health.CanTakeOverheal)
         {
-            health.AddHealth(healAmount);
-            IconPopup.Show(transform.position + Vector3.up * 0.4f, GetComponent<SpriteRenderer>()?.sprite, "+" + healAmount.ToString("0") + " HP", pickupColor);
+            health.AddHealth(healAmount, true); // past full = overheal (HealFX shows the +HP popup)
             Burst();
             SoundManager.PlaySfx(Resources.Load<AudioClip>("Sounds/HeartPickup"), 0.8f);
             Destroy(gameObject);

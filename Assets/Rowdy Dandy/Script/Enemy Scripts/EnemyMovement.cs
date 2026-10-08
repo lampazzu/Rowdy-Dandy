@@ -314,6 +314,16 @@ public class EnemyMovement : MonoBehaviour
         else usesSpacing = keepAttackDistance == SpacingMode.On;
         EnemyCatalog.Entry kind = health != null ? EnemyCatalog.Identify(health) : null;
         lockFacingInAttack = kind != null && kind.id == "horserider";
+        // Gnoll Warriors are bold: they jump up / drop down ledges after Rowdy and don't give up when he changes floor
+        boldChaser = kind != null && kind.id == "gnollwarrior";
+        if (boldChaser)
+        {
+            isJumperMan = true;
+            enableEdgeAvoidance = false;
+            enableStuckDetection = false;
+            chaseDistance = Mathf.Max(chaseDistance * 1.6f, 9f);
+            loseTargetTime *= 3f;
+        }
         if (!isOnlyAquatic) EnemyDust.Attach(gameObject); // Rowdy's running / landing dust at their feet
         EnemyAlert.Attach(gameObject);                    // "!" once when it notices Rowdy
         usesSpacing &= melee != null && !isOnlyAquatic;
@@ -478,6 +488,13 @@ public class EnemyMovement : MonoBehaviour
         if (UpdateSleep()) return;
 
         GroundCheck();
+
+        // Stunned (Mushidon's stomp, see StatusEffects): frozen on the spot
+        if (StatusEffects.IsStunned(gameObject))
+        {
+            if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic) ApplyHorizontalVelocity(0f);
+            return;
+        }
 
         // Stun State Handler
         if (enableLandingStun && isStunned)
@@ -1192,7 +1209,8 @@ public class EnemyMovement : MonoBehaviour
         enableFloorAwareChase && !isOnlyAquatic && rb != null && rb.gravityScale >= 0.5f;
 
     // JumperMen still jump up to Rowdy; they only stop and watch when he's below them
-    private bool ShouldWatchPlayer => playerOnOtherFloor && (!isJumperMan || playerIsBelow);
+    private bool ShouldWatchPlayer => playerOnOtherFloor && !boldChaser && (!isJumperMan || playerIsBelow);
+    private bool boldChaser;
 
     // Mid-jump (Rowdy's or the enemy's own wall hop) keeps the last answer, so a jump on the same floor never counts
     private void UpdatePlayerFloor()

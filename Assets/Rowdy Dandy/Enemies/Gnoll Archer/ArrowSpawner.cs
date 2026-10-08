@@ -55,6 +55,9 @@ public class ArrowSpawner : MonoBehaviour
 
                 arrow.transform.localScale = arrowScale;
                 arrowForce.force = arrowForceValue;
+
+                // Learn the real flight so the aim trace can draw it (arcs for bombs), see ShotPaths
+                ShotRecorder.Attach(arrow, parentTransform);
             }
             else
             {

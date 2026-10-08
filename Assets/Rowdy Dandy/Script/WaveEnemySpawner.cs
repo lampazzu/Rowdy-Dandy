@@ -73,7 +73,7 @@ public class WaveEnemySpawner : MonoBehaviour
     {
         new Zone("Gloomy Forest (up top)", 5f, 60f, 7f, 100000f, 9, 1.3f),
         new Zone("Pelich", 205f, 100000f, -100000f, 100000f, 10, 1.4f),
-        new Zone("Before Pelich", 160f, 205f, -100000f, 100000f, 6, 1.1f),
+        new Zone("Gnoll Tower", 160f, 205f, -100000f, 100000f, 6, 1.1f),
         new Zone("Jungle", 104f, 160f, -100000f, 100000f, 4, 1f),
         new Zone("Beach", -100000f, 104f, -100000f, 100000f, 2, 0.7f),
     };

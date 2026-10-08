@@ -16,7 +16,9 @@ public class Jellyfish : MonoBehaviour
     [SerializeField] private float hoverAmount = 0.5f;
 
     [Header("Squash Settings")]
-    [SerializeField] private float squashAmount = 0.7f; // How much it squashes
+#pragma warning disable 0414
+    [SerializeField] private float squashAmount = 0.7f; // (unused: the wobble has a fixed strength)
+#pragma warning restore 0414
     [SerializeField] private float squashTime = 0.2f; // How fast it squashes
 
     private Light2D jellyfishLight;
@@ -79,8 +81,10 @@ public class Jellyfish : MonoBehaviour
                     jellyfishAnimator.SetTrigger("Splish");
                 }
 
-                // Start Squash Effect
-                StartCoroutine(SquashEffect());
+                // Start Squash Effect (springy wobble) + splash, rising boing combo
+                if (wobble != null) StopCoroutine(wobble);
+                wobble = StartCoroutine(SquashEffect());
+                BounceJuice(collision);
             }
         }
     }
@@ -124,14 +128,45 @@ public class Jellyfish : MonoBehaviour
         jellyfishLight.intensity = 0f;
     }
 
+    private Coroutine wobble;
+
+    // Big squash on the hit, then a damped spring back (stretches tall, squashes again, settles)
     private IEnumerator SquashEffect()
     {
-        // Squash horizontally (wider) and slightly reduce height
-        transform.localScale = new Vector3(originalScale.x * 1.3f, originalScale.y * 0.8f, originalScale.z);
-        yield return new WaitForSeconds(squashTime);
-
-        // Restore to original size smoothly
+        float duration = Mathf.Max(0.35f, squashTime * 3f);
+        for (float t = 0f; t < 1f; t += Time.deltaTime / duration)
+        {
+            float spring = Mathf.Cos(t * Mathf.PI * 3.2f) * Mathf.Exp(-t * 4f); // 1 -> -0.4 -> ... -> 0
+            float squash = 0.35f * spring; // fixed strength (the Inspector's Squash Amount is 30 on many jellies and was never used)
+            transform.localScale = new Vector3(originalScale.x * (1f + squash), originalScale.y * (1f - squash * 0.9f), originalScale.z);
+            yield return null;
+        }
         transform.localScale = originalScale;
+        wobble = null;
+    }
+
+    // Consecutive bounces (within a second and a half) climb a scale: boing, boing, BOING
+    private static int combo;
+    private static float lastBounce = -10f;
+    private static readonly int[] Steps = { 0, 2, 4, 5, 7, 9, 11, 12 };
+
+    private void BounceJuice(Collision2D collision)
+    {
+        combo = Time.time - lastBounce < 1.5f ? combo + 1 : 0;
+        lastBounce = Time.time;
+        RunStats.JellyBounces++;
+
+        Vector3 top = GetComponent<Collider2D>().bounds.center;
+        top.y = GetComponent<Collider2D>().bounds.max.y;
+        Color jelly = jellyfishLight != null ? jellyfishLight.color : new Color(0.6f, 0.9f, 1f);
+
+        PulseRing.Spawn(top, new Color(jelly.r, jelly.g, jelly.b, 0.9f), 0.9f + combo * 0.1f, 0.3f, 90, true);
+        PulseRing.Spawn(top, new Color(1f, 1f, 1f, 0.6f), 0.5f, 0.2f, 91, true);
+        FXParticle.Burst(top, Color.Lerp(jelly, Color.white, 0.4f), 10 + combo * 2, 1.5f, 4f, 9f, 0.6f, true);
+        FXSound.Play("Jelly", 0.5f, Mathf.Pow(2f, Steps[Mathf.Min(combo, Steps.Length - 1)] / 12f));
+        TimeSlowController.HitStop(0.03f, 0.2f);
+        ScreenShake.Impulse(0.12f + combo * 0.03f);
+        GamepadRumble.Pulse(0.15f, 0.35f, 0.08f);
     }
 
     void JellyTime()

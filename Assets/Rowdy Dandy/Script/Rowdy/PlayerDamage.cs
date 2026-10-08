@@ -46,6 +46,7 @@ public class PlayerDamage : MonoBehaviour
                 float finalDamage = CalculateTotalDamage(out bool isCrit);
                 EnemyHealth.CreditNextHit(owningCat != null ? KillCredit.Cat(owningCat) : KillCredit.Rowdy());
                 enemy.TakeDamageEnemy(finalDamage, isCrit);
+                if (owningCat == null) RowdyBuffs.OnRowdyHit(enemy); // Paprika's poison imbue
                 // Weapon durability is spent per swing in PlayerMovement, not per hit (cats share this script too)
             }
 

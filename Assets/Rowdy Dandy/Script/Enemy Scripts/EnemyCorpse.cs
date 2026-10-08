@@ -21,7 +21,7 @@ public class EnemyCorpse : MonoBehaviour
     [SerializeField] private float fallGravity = 25f;
     [SerializeField] private float maxFallSpeed = 9f;
     [Tooltip("Stop falling after this long without finding ground (e.g. sank out of view).")]
-    [SerializeField] private float maxFallTime = 4f;
+    [SerializeField] private float maxFallTime = 8f;
     [Tooltip("Max sinking speed for drownable bodies under water.")]
     [SerializeField] private float waterSinkSpeed = 0.9f;
 
@@ -137,6 +137,13 @@ public class EnemyCorpse : MonoBehaviour
         float feetX = feet != null ? feet.bounds.center.x : position.x;
         float feetY = position.y - feetOffset;
 
+        // Landed on something that went away (another body, a jelly, a platform edge it only clipped): fall again
+        if (landed && !FindGround(new Vector2(feetX, feetY + 0.1f), 0.25f, out _))
+        {
+            landed = false;
+            fallTime = 0f;
+        }
+
         if (!landed && fallTime < maxFallTime)
         {
             fallTime += dt;
@@ -194,6 +201,8 @@ public class EnemyCorpse : MonoBehaviour
             if (col.attachedRigidbody != null && col.attachedRigidbody.bodyType == RigidbodyType2D.Dynamic) continue; // characters, jellies, pickups
             if (col.CompareTag("Player") || col.CompareTag("Enemy")) continue;
             if (movement != null && movement.PassesThroughLayer(col.gameObject.layer)) continue;
+            // started inside a one-way platform (died jumping up through it): that's not a floor to stand on
+            if (hit.distance <= 0.0001f && col.usedByEffector) continue;
 
             result = hit;
             return true;

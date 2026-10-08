@@ -102,6 +102,49 @@ public static class NotesData
                 (Quip, "He bows before every kill. Show-off. I respect it."),
             },
         },
+        new Topic
+        {
+            id = "Paprika", name = "Paprika", glyph = "P", icon = () => CatIcon("Interactables/Paprika"),
+            sections = new[]
+            {
+                ("WHAT HE DOES", "When enemies are close he spices up Rowdy's weapon: for a few seconds every hit poisons. Poison eats HP over time (green numbers)."),
+                ("HOW TO USE HIM", "Spread hits around the crowd while it's on - every enemy you tag keeps bleeding green."),
+                ("COOLDOWN", "Starts when the poison blade runs out. It blinks right before it ends."),
+                (Quip, "Hot, dangerous and a little bit toxic. Like me on a Friday."),
+            },
+        },
+        new Topic
+        {
+            id = "Mushidon", name = "Mushidon", glyph = "M", icon = () => CatIcon("Interactables/Mushidon"),
+            sections = new[]
+            {
+                ("WHAT HE DOES", "Jumps sky high and slams the ground. Every enemy standing on the ground nearby is stunned for a second."),
+                ("WATCH OUT", "Flyers and anything mid-jump don't care. He only stomps when Rowdy is on the ground too."),
+                ("COOLDOWN", "Short. He loves the sound."),
+                (Quip, "Big feet, bigger ego. We get along great."),
+            },
+        },
+        new Topic
+        {
+            id = "Peak", name = "The Peak", glyph = "K", icon = () => CatIcon("Interactables/ThePeak"),
+            sections = new[]
+            {
+                ("WHAT HE DOES", "Gives Rowdy armor that blocks the next 3 hits. The shield over his head cracks a little with every block."),
+                ("COOLDOWN", "Only starts once the armor breaks. Then he makes a new one."),
+                (Quip, "Finally, someone who protects this face professionally."),
+            },
+        },
+        new Topic
+        {
+            id = "Lallo", name = "Lallo", glyph = "L", icon = () => CatIcon("Interactables/Lallo"),
+            sections = new[]
+            {
+                ("WHAT HE DOES", "While his bar is full, the next enemy Rowdy kills bursts in decay. Anything caught in it gets infected and bursts too - chain reaction."),
+                ("HOW TO USE HIM", "Save the kill for the middle of a crowd. Purple shimmer on Rowdy = decay is ready."),
+                ("COOLDOWN", "Starts after the burst."),
+                (Quip, "He's not evil. He's just... thorough."),
+            },
+        },
     };
 
     // ---------------------------------------------------------------- game mechanics
@@ -193,7 +236,7 @@ public static class NotesData
             {
                 ("HOW", "Touch a spawner to set it as your respawn point."),
                 ("RESTING", "While you stand on a spawner no new enemy waves arrive. Catch your breath. The start of the beach is quiet too."),
-                ("DYING", "You come back at the last spawner you touched. Level, weapons and notes are kept - but your newest cat gets lost."),
+                ("DYING", "You come back at the last spawner you touched. Level, weapons and notes are kept - but ALL your cats get lost, except one for every flying rat you registered."),
                 (Quip, "Nap spot. Officially. I'm putting it on my resume."),
             },
         },
@@ -304,7 +347,7 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT IT IS", "A very rare rat with wings. Now and then one bursts out of a defeated enemy, flutters around and escapes after a while."),
-                ("REGISTER IT", "Touch it to register it. Every registered rat is bait: when you die, the cats are safe as long as you have a rat for each of them. 2 rats and 2 cats = nobody gets lost; only a 3rd cat would be at risk."),
+                ("REGISTER IT", "Walk up to it and press Y / E to grab it. Every registered rat is bait: when you die, one cat per rat stays with you and the rest get lost. 10 cats and 3 rats = you come back with 3 cats."),
                 ("LUCK", "Ore gems make it show up more often."),
                 (Quip, "Cats love rats. I love cats. The rats are fine with it. Probably."),
             },
@@ -335,8 +378,9 @@ public static class NotesData
             id = "catpickup", name = "Lost Cats", glyph = "C", icon = () => CatIcon("Interactables/SamuraiCat"),
             sections = new[]
             {
-                ("WHAT THEY ARE", "Cats hiding around the map, glowing so you can spot them. Touch one to bring it along. See the Cats tab."),
-                ("GETTING LOST", "Die and your newest cat gets lost again somewhere you've been - unless you have registered a flying rat for every cat."),
+                ("WHAT THEY ARE", "Cats hiding around the map, glowing so you can spot them. Touch one and it joins the party. See the Cats tab."),
+                ("MAGICAL CAT CAPACITY", "You can have as many cats as your level (level 1 = 1 cat, up to 10). Party full? Press Y / E on a new cat to swap: the cat that's been with you longest waits there."),
+                ("GETTING LOST", "Die and every cat gets lost again somewhere you've been - except one per registered flying rat."),
                 (Quip, "If you love something, let it go. Then go find it. It's glowing. Easy."),
             },
         },

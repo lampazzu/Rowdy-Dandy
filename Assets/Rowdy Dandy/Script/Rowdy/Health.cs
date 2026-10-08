@@ -20,23 +20,59 @@ public class Health : MonoBehaviour
     private bool isInvincible = false; // Invincibility flag
     [SerializeField] private float invincibilityDuration = 15f; // Adjust duration as needed
 
+    [Header("Overheal (pelican hearts at full health)")]
+    [Tooltip("Most extra life on top of the normal maximum (100 = double life)")]
+    [SerializeField] private float maxOverheal = 100f;
+    [Tooltip("Overheal lost per second, plus overhealDecayPercent of what's left")]
+    [SerializeField] private float overhealDecay = 4f;
+    [SerializeField] private float overhealDecayPercent = 0.08f;
+    [Tooltip("Seconds a fresh overheal holds before it starts draining")]
+    [SerializeField] private float overhealHold = 0.6f;
+
+    // Extra life above the maximum: soaks damage first, drains quickly. Drawn on the health bar (HealthBar) and as a gold aura (RowdyAura).
+    public float Overheal { get; private set; }
+    public float MaxOverheal => maxOverheal;
+    public bool IsDead => dead;
+    private float overhealHoldUntil;
+
     private void Awake()
     {
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
         redboy = GetComponent<SpriteRenderer>();
+        if (GetComponent<RowdyAura>() == null) gameObject.AddComponent<RowdyAura>();
+        if (GetComponent<RowdyBuffs>() == null) gameObject.AddComponent<RowdyBuffs>();
     }
 
-    public void AddHealth(float _value)
+    public void AddHealth(float _value) => AddHealth(_value, false);
+
+    // overheal: what doesn't fit under the maximum becomes overheal (pelican hearts)
+    public void AddHealth(float _value, bool overheal)
     {
-        if (_value > 0 && currentHealth < startingHealth)
+        if (_value <= 0f) { currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth); return; }
+        if (dead) return;
+
+        float room = startingHealth - currentHealth;
+        float healed = Mathf.Min(room, _value);
+        float extra = overheal ? Mathf.Min(_value - healed, maxOverheal - Overheal) : 0f;
+
+        if (healed > 0f || extra > 0f)
         {
-            healSFX.Play();
-            if (healingEffectAnimator != null)
-                healingEffectAnimator.SetTrigger("PlayHealingEffect");
+            if (healSFX != null) healSFX.Play();
+            if (healingEffectAnimator != null) healingEffectAnimator.SetTrigger("PlayHealingEffect");
+            HealFX.Play(this, healed + extra, extra > 0f);
         }
-        currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
+        currentHealth = Mathf.Clamp(currentHealth + healed, 0, startingHealth);
+        RunStats.Healed += healed;
+        RunStats.OverhealGained += extra;
+        if (extra > 0f)
+        {
+            Overheal += extra;
+            overhealHoldUntil = Time.time + overhealHold;
+        }
     }
+
+    public bool CanTakeOverheal => !dead && (currentHealth < startingHealth || Overheal < maxOverheal - 0.5f);
 
     public void Respawn()
     {
@@ -50,31 +86,50 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        if (isInvincible) return; // Ignore damage when invincible
+        if (isInvincible || DevTools.GodMode) return; // Ignore damage when invincible
 
         if (Time.time - lastDamageTime > damageCooldown)
         {
+            // The Peak's armor eats the hit (still counts as a hit for the cooldown, so one attack = one charge)
+            if (_damage > 0f && !dead && RowdyBuffs.TryBlock(this))
+            {
+                lastDamageTime = Time.time;
+                return;
+            }
+
             float before = currentHealth;
-            currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
-            RunStats.RecordDamageTaken(before - currentHealth);
-            if (before - currentHealth > 0f) StyleRank.OnPlayerHurt(); // drops two style ranks
+            float soaked = Mathf.Min(Overheal, Mathf.Max(0f, _damage));
+            Overheal -= soaked;
+            currentHealth = Mathf.Clamp(currentHealth - (_damage - soaked), 0, startingHealth);
+            RunStats.RecordDamageTaken(before - currentHealth + soaked);
+            if (before - currentHealth + soaked > 0f) StyleRank.OnPlayerHurt(); // drops two style ranks
             if (currentHealth > 0)
             {
                 anim.SetTrigger("hit");
                 bloodhit.Play();
                 lastDamageTime = Time.time;
                 if (TryGetComponent(out PlayerHitReaction reaction)) reaction.OnHit(_damage);
+                Blood.Spill(BodyCenter(), -Mathf.Sign(transform.localScale.x), 6);
             }
             else if (!dead)
             {
                 anim.SetTrigger("dead");
                 dead = true;
+                Overheal = 0f;
                 RunStats.Deaths++;
                 CatRoster.MarkDied(); // costs a cat once the scene reloads
                 anim.SetTrigger("IsDead");
                 gameObject.tag = "Untagged";
+                Blood.Spill(BodyCenter(), -Mathf.Sign(transform.localScale.x), 16);
+                DeathFX.Play(); // slow motion + the world loses its colour
             }
         }
+    }
+
+    private Vector3 BodyCenter()
+    {
+        Collider2D c = GetComponent<Collider2D>();
+        return c != null ? c.bounds.center : transform.position + Vector3.up * 0.4f;
     }
 
     public void TriggerInvincibility()
@@ -100,6 +155,12 @@ public class Health : MonoBehaviour
         if (isDead)
         {
             ResetScene();
+        }
+
+        // Overheal drains fast (faster the more there is)
+        if (Overheal > 0f && Time.time > overhealHoldUntil)
+        {
+            Overheal = Mathf.Max(0f, Overheal - (overhealDecay + Overheal * overhealDecayPercent) * Time.deltaTime);
         }
     }
 }

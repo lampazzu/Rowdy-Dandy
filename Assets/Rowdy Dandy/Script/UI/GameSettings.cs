@@ -28,12 +28,20 @@ public static class GameSettings
     public static float MessageSize { get; private set; } = 1f;      // x the (already halved) base size of CRITICAL! / COUNTER! / EXECUTED!...
     public static bool ShowFps { get; private set; }
     // "Respect": how many of the pushy melee enemies (Big Wolf, Transform Wolf, Werefast) may press Rowdy at once;
-    // the rest hang back and wait for a turn. 0 = no limit.
+    // the rest hang back and wait for a turn. 0 = no limit. DEV TOOL ONLY (Dev Tools page), not a player setting.
     public static int CrowdLimit { get; private set; } = 4;
-    // Style rank panel (StyleRank): on / off, size, which screen corner
-    public static bool StyleRankOn { get; private set; } = true;
+    // Style rank panel (StyleRank): on / off, size, which screen corner. Off by default, bottom right.
+    public static bool StyleRankOn { get; private set; } = false;
     public static float StyleRankSize { get; private set; } = 0.6f;
-    public static int StyleRankPosition { get; private set; } = 1; // index into RankPositions
+    public static int StyleRankPosition { get; private set; } = 5; // index into RankPositions
+
+    // Accessibility page
+    public static bool EnemyAlerts { get; private set; } = true;          // "!" over enemies that notice Rowdy
+    public static bool RangedAimLines { get; private set; } = false;      // red aim trace before archers / bombers shoot
+    public static bool AutoPickupWeapons { get; private set; } = false;   // walk over a weapon drop = pick it up
+    public static bool AutoEquipWeapon { get; private set; } = false;     // broken weapon -> next weapon, never the Rod while you have one
+    public static bool RowdyOutline { get; private set; } = false;        // blue outline around Rowdy
+    public static bool BossWeakness { get; private set; } = false;        // arrow + brackets on a boss's weak spot (Pelich's head)
 
     public static event Action Changed;
 
@@ -117,9 +125,16 @@ public static class GameSettings
         MessageSize = PlayerPrefs.GetFloat(Prefix + "MessageSize", 1f);
         ShowFps = PlayerPrefs.GetInt(Prefix + "ShowFps", 0) == 1;
         CrowdLimit = PlayerPrefs.GetInt(Prefix + "CrowdLimit", 4);
-        StyleRankOn = PlayerPrefs.GetInt(Prefix + "RankOn", 1) == 1;
+        // (keys renamed when the defaults changed to off / bottom right, so old saves pick up the new defaults)
+        StyleRankOn = PlayerPrefs.GetInt(Prefix + "RankOn2", 0) == 1;
         StyleRankSize = PlayerPrefs.GetFloat(Prefix + "RankSize", 0.6f);
-        StyleRankPosition = Mathf.Clamp(PlayerPrefs.GetInt(Prefix + "RankPosition", 1), 0, RankPositions.Length - 1);
+        StyleRankPosition = Mathf.Clamp(PlayerPrefs.GetInt(Prefix + "RankPosition2", 5), 0, RankPositions.Length - 1);
+        EnemyAlerts = PlayerPrefs.GetInt(Prefix + "EnemyAlerts", 1) == 1;
+        RangedAimLines = PlayerPrefs.GetInt(Prefix + "AimLines", 0) == 1;
+        AutoPickupWeapons = PlayerPrefs.GetInt(Prefix + "AutoPickup", 0) == 1;
+        AutoEquipWeapon = PlayerPrefs.GetInt(Prefix + "AutoEquip", 0) == 1;
+        RowdyOutline = PlayerPrefs.GetInt(Prefix + "RowdyOutline", 0) == 1;
+        BossWeakness = PlayerPrefs.GetInt(Prefix + "BossWeakness", 0) == 1;
     }
 
     private static void Save()
@@ -140,9 +155,15 @@ public static class GameSettings
         PlayerPrefs.SetFloat(Prefix + "MessageSize", MessageSize);
         PlayerPrefs.SetInt(Prefix + "ShowFps", ShowFps ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "CrowdLimit", CrowdLimit);
-        PlayerPrefs.SetInt(Prefix + "RankOn", StyleRankOn ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "RankOn2", StyleRankOn ? 1 : 0);
         PlayerPrefs.SetFloat(Prefix + "RankSize", StyleRankSize);
-        PlayerPrefs.SetInt(Prefix + "RankPosition", StyleRankPosition);
+        PlayerPrefs.SetInt(Prefix + "RankPosition2", StyleRankPosition);
+        PlayerPrefs.SetInt(Prefix + "EnemyAlerts", EnemyAlerts ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "AimLines", RangedAimLines ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "AutoPickup", AutoPickupWeapons ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "AutoEquip", AutoEquipWeapon ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "RowdyOutline", RowdyOutline ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "BossWeakness", BossWeakness ? 1 : 0);
         PlayerPrefs.Save();
     }
 
@@ -184,6 +205,12 @@ public static class GameSettings
     public static void SetStyleRankOn(bool on) { StyleRankOn = on; Commit(); }
     public static void SetStyleRankSize(float v) { StyleRankSize = Mathf.Clamp(v, 0.3f, 1.5f); Commit(); }
     public static void SetStyleRankPosition(int i) { StyleRankPosition = (i % RankPositions.Length + RankPositions.Length) % RankPositions.Length; Commit(); }
+    public static void SetEnemyAlerts(bool on) { EnemyAlerts = on; Commit(); }
+    public static void SetRangedAimLines(bool on) { RangedAimLines = on; Commit(); }
+    public static void SetAutoPickupWeapons(bool on) { AutoPickupWeapons = on; Commit(); }
+    public static void SetAutoEquipWeapon(bool on) { AutoEquipWeapon = on; Commit(); }
+    public static void SetRowdyOutline(bool on) { RowdyOutline = on; Commit(); }
+    public static void SetBossWeakness(bool on) { BossWeakness = on; Commit(); }
 
     public static string DisplayModeName(FullScreenMode mode)
     {

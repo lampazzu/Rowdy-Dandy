@@ -4,7 +4,7 @@ using UnityEngine;
 // THE MOONBOUND ELDER - what the old man really is. Hurt him and the curse wakes up.
 // Built at runtime from the Big Wolf (Resources/Enemies Prefab/Enemy_BigWerewolf): its AI, leaps, claws, hitboxes and
 // counter windows stay, but it LOOKS like the TDF shadow werewolf (ItemArt.werewolf, 15 frames: 0-3 rising out of the
-// ground, 4-11 prowl loop, 12-13 lunge, 14 recover) - the Big Wolf animator still runs and picks which frames show.
+// ground... used as the walk cycle: dark run frames 0-3, 4-11 prowl / idle loop, 12-13 lunge, 14 recover) - the Big Wolf animator still runs and picks which frames show.
 //   - 1.5x bigger, a pulsing moon-glow outline (red in phase 2), 450 HP, faster
 //   - crawls up out of the ground when it appears, sinks back into it when it dies
 //   - MOON NOVA: crouches and glows (telegraph), then a ring of explosions around him. Jump away or eat 15.
@@ -16,12 +16,11 @@ public class CursedElder : MonoBehaviour
     public const string ObjectName = "MoonboundElder";
 
     [Header("Body")]
-    [SerializeField] private float size = 1.5f;
+    [Tooltip("Root scale (hitbox). The art is always drawn at the game's 64 px per unit, whatever this is.")]
+    [SerializeField] private float size = 1f;
     [SerializeField] private float maxHealth = 450f;
     [SerializeField] private float speedMultiplier = 1.35f;
     [SerializeField] private Color skin = Color.white;
-    [Tooltip("How tall the werewolf art is drawn, x the body collider height.")]
-    [SerializeField] private float artHeight = 1.25f;
     [SerializeField] private Color glow = new Color(0.65f, 0.55f, 1f, 1f);
     [SerializeField] private Color rageGlow = new Color(1f, 0.25f, 0.35f, 1f);
     [SerializeField] private int expGems = 30;
@@ -47,7 +46,7 @@ public class CursedElder : MonoBehaviour
 
     // TDF werewolf frames
     private const int CellW = 156, CellH = 108;
-    private const float CreaturePixels = 66f; // visible height of the wolf inside a cell
+    private const float FeetRow = 6f; // the wolf's feet: 6 px above the bottom of every cell
     private Sprite[] frames;
     private float spawnedAt, diedAt = -1f;
 
@@ -109,7 +108,7 @@ public class CursedElder : MonoBehaviour
             health.SetExpDropIfMissing(Resources.Load<GameObject>("Systems/EXPgem"), expGems);
         }
         if (movement != null) movement.moveSpeed *= speedMultiplier;
-        if (animator != null) { baseAnimSpeed = animator.speed * 1.12f; animator.speed = baseAnimSpeed; }
+        if (animator != null) { baseAnimSpeed = animator.speed * 1.25f; animator.speed = baseAnimSpeed; }
         if (body != null) body.color = skin;
         SetupFrames();
         spawnedAt = Time.time;
@@ -153,12 +152,16 @@ public class CursedElder : MonoBehaviour
     {
         ItemArt art = ItemArt.Get;
         if (art == null || art.werewolf == null || body == null) return;
-        float colliderHeight = 1f;
-        foreach (Collider2D c in GetComponents<Collider2D>()) if (c.enabled && !c.isTrigger) { colliderHeight = c.bounds.size.y; break; }
-        // pixels per unit so the wolf is artHeight x the body collider tall, whatever the root scale is
-        float ppu = CreaturePixels * Mathf.Abs(transform.lossyScale.y) / Mathf.Max(0.1f, colliderHeight * artHeight);
-        frames = ItemArt.Frames(art.werewolf, 15, 1, new Vector2(0.5f, 9f / CellH), ppu);
-        body.sprite = frames[0];
+        // Same pixel size as the rest of the game (64 px per world unit), whatever the root scale is
+        float scaleY = Mathf.Max(0.01f, Mathf.Abs(transform.lossyScale.y));
+        float ppu = 64f * scaleY;
+        // Feet on the bottom of the body collider (the hitbox), not floating above it
+        float colliderBottom = transform.position.y;
+        foreach (Collider2D c in GetComponents<Collider2D>()) if (c.enabled && !c.isTrigger) { colliderBottom = c.bounds.min.y; break; }
+        float localFeet = (colliderBottom - transform.position.y) / scaleY; // local units, usually <= 0
+        float pivotPixels = FeetRow - localFeet * ppu;
+        frames = ItemArt.Frames(art.werewolf, 15, 1, new Vector2(0.5f, pivotPixels / CellH), ppu);
+        body.sprite = frames[4];
     }
 
     // The Big Wolf animator keeps running (hitboxes, counter windows live in its clips); here its current
@@ -168,14 +171,18 @@ public class CursedElder : MonoBehaviour
         if (frames == null || body == null) return;
         float now = Time.time;
 
-        if (diedAt >= 0f) // sinking back into the ground: 3, 2, 1, 0
+        if (diedAt >= 0f) // staggers on the recover frame and fades into the dark
         {
-            int k = Mathf.Clamp(3 - (int)((now - diedAt) / 0.12f), 0, 3);
-            body.sprite = frames[k];
+            body.sprite = frames[14];
             body.color = new Color(skin.r, skin.g, skin.b, Mathf.Clamp01(1.4f - (now - diedAt) / 0.8f));
             return;
         }
-        if (now - spawnedAt < 0.6f) { body.sprite = frames[Mathf.Clamp((int)((now - spawnedAt) / 0.15f), 0, 3)]; return; } // rising
+        if (now - spawnedAt < 0.5f) // out of the shadows: fades in on the lunge pose
+        {
+            body.sprite = frames[(now - spawnedAt) < 0.25f ? 12 : 13];
+            body.color = new Color(skin.r, skin.g, skin.b, Mathf.Clamp01((now - spawnedAt) / 0.4f));
+            return;
+        }
 
         string clip = "";
         if (animator != null && animator.isActiveAndEnabled)
@@ -193,10 +200,10 @@ public class CursedElder : MonoBehaviour
             body.sprite = frames[14];
         else
         {
-            // prowl loop, faster while moving
+            // walking: the dark run cycle (frames 0-3), quick; standing: the prowl loop (4-11)
             float speed = TryGetComponent(out Rigidbody2D rb) ? Mathf.Abs(rb.linearVelocity.x) : 0f;
-            float fps = speed > 0.3f ? 12f : 7f;
-            body.sprite = frames[4 + (int)(now * fps) % 8];
+            if (speed > 0.3f) body.sprite = frames[(int)(now * Mathf.Lerp(12f, 18f, Mathf.Clamp01(speed / 6f))) % 4];
+            else body.sprite = frames[4 + (int)(now * 12f) % 8];
         }
     }
 

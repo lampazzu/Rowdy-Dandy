@@ -49,45 +49,207 @@ public static class EnemyFairness
     // Red aim trace in front of an archer / bomber for `duration` seconds before it shoots
     public static void AimTrace(Component enemy, float duration)
     {
+        if (!GameSettings.RangedAimLines) return; // Accessibility > Ranged Aim Lines (the shot still waits the same time)
         var go = new GameObject("Aim Trace");
         go.AddComponent<EnemyAimTrace>().Begin(enemy, duration);
     }
 }
 
-// Dashed red line from the shooter, straight ahead (they shoot the way they face; the art faces left at +x scale).
-// Long enough to reach onto the screen from off screen. Flickers faster right before the shot.
+// Where a shooter's shots actually fly, learned from the real projectiles (ArrowSpawner attaches a ShotRecorder to
+// every arrow / bomb it spawns). Points are relative to the shooter's body center, x pointing the way it faces.
+// Until a kind of shooter has fired once, bombers get a simulated lob and archers a straight line.
+public static class ShotPaths
+{
+    private static readonly System.Collections.Generic.Dictionary<string, Vector2[]> paths = new System.Collections.Generic.Dictionary<string, Vector2[]>();
+
+    public static string KeyOf(Component shooter)
+    {
+        EnemyHealth h = shooter != null ? shooter.GetComponentInParent<EnemyHealth>() : null;
+        EnemyCatalog.Entry e = h != null ? EnemyCatalog.Identify(h) : null;
+        return e != null ? e.id : null;
+    }
+
+    public static void Store(string key, Vector2[] path)
+    {
+        if (string.IsNullOrEmpty(key) || path == null || path.Length < 3) return;
+        paths[key] = path;
+    }
+
+    public static bool TryGet(string key, out Vector2[] path)
+    {
+        path = null;
+        return !string.IsNullOrEmpty(key) && paths.TryGetValue(key, out path);
+    }
+
+    // Gnoll bomb before any real one was seen: the RDR_Bomb prefab's physics (mass 0.5, gravity x25, drag 50,
+    // constant force 41.9 forward) plus FrechaAnim's upward force (250 -> 0 over 0.75 s)
+    public static Vector2[] SimulatedBomb()
+    {
+        var list = new System.Collections.Generic.List<Vector2>();
+        Vector2 pos = new Vector2(0.25f, 0.05f), vel = Vector2.zero;
+        const float dt = 0.02f, mass = 0.5f, drag = 50f;
+        float gravity = Physics2D.gravity.y * 25f;
+        for (float t = 0f; t < 2.5f; t += dt)
+        {
+            float up = Mathf.Lerp(250f, 0f, t / 0.75f);
+            vel += dt * new Vector2(41.9f / mass, gravity + up / mass);
+            vel *= 1f / (1f + dt * drag);
+            pos += vel * dt;
+            list.Add(pos);
+        }
+        return list.ToArray();
+    }
+}
+
+// Rides on a projectile and writes down its flight (see ShotPaths)
+public class ShotRecorder : MonoBehaviour
+{
+    private string key;
+    private Vector3 origin;
+    private float dir;
+    private readonly System.Collections.Generic.List<Vector2> points = new System.Collections.Generic.List<Vector2>();
+    private float age;
+
+    public static void Attach(GameObject projectile, Component shooter)
+    {
+        string key = ShotPaths.KeyOf(shooter);
+        if (key == null) return;
+        EnemyHealth h = shooter.GetComponentInParent<EnemyHealth>();
+        var r = projectile.AddComponent<ShotRecorder>();
+        r.key = key;
+        r.origin = EnemyFairness.BodyCenter(h);
+        r.dir = h.transform.lossyScale.x >= 0f ? -1f : 1f;
+        r.points.Add(Local(r, projectile.transform.position));
+    }
+
+    private static Vector2 Local(ShotRecorder r, Vector3 world) => new Vector2((world.x - r.origin.x) * r.dir, world.y - r.origin.y);
+
+    private void FixedUpdate()
+    {
+        age += Time.fixedDeltaTime;
+        if (age > 3f || points.Count > 200) { Save(); enabled = false; return; }
+        points.Add(Local(this, transform.position));
+    }
+
+    private void OnDestroy() => Save();
+
+    private bool saved;
+    private void Save()
+    {
+        if (saved) return;
+        saved = true;
+        ShotPaths.Store(key, points.ToArray());
+    }
+}
+
+// Red aim trace from an archer / bomber along the path its shot will take (straight for arrows, an arc for bombs),
+// cut where it meets the ground, with a target mark where it lands. Grows out from the shooter, flickers faster
+// right before the shot. Optional: Accessibility > Ranged Aim Lines (off by default).
 public class EnemyAimTrace : MonoBehaviour
 {
-    private const float Length = 16f;
-    private static Sprite lineSprite;
+    private const float MaxLength = 16f;
+    private const float DotSpacing = 0.11f;
+    private static Sprite dotSprite, markSprite;
     private static readonly Color Red = new Color(1f, 0.2f, 0.25f, 1f);
 
     private Component enemy;
-    private SpriteRenderer line, glow;
+    private Vector2[] path;            // local (forward = +x) points, already spaced DotSpacing apart
+    private SpriteRenderer[] dots;
+    private SpriteRenderer mark;
     private float duration, age;
+    private int layer, order;
 
     public void Begin(Component target, float time)
     {
         enemy = target;
         duration = Mathf.Max(0.05f, time);
         SpriteRenderer body = target.GetComponent<SpriteRenderer>();
-        int layer = body != null ? body.sortingLayerID : 0, order = body != null ? body.sortingOrder : 0;
-        glow = Make("Glow", layer, order - 2, 3f);
-        line = Make("Line", layer, order - 1, 1f);
+        layer = body != null ? body.sortingLayerID : 0;
+        order = body != null ? body.sortingOrder : 0;
+
+        string key = ShotPaths.KeyOf(target);
+        if (!ShotPaths.TryGet(key, out Vector2[] raw))
+            raw = key == "gnollbomber" ? ShotPaths.SimulatedBomb() : new[] { new Vector2(0.25f, 0.05f), new Vector2(0.25f + MaxLength, 0.05f) };
+        path = Resample(raw);
+        Build();
         LateUpdate();
     }
 
-    private SpriteRenderer Make(string name, int layer, int order, float thickness)
+    // Even dot spacing along the polyline, up to MaxLength, stopping where it hits solid ground
+    private Vector2[] Resample(Vector2[] raw)
     {
-        var go = new GameObject(name);
-        go.transform.SetParent(transform, false);
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = LineSprite;
-        sr.sortingLayerID = layer;
-        sr.sortingOrder = order;
-        if (CatFX.Unlit != null) sr.sharedMaterial = CatFX.Unlit;
-        go.transform.localScale = new Vector3(Length, thickness, 1f);
-        return sr;
+        float dir = enemy.transform.lossyScale.x >= 0f ? -1f : 1f;
+        Vector3 origin = EnemyFairness.BodyCenter(enemy);
+        // Long straight pieces split up, so the ground check below can skip just the bit at the shooter's feet
+        var dense = new System.Collections.Generic.List<Vector2> { raw[0] };
+        for (int i = 1; i < raw.Length; i++)
+        {
+            int pieces = Mathf.Max(1, Mathf.CeilToInt(Vector2.Distance(raw[i - 1], raw[i]) / 0.5f));
+            for (int s = 1; s <= pieces; s++) dense.Add(Vector2.Lerp(raw[i - 1], raw[i], s / (float)pieces));
+        }
+        raw = dense.ToArray();
+
+        var result = new System.Collections.Generic.List<Vector2>();
+        float carry = 0f, travelled = 0f;
+        result.Add(raw[0]);
+        for (int i = 1; i < raw.Length && travelled < MaxLength; i++)
+        {
+            Vector2 a = raw[i - 1], b = raw[i];
+            float len = Vector2.Distance(a, b);
+            if (len < 0.0001f) continue;
+
+            // World-space segment: stop at the ground (bombs land, arrows hit walls)
+            Vector2 wa = new Vector2(origin.x + a.x * dir, origin.y + a.y), wb = new Vector2(origin.x + b.x * dir, origin.y + b.y);
+            RaycastHit2D hit = default;
+            // one-way platforms only stop things coming down onto them
+            if (travelled > 0.4f && SolidGround.Line(wa, wb, out RaycastHit2D h) && (!h.collider.usedByEffector || wb.y < wa.y)) hit = h;
+            float usable = hit.collider != null ? len * hit.fraction : len;
+
+            float d = DotSpacing - carry;
+            while (d <= usable && travelled < MaxLength)
+            {
+                result.Add(Vector2.Lerp(a, b, d / len));
+                travelled += DotSpacing;
+                d += DotSpacing;
+            }
+            carry = usable - (d - DotSpacing);
+            if (hit.collider != null)
+            {
+                result.Add(Vector2.Lerp(a, b, usable / len));
+                landed = true;
+                break;
+            }
+        }
+        return result.ToArray();
+    }
+
+    private bool landed;
+
+    private void Build()
+    {
+        dots = new SpriteRenderer[path.Length];
+        for (int i = 0; i < path.Length; i++)
+        {
+            var go = new GameObject("Dot");
+            go.transform.SetParent(transform, false);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = DotSprite;
+            sr.sortingLayerID = layer;
+            sr.sortingOrder = order - 1;
+            if (CatFX.Unlit != null) sr.sharedMaterial = CatFX.Unlit;
+            dots[i] = sr;
+        }
+        if (landed || path.Length > 0)
+        {
+            var m = new GameObject("Target");
+            m.transform.SetParent(transform, false);
+            mark = m.AddComponent<SpriteRenderer>();
+            mark.sprite = MarkSprite;
+            mark.sortingLayerID = layer;
+            mark.sortingOrder = order + 1;
+            if (CatFX.Unlit != null) mark.sharedMaterial = CatFX.Unlit;
+            mark.enabled = landed;
+        }
     }
 
     private void LateUpdate()
@@ -98,33 +260,68 @@ public class EnemyAimTrace : MonoBehaviour
         if (h != null && h.enemydead) { Destroy(gameObject); return; }
 
         float dir = enemy.transform.lossyScale.x >= 0f ? -1f : 1f;
-        Vector3 from = EnemyFairness.BodyCenter(enemy) + new Vector3(dir * 0.25f, 0.05f, 0f);
-        transform.position = from;
+        Vector3 origin = EnemyFairness.BodyCenter(enemy);
+        transform.position = origin;
         transform.localScale = new Vector3(dir, 1f, 1f);
 
         float k = Mathf.Clamp01(age / duration);
         float flicker = Mathf.Repeat(age * Mathf.Lerp(6f, 22f, k), 1f) < 0.65f ? 1f : 0.45f;
-        float grow = Mathf.Clamp01(age / 0.12f); // shoots out from the shooter
-        line.transform.localScale = new Vector3(Length * grow, 1f, 1f);
-        glow.transform.localScale = new Vector3(Length * grow, 3f, 1f);
-        line.color = new Color(Red.r, Red.g, Red.b, (0.45f + 0.5f * k) * flicker);
-        glow.color = new Color(Red.r, Red.g, Red.b, 0.12f * k * flicker);
+        int shown = Mathf.CeilToInt(path.Length * Mathf.Clamp01(age / 0.15f)); // shoots out from the shooter
+        float march = Mathf.Repeat(age * 10f, 1f); // dots crawl along the path towards the target
+        for (int i = 0; i < dots.Length; i++)
+        {
+            bool on = i < shown;
+            dots[i].enabled = on;
+            if (!on) continue;
+            Vector2 p = path[i];
+            if (i + 1 < path.Length) p = Vector2.Lerp(path[i], path[i + 1], march * 0.5f);
+            dots[i].transform.localPosition = new Vector3(Snap(p.x), Snap(p.y), 0f);
+            float fadeOut = 1f - 0.5f * i / Mathf.Max(1, path.Length); // fainter far away
+            dots[i].color = new Color(Red.r, Red.g, Red.b, (0.45f + 0.5f * k) * flicker * fadeOut);
+        }
+
+        if (mark != null && landed)
+        {
+            mark.enabled = shown >= path.Length;
+            Vector2 end = path[path.Length - 1];
+            mark.transform.localPosition = new Vector3(Snap(end.x), Snap(end.y + 0.03f), 0f);
+            float pulse = 1f + 0.25f * Mathf.Sin(age * Mathf.Lerp(10f, 30f, k));
+            mark.transform.localScale = new Vector3(pulse, pulse, 1f);
+            mark.color = new Color(Red.r, Red.g, Red.b, (0.6f + 0.4f * k) * flicker);
+        }
     }
 
-    // 1 world unit long, 1 px dashed line, pivot at its start
-    private static Sprite LineSprite
+    private static float Snap(float v) => Mathf.Round(v * 64f) / 64f;
+
+    // 2x2 px dot
+    private static Sprite DotSprite
     {
         get
         {
-            if (lineSprite != null) return lineSprite;
-            const int w = 64, h = 1;
-            var tex = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, name = "EnemyAimLine" };
-            var px = new Color32[w * h];
-            for (int x = 0; x < w; x++) px[x] = (x % 6) < 4 ? new Color32(255, 255, 255, 255) : new Color32(255, 255, 255, 0);
-            tex.SetPixels32(px);
+            if (dotSprite != null) return dotSprite;
+            var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, name = "EnemyAimDot" };
+            tex.SetPixels32(new[] { new Color32(255, 255, 255, 255), new Color32(255, 255, 255, 255), new Color32(255, 255, 255, 255), new Color32(255, 255, 255, 255) });
             tex.Apply(false, true);
-            lineSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0f, 0.5f), 64f);
-            return lineSprite;
+            dotSprite = Sprite.Create(tex, new Rect(0, 0, 2, 2), new Vector2(0.5f, 0.5f), 64f);
+            return dotSprite;
+        }
+    }
+
+    // Flat target ring where the shot lands (9 x 4 px)
+    private static Sprite MarkSprite
+    {
+        get
+        {
+            if (markSprite != null) return markSprite;
+            Sprite raw = OverlayUI.PixelSprite(new[]
+            {
+                "..WWWWW..",
+                "WW.....WW",
+                "WW.....WW",
+                "..WWWWW..",
+            }, ch => new Color32(255, 255, 255, 255), "EnemyAimMark");
+            markSprite = Sprite.Create(raw.texture, raw.rect, new Vector2(0.5f, 0.5f), 64f);
+            return markSprite;
         }
     }
 }
@@ -167,7 +364,7 @@ public class EnemyAlert : MonoBehaviour
         if (now && !aggro && Time.time - lostAt > ForgetAfter) pendingShow = true;
         if (!now && aggro) lostAt = Time.time;
         aggro = now;
-        if (!now) pendingShow = false;
+        if (!now || !GameSettings.EnemyAlerts) pendingShow = false; // Accessibility > Enemy Alerts
 
         // Only worth showing where you can see it
         if (pendingShow && EnemyFairness.OnScreen(EnemyFairness.BodyCenter(this), 0.02f))

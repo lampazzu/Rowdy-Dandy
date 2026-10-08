@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Frames-per-second readout in the bottom-left corner (Settings > Show FPS). Created automatically.
+// Frames-per-second readout in the bottom-left corner, above the button prompts (Settings > Show FPS). Created automatically.
 public class FpsCounter : MonoBehaviour
 {
     private static FpsCounter instance;
@@ -21,7 +21,8 @@ public class FpsCounter : MonoBehaviour
     private void Awake()
     {
         label = PixelText.Create(OverlayUI.Root, "-- FPS", 2, new Color(0.75f, 1f, 0.75f, 0.9f), 0f);
-        OverlayUI.Place(label.Rect, new Vector2(0f, 0f), new Vector2(14f, 12f));
+        // bottom-left, just above the [SELECT] NOTES / STATS / MAP prompts (HudPrompts)
+        OverlayUI.Place(label.Rect, new Vector2(0f, 0f), new Vector2(24f, 24f + HudTag.Height * HudTag.ArtScale + 10f));
         label.gameObject.SetActive(GameSettings.ShowFps);
     }
 

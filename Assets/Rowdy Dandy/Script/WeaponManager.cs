@@ -131,6 +131,14 @@ public class WeaponManager : MonoBehaviour
         }
 
         LoadWeaponData();
+        if (GameSettings.AutoEquipWeapon && GetActiveWeaponIndex() == 0 && HasBreakableWeapon)
+        {
+            int best = BestOtherWeapon(0);
+            isWK_Axe = false;
+            isWK_Sword = best == 1;
+            isWK_Naginata = best == 2;
+            isWK_Cleaver = best == 3;
+        }
         UpdateWeapon();
 
         if (weaponProfileImage != null) WeaponSwitchPrompt.Attach(this, weaponProfileImage.rectTransform);
@@ -142,9 +150,11 @@ public class WeaponManager : MonoBehaviour
         get
         {
             int current = GetActiveWeaponIndex();
+            bool skipRod = GameSettings.AutoEquipWeapon && HasBreakableWeapon;
             for (int i = 1; i < 4; i++)
             {
                 int index = (current + i) % 4;
+                if (index == 0 && skipRod) continue;
                 if (unlockedWeapons[index]) return index == current ? null : GetProfileByIndex(index);
             }
             return null;
@@ -257,7 +267,35 @@ public class WeaponManager : MonoBehaviour
             RunStats.WeaponsBroken++;
             PlayBreakMoment(activeIndex); // before the switch, while the HUD still shows the broken weapon
             onWeaponBroken?.Invoke();
-            SetWeaponToAxe(); // Auto-switch back to starting Rod
+            // Accessibility > Auto Equip Weapon: straight to the next weapon he has; otherwise back to the Rod
+            int next = GameSettings.AutoEquipWeapon ? BestOtherWeapon(activeIndex) : -1;
+            if (next > 0) SetWeaponByIndex(next);
+            else SetWeaponToAxe(); // Auto-switch back to starting Rod
+        }
+    }
+
+    // The unlocked breakable weapon with the most durability left (not 'except'), or -1
+    private int BestOtherWeapon(int except)
+    {
+        int best = -1;
+        for (int i = 1; i < 4; i++)
+        {
+            if (i == except || !unlockedWeapons[i]) continue;
+            if (best < 0 || currentDurability[i] > currentDurability[best]) best = i;
+        }
+        return best;
+    }
+
+    private bool HasBreakableWeapon => unlockedWeapons[1] || unlockedWeapons[2] || unlockedWeapons[3];
+
+    private void SetWeaponByIndex(int index)
+    {
+        switch (index)
+        {
+            case 1: SetWeaponToSword(); break;
+            case 2: SetWeaponToNaginata(); break;
+            case 3: SetWeaponToCleaver(); break;
+            default: SetWeaponToAxe(); break;
         }
     }
 
@@ -424,9 +462,11 @@ public class WeaponManager : MonoBehaviour
         int currentIndex = GetActiveWeaponIndex();
         int nextIndex = currentIndex;
 
+        bool skipRod = GameSettings.AutoEquipWeapon && HasBreakableWeapon; // the Rod only when there's nothing else
         for (int i = 1; i <= 4; i++)
         {
             int checkIndex = (currentIndex + i) % 4;
+            if (checkIndex == 0 && skipRod) continue;
             if (unlockedWeapons[checkIndex])
             {
                 nextIndex = checkIndex;

@@ -97,7 +97,7 @@ public class Spike : MonoBehaviour
 
     private void TryTelegraphedAttack(Collider2D player)
     {
-        if (owner.enemydead) return;
+        if (owner.enemydead || StatusEffects.IsStunned(owner.gameObject)) return;
         if (!EnemyFairness.OnScreen(EnemyFairness.BodyCenter(owner), 0.01f)) return;
         // Runs on the enemy: the attack clip switches this box off on its first frame
         owner.StartCoroutine(TelegraphedAttack(player));

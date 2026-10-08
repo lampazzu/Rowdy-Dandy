@@ -170,6 +170,9 @@ public class EnemyHealthBar : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        // the style asset can get unloaded (scene reload unloads unused assets): fetch it again
+        if (style == null) style = Resources.Load<EnemyHealthBarStyle>("EnemyHealthBarStyle");
+        if (style == null) return;
 
         float maxHealth = Mathf.Max(0.0001f, target.startingenemyHealth);
         float health = Mathf.Max(0f, target.currentenemyHealth);
