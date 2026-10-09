@@ -83,7 +83,7 @@ public class Werewolf : MonoBehaviour
 
         if (!active && !transforming) charge = Mathf.Min(100f, charge + Time.deltaTime * 0.9f * Boons.MoonChargeMultiplier);
 
-        bool menuJustClosed = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput || CatParty.BlocksPause;
+        bool menuJustClosed = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput || CatParty.BlocksPause || CheckpointMenu.BlocksPause || StatsPause.BlocksPause;
         if (!menuJustClosed && GameInput.Down(GameInput.Act.Werewolf) && health != null && !health.IsDead)
         {
             if (Ready && !active && !transforming) StartCoroutine(Transform());
@@ -352,7 +352,7 @@ public class Werewolf : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        vignetteSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f));
+        vignetteSprite = AIArt.Use("Werewolf_Vignette", Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f)));
         return vignetteSprite;
     }
 }

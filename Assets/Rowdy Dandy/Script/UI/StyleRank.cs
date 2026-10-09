@@ -645,7 +645,7 @@ public class StyleRank : MonoBehaviour
         }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        return Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
+        return AIArt.Use("StyleRank_Plate_" + w + "x" + h + "_" + ColorUtility.ToHtmlStringRGB(fill), Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect));
     }
 
     private static Texture2D stripeTexture;
@@ -679,7 +679,7 @@ public class StyleRank : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        ringSprite = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        ringSprite = AIArt.Use("StyleRank_Ring", Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f));
         return ringSprite;
     }
 }

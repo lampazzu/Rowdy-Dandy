@@ -377,7 +377,7 @@ public class WeaponDrop : MonoBehaviour
         tex.SetPixels32(pixels);
         tex.Apply(false);
 
-        beamSprite = Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0f), PixelsPerUnit, 0, SpriteMeshType.FullRect);
+        beamSprite = AIArt.Use("WeaponDrop_Beam", Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0f), PixelsPerUnit, 0, SpriteMeshType.FullRect));
         beamSprite.name = "WeaponDropBeam";
         beamSpriteKey = key;
         return beamSprite;
@@ -390,7 +390,7 @@ public class WeaponDrop : MonoBehaviour
         Color32 w = new Color32(255, 255, 255, 255), e = new Color32(255, 255, 255, 0);
         tex.SetPixels32(new[] { e, w, e, w, w, w, e, w, e });
         tex.Apply(false);
-        sparkleSprite = Sprite.Create(tex, new Rect(0, 0, 3, 3), new Vector2(0.5f, 0.5f), PixelsPerUnit, 0, SpriteMeshType.FullRect);
+        sparkleSprite = AIArt.Use("WeaponDrop_Sparkle", Sprite.Create(tex, new Rect(0, 0, 3, 3), new Vector2(0.5f, 0.5f), PixelsPerUnit, 0, SpriteMeshType.FullRect));
         return sparkleSprite;
     }
 }

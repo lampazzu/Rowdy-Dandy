@@ -144,7 +144,7 @@ public class PauseMenu : MonoBehaviour
 
         if (page == Page.Closed)
         {
-            bool blocked = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput || CatParty.BlocksPause;
+            bool blocked = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput || CatParty.BlocksPause || CheckpointMenu.BlocksPause || StatsPause.BlocksPause;
             if (pausePressed && !blocked) Open();
             else if (devPressed && !blocked) { Open(); ShowPage(Page.DevTools, 0); }
             return;
@@ -720,6 +720,7 @@ public class PauseMenu : MonoBehaviour
         AddDevButton(panel, "First Checkpoint", ref y, DevTools.GoToFirstCheckpoint, "Reload at the start of the map", false);
         AddDevButton(panel, "Last Checkpoint", ref y, DevTools.GoToLastCheckpoint, "Reload at the right-most checkpoint (Pelich)", false);
         AddDevButton(panel, "Saved Checkpoint", ref y, DevTools.GoToSavedCheckpoint, "Reload at the checkpoint you touched last", false);
+        AddDevButton(panel, "The Gloomwood", ref y, GloomArena.DevTravel, "Unseal the Gloom Gate and jump into the second colosseum", false);
         AddHeader(devRows, panel, "Boons", ref y);
         AddDevButton(panel, "Offer A Boon", ref y, Boons.DevOfferPick, "Opens the boon picker (one extra pick)", false);
         AddDevButton(panel, "Hair Gel +3", ref y, () => Boons.AddRerolls(3), "Three rerolls for the boon cards", true);
@@ -729,7 +730,7 @@ public class PauseMenu : MonoBehaviour
         columnX = ColumnOffset;
         buildColumn = 1;
         AddHeader(devRows, panel, "Spawn", ref y);
-        AddDevButton(panel, "Flying Rat", ref y, DevTools.SpawnRat, "Rare drop: protects a cat when you die", false);
+        AddDevButton(panel, "Flying Rat", ref y, DevTools.SpawnRat, "Rare drop: bait to call a lost cat back at a checkpoint", false);
         AddDevButton(panel, "Cat Treat Fish", ref y, DevTools.SpawnFish, "Rare drop: feeds every cat", false);
         AddDevButton(panel, "Random Statue", ref y, DevTools.SpawnStatue, "A statue near Rowdy", false);
         AddDevButton(panel, "Collect All Cats", ref y, DevTools.CollectAllCats, "Every cat in the level joins Rowdy", false);
@@ -936,7 +937,7 @@ public class PauseMenu : MonoBehaviour
         }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        gamepadSprite = Sprite.Create(tex, new Rect(0, 0, W, H), new Vector2(0.5f, 0.5f), 16f);
+        gamepadSprite = AIArt.Use("PauseMenu_Gamepad", Sprite.Create(tex, new Rect(0, 0, W, H), new Vector2(0.5f, 0.5f), 16f));
         return gamepadSprite;
     }
 
@@ -1195,7 +1196,7 @@ public class PauseMenu : MonoBehaviour
         }
         tex.SetPixels32(pixels);
         tex.Apply(false, true);
-        return Sprite.Create(tex, new Rect(0, 0, 12, 12), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(4, 4, 4, 4));
+        return AIArt.Use("PauseMenu_Panel9Slice", Sprite.Create(tex, new Rect(0, 0, 12, 12), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(4, 4, 4, 4)));
     }
 
     // Mouse hover / click for menu rows and arrows

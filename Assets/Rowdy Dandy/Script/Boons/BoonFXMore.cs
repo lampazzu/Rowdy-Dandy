@@ -525,8 +525,10 @@ public class BoonDot : MonoBehaviour
         BoonDot d = Of(e);
         if (Time.time >= d.burnUntil)
         {
-            BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sizzle : null, 0.18f, Random.Range(1.3f, 1.6f));
-            FXParticle.Burst(BoonFX.Center(e), BoonFX.Ember, 8, 1f, 3f, -3f, 0.5f);
+            BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sizzle : null, 0.3f, Random.Range(1.1f, 1.4f));
+            FXParticle.Burst(BoonFX.Center(e), BoonFX.Ember, 16, 1.5f, 4f, -3f, 0.6f);
+            FXParticle.Burst(BoonFX.Center(e), BoonFX.Sunny, 8, 1f, 3f, -2f, 0.4f);
+            PulseRing.Spawn(BoonFX.Center(e), new Color(1f, 0.55f, 0.15f, 0.9f), 0.9f, 0.3f);
         }
         d.burnUntil = Mathf.Max(d.burnUntil, Time.time + seconds);
         d.burnDps = Mathf.Max(d.burnDps, dps);
@@ -537,6 +539,7 @@ public class BoonDot : MonoBehaviour
         if (health == null || health.enemydead) { Destroy(this); return; }
         float now = Time.time;
         bool bleeding = now < bleedUntil, burning = now < burnUntil;
+        UpdateFlames(burning);
         if (!bleeding && !burning) { burnDps = bleedDps = 0f; return; }
 
         fxTimer -= Time.deltaTime;
@@ -557,6 +560,43 @@ public class BoonDot : MonoBehaviour
         tick = 0.5f;
         if (burning) BoonFX.Hit(health, burnDps * 0.5f, "Sunburn", null, true);
         if (bleeding && health != null && !health.enemydead) BoonFX.Hit(health, bleedDps * 0.5f, "Bleeding", null, true);
+    }
+
+    // Burning (Sunburn / Forged In Sunlight): real flames licking up the enemy (TBZG_VFX_Charge, the fire sheet,
+    // looping at its feet) and a flickering orange glow on its sprite, so a burning enemy reads at a glance.
+    private SheetFX flames;
+    private SpriteRenderer bodySr;
+    private Color bodyBase;
+
+    private void UpdateFlames(bool burning)
+    {
+        if (burning && flames == null)
+        {
+            BoonArt art = BoonArt.Get;
+            if (art != null && art.charge != null)
+            {
+                bodySr = health.GetComponent<SpriteRenderer>();
+                Bounds b = bodySr != null ? bodySr.bounds : new Bounds(BoonFX.Center(health), Vector3.one * 0.6f);
+                float scale = Mathf.Clamp(b.size.x / 1.6f, 0.35f, 0.7f);
+                flames = SheetFX.Play(art.charge, 10, new Vector3(b.center.x, b.min.y - 0.1f, 0f), 20f, 64f,
+                    bodySr != null ? bodySr.sortingOrder + 3 : 80, health.transform, true, new Color(1f, 0.9f, 0.6f, 1f), scale, new Vector2(0.5f, 0f));
+                if (bodySr != null) bodyBase = bodySr.color;
+            }
+        }
+        else if (!burning && flames != null)
+        {
+            flames.Stop(0.25f);
+            flames = null;
+            if (bodySr != null) bodySr.color = bodyBase;
+        }
+        if (burning && bodySr != null && !StatusEffects.IsStunned(health.gameObject))
+            bodySr.color = Color.Lerp(bodyBase, new Color(1f, 0.55f, 0.25f, bodyBase.a), 0.25f + 0.2f * Mathf.Sin(Time.time * 22f));
+    }
+
+    private void OnDestroy()
+    {
+        if (flames != null) flames.Stop(0.2f);
+        if (bodySr != null) bodySr.color = bodyBase;
     }
 }
 
@@ -653,6 +693,8 @@ public class TideRider : MonoBehaviour
     private readonly List<EnemyHealth> carried = new List<EnemyHealth>();
     private SheetFX water;
     private SpriteRenderer pinkWave;
+    private Light2D pinkGlow;
+    private float trailTimer;
     private const float MaxRide = 2.4f, MinRide = 0.35f;
 
     public static void Begin(BoonRunner runner, float damage, bool pink, bool toxic)
@@ -673,10 +715,20 @@ public class TideRider : MonoBehaviour
         int order = t.rowdyBody != null ? t.rowdyBody.sortingOrder : BoonFX.Order;
 
         BoonArt art = BoonArt.Get;
-        if (pink && BoonArt.PinkWave != null)
+        if (pink && BeachBodWave.Frames != null)
         {
-            t.pinkWave = BoonFX.MakeRenderer("Pink Wave", BoonArt.PinkWave, feet, order - 1, null, ItemArt.Lit);
+            // in FRONT of Rowdy, animated (BeachBodWave), unlit so it glows, with a pink light around it
+            t.pinkWave = BoonFX.MakeRenderer("Pink Wave", BeachBodWave.Frames[0], feet, order + 2, null, CatFX.Unlit != null ? CatFX.Unlit : ItemArt.Lit);
             t.pinkWave.sortingLayerID = layer;
+            var lightGo = new GameObject("Glow");
+            lightGo.transform.SetParent(t.pinkWave.transform, false);
+            lightGo.transform.localPosition = new Vector3(0f, 0.4f, 0f);
+            t.pinkGlow = lightGo.AddComponent<Light2D>();
+            t.pinkGlow.lightType = Light2D.LightType.Point;
+            t.pinkGlow.color = new Color(1f, 0.45f, 0.85f);
+            t.pinkGlow.pointLightOuterRadius = 2.6f;
+            t.pinkGlow.pointLightInnerRadius = 0.4f;
+            t.pinkGlow.intensity = 1.1f;
         }
         else if (art != null)
         {
@@ -725,6 +777,19 @@ public class TideRider : MonoBehaviour
             float bob = Mathf.Round(Mathf.Sin(age * 12f) * 2f) / 64f; // whole pixels
             pinkWave.transform.position = feet + new Vector3(-facing * 0.25f, -0.18f + bob, 0f);
             pinkWave.flipX = facing < 0f;
+            Sprite[] frames = BeachBodWave.Frames;
+            if (frames != null) pinkWave.sprite = frames[(int)(age * 16f) % frames.Length];
+            if (pinkGlow != null) pinkGlow.intensity = 0.9f + 0.4f * Mathf.Sin(age * 9f);
+            // pink afterimages streaming off the back, hearts and glitter over the crest
+            trailTimer -= dt;
+            if (trailTimer <= 0f)
+            {
+                trailTimer = 0.05f;
+                CatFX.Afterimage(pinkWave, new Color(1f, 0.5f, 0.85f, 0.45f), 0.25f);
+                Vector3 crest = pinkWave.bounds.center + new Vector3(facing * Random.Range(0f, pinkWave.bounds.extents.x), pinkWave.bounds.extents.y * 0.6f, 0f);
+                BoonFX.Sparkles(crest, Random.value < 0.5f ? Color.white : BoonFX.Gold, 1, 0.3f, 0.45f);
+                FXParticle.Burst(crest, Color.Lerp(BoonFX.Pink, Color.white, Random.value * 0.6f), 2, 1.5f, 4f, 6f, 0.5f);
+            }
         }
 
         Vector3 front = feet + new Vector3(facing * 0.7f, 0.5f, 0f);
@@ -796,6 +861,94 @@ public class TideRider : MonoBehaviour
         if (water != null) water.Stop(0.15f);
         if (pinkWave != null) Shard.Break(pinkWave, 4, 3, pinkWave.bounds.center, 2.5f);
         Destroy(gameObject);
+    }
+}
+
+// Beach Bod's wave, animated: 16 frames made at runtime from the pink wave art (Misc/Test/testWave.png) at its own
+// pixel size. Every column rolls up and down (a travelling swell), the top edge is a white foam line, a glossy
+// shine band sweeps across, the pinks shimmer through magenta, and glitter pixels twinkle on it.
+public static class BeachBodWave
+{
+    private const int Count = 16, Pad = 3;
+    private static Sprite[] frames;
+    private static bool tried;
+
+    public static Sprite[] Frames
+    {
+        get
+        {
+            if (frames != null || tried) return frames;
+            tried = true;
+            Sprite src = BoonArt.PinkWave;
+            if (src == null) return null;
+            Color32[] px = ReadPixels(src.texture);
+            if (px == null) return frames = new[] { src };
+            int w = src.texture.width, h = src.texture.height, oh = h + Pad * 2;
+            frames = new Sprite[Count];
+            var outPx = new Color32[w * oh];
+            for (int f = 0; f < Count; f++)
+            {
+                float phase = f / (float)Count * Mathf.PI * 2f;
+                System.Array.Clear(outPx, 0, outPx.Length);
+                for (int x = 0; x < w; x++)
+                {
+                    int dy = Mathf.RoundToInt(Mathf.Sin(phase + x * 0.16f) * 2f);
+                    int top = -1;
+                    for (int y = h - 1; y >= 0; y--) if (px[y * w + x].a > 20) { top = y; break; }
+                    for (int y = 0; y < h; y++)
+                    {
+                        Color32 c = px[y * w + x];
+                        if (c.a <= 20) continue;
+                        Color col = c;
+                        // shimmer: hue drifts between pink and magenta along the wave
+                        Color.RGBToHSV(col, out float hh, out float s, out float v);
+                        hh = Mathf.Repeat(hh + 0.035f * Mathf.Sin(phase * 2f + x * 0.07f), 1f);
+                        v = Mathf.Clamp01(v * (1.05f + 0.1f * Mathf.Sin(phase + x * 0.1f)));
+                        col = Color.HSVToRGB(hh, s, v);
+                        // foam on the crest
+                        if (top >= 0 && y >= top - 1) col = Color.Lerp(col, Color.white, y == top ? 0.85f : 0.45f);
+                        // the gloss band, sweeping across
+                        float band = Mathf.Repeat(f / (float)Count * 1.6f, 1.6f) * (w + h) - (w + h) * 0.3f;
+                        float d = Mathf.Abs(x + (h - y) - band);
+                        if (d < 4f) col = Color.Lerp(col, Color.white, d < 2f ? 0.55f : 0.25f);
+                        // glitter
+                        int hash = (x * 73856093) ^ (y * 19349663) ^ (f * 83492791);
+                        if ((hash & 0x3FF) < 6) col = Color.white;
+                        col.a = c.a / 255f;
+                        int oy = y + Pad + dy;
+                        if (oy >= 0 && oy < oh) outPx[oy * w + x] = col;
+                    }
+                }
+                var tex = new Texture2D(w, oh, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, name = "BeachBod_" + f };
+                tex.SetPixels32(outPx);
+                tex.Apply(false, true);
+                Vector2 pivot = src.pivot / new Vector2(w, h); // pivot in 0..1 of the source
+                frames[f] = Sprite.Create(tex, new Rect(0, 0, w, oh), new Vector2(pivot.x, (pivot.y * h + Pad) / oh), src.pixelsPerUnit);
+            }
+            return frames;
+        }
+    }
+
+    // Works on non-readable textures too (copied through a render texture)
+    private static Color32[] ReadPixels(Texture2D tex)
+    {
+        try
+        {
+            if (tex.isReadable) return tex.GetPixels32();
+            RenderTexture rt = RenderTexture.GetTemporary(tex.width, tex.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            RenderTexture prev = RenderTexture.active;
+            Graphics.Blit(tex, rt);
+            RenderTexture.active = rt;
+            var copy = new Texture2D(tex.width, tex.height, TextureFormat.RGBA32, false);
+            copy.ReadPixels(new Rect(0, 0, tex.width, tex.height), 0, 0);
+            copy.Apply();
+            RenderTexture.active = prev;
+            RenderTexture.ReleaseTemporary(rt);
+            Color32[] result = copy.GetPixels32();
+            Object.Destroy(copy);
+            return result;
+        }
+        catch { return null; }
     }
 }
 
@@ -901,12 +1054,18 @@ public class Tentacle : MonoBehaviour
     }
 }
 
-// Ink Cloud: a cloud of black ink at the dash start; enemies inside panic
+// Ink Cloud: a squirt of black ink at the dash start; enemies inside panic. The ink is Rowdy's own surf spray
+// (the "SurfWater" particles on his prefab) cloned and dyed black: a big burst back and up, then it keeps
+// bubbling while the cloud lasts.
 public class InkCloud : MonoBehaviour
 {
     private float age, fear;
     private readonly HashSet<EnemyHealth> done = new HashSet<EnemyHealth>();
     private const float Life = 2.2f, Radius = 1.6f;
+    private ParticleSystem[] sprays;
+    private static Material inkMaterial;
+
+    private static readonly Color InkDark = new Color(0.03f, 0.02f, 0.06f, 1f), InkSheen = new Color(0.2f, 0.12f, 0.32f, 0.9f);
 
     public static void Spawn(Vector3 at, float facing, float fearSeconds)
     {
@@ -914,17 +1073,74 @@ public class InkCloud : MonoBehaviour
         go.transform.position = at;
         var c = go.AddComponent<InkCloud>();
         c.fear = fearSeconds;
-        ItemArt items = ItemArt.Get;
-        if (items != null) BoonFX.Sheet(items.vfxPoison, 10, at + Vector3.down * 0.6f, 14f, 1f, new Color(0.18f, 0.12f, 0.35f, 0.95f), null, false, BoonFX.Order - 1, new Vector2(0.5f, 0.12f));
-        FXParticle.Burst(at, new Color(0.1f, 0.06f, 0.2f), 20, 1f, 3.5f, 1f, 0.8f);
-        BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sporePop : null, 0.4f, 0.7f);
+        c.sprays = new[] { c.Spray(at, facing, 115f, 1f), c.Spray(at, facing, 65f, 0.7f), c.Spray(at + Vector3.down * 0.3f, -facing, 150f, 0.5f) };
+        if (c.sprays[0] == null) // no surf spray to copy: plain ink blobs
+            FXParticle.Burst(at, InkDark, 26, 1f, 4f, 2f, 0.9f);
+        FXParticle.Burst(at, InkSheen, 10, 1f, 3f, 3f, 0.6f);
+        BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sporePop : null, 0.45f, 0.6f);
+        FXSound.Play("Jelly", 0.35f, 0.6f); // a wet squelch
+    }
+
+    // One spray of ink, like Rowdy's surf spray (a cone of drops that arcs and falls) but black. 'angle' = degrees
+    // from the facing direction (0 = forward, 90 = up). Built fresh: Rowdy's own SurfWater particles don't draw
+    // when cloned (built-in material + a size-over-life curve made for his speed).
+    private ParticleSystem Spray(Vector3 at, float facing, float angle, float strength)
+    {
+        var go = new GameObject("Ink Spray");
+        go.transform.SetParent(transform, false);
+        go.transform.position = at;
+        float dir = (facing >= 0f ? angle : 180f - angle) * Mathf.Deg2Rad;
+        go.transform.rotation = Quaternion.LookRotation(new Vector3(Mathf.Cos(dir), Mathf.Sin(dir), 0f), Vector3.back); // the cone shoots along local +z
+        var ps = go.AddComponent<ParticleSystem>();
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        var main = ps.main;
+        main.loop = true;
+        main.playOnAwake = false;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        main.startColor = new ParticleSystem.MinMaxGradient(InkDark, InkSheen);
+        main.startSpeed = new ParticleSystem.MinMaxCurve(2.5f * strength, 7.5f * strength);
+        main.startSize = new ParticleSystem.MinMaxCurve(4f / 64f, 12f / 64f); // chunky pixel drops
+        main.startLifetime = new ParticleSystem.MinMaxCurve(0.45f, 0.95f);
+        main.gravityModifier = 0.9f;
+        main.maxParticles = 600;
+        var shape = ps.shape;
+        shape.shapeType = ParticleSystemShapeType.Cone;
+        shape.angle = 28f;
+        shape.radius = 0.12f;
+        var emission = ps.emission;
+        emission.rateOverTime = 420f * strength;
+        var col = ps.colorOverLifetime;
+        col.enabled = true;
+        var g = new Gradient();
+        g.SetKeys(new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
+                  new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 0.6f), new GradientAlphaKey(0f, 1f) });
+        col.color = g;
+        var size = ps.sizeOverLifetime;
+        size.enabled = true;
+        size.size = new ParticleSystem.MinMaxCurve(1f, AnimationCurve.Linear(0f, 1f, 1f, 0.4f));
+        var psr = go.GetComponent<ParticleSystemRenderer>();
+        if (inkMaterial == null && CatFX.Unlit != null) inkMaterial = new Material(CatFX.Unlit) { name = "Ink", mainTexture = Texture2D.whiteTexture };
+        if (inkMaterial != null) psr.sharedMaterial = inkMaterial;
+        psr.sortingLayerName = "Default";
+        psr.sortingOrder = BoonFX.Order + 2;
+        ps.Play();
+        return ps;
     }
 
     private void Update()
     {
         age += Time.deltaTime;
-        if (age >= Life) { Destroy(gameObject); return; }
-        if (Random.value < 0.4f) FXParticle.Burst(transform.position + (Vector3)(Random.insideUnitCircle * Radius * 0.8f), new Color(0.12f, 0.08f, 0.25f), 1, 0.1f, 0.4f, -0.5f, 0.7f);
+        if (age >= Life + 1f) { Destroy(gameObject); return; }
+        // the squirt: a hard burst first, then it bubbles, then it stops and the last drops fall
+        if (sprays != null)
+            foreach (ParticleSystem ps in sprays)
+            {
+                if (ps == null) continue;
+                var emission = ps.emission;
+                emission.rateOverTimeMultiplier = age < 0.25f ? 420f : age < Life ? 45f : 0f;
+            }
+        if (age >= Life) return;
+        if (Random.value < 0.4f) FXParticle.Burst(transform.position + (Vector3)(Random.insideUnitCircle * Radius * 0.8f), InkDark, 1, 0.1f, 0.4f, -0.5f, 0.7f);
         foreach (EnemyHealth e in BoonFX.EnemiesIn(transform.position, Radius))
         {
             if (!done.Add(e)) continue;
@@ -1578,7 +1794,7 @@ public class FishTreat : MonoBehaviour
     {
         if (frames == null)
         {
-            Texture2D tex = Resources.Load<Texture2D>("Pickups/CatTreat_Fish");
+            Texture2D tex = Resources.Load<Texture2D>("AI Placeholders/Pickups/CatTreat_Fish");
             if (tex != null) { tex.filterMode = FilterMode.Point; frames = ItemArt.Frames(tex, 2, 1, new Vector2(0.5f, 0f), 64f); }
         }
         SpriteRenderer sr = BoonFX.MakeRenderer("Fish Treat", frames != null && frames.Length > 0 ? frames[0] : BoonFX.Heart, at, 75, null, ItemArt.Lit);

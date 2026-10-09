@@ -321,5 +321,91 @@ public class PelichBoss : MonoBehaviour
             body.linearVelocity = Vector2.zero;
             body.bodyType = RigidbodyType2D.Kinematic; // no collider left to stand on, so don't let it fall
         }
+        MetalSlugDeath.Play(this, GetComponent<SpriteRenderer>(), BodyBounds);
+    }
+}
+
+// Pelich Anus goes down like a Metal Slug boss: the body shakes and flashes while explosions pop all over it, faster
+// and faster, then a white flash, a huge triple blast, and TUTORIAL COMPLETE across the screen.
+// Runs on its own object, so it keeps going whatever the death clip does to Pelich himself.
+public class MetalSlugDeath : MonoBehaviour
+{
+    public static void Play(PelichBoss boss, SpriteRenderer body, Bounds bounds)
+    {
+        var go = new GameObject("Pelich Death (Metal Slug)");
+        go.AddComponent<MetalSlugDeath>().StartCoroutine(go.GetComponent<MetalSlugDeath>().Run(boss, body, bounds));
+    }
+
+    // the explosion art sits at order 5: draw these over Pelich
+    private static void Front(GameObject boom, SpriteRenderer body)
+    {
+        if (boom == null) return;
+        int order = (body != null ? body.sortingOrder : 20) + 5;
+        foreach (SpriteRenderer r in boom.GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            if (body != null) r.sortingLayerID = body.sortingLayerID;
+            r.sortingOrder = order;
+        }
+    }
+
+    private System.Collections.IEnumerator Run(PelichBoss boss, SpriteRenderer body, Bounds b)
+    {
+        Transform bodyT = body != null ? body.transform : null;
+        Vector3 home = bodyT != null ? bodyT.position : b.center;
+        Color baseColor = body != null ? body.color : Color.white;
+        TimeSlowController.HitStop(0.15f, 0.02f);
+        ScreenShake.Impulse(0.8f);
+        GamepadRumble.Pulse(0.8f, 1f, 0.4f);
+        FXSound.Play("Fear", 0.8f, 0.5f);
+
+        // 3.2 s of explosions all over the body, accelerating
+        const float duration = 3.2f;
+        float t = 0f, next = 0f;
+        while (t < duration)
+        {
+            float k = t / duration;
+            if (t >= next)
+            {
+                next = t + Mathf.Lerp(0.22f, 0.045f, k);
+                Vector3 at = new Vector3(Random.Range(b.min.x, b.max.x), Random.Range(b.min.y, b.max.y), 0f);
+                Front(ExplosionChain.Boom(at, Random.Range(0.6f, 1.1f) * (1f + k * 0.6f), 0.2f + 0.15f * k, 0.12f + 0.25f * k), body);
+                if (Random.value < 0.35f) FXParticle.Burst(at, new Color(1f, 0.6f, 0.2f), 6, 2f, 6f, 6f, 0.5f);
+                if (Random.value < 0.25f) FXParticle.Burst(at, new Color(0.25f, 0.2f, 0.2f), 4, 0.5f, 2f, -1.5f, 1.2f); // smoke
+            }
+            // shake + flash the body
+            if (body != null)
+            {
+                bodyT.position = home + new Vector3(Mathf.Round(Random.Range(-3f, 3f) * (0.5f + k)) / 64f, Mathf.Round(Random.Range(-2f, 2f)) / 64f, 0f);
+                body.color = Mathf.Repeat(t * (8f + 16f * k), 1f) < 0.5f ? Color.Lerp(baseColor, new Color(1f, 0.3f, 0.25f, baseColor.a), 0.6f) : Color.Lerp(baseColor, Color.white, 0.5f);
+            }
+            if (Random.value < 0.08f) GamepadRumble.Pulse(0.3f + 0.5f * k, 0.6f, 0.08f);
+            t += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        // the finale
+        ScreenFlash.Play(new Color(1f, 1f, 1f, 0.85f), 0.6f);
+        TimeSlowController.HitStop(0.2f, 0.02f);
+        Front(ExplosionChain.Boom(b.center, 3f, 0.8f, 1.2f), body);
+        GamepadRumble.Pulse(1f, 1f, 0.6f);
+        if (body != null) { bodyT.position = home; body.color = new Color(0.25f, 0.2f, 0.22f, baseColor.a); } // charred
+        yield return new WaitForSecondsRealtime(0.18f);
+        Front(ExplosionChain.Boom(b.center + new Vector3(-b.extents.x * 0.6f, 0.3f, 0f), 2.2f, 0.6f, 0.6f), body);
+        Front(ExplosionChain.Boom(b.center + new Vector3(b.extents.x * 0.6f, -0.2f, 0f), 2.2f, 0.6f, 0.6f), body);
+        PulseRing.Spawn(b.center, new Color(1f, 0.85f, 0.4f, 1f), 6f, 0.8f);
+        FXParticle.Burst(b.center, new Color(1f, 0.75f, 0.3f), 60, 3f, 9f, 6f, 1.2f);
+        yield return new WaitForSecondsRealtime(0.9f);
+
+        Banner.Show("TUTORIAL COMPLETE", "PELICH ANUS IS NO MORE.  THE FRONTIER LIES EAST, ACROSS THE SEA", new Color(1f, 0.82f, 0.3f), 4f);
+        BoonArt art = BoonArt.Get;
+        if (art != null) { FXSound.Play(art.fanfare, 0.8f, 1f); FXSound.Play(art.sparkle, 0.6f, 1.1f); }
+        yield return new WaitForSecondsRealtime(1.2f);
+        // the charred body slowly fades
+        for (float f = 0f; f < 1f && body != null; f += Time.deltaTime / 1.5f)
+        {
+            body.color = new Color(0.25f, 0.2f, 0.22f, (1f - f) * baseColor.a);
+            yield return null;
+        }
+        Destroy(gameObject);
     }
 }

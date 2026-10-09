@@ -90,6 +90,7 @@ public static class ButtonIcons
         tex.Apply(false, true);
         s = Sprite.Create(tex, new Rect(0, 0, canvas.w, canvas.h), pivot, 64f, 0, SpriteMeshType.FullRect);
         s.name = tex.name;
+        s = AIArt.Use("ButtonIcon_" + id + (pivot == new Vector2(0.5f, 0.5f) ? "" : "_pivot" + Mathf.RoundToInt(pivot.x * 10) + Mathf.RoundToInt(pivot.y * 10)), s);
         sprites[key] = s;
         return s;
     }

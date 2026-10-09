@@ -433,7 +433,8 @@ public class StatusEffects : MonoBehaviour
                 if (charmFrames == null && art != null && art.charm != null) charmFrames = ItemArt.Frames(art.charm, 9, 1, new Vector2(0.5f, 0f), 64f);
                 return charmFrames;
             case HoldKind.Fear:
-                if (fearFrames == null && art != null && art.fear != null) fearFrames = ItemArt.Frames(art.fear, 9, 1, new Vector2(0.5f, 0f), 64f);
+                // the panic sheet is big (54 x 74 px): drawn at half size so it sits small on the enemy's head
+                if (fearFrames == null && art != null && art.fear != null) fearFrames = ItemArt.Frames(art.fear, 9, 1, new Vector2(0.5f, 0f), 128f);
                 return fearFrames;
             case HoldKind.Root:
                 return null; // the vines are the icon
@@ -547,7 +548,7 @@ public class StatusEffects : MonoBehaviour
                 if (holdKind == HoldKind.Stun) frame = (int)(Time.time * 18f) % f.Length;
                 else
                 {
-                    int played = (int)((Time.time - holdStartedAt) * 16f);
+                    int played = (int)((Time.time - holdStartedAt) * (holdKind == HoldKind.Fear ? 32f : 16f)); // panic: 2x speed
                     frame = played < f.Length ? played : f.Length - 4 + (played % 4);
                 }
                 stunIcon.sprite = f[Mathf.Clamp(frame, 0, f.Length - 1)];

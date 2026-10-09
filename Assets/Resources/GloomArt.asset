@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c63a2039fe045f29783dd2c4524c5b0, type: 3}
+  m_Name: GloomArt
+  m_EditorClassIdentifier: Assembly-CSharp::GloomArt
+  backdrop: {fileID: 21300000, guid: 26cbf7cb313dcbc409d80a545d34f11b, type: 3}
+  trees:
+  - {fileID: 21300000, guid: 6a8649212e5df0e4a8f346080d78306c, type: 3}
+  - {fileID: 21300000, guid: 13feb7c51d4ecf342ab2919164473c14, type: 3}
+  - {fileID: 21300000, guid: 0627709895b76b045b5d456f3cac70b4, type: 3}
+  - {fileID: 21300000, guid: 8a1fefaccf5707b40a50910c33a39e15, type: 3}
+  - {fileID: 21300000, guid: 5c7f712456622db48a503a2999dd1637, type: 3}
+  - {fileID: 21300000, guid: b0b613e61e69232419ca7c3d05002567, type: 3}
+  horrificTrees:
+  - {fileID: 21300000, guid: 98ced60aa363c3a41bdeb2d2dfa08ed2, type: 3}
+  - {fileID: 21300000, guid: 4011bb8c9bad0754bacbdb1b1c98b871, type: 3}
+  bushes:
+  - {fileID: 21300000, guid: 5c13926c276d47a42b0cf8d58c83096e, type: 3}
+  - {fileID: 21300000, guid: 3515d61d92389e249bf9fd4b2c96b19e, type: 3}
+  - {fileID: 21300000, guid: 9217a67e892c7e847bf25825fe0edeaa, type: 3}
+  crystals:
+  - {fileID: 21300000, guid: c9cd5f0f1f0d10b468d309e6a1b08568, type: 3}
+  - {fileID: 21300000, guid: 60d6229c469f3e24e895b482db9b658a, type: 3}
+  - {fileID: 21300000, guid: c883fdfadb0f9e340986a9625fef4a45, type: 3}
+  - {fileID: 21300000, guid: 8133625a52f0dd64ca18e86938c6cd3c, type: 3}
+  - {fileID: 21300000, guid: 93a3bbbbb593e074eb7bb7c306363b6c, type: 3}
+  crystalPatches:
+  - {fileID: 21300000, guid: b101511b67dbb484fb4aefaee0e2d50f, type: 3}
+  - {fileID: 21300000, guid: ade9eb33411fccc4691a39ae8deeff4a, type: 3}
+  - {fileID: 21300000, guid: 3212e37a6b6286f4092d9aaeea781e78, type: 3}
+  - {fileID: 21300000, guid: 699a853ebfebedd479793bc9dc78b824, type: 3}
+  flowers:
+  - {fileID: 21300000, guid: 85579bf0ad8f7b843ab0df21b26fcac1, type: 3}
+  - {fileID: 21300000, guid: 5c17fe1526954ad4d90e02169b4b62be, type: 3}
+  - {fileID: 21300000, guid: 5893bb8e4fa11c144867e8e765172717, type: 3}
+  - {fileID: 21300000, guid: ff347011653159346980644089c45759, type: 3}
+  - {fileID: 21300000, guid: da377a068751f3b4fb2749887816323c, type: 3}
+  grass:
+  - {fileID: 21300000, guid: 85da30cf52c99474fa47f1bc9da4a613, type: 3}
+  - {fileID: 21300000, guid: 831af21942f06ae429159a3a6b4f0c5f, type: 3}
+  - {fileID: 21300000, guid: 77a56f9c4ef27814dbe062f7ff12a95e, type: 3}
+  - {fileID: 21300000, guid: e4c0de533e15e924ca6652432e243b89, type: 3}
+  rocks:
+  - {fileID: 21300000, guid: 278c13a225737c549ab68faf996f99e2, type: 3}
+  - {fileID: 21300000, guid: 72998967e599d9f4ebc0f223556b8163, type: 3}
+  - {fileID: 21300000, guid: 421ccb3527e68c84aa02f2f05763110f, type: 3}
+  - {fileID: 21300000, guid: a50fb4f6dca55584b8b6196dba819cf4, type: 3}

@@ -170,7 +170,7 @@ public class PetFollower : MonoBehaviour
     }
     // x Balance.CatCooldownScale (all cats), the party leader is faster, Catnip Frenzy / Wolf Pack
     private float Cooldown => (IsFed ? BaseCooldown * 0.5f : BaseCooldown) * Balance.CatCooldownScale * Boons.CatCooldownMultiplier
-                              * (CatRoster.IsLeader(this) ? Balance.LeaderCooldownScale : 1f);
+                              * (CatRoster.IsLeader(this) ? Balance.LeaderCooldownScale : CatRoster.IsSubLeader(this) ? Balance.SubLeaderCooldownScale : 1f);
 
     public void Treat()
     {
@@ -338,9 +338,9 @@ public class PetFollower : MonoBehaviour
         if (!rowdyNearby && Time.time - fullNoticeAt > 4f)
         {
             fullNoticeAt = Time.time;
+            // party full: the Cat Party menu only opens when Rowdy presses {INTERACT} on the cat (UpdateSwapPrompt),
+            // never by walking into it - Auto Pick Up only takes cats while there are free slots
             IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, CatRoster.HasRoom ? "TAKE ME?" : "PARTY FULL!", new Color(1f, 0.75f, 0.9f), 0.8f, 1.6f);
-            // party full and nothing around: straight to the Cat Party menu (only once per visit)
-            if (!CatRoster.HasRoom && !kickHold && BoonFX.EnemiesIn(transform.position, 6f).Count == 0) CatParty.Open(this);
         }
         rowdyNearby = true;
         nearbyRowdy = other.transform;
@@ -1044,9 +1044,38 @@ public static class CatRoster
 
     private static readonly List<string> collected = new List<string>(); // pickup order
 
-    // Registered flying rats: each one is bait that keeps one cat from getting lost on death
+    // Legendary (flying) rats: a consumable BAIT. At a checkpoint, drop one (checkpoint menu) and a cat lost somewhere
+    // in the level smells it and comes running back to Rowdy (RatBait). Works anywhere there's a checkpoint - e.g. the
+    // one by the Frontier colosseum, to call cats before a trial.
     public static int Rats { get; private set; }
     public static void AddRat() => Rats++;
+    private static readonly List<string> lostOrder = new List<string>();   // cats lost by dying, latest last
+    private static readonly HashSet<string> everOwned = new HashSet<string>();
+
+    // The cat a rat would lure right now: the last one lost by dying, then any cat he had before, then a new one
+    public static PetFollower Lurable()
+    {
+        PetFollower best = null;
+        int bestScore = -1;
+        foreach (PetFollower pet in PetFollower.Pets)
+        {
+            if (pet == null || pet.IsCollected || !pet.isActiveAndEnabled) continue;
+            int lostAt = lostOrder.LastIndexOf(pet.RosterKey);
+            int score = lostAt >= 0 ? 1000 + lostAt : everOwned.Contains(pet.RosterKey) ? 500 : Random.Range(0, 100);
+            if (score > bestScore) { bestScore = score; best = pet; }
+        }
+        return best;
+    }
+
+    // Spends a rat; false if there's none or no cat to call
+    public static bool SpendRat(out PetFollower lured)
+    {
+        lured = Rats > 0 ? Lurable() : null;
+        if (lured == null) return false;
+        Rats--;
+        lostOrder.Remove(lured.RosterKey);
+        return true;
+    }
     public static int CatCount => collected.Count;
     private static readonly Dictionary<string, List<Vector3>> visitedSpots = new Dictionary<string, List<Vector3>>();
     private static bool needsApply = true;
@@ -1088,8 +1117,11 @@ public static class CatRoster
     public static void ClearAll()
     {
         LeaderKey = null;
+        SubLeaderKey = null;
         Rats = 0;
         collected.Clear();
+        lostOrder.Clear();
+        everOwned.Clear();
         visitedSpots.Clear();
         needsApply = true;
         diedBeforeReload = false;
@@ -1098,10 +1130,16 @@ public static class CatRoster
     public static void RecordCollected(string key)
     {
         if (!collected.Contains(key)) collected.Add(key);
+        everOwned.Add(key);
+        lostOrder.Remove(key);
+        SortRanks(); // a newcomer never cuts in front of the leader / sub-leader
     }
 
-    // ---- Magical Cat Capacity: as many cats as Rowdy's level (level 1 = 1 cat ... level 10 = 10 cats)
-    public const int MaxCats = 10;
+    // ---- Magical Cat Capacity: as many cats as Rowdy's level (level 1 = 1 cat ... level 9 = 9 cats, the cap).
+    // Level 10 adds a SUB-LEADER instead of a 10th cat (SubLeaderLevel).
+    public const int MaxCats = 9;
+    public const int SubLeaderLevel = 10;
+    public static bool SubLeaderUnlocked => PlayerStats.Level >= SubLeaderLevel;
     public static int Capacity => Mathf.Clamp(PlayerStats.Level, 1, MaxCats);
     public static bool HasRoom => collected.Count < Capacity;
 
@@ -1118,7 +1156,7 @@ public static class CatRoster
         }
         if (leaving != null)
         {
-            if (IsLeader(leaving)) LeaderKey = null;
+            ClearRank(leaving);
             collected.Remove(leaving.RosterKey);
             leaving.Dismiss(newcomer.transform.position + new Vector3(0.5f, 0f, 0f));
         }
@@ -1129,10 +1167,49 @@ public static class CatRoster
 
     // ---- Cat Party (CatParty menu): order, leader, kicking, auto pick up
     // Party order = the 'collected' order: the ring around Rowdy follows it, and on death the first ones stay (rats).
+    // The leader (and from level 10 the sub-leader) always stand first and second in the line (and on the cat HUD).
     public static string LeaderKey { get; private set; }
+    public static string SubLeaderKey { get; private set; }
     public static PetFollower Leader => Find(LeaderKey);
+    public static PetFollower SubLeader => Find(SubLeaderKey);
     public static bool IsLeader(PetFollower p) => p != null && LeaderKey != null && p.IsCollected && p.RosterKey == LeaderKey;
-    public static void SetLeader(PetFollower p) => LeaderKey = p != null && p.IsCollected ? p.RosterKey : null;
+    public static bool IsSubLeader(PetFollower p) => p != null && SubLeaderKey != null && p.IsCollected && p.RosterKey == SubLeaderKey;
+    public static void SetLeader(PetFollower p)
+    {
+        LeaderKey = p != null && p.IsCollected ? p.RosterKey : null;
+        if (LeaderKey != null && LeaderKey == SubLeaderKey) SubLeaderKey = null;
+        SortRanks();
+    }
+    public static void SetSubLeader(PetFollower p)
+    {
+        SubLeaderKey = p != null && p.IsCollected && SubLeaderUnlocked ? p.RosterKey : null;
+        if (SubLeaderKey != null && SubLeaderKey == LeaderKey) LeaderKey = null;
+        SortRanks();
+    }
+    private static void ClearRank(PetFollower p)
+    {
+        if (IsLeader(p)) LeaderKey = null;
+        if (IsSubLeader(p)) SubLeaderKey = null;
+    }
+
+    // Leader to slot 1, sub-leader to slot 2; everybody else keeps their order
+    public static void SortRanks()
+    {
+        if (SubLeaderKey != null && !SubLeaderUnlocked) SubLeaderKey = null;
+        if (LeaderKey != null && !collected.Contains(LeaderKey)) LeaderKey = null;
+        if (SubLeaderKey != null && !collected.Contains(SubLeaderKey)) SubLeaderKey = null;
+        int at = 0;
+        foreach (string key in new[] { LeaderKey, SubLeaderKey })
+        {
+            if (key == null) continue;
+            collected.Remove(key);
+            collected.Insert(at++, key);
+        }
+        Reindex();
+    }
+
+    // How many front places are locked by rank (the Cat Party can't move other cats in front of them)
+    public static int RankedCount => (LeaderKey != null && collected.Contains(LeaderKey) ? 1 : 0) + (SubLeaderKey != null && collected.Contains(SubLeaderKey) ? 1 : 0);
 
     private const string AutoPickupKey = "RD_CatAutoPickup";
     public static bool AutoPickup
@@ -1164,7 +1241,7 @@ public static class CatRoster
     public static void Kick(PetFollower pet, Vector3 at)
     {
         if (pet == null || !pet.IsCollected) return;
-        if (IsLeader(pet)) LeaderKey = null;
+        ClearRank(pet);
         collected.Remove(pet.RosterKey);
         pet.Dismiss(at);
         pet.MarkKicked();
@@ -1177,7 +1254,8 @@ public static class CatRoster
         if (pet == null) return;
         int i = collected.IndexOf(pet.RosterKey);
         int j = i + direction;
-        if (i < 0 || j < 0 || j >= collected.Count) return;
+        int locked = RankedCount; // leader / sub-leader stay in front
+        if (i < locked || j < locked || j >= collected.Count) return;
         (collected[i], collected[j]) = (collected[j], collected[i]);
         Reindex();
     }
@@ -1232,20 +1310,22 @@ public static class CatRoster
         needsApply = false;
         string sceneName = rowdy.gameObject.scene.name;
 
-        // Death penalty: ALL cats get lost, except one per registered flying rat (the ones found first stay).
-        // Also never more cats than the Magical Cat Capacity.
+        // Death penalty: ALL cats get lost (legendary rats no longer shield them: they're bait to call cats back at a
+        // checkpoint, see RatBait). Also never more cats than the Magical Cat Capacity.
         var lostKeys = new List<string>();
         int keep = Mathf.Min(collected.Count, Capacity);
-        if (diedBeforeReload) keep = Mathf.Min(keep, Rats);
+        if (diedBeforeReload) keep = 0;
         while (collected.Count > keep)
         {
             lostKeys.Insert(0, collected[collected.Count - 1]);
             collected.RemoveAt(collected.Count - 1);
             if (diedBeforeReload) RunStats.CatsLost++;
         }
+        if (diedBeforeReload) foreach (string k in lostKeys) { lostOrder.Remove(k); lostOrder.Add(k); }
         bool died = diedBeforeReload;
         diedBeforeReload = false;
         if (LeaderKey != null && !collected.Contains(LeaderKey)) LeaderKey = null; // the leader got lost
+        if (SubLeaderKey != null && !collected.Contains(SubLeaderKey)) SubLeaderKey = null;
 
         var pets = new List<PetFollower>();
         foreach (PetFollower pet in PetFollower.Pets)
@@ -1322,6 +1402,7 @@ public static class CatRoster
     {
         if (rowdyMovement == null || !rowdyMovement.IsGrounded) return;
         Vector3 pos = rowdy.position;
+        if (FrontierArena.InGloom(pos)) return; // the Gloomwood is behind a gate: cats don't hide there
         if (Vector2.Distance(pos, lastSample) < VisitedSampleSpacing) return;
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(pos, Vector2.down, 2f);

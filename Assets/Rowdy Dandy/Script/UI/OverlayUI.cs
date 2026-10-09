@@ -103,7 +103,7 @@ public static class OverlayUI
             }
             tex.SetPixels32(pixels);
             tex.Apply(false, true);
-            panelSprite = Sprite.Create(tex, new Rect(0, 0, 12, 12), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(4, 4, 4, 4));
+            panelSprite = AIArt.Use("Overlay_Panel9Slice", Sprite.Create(tex, new Rect(0, 0, 12, 12), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(4, 4, 4, 4)));
             return panelSprite;
         }
     }
@@ -119,6 +119,6 @@ public static class OverlayUI
                 pixels[(h - 1 - y) * w + x] = rows[y][x] == '.' ? new Color32(0, 0, 0, 0) : palette(rows[y][x]);
         tex.SetPixels32(pixels);
         tex.Apply(false, true);
-        return Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 16f);
+        return AIArt.Use(name, Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 16f));
     }
 }

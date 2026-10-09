@@ -88,7 +88,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 0.82, b: 0.95, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -276,6 +276,7 @@ MonoBehaviour:
   recoverTime: 0.5
   attackEvery: {x: 1.6, y: 3}
   crackle: {fileID: 8300000, guid: 4c71dcdadf8da6c42a5786994bb172f6, type: 3}
+  jellySheet: {fileID: 2800000, guid: 024ec401ca1382143b92f3bf553e801f, type: 3}
 --- !u!1 &1039055637075645156
 GameObject:
   m_ObjectHideFlags: 0

@@ -118,6 +118,8 @@ public static class BoonFX
         tex.SetPixels32(px);
         tex.Apply(false, true);
         s = Sprite.Create(tex, new Rect(0, 0, w, h), pivot, ppu);
+        // your redraw, if there is one (AI Placeholders). Boon icons are named per boon by BoonIcons instead.
+        if (key != "BoonPixel" && !key.StartsWith("BoonIcon_")) s = AIArt.Use(key, s);
         sprites[key] = s;
         return s;
     }
@@ -159,7 +161,7 @@ public static class BoonFX
                 }
             tex.SetPixels32(px);
             tex.Apply(false, true);
-            s = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 64f);
+            s = AIArt.Use(key, Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 64f));
             sprites[key] = s;
             return s;
         }
@@ -192,7 +194,7 @@ public static class BoonFX
                 }
             tex.SetPixels32(px);
             tex.Apply(false, true);
-            s = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 64f);
+            s = AIArt.Use(key, Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 64f));
             sprites[key] = s;
             return s;
         }
@@ -226,7 +228,7 @@ public static class BoonFX
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        s = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), 64f);
+        s = AIArt.Use(key, Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), 64f));
         sprites[key] = s;
         return s;
     }

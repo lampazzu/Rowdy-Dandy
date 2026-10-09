@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// CAT PARTY: manage Rowdy's cats. Opens by itself when he finds a cat with a full party (or {INTERACT} on it), and
+// CAT PARTY: manage Rowdy's cats. Opens with {INTERACT} on a new cat while the party is full (never by itself), and
 // from the pause menu. The game is paused while it's open.
 //   {MOVE} pick a cat          {OK} pick it up and move it along the line (order = ring order, and who stays on death)
 //   {INTERACT} make it LEADER  (the leader's power cools down much faster; Top Cat boon: more damage + a crown)
@@ -246,7 +246,7 @@ public class CatParty : MonoBehaviour
         c.crown = OverlayUI.MakeImage("Crown", c.root, Color.white, MoreSprites.Crown);
         c.crown.preserveAspect = true;
         Center(c.crown.rectTransform, new Vector2(0f, CardH / 2f + 8f), new Vector2(54f, 30f));
-        c.crown.enabled = CatRoster.IsLeader(p);
+        c.crown.enabled = CatRoster.IsLeader(p) || CatRoster.IsSubLeader(p);
 
         c.name = Text(c.root, p.CatName, p.CatName.Length > 8 ? 2 : 3, Color.white);
         Center(c.name.Rect, new Vector2(0f, -36f));
@@ -262,14 +262,26 @@ public class CatParty : MonoBehaviour
     private void RefreshTexts()
     {
         int n = CatRoster.CatCount;
-        PetFollower leader = CatRoster.Leader;
-        subheader.SetText(n + " / " + CatRoster.Capacity + " CATS     LEADER: " + (leader != null ? leader.CatName : "NONE"));
+        PetFollower leader = CatRoster.Leader, sub = CatRoster.SubLeader;
+        string ranks = "     LEADER: " + (leader != null ? leader.CatName : "NONE");
+        if (CatRoster.SubLeaderUnlocked) ranks += "     SUB: " + (sub != null ? sub.CatName : "NONE");
+        else ranks += "     SUB-LEADER AT LV " + CatRoster.SubLeaderLevel;
+        subheader.SetText(n + " / " + CatRoster.Capacity + " CATS" + ranks);
         foreach (Card c in cards)
         {
             if (c.pet == null) continue;
             if (c.cd != null) c.cd.SetText("COOLDOWN " + Mathf.RoundToInt(c.pet.CooldownSeconds) + "S");
-            if (c.crown != null) c.crown.enabled = CatRoster.IsLeader(c.pet);
-            if (c.tag != null && !c.candidate) c.tag.SetText(CatRoster.IsLeader(c.pet) ? "LEADER" : "");
+            bool isLeader = CatRoster.IsLeader(c.pet), isSub = CatRoster.IsSubLeader(c.pet);
+            if (c.crown != null)
+            {
+                c.crown.enabled = isLeader || isSub;
+                c.crown.color = isSub ? new Color(0.75f, 0.85f, 1f) : Color.white; // silver crown for the sub-leader
+            }
+            if (c.tag != null && !c.candidate)
+            {
+                c.tag.SetText(isLeader ? "LEADER" : isSub ? "SUB-LEADER" : "");
+                c.tag.Color = isSub ? new Color(0.75f, 0.85f, 1f) : new Color(1f, 0.85f, 0.3f);
+            }
         }
         autoText.SetText(GameInput.Format("{NOTES} AUTO PICK UP: " + (CatRoster.AutoPickup ? "ON" : "OFF")));
         autoText.Color = CatRoster.AutoPickup ? new Color(0.55f, 1f, 0.6f) : new Color(1f, 0.55f, 0.5f);
@@ -284,7 +296,12 @@ public class CatParty : MonoBehaviour
         else if (mode == Mode.ChooseSwap) s = "{MOVE} WHO LEAVES?     {OK} SWAP     {BACK} NEVER MIND";
         else if (mode == Mode.ConfirmKick) s = "{ATTACK} KICK FOR REAL     {MOVE} MERCY";
         else if (c != null && c.candidate) s = "{MOVE} SELECT     {OK} " + (CatRoster.HasRoom ? "TAKE" : "TAKE (SWAP)") + "     {BACK} CLOSE";
-        else if (c != null && c.pet != null) s = "{MOVE} SELECT     {OK} MOVE     {INTERACT} LEADER     {ATTACK} KICK     {BACK} CLOSE";
+        else if (c != null && c.pet != null)
+        {
+            string rank = CatRoster.IsLeader(c.pet) ? "UNCROWN" : CatRoster.IsSubLeader(c.pet) ? "MAKE LEADER"
+                : CatRoster.SubLeaderUnlocked && CatRoster.Leader != null ? "SUB-LEADER" : "LEADER";
+            s = "{MOVE} SELECT     {OK} MOVE     {INTERACT} " + rank + "     {ATTACK} KICK     {BACK} CLOSE";
+        }
         else s = "{MOVE} SELECT     {BACK} CLOSE";
         hints.SetText(GameInput.Format(s));
         RefreshTexts();
@@ -440,7 +457,8 @@ public class CatParty : MonoBehaviour
         Card c = Selected;
         if (c == null || c.pet == null) return;
         int target = selected + dir;
-        if (target < 0 || target >= CatRoster.CatCount) { shake = 0.15f; UISound.Play(UISound.Cue.Locked); return; }
+        int locked = CatRoster.RankedCount; // the leader / sub-leader hold the front places
+        if (selected < locked || target < locked || target >= CatRoster.CatCount) { shake = 0.15f; UISound.Play(UISound.Cue.Locked); return; }
         CatRoster.Move(c.pet, dir);
         (cards[selected], cards[target]) = (cards[target], cards[selected]);
         (cards[selected].home, cards[target].home) = (cards[target].home, cards[selected].home);
@@ -449,25 +467,53 @@ public class CatParty : MonoBehaviour
         UISound.Play(UISound.Cue.Move);
     }
 
+    // {INTERACT} cycles the rank. Before level 10: none -> LEADER -> none.
+    // From level 10 (sub-leader unlocked), with a leader already picked: none -> SUB-LEADER -> LEADER (the old leader
+    // steps down to sub) -> none. Ranked cats jump to the front of the line (1st leader, 2nd sub-leader).
     private void Crown(Card c)
     {
-        if (CatRoster.IsLeader(c.pet))
+        PetFollower pet = c.pet;
+        bool promoted;
+        if (CatRoster.IsLeader(pet))
         {
             CatRoster.SetLeader(null);
+            promoted = false;
+        }
+        else if (CatRoster.IsSubLeader(pet))
+        {
+            PetFollower old = CatRoster.Leader;
+            CatRoster.SetLeader(pet);
+            if (old != null) CatRoster.SetSubLeader(old);
+            promoted = true;
+        }
+        else if (CatRoster.SubLeaderUnlocked && CatRoster.Leader != null)
+        {
+            CatRoster.SetSubLeader(pet);
+            promoted = true;
+        }
+        else
+        {
+            CatRoster.SetLeader(pet);
+            promoted = true;
+        }
+
+        Rebuild(false); // ranked cats move to the front
+        selected = Mathf.Max(0, cards.FindIndex(k => k.pet == pet));
+        Card now = Selected;
+        if (!promoted)
+        {
             UISound.Play(UISound.Cue.Back);
-            Say(c.pet, "pick");
-            RefreshTexts();
+            Say(pet, "pick");
+            RefreshHints();
             return;
         }
-        CatRoster.SetLeader(c.pet);
-        foreach (Card k in cards) if (k.crown != null) { k.crown.enabled = k == c; }
         crownDrop = 0f;
-        crownCard = c;
-        Celebrate(c, "leader");
+        crownCard = now;
+        Celebrate(now, "leader");
         BoonArt art = BoonArt.Get;
-        if (art != null) Play(art.coin, 0.5f, 1.2f);
+        if (art != null) Play(art.coin, 0.5f, CatRoster.IsLeader(pet) ? 1.2f : 1.45f);
         UISound.Play(UISound.Cue.Unlock);
-        RefreshTexts();
+        RefreshHints();
     }
 
     private void KickPressed(Card c)
@@ -793,7 +839,7 @@ public class CatParty : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        cardSprite = Sprite.Create(tex, new Rect(0, 0, 12, 12), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(4, 4, 4, 4));
+        cardSprite = AIArt.Use("CatParty_Card9Slice", Sprite.Create(tex, new Rect(0, 0, 12, 12), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(4, 4, 4, 4)));
         return cardSprite;
     }
 
@@ -812,7 +858,7 @@ public class CatParty : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        bubbleSprite = Sprite.Create(tex, new Rect(0, 0, 10, 10), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(3, 3, 3, 3));
+        bubbleSprite = AIArt.Use("CatParty_Bubble9Slice", Sprite.Create(tex, new Rect(0, 0, 10, 10), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(3, 3, 3, 3)));
         return bubbleSprite;
     }
 
@@ -839,7 +885,7 @@ public class CatParty : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        glowSprite = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f));
+        glowSprite = AIArt.Use("CatParty_Glow", Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f)));
         return glowSprite;
     }
 
@@ -857,7 +903,7 @@ public class CatParty : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        washSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f));
+        washSprite = AIArt.Use("CatParty_Wash", Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f)));
         return washSprite;
     }
 }

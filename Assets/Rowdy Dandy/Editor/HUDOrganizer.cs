@@ -16,7 +16,7 @@ public static class HUDOrganizer
     private const string MainCanvasName = "UI / User Interface";
     private const string HealthCanvasName = "User Interface";
     private const string HudFolder = "Assets/Rowdy Dandy/HUD and UI/";
-    private const string GeneratedFolder = "Assets/Rowdy Dandy/HUD and UI/Generated/";
+    private const string GeneratedFolder = "Assets/Resources/AI Placeholders/HUD/";
     private const string ShadowMaterialPath = "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Drop Shadow.mat";
     private const string UndoName = "Organize HUD";
 
@@ -75,7 +75,7 @@ public static class HUDOrganizer
 
         if (frameSprite == null || backSprite == null || greenFill == null || panelSprite == null || labelHP == null)
         {
-            EditorUtility.DisplayDialog("Organize HUD", "Some HUD sprites are missing. Make sure 'Assets/Rowdy Dandy/HUD and UI/Generated' finished importing, then try again.", "OK");
+            EditorUtility.DisplayDialog("Organize HUD", "Some HUD sprites are missing. Make sure 'Assets/Resources/AI Placeholders/HUD' finished importing, then try again.", "OK");
             return;
         }
 

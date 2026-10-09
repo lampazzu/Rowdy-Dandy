@@ -210,10 +210,10 @@ public static class EnemyCatalog
         },
         new Entry
         {
-            id = "voltrat", name = "Volt Rat", keys = new[] { "voltrat" }, killsToReveal = 5,
-            about = "Comes in packs on The Frontier. Hovers around you, crackles, then zips straight through where you stand.",
+            id = "voltrat", name = "Red Jelly", keys = new[] { "voltrat", "redjelly" }, killsToReveal = 5,
+            about = "Angry red jellyfish that float in packs in the colosseums. Hovers around you, pulses, then jets straight through where you stand.",
             weakness = "Paper thin. One or two hits each.",
-            counter = "Watch for the crackle and the flash, then jump or dash out of the line.",
+            counter = "Watch for the fast pulsing and the white flash, then jump or dash out of the line.",
             drops = "A couple of EXP gems.",
         },
         new Entry

@@ -15,6 +15,7 @@ public static class BoonIcons
         PatronInfo p = BoonCatalog.Of(d.patron);
         Color b = d.IsDuo ? BoonCatalog.Of(d.partner.Value).color : p.accent;
         s = Make(d.icon, p.color, b);
+        if (d.icon != null && d.icon.StartsWith("draw:")) s = AIArt.Use("BoonIcon_" + d.id, s); // drawn placeholder: your redraw wins
         cache[d.id] = s;
         return s;
     }
@@ -33,6 +34,7 @@ public static class BoonIcons
         {
             PatronInfo p = BoonCatalog.Of(patron);
             s = Make(p.emblem, p.color, p.accent);
+            if (p.emblem != null && p.emblem.StartsWith("draw:")) s = AIArt.Use("PatronEmblem_" + patron, s);
         }
         cache[key] = s;
         return s;
@@ -171,7 +173,7 @@ public static class BoonIcons
                 }
             tex.SetPixels32(px);
             tex.Apply(false, true);
-            medallion = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), 64f);
+            medallion = AIArt.Use("BoonMedallion", Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), 64f));
             return medallion;
         }
     }

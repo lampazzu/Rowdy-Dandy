@@ -18,7 +18,7 @@ public class Tutorials : MonoBehaviour
         {
             case Topic.Weapon: return ("SHINY!", "EVERY SWING WEARS IT DOWN.", "WATCH THE DUR BAR. IT WILL BREAK, BABY.");
             case Topic.Cat: return ("A CAT!", "CATS FIGHT FOR YOU. NO TRAINING NEEDED.", "LEVEL UP FOR MORE. DIE AND THEY WANDER OFF.");
-            case Topic.Rat: return ("LEGENDARY RAT!", "EACH RAT KEEPS ONE CAT SAFE", "WHEN YOU DIE. GROSS, BUT LOYAL.");
+            case Topic.Rat: return ("LEGENDARY RAT!", "DROP IT AT A CHECKPOINT AS BAIT:", "A LOST CAT COMES RUNNING BACK.");
             case Topic.Checkpoint: return ("CHECKPOINT", "PRESS {I} HERE TO REST.", "FULL HEALTH, FRESH ENEMIES, MORNING SUN.");
             case Topic.LevelUp: return ("LEVEL UP!", "MORE DAMAGE, CRIT CHANCE, CRIT DAMAGE + 1 CAT SLOT.", "SEE YOUR LEVEL BONUSES ANYTIME: {STATS}");
             case Topic.Night: return ("NIGHTFALL", "MORE MONSTERS. GLOWING ONES ARE ELITES.", "REST AT A CHECKPOINT TO SKIP TO MORNING.");

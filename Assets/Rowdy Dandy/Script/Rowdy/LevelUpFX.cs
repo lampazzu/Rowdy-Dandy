@@ -223,7 +223,7 @@ public class LevelUpFX : MonoBehaviour
                     }
                 tex.SetPixels32(px);
                 tex.Apply(false, true);
-                ringSprite = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 64f);
+                ringSprite = AIArt.Use("LevelUp_Ring", Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 64f));
             }
             return ringSprite;
         }
@@ -263,7 +263,7 @@ public class LevelUpFX : MonoBehaviour
                 }
                 tex.SetPixels32(px);
                 tex.Apply(false, true);
-                beamSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0f), 32f);
+                beamSprite = AIArt.Use("LevelUp_Beam", Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0f), 32f));
             }
             return beamSprite;
         }
@@ -279,7 +279,7 @@ public class LevelUpFX : MonoBehaviour
                 px[(h - 1 - y) * w + x] = rows[y][x] == '#' ? new Color32(255, 255, 255, 255) : new Color32(0, 0, 0, 0);
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        return Sprite.Create(tex, new Rect(0, 0, w, h), pivot, 64f);
+        return AIArt.Use("LevelUp_" + name, Sprite.Create(tex, new Rect(0, 0, w, h), pivot, 64f));
     }
 
     // Rising major arpeggio with a little sparkle on top (C5 E5 G5 C6)

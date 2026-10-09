@@ -21,7 +21,7 @@ public class ItemArt : ScriptableObject
     public bool scatterOres = true;
     public int oresPerLevel = 14;
 
-    [Header("Cat treat fish (Resources/Pickups/CatTreat_Fish.png, frames side by side)")]
+    [Header("Cat treat fish (Resources/AI Placeholders/Pickups/CatTreat_Fish.png, frames side by side)")]
     public Texture2D fish;
     public int fishFrames = 2;
 

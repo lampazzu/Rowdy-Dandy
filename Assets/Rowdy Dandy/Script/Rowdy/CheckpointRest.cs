@@ -45,9 +45,17 @@ public class CheckpointRest : MonoBehaviour
         if (here && Interact.Pressed && !Interact.UsedThisFrame)
         {
             Interact.Use();
-            Resting = true;
-            RestRunner.Run(rowdy, area.bounds.center, area.bounds.max.y);
+            // carrying legendary rats: a small menu (rest / drop a rat as cat bait); otherwise rest right away
+            if (CatRoster.Rats > 0) CheckpointMenu.Open(Rest, new Vector3(area.bounds.center.x, area.bounds.min.y, 0f));
+            else Rest();
         }
+    }
+
+    private void Rest()
+    {
+        if (Resting || rowdy == null) return;
+        Resting = true;
+        RestRunner.Run(rowdy, area.bounds.center, area.bounds.max.y);
     }
 
     private void UpdatePrompt(bool show)

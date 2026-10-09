@@ -329,6 +329,21 @@ public class EnemyMovement : MonoBehaviour
         usesSpacing &= melee != null && !isOnlyAquatic;
     }
 
+    // Arena fighters (colosseums): they know where Rowdy is from the start and never give up the chase, so the
+    // player never has to go looking for a stray enemy. Bold like the Gnoll Warriors (keep coming on other floors).
+    public void ArenaAggro()
+    {
+        chaseDistance = 999f;
+        enableChaseTimeout = false;
+        enableLineOfSightCheck = false;
+        sleepWhenFar = false;
+        enableEdgeAvoidance = false;
+        enableStuckDetection = false;
+        boldChaser = true; // never stands around "watching" Rowdy on another floor
+        isChasing = true;
+        timeOutOfRange = 0f;
+    }
+
     private void OnDisable() => LeaveTurnQueue();
     private void OnDestroy() => LeaveTurnQueue();
 

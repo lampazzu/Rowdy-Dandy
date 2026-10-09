@@ -271,7 +271,7 @@ public static class NotesData
             {
                 ("HOW", "Touch a spawner to set it as your respawn point."),
                 ("RESTING", "While you stand on a spawner no new enemy waves arrive. Catch your breath. The start of the beach is quiet too."),
-                ("DYING", "You come back at the last spawner you touched. Level, weapons and notes are kept - but ALL your cats get lost, except one for every flying rat you registered."),
+                ("DYING", "You come back at the last spawner you touched. Level, weapons and notes are kept - but ALL your cats get lost. Legendary rats dropped at a checkpoint lure them back, one cat per rat."),
                 (Quip, "Nap spot. Officially. I'm putting it on my resume."),
             },
         },
@@ -382,7 +382,7 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT IT IS", "A very rare rat with wings. Now and then one bursts out of a defeated enemy, flutters around and escapes after a while."),
-                ("REGISTER IT", "Walk up to it and press {INTERACT} to grab it. Every registered rat is bait: when you die, one cat per rat stays with you and the rest get lost. 10 cats and 3 rats = you come back with 3 cats."),
+                ("REGISTER IT", "Walk up to it and press {INTERACT} to grab it. Every registered rat is BAIT: press {INTERACT} on a checkpoint and drop one, and a cat lost somewhere in the level smells it and comes running back to you. Works at the checkpoint by the colosseum too - call your cats before a trial."),
                 ("LUCK", "Ore gems make it show up more often."),
                 (Quip, "Cats love rats. I love cats. The rats are fine with it. Probably."),
             },

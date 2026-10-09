@@ -369,7 +369,7 @@ public class PulseRing : MonoBehaviour
                 }
             tex.SetPixels32(px);
             tex.Apply(false, true);
-            ring = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), n);
+            ring = AIArt.Use("FX_PulseRing", Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), n));
             return ring;
         }
     }

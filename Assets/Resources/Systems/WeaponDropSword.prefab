@@ -53,7 +53,7 @@ MonoBehaviour:
   purpleGlowColor: {r: 0.75, g: 0.3, b: 1, a: 1}
   dropSound: {fileID: 8300000, guid: c087ca6dd5db250408146587d4537c8f, type: 3}
   dropVolume: 0.8
-  pickupSound: {fileID: 8300000, guid: 3dd5bc1baf83c1445b2162755b8b316b, type: 3}
+  pickupSound: {fileID: 8300000, guid: bfb64743159fae549b1983c44980ddf7, type: 3}
   pickupVolume: 1
 --- !u!61 &260197071294811265
 BoxCollider2D:

@@ -3,8 +3,8 @@ using UnityEngine;
 
 // FLYING RAT (PIV_Flying_Rat art) - very rare, LEGENDARY drop from enemies. It crackles into existence with a golden
 // aura (outline, light beam, sparkles, chime), flutters around for a while and then escapes. Walk up to it and press
-// Y / E to GRAB it: time slows right down for the moment. Every registered rat is bait that keeps one cat from
-// getting lost when Rowdy dies: with 2 rats and 2 cats you never lose a cat, only a 3rd one would be at risk (CatRoster).
+// Y / E to GRAB it: time slows right down for the moment. Every registered rat is BAIT: dropped at a checkpoint
+// (CheckpointMenu) it lures one lost cat back to Rowdy (RatBait, CatRoster.SpendRat).
 public class FlyingRat : Pickup
 {
     private const float PixelsPerUnit = 64f;
@@ -192,7 +192,7 @@ public class FlyingRat : Pickup
             }
             tex.SetPixels32(px);
             tex.Apply(false, true);
-            beamSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), PixelsPerUnit);
+            beamSprite = AIArt.Use("LegendaryRat_Beam", Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), PixelsPerUnit));
             return beamSprite;
         }
     }

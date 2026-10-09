@@ -1,0 +1,689 @@
+fileFormatVersion: 2
+guid: 4c2622a2ad2af544588f4473518b6577
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3119495454028052035
+    second: RDR_Tchogon_0
+  - first:
+      213: -5148704536163231925
+    second: RDR_Tchogon_1
+  - first:
+      213: 3213574446233649201
+    second: RDR_Tchogon_2
+  - first:
+      213: 3289875629723136449
+    second: RDR_Tchogon_3
+  - first:
+      213: -8894140316783935355
+    second: RDR_Tchogon_4
+  - first:
+      213: -1339511119723000229
+    second: RDR_Tchogon_5
+  - first:
+      213: 8604121183786089373
+    second: RDR_Tchogon_6
+  - first:
+      213: 2826090204951380812
+    second: RDR_Tchogon_7
+  - first:
+      213: 6483585453302072188
+    second: RDR_Tchogon_8
+  - first:
+      213: 8316965506329461941
+    second: RDR_Tchogon_9
+  - first:
+      213: -4727112117922598508
+    second: RDR_Tchogon_10
+  - first:
+      213: -3079030508956058773
+    second: RDR_Tchogon_11
+  - first:
+      213: -9130360198955965093
+    second: RDR_Tchogon_12
+  - first:
+      213: 8363997571171843098
+    second: RDR_Tchogon_13
+  - first:
+      213: -3215091820125091939
+    second: RDR_Tchogon_14
+  - first:
+      213: 3876992865124480299
+    second: RDR_Tchogon_15
+  - first:
+      213: -7727614612537390940
+    second: RDR_Tchogon_16
+  - first:
+      213: -8742642668695995159
+    second: RDR_Tchogon_17
+  - first:
+      213: 3358362843984188833
+    second: RDR_Tchogon_18
+  - first:
+      213: -3586355669261621129
+    second: RDR_Tchogon_19
+  - first:
+      213: -3261237601025527277
+    second: RDR_Tchogon_20
+  - first:
+      213: 6427260202313701055
+    second: RDR_Tchogon_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RDR_Tchogon_0
+      rect:
+        serializedVersion: 2
+        x: 638
+        y: 70
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db94630996355b4d0800000000000000
+      internalID: -3119495454028052035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_1
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 70
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b475c8cd0802c88b0800000000000000
+      internalID: -5148704536163231925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_2
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 29
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 130870fbee8e89c20800000000000000
+      internalID: 3213574446233649201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_3
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 29
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c1bcd8647cf7ad20800000000000000
+      internalID: 3289875629723136449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_4
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 29
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5800d9b418aa19480800000000000000
+      internalID: -8894140316783935355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_5
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 29
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5e8930dbb9196de0800000000000000
+      internalID: -1339511119723000229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_6
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 29
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9bbbfb41aaf76770800000000000000
+      internalID: 8604121183786089373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_7
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 28
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c438651711a483720800000000000000
+      internalID: 2826090204951380812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_8
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 25
+        width: 13
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c73c5f64e925af950800000000000000
+      internalID: 6483585453302072188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_9
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 26
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b4c1f5101ccb6370800000000000000
+      internalID: 8316965506329461941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_10
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 29
+        width: 9
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49177c5f29ce56eb0800000000000000
+      internalID: -4727112117922598508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_11
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 27
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6b7515c0161545d0800000000000000
+      internalID: -3079030508956058773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_12
+      rect:
+        serializedVersion: 2
+        x: 688
+        y: 29
+        width: 9
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b556dd516c17a4180800000000000000
+      internalID: -9130360198955965093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_13
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 14
+        width: 48
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1c7de30a73e21470800000000000000
+      internalID: 8363997571171843098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_14
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 26
+        width: 32
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d970e2d1603b163d0800000000000000
+      internalID: -3215091820125091939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_15
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 29
+        width: 56
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b25f77a3878ddc530800000000000000
+      internalID: 3876992865124480299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_16
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 16
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a8479ad37ff1c490800000000000000
+      internalID: -7727614612537390940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_17
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 9
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ecb33630d4eba680800000000000000
+      internalID: -8742642668695995159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_18
+      rect:
+        serializedVersion: 2
+        x: 651
+        y: 10
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a55c86963d4b9e20800000000000000
+      internalID: 3358362843984188833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_19
+      rect:
+        serializedVersion: 2
+        x: 668
+        y: 10
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 778e3772584ba3ec0800000000000000
+      internalID: -3586355669261621129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_20
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 9
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 312f9be3ea1cdb2d0800000000000000
+      internalID: -3261237601025527277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RDR_Tchogon_21
+      rect:
+        serializedVersion: 2
+        x: 686
+        y: 16
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb6d9e5d917323950800000000000000
+      internalID: 6427260202313701055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      RDR_Tchogon_0: -3119495454028052035
+      RDR_Tchogon_1: -5148704536163231925
+      RDR_Tchogon_10: -4727112117922598508
+      RDR_Tchogon_11: -3079030508956058773
+      RDR_Tchogon_12: -9130360198955965093
+      RDR_Tchogon_13: 8363997571171843098
+      RDR_Tchogon_14: -3215091820125091939
+      RDR_Tchogon_15: 3876992865124480299
+      RDR_Tchogon_16: -7727614612537390940
+      RDR_Tchogon_17: -8742642668695995159
+      RDR_Tchogon_18: 3358362843984188833
+      RDR_Tchogon_19: -3586355669261621129
+      RDR_Tchogon_2: 3213574446233649201
+      RDR_Tchogon_20: -3261237601025527277
+      RDR_Tchogon_21: 6427260202313701055
+      RDR_Tchogon_3: 3289875629723136449
+      RDR_Tchogon_4: -8894140316783935355
+      RDR_Tchogon_5: -1339511119723000229
+      RDR_Tchogon_6: 8604121183786089373
+      RDR_Tchogon_7: 2826090204951380812
+      RDR_Tchogon_8: 6483585453302072188
+      RDR_Tchogon_9: 8316965506329461941
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -127,6 +127,8 @@ public static class Balance
     public const float CatCooldownScale = 1.35f;
     // The party leader (Cat Party menu) cools down this much faster than the others
     public const float LeaderCooldownScale = 0.6f;
+    // The sub-leader (unlocked at level 10, instead of a 10th cat slot)
+    public const float SubLeaderCooldownScale = 0.8f;
 
     // ================================================================ boons
     // Wipeout: how long the wave carries enemies and the cooldown. Lamp: 0.55s at speed 12 (6.6 units: always off screen), 1s

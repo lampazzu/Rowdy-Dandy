@@ -52,12 +52,13 @@ public class CatHUD : MonoBehaviour
         public CanvasGroup group;
         public PixelText status;
         public RectTransform bar;
-        public Image crown; // the Cat Party leader
+        public Image crown; // the Cat Party leader (gold) / sub-leader (silver)
+        public Vector2 home; // its place in the layout
     }
 
     private readonly List<Entry> entries = new List<Entry>();
 
-    // Registered flying rats (each one keeps a cat from getting lost): [rat] x2 under the cats
+    // Legendary rats carried (bait for a lost cat, dropped at a checkpoint): [rat] x2 under the cats
     private RectTransform ratRow;
     private Image ratIcon;
     private PixelText ratText;
@@ -114,7 +115,13 @@ public class CatHUD : MonoBehaviour
     private void Update()
     {
         SyncEntries();
-        foreach (Entry e in entries) if (e.crown != null) e.crown.enabled = !e.lost && CatRoster.IsLeader(e.pet);
+        foreach (Entry e in entries)
+        {
+            if (e.crown == null) continue;
+            bool sub = CatRoster.IsSubLeader(e.pet);
+            e.crown.enabled = !e.lost && (CatRoster.IsLeader(e.pet) || sub);
+            e.crown.color = sub ? new Color(0.75f, 0.85f, 1f) : Color.white;
+        }
         UpdateFreeSlot();
         if (freeSlot != null)
         {
@@ -122,6 +129,7 @@ public class CatHUD : MonoBehaviour
             freeSlot.localScale = Vector3.one * (1f + freePunch * 0.6f);
         }
         AvoidStatsPanel();
+        Layout(); // party order (leader / sub-leader) and the stats panel can change it any frame
         UpdateRats();
 
         float dt = Time.unscaledDeltaTime;
@@ -208,14 +216,44 @@ public class CatHUD : MonoBehaviour
         if (changed) Layout();
     }
 
-    // Collected cats first (pickup order), lost ghosts under them
+    // Collected cats first in PARTY order (leader 1st, sub-leader 2nd), then the free places, lost ghosts, the rats.
+    // Never runs into the boon strip at the bottom-left: once the column would reach it, it wraps into a 2nd column.
+    private const float BottomKeepOut = 200f; // canvas units above the bottom edge (boon strip + its moon button)
+    private Vector2 ratSpot;
+
     private void Layout()
     {
         float step = 22 * pixelScale + entryGap;
-        int row = 0;
-        foreach (Entry e in entries) if (!e.lost) e.root.anchoredPosition = new Vector2(0f, -(row++) * step);
-        if (freeSlot != null && freeSlot.gameObject.activeSelf) freeSlot.anchoredPosition = new Vector2(0f, -(row++) * step);
-        foreach (Entry e in entries) if (e.lost) e.root.anchoredPosition = new Vector2(e.root.anchoredPosition.x, -(row++) * step);
+        float columnStep = (22 + 2 + 76) * pixelScale + 16f;
+        int maxRows = MaxRows(step);
+        int slot = 0;
+        Vector2 Next() { int col = slot / maxRows, row = slot % maxRows; slot++; return new Vector2(col * columnStep, -row * step); }
+
+        List<PetFollower> party = CatRoster.Party;
+        var live = entries.FindAll(e => !e.lost);
+        live.Sort((a, b) => Order(party, a.pet).CompareTo(Order(party, b.pet)));
+        foreach (Entry e in live) { e.home = Next(); e.root.anchoredPosition = e.home; }
+        if (freeSlot != null && freeSlot.gameObject.activeSelf) freeSlot.anchoredPosition = Next();
+        foreach (Entry e in entries) if (e.lost) e.home = Next();
+        ratSpot = Next();
+    }
+
+    private static int Order(List<PetFollower> party, PetFollower pet)
+    {
+        int i = party.IndexOf(pet);
+        return i < 0 ? 999 : i;
+    }
+
+    private int MaxRows(float step)
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null) return 99;
+        var canvasRect = (RectTransform)canvas.rootCanvas.transform;
+        var corners = new Vector3[4];
+        rect.GetWorldCorners(corners);
+        float top = canvasRect.InverseTransformPoint(corners[1]).y;  // top-left corner of this panel
+        float bottom = -canvasRect.rect.height * canvasRect.pivot.y + BottomKeepOut;
+        return Mathf.Max(2, Mathf.FloorToInt((top - bottom + entryGap) / step));
     }
 
     // false = finished, remove it
@@ -240,8 +278,7 @@ public class CatHUD : MonoBehaviour
 
         float fade = Mathf.Clamp01((t - lostHold) / Mathf.Max(0.01f, lostFade));
         entry.group.alpha = 1f - fade;
-        Vector2 p = entry.root.anchoredPosition;
-        entry.root.anchoredPosition = new Vector2(-fade * fade * 60f, p.y);
+        entry.root.anchoredPosition = new Vector2(entry.home.x - fade * fade * 60f, entry.home.y);
         return fade < 1f;
     }
 
@@ -267,8 +304,7 @@ public class CatHUD : MonoBehaviour
         {
             if (shownRats >= 0 && rats > shownRats / 100) ratPunch = 0.35f; // a new rat: punch
             shownRats = key;
-            bool safe = rats >= CatRoster.CatCount && CatRoster.CatCount > 0;
-            ratText.SetText("X" + rats + (safe ? "  CATS SAFE" : ""));
+            ratText.SetText("X" + rats + "  BAIT");
             ratText.Rect.anchoredPosition = new Vector2(24 * pixelScale, -11 * pixelScale);
         }
         // Flaps in the HUD too
@@ -276,8 +312,7 @@ public class CatHUD : MonoBehaviour
         ratPunch = Mathf.Max(0f, ratPunch - Time.unscaledDeltaTime);
         ratIcon.rectTransform.localScale = Vector3.one * (1f + ratPunch * 1.2f);
         ratIcon.color = ratPunch > 0f ? Color.Lerp(Color.white, new Color(1f, 0.85f, 0.3f), Mathf.Repeat(ratPunch * 12f, 1f)) : Color.white;
-        int rows = entries.Count + (freeSlot != null && freeSlot.gameObject.activeSelf ? 1 : 0);
-        Place(ratRow, 0f, rows * (22 * pixelScale + entryGap), 260f, 22 * pixelScale);
+        Place(ratRow, ratSpot.x, -ratSpot.y, 260f, 22 * pixelScale);
     }
 
     private Sprite[] ratFrames;

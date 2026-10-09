@@ -34,7 +34,7 @@ public static class ItemArtSetup
         changed |= Fill(ref art.sapphire, NewStuff + "DMG_Ore@Sapphire.png");
         changed |= Fill(ref art.ruby, NewStuff + "DMG_Ore@Ruby.png");
         changed |= Fill(ref art.crystals, NewStuff + "DMG_Ore@Crystals.png");
-        changed |= Fill(ref art.fish, "Assets/Resources/Pickups/CatTreat_Fish.png");
+        changed |= Fill(ref art.fish, "Assets/Resources/AI Placeholders/Pickups/CatTreat_Fish.png");
 
         changed |= Fill(ref art.vfxHeal, NewStuff + "TBZG_VFX_Heal.png");
         changed |= Fill(ref art.vfxPoison, NewStuff + "TBZG_VFX_Poison.png");

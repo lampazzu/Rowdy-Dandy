@@ -93,10 +93,14 @@ public class PlayerStats : MonoBehaviour
 
     private void Update()
     {
-        if (PauseMenu.IsPaused) return;
+        // the stats screen pauses the game itself (StatsPause): it still has to be able to close
+        if (PauseMenu.IsPaused && !(isUIPanelOpen && StatsPause.IsOpen)) return;
 
-        // C, or the gamepad's L2 / LT (Rowdy Notes are on Select / Tab)
-        if (!RowdyNotes.IsOpen && (GameInput.KeyDown(toggleUIKey) || GameInput.PadDown(GameInput.Act.Stats)))
+        // C, or the gamepad's L2 / LT (Rowdy Notes are on Select / Tab). Back / pause also close it.
+        bool toggle = GameInput.KeyDown(toggleUIKey) || GameInput.PadDown(GameInput.Act.Stats);
+        bool close = isUIPanelOpen && StatsPause.IsOpen && Time.unscaledTime - StatsPause.OpenedAt > 0.15f
+                     && (GameInput.Down(GameInput.Act.Back) || GameInput.Down(GameInput.Act.Pause));
+        if (!RowdyNotes.IsOpen && (toggle || close))
         {
             ToggleStatsUI();
         }
@@ -258,6 +262,7 @@ public class PlayerStats : MonoBehaviour
         isUIPanelOpen = !isUIPanelOpen;
         if (statsPanel != null) statsPanel.SetActive(isUIPanelOpen);
         RunStatsPanel.SetVisible(isUIPanelOpen, statsPanel != null ? statsPanel.transform as RectTransform : null);
+        StatsPause.Set(isUIPanelOpen); // pauses the game while the stats are up
 
         if (isUIPanelOpen)
         {
@@ -267,7 +272,7 @@ public class PlayerStats : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (isUIPanelOpen) RunStatsPanel.SetVisible(false, null); // the overlay outlives the scene
+        if (isUIPanelOpen) { RunStatsPanel.SetVisible(false, null); StatsPause.Set(false); } // the overlay outlives the scene
     }
 
     private void UpdateUI()

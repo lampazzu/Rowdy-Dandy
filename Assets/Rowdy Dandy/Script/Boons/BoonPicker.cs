@@ -805,7 +805,7 @@ public class BoonPicker : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        cardSprite = Sprite.Create(tex, new Rect(0, 0, 12, 12), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(4, 4, 4, 4));
+        cardSprite = AIArt.Use("BoonPicker_Card9Slice", Sprite.Create(tex, new Rect(0, 0, 12, 12), new Vector2(0.5f, 0.5f), 64f, 0, SpriteMeshType.FullRect, new Vector4(4, 4, 4, 4)));
         return cardSprite;
     }
 
@@ -827,7 +827,7 @@ public class BoonPicker : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        raysSprite = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f));
+        raysSprite = AIArt.Use("BoonPicker_Rays", Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f)));
         return raysSprite;
     }
 
@@ -847,7 +847,7 @@ public class BoonPicker : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        glowSprite = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f));
+        glowSprite = AIArt.Use("BoonPicker_Glow", Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f)));
         return glowSprite;
     }
 
@@ -866,7 +866,7 @@ public class BoonPicker : MonoBehaviour
             }
         tex.SetPixels32(px);
         tex.Apply(false, true);
-        edgeSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f));
+        edgeSprite = AIArt.Use("BoonPicker_Edge", Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f)));
         return edgeSprite;
     }
 

@@ -27,6 +27,11 @@ public class FirstDrop : MonoBehaviour
         go.AddComponent<FirstDrop>().StartCoroutine(go.GetComponent<FirstDrop>().Drop(rowdy));
     }
 
+    // A reload in the middle of the drop (dev reset, death, rest) destroys this object with the scene and the coroutine
+    // never reaches its end: Running stayed true for the whole session, which kept the boon picker from ever opening,
+    // made Rowdy immune to damage and blocked checkpoints and tutorials.
+    private void OnDestroy() => Running = false;
+
     private IEnumerator Drop(Health rowdy)
     {
         Running = true;
@@ -71,7 +76,9 @@ public class FirstDrop : MonoBehaviour
             yield return null;
         }
         yield return new WaitForSeconds(0.3f);
-        FXSound.Play(Whistle(), 0.45f, 1f);
+        // a cinematic whoosh (Resources/Sounds/FX/SkyFall); the old synth whistle only if it's missing
+        AudioClip fall = FXSound.Clip("SkyFall");
+        FXSound.Play(fall != null ? fall : Whistle(), fall != null ? 0.8f : 0.45f, 1f);
 
         float trail = 0f;
         for (float t = 0f; t < FallTime; t += Time.deltaTime)
@@ -96,7 +103,8 @@ public class FirstDrop : MonoBehaviour
         TimeSlowController.HitStop(0.09f, 0.05f);
         ScreenShake.Impulse(1.1f);
         GamepadRumble.Pulse(0.7f, 0.9f, 0.25f);
-        FXSound.Play("Slam", 0.9f, 1f);
+        FXSound.Play("Slam", 0.7f, 1f);
+        FXSound.Play("SkyLand", 0.9f, 1f); // meteor impact
         Vector3 ground = new Vector3(land.x, land.y - feet, 0f);
         GroundShock.Spawn(ground, 3.2f, new Color(1f, 0.85f, 0.95f), new Color(0.85f, 0.75f, 0.65f));
         PulseRing.Spawn(ground + Vector3.up * 0.2f, new Color(1f, 0.6f, 0.9f, 0.9f), 1.6f, 0.45f, 90, true);

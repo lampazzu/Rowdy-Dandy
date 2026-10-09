@@ -8,6 +8,7 @@ public class ExplosionChain : MonoBehaviour
 {
     private static GameObject explosionPrefab;
     private static AudioClip explosionSound;
+    private static GameObject holder;
 
     public static GameObject Prefab
     {
@@ -31,8 +32,14 @@ public class ExplosionChain : MonoBehaviour
         GameObject b = null;
         if (Prefab != null)
         {
-            b = Instantiate(Prefab, at, Quaternion.Euler(0f, 0f, Random.Range(0, 4) * 90f));
+            // The prefab carries an enabled Vanish (Destroy on OnEnable), which killed every explosion the frame it
+            // was spawned. Made under an inactive holder, Vanish switched off, then let loose with a timed cleanup.
+            if (holder == null) { holder = new GameObject("Explosion Holder (inactive)"); holder.SetActive(false); DontDestroyOnLoad(holder); }
+            b = Instantiate(Prefab, at, Quaternion.Euler(0f, 0f, Random.Range(0, 4) * 90f), holder.transform);
+            foreach (Vanish v in b.GetComponentsInChildren<Vanish>(true)) v.enabled = false;
+            b.transform.SetParent(null, true);
             b.transform.localScale = Prefab.transform.localScale * scale;
+            Destroy(b, 1.5f);
         }
         if (explosionSound == null) explosionSound = Resources.Load<AudioClip>("Sounds/Explosion");
         SoundManager.PlaySfx(explosionSound, volume);

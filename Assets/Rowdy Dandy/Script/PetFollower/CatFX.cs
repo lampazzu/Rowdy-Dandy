@@ -133,7 +133,7 @@ public static class CatFX
             }
             tex.SetPixels32(px);
             tex.Apply(false, true);
-            slashSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 32f);
+            slashSprite = AIArt.Use("Cat_Slash", Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 32f));
             return slashSprite;
         }
     }
