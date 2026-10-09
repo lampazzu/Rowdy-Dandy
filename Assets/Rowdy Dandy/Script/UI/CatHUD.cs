@@ -52,6 +52,7 @@ public class CatHUD : MonoBehaviour
         public CanvasGroup group;
         public PixelText status;
         public RectTransform bar;
+        public Image crown; // the Cat Party leader
     }
 
     private readonly List<Entry> entries = new List<Entry>();
@@ -113,6 +114,7 @@ public class CatHUD : MonoBehaviour
     private void Update()
     {
         SyncEntries();
+        foreach (Entry e in entries) if (e.crown != null) e.crown.enabled = !e.lost && CatRoster.IsLeader(e.pet);
         UpdateFreeSlot();
         if (freeSlot != null)
         {
@@ -331,6 +333,14 @@ public class CatHUD : MonoBehaviour
         iconRect.sizeDelta = new Vector2(16 * s, 16 * s);
         entry.icon = AddImage(iconRect, pet.Portrait);
         entry.icon.preserveAspect = true;
+
+        // leader (Cat Party): a little crown on top of the slot
+        RectTransform crownRect = CreateUI("Leader Crown", slot);
+        crownRect.anchorMin = crownRect.anchorMax = crownRect.pivot = new Vector2(0.5f, 0f);
+        crownRect.anchoredPosition = new Vector2(0f, slotSize - 3 * s);
+        crownRect.sizeDelta = new Vector2(9 * s, 5 * s);
+        entry.crown = AddImage(crownRect, MoreSprites.Crown);
+        entry.crown.enabled = false;
 
         // Name
         entry.label = PixelText.Create(entry.root, pet.CatName, s, Color.white, 0f);

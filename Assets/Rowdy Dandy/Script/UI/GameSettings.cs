@@ -30,8 +30,7 @@ public static class GameSettings
     // "Respect": how many of the pushy melee enemies (Big Wolf, Transform Wolf, Werefast) may press Rowdy at once;
     // the rest hang back and wait for a turn. 0 = no limit. DEV TOOL ONLY (Dev Tools page), not a player setting.
     public static int CrowdLimit { get; private set; } = 4;
-    // Style rank panel (StyleRank): on / off, size, which screen corner. Off by default, bottom right.
-    public static bool StyleRankOn { get; private set; } = false;
+    // Style rank panel (StyleRank, part of the Main Character boon): size, which screen corner. Bottom right by default.
     public static float StyleRankSize { get; private set; } = 0.6f;
     public static int StyleRankPosition { get; private set; } = 5; // index into RankPositions
 
@@ -63,6 +62,7 @@ public static class GameSettings
     // instead of replacing it, so 100% sounds like the game always did.
     private static float projectVolume = 1f;
     private static void ApplyMasterVolume() => AudioListener.volume = projectVolume * MasterVolume;
+    public static void ReapplyMasterVolume() => ApplyMasterVolume(); // AudioGuard, after restarting the audio system
 
     // Distinct screen sizes the monitor supports, smallest first
     public static List<Vector2Int> Resolutions
@@ -130,7 +130,6 @@ public static class GameSettings
         ShowFps = PlayerPrefs.GetInt(Prefix + "ShowFps", 0) == 1;
         CrowdLimit = PlayerPrefs.GetInt(Prefix + "CrowdLimit", 4);
         // (keys renamed when the defaults changed to off / bottom right, so old saves pick up the new defaults)
-        StyleRankOn = PlayerPrefs.GetInt(Prefix + "RankOn2", 0) == 1;
         StyleRankSize = PlayerPrefs.GetFloat(Prefix + "RankSize", 0.6f);
         StyleRankPosition = Mathf.Clamp(PlayerPrefs.GetInt(Prefix + "RankPosition2", 5), 0, RankPositions.Length - 1);
         EnemyAlerts = PlayerPrefs.GetInt(Prefix + "EnemyAlerts", 1) == 1;
@@ -163,7 +162,6 @@ public static class GameSettings
         PlayerPrefs.SetFloat(Prefix + "MessageSize", MessageSize);
         PlayerPrefs.SetInt(Prefix + "ShowFps", ShowFps ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "CrowdLimit", CrowdLimit);
-        PlayerPrefs.SetInt(Prefix + "RankOn2", StyleRankOn ? 1 : 0);
         PlayerPrefs.SetFloat(Prefix + "RankSize", StyleRankSize);
         PlayerPrefs.SetInt(Prefix + "RankPosition2", StyleRankPosition);
         PlayerPrefs.SetInt(Prefix + "EnemyAlerts", EnemyAlerts ? 1 : 0);
@@ -214,7 +212,6 @@ public static class GameSettings
     public static void SetMessageSize(float v) { MessageSize = Mathf.Clamp(v, 0.25f, 3f); Commit(); }
     public static void SetShowFps(bool on) { ShowFps = on; Commit(); }
     public static void SetCrowdLimit(int n) { CrowdLimit = Mathf.Clamp(n, 0, 8); Commit(); }
-    public static void SetStyleRankOn(bool on) { StyleRankOn = on; Commit(); }
     public static void SetStyleRankSize(float v) { StyleRankSize = Mathf.Clamp(v, 0.3f, 1.5f); Commit(); }
     public static void SetStyleRankPosition(int i) { StyleRankPosition = (i % RankPositions.Length + RankPositions.Length) % RankPositions.Length; Commit(); }
     public static void SetEnemyAlerts(bool on) { EnemyAlerts = on; Commit(); }

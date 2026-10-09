@@ -145,6 +145,17 @@ public static class NotesData
                 (Quip, "He's not evil. He's just... thorough."),
             },
         },
+        new Topic
+        {
+            id = "Tchogon", name = "Tchogon", glyph = "T", icon = () => CatIcon("Interactables/Tchogon"),
+            sections = new[]
+            {
+                ("WHAT HE DOES", "When enemies get close, he flies over Rowdy and spins into a vortex: three pulls drag everything around Rowdy in toward him, slowed and dizzy."),
+                ("HOW TO USE HIM", "Great with anything that hits a crowd: Hang Ten, Spore Step, the werewolf. Stand in the middle and let them come to you."),
+                ("COOLDOWN", "Starts after the third pull."),
+                (Quip, "Everything revolves around him. He says so himself. Constantly."),
+            },
+        },
     };
 
     // ---------------------------------------------------------------- game mechanics
@@ -213,11 +224,11 @@ public static class NotesData
             sections = new[]
             {
                 ("LEVEL UP = BOON", "Every level up, three patrons each offer you a boon. Take one. They stay with you, even when you die."),
-                ("THE PATRONS", "The Pompadour (gorgeous), Riptide (surf), Howl (the moon), Mama Rot (poison), DJ Fever (lightning and disco), Madame Meow (cats) and The Hammock (great deals with a catch)."),
+                ("THE PATRONS", "Narcissism (gorgeous, and the Style Rank), Sea Abyss (the deep, waves), Lycanthropy (the moon), Mama Rot (poison), the Stinky Bois Guild (cats), the Crazy Chef (food, sandwiches), the Blacksmith (weapons) and the Sun God (daylight, fire)."),
                 ("SLOTS", "Attack, Dash, Jump, Cats and Special hold one boon each - a new one replaces the old. Passives stack."),
                 ("RARITY AND DUOS", "Common, Rare, Epic: same boon, bigger numbers. A boon you own can come back as an UPGRADE. Mix two patrons and a DUO boon may show up."),
                 ("YOUR BUILD", "{STATS} shows every boon you have. The HUD shows your slots at the bottom left."),
-                (Quip, "Seven strangers offering me free power. Totally normal. Very normal beach."),
+                (Quip, "Eight strangers offering me free power. One of them is a sandwich guy. Very normal beach."),
             },
         },
         new Topic
@@ -225,7 +236,7 @@ public static class NotesData
             id = "werewolf", name = "Call Of The Moon", glyph = "W", icon = () => BoonIcons.Get(BoonCatalog.Get("moon")),
             sections = new[]
             {
-                ("THE MOON METER", "With Howl's boon, the moon in your Special slot fills up as you fight. At night it fills twice as fast."),
+                ("THE MOON METER", "With Lycanthropy's boon, the moon in your Special slot fills up as you fight. At night it fills twice as fast."),
                 ("TRANSFORM", "When it's full, press {WOLF}. Rowdy howls, every enemy near him panics, and he's a werewolf for a while."),
                 ("AS A WOLF", "More damage, more speed, less damage taken, claw swipes on every attack, every hit heals a little, and weapons don't wear out. Kills keep the night going longer."),
                 (Quip, "I'm not hairy. I'm voluminous."),

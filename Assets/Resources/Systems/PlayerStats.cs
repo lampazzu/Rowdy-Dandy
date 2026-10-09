@@ -156,7 +156,12 @@ public class PlayerStats : MonoBehaviour
 
     public float GetRequiredEXPForCurrentLevel()
     {
-        if (Balance.Jarvis) return Balance.ExpRequired(currentLevel);
+        return Balance.ExpRequired(currentLevel);
+    }
+
+    // The old per-level list (inspector) - unused since the rebalance, kept for reference
+    private float LegacyRequiredEXP()
+    {
         int index = currentLevel - 1;
         if (index >= 0 && index < levelProgression.Count && levelProgression[index].expRequiredForNext > 0)
         {
@@ -223,25 +228,9 @@ public class PlayerStats : MonoBehaviour
 
         for (int i = 0; i < currentLevel - 1; i++)
         {
-            if (Balance.Jarvis)
-            {
-                newDamageBonus += Balance.LevelDamageGain(i);
-                newCritChanceBonus += Balance.CritChanceGain;
-                newCritMultiplierBonus += Balance.CritMultiplierGain;
-            }
-            else if (i < levelProgression.Count)
-            {
-                newDamageBonus += levelProgression[i].baseDamageGain;
-                newCritChanceBonus += levelProgression[i].critChanceGain;
-                newCritMultiplierBonus += levelProgression[i].critMultiplierGain;
-            }
-            else
-            {
-                // placeholder scaling until the list has entries for these levels
-                newDamageBonus += placeholderDamageGain;
-                newCritChanceBonus += placeholderCritChanceGain;
-                newCritMultiplierBonus += placeholderCritMultiplierGain;
-            }
+            newDamageBonus += Balance.LevelDamageGain(i);
+            newCritChanceBonus += Balance.CritChanceGain;
+            newCritMultiplierBonus += Balance.CritMultiplierGain;
         }
 
         foreach (PlayerDamage pd in targetPlayerDamages)

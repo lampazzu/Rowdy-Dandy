@@ -104,7 +104,7 @@ public class CursedElder : MonoBehaviour
         root.localScale = Vector3.Scale(root.localScale, new Vector3(size, size, 1f));
         if (health != null)
         {
-            health.SetMaxHealth(Balance.Jarvis ? 900f : maxHealth);
+            health.SetMaxHealth(900f);
             health.SetExpDropIfMissing(Resources.Load<GameObject>("Systems/EXPgem"), expGems);
         }
         if (movement != null) movement.moveSpeed *= speedMultiplier;

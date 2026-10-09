@@ -77,14 +77,24 @@ public static class Boons
     {
         owned = new Dictionary<string, Rarity>();
         order.Clear();
+        int refunds = 0;
         foreach (string entry in PlayerPrefs.GetString(OwnedKey, "").Split(';'))
         {
             if (entry.Length == 0) continue;
             string[] parts = entry.Split(':');
-            if (BoonCatalog.Get(parts[0]) == null) continue;
+            if (BoonCatalog.Get(parts[0]) == null)
+            {
+                if (BoonCatalog.Retired.Contains(parts[0])) refunds++; // a boon that left the game: the pick comes back
+                continue;
+            }
             int r = parts.Length > 1 && int.TryParse(parts[1], out int v) ? v : 0;
             owned[parts[0]] = (Rarity)Mathf.Clamp(r, 0, 4);
             if (!order.Contains(parts[0])) order.Add(parts[0]);
+        }
+        if (refunds > 0)
+        {
+            PlayerPrefs.SetInt(PicksKey, Mathf.Max(0, Picks - refunds));
+            Save();
         }
     }
 
@@ -224,7 +234,7 @@ public static class Boons
             PlayerPrefs.SetInt(FirstOfferKey, 1);
             BoonDef moon = BoonCatalog.Get("moon");
             result.Add(Build(moon));
-            usedPatrons.Add(Patron.Howl);
+            usedPatrons.Add(Patron.Lycanthropy);
             usedBoons.Add("moon");
         }
 
@@ -238,7 +248,6 @@ public static class Boons
             foreach (Patron p in patrons)
             {
                 float w = usedPatrons.Contains(p) || Candidates(p).Count == 0 ? 0f : 1f + 0.35f * CountFrom(p);
-                if (p == Patron.Hammock) w *= 0.6f; // the catch-boons are a bit rarer
                 if (previous != null) foreach (Offer o in previous) if (o.def != null && o.def.patron == p) w *= 0.5f;
                 weights.Add(w);
                 total += w;
@@ -294,6 +303,10 @@ public static class Boons
         }
     }
 
+    // Day / night boons (Eclipse: both, all the time)
+    public static bool NightBoons => DayNight.IsNight || Has("eclipse");
+    public static bool DayBoons => !DayNight.IsNight || Has("eclipse");
+
     // Everything that scales Rowdy's own hits (not cats)
     public static float OutgoingMultiplier
     {
@@ -301,28 +314,46 @@ public static class Boons
         {
             float m = 1f;
             if (Has("mainchar")) m *= 1f + V("mainchar", 0) * StyleRank.Rank / 100f;
-            if (Has("moonrage") && DayNight.IsNight) m *= 1f + V("moonrage", 0) / 100f;
-            if (Has("glassjaw")) m *= Balance.GlassJawDamage;
+            if (Has("moonrage") && NightBoons) m *= 1f + V("moonrage", 0) / 100f;
+            if (Has("daybreak") && DayBoons) m *= 1f + V("daybreak", 0) / 100f;
+            if (Has("spotlight") && BoonRunner.InSpotlight) m *= 1f + V("spotlight", 0) / 100f;
+            if (Has("flawless") && BoonRunner.AtFullHealth) m *= 1f + V("flawless", 0) / 100f;
             if (BoonRunner.SaltyActive) m *= 1.2f;
+            if (BoonRunner.WellFed) m *= 1.2f; // Sandwich Time
             if (Werewolf.Active) m *= Werewolf.DamageMultiplier;
             m *= Encore.DamageMultiplier;
             return m;
         }
     }
 
+    // Rowdy's hit on this particular enemy (Hair Spray gloss, Fester, Hunters Mark, Butcher Block)
+    public static float TargetMultiplier(EnemyHealth e)
+    {
+        if (e == null) return 1f;
+        float m = 1f;
+        if (Has("hairspray") && Glossed.On(e)) m *= 1f + V("hairspray", 0) / 100f;
+        if (Has("fester") && e.TryGetComponent(out StatusEffects s) && s.IsPoisoned) m *= 1f + V("fester", 0) / 100f;
+        if (Has("huntmark") && HuntersMark.Target == e) m *= 1f + V("huntmark", 0) / 100f;
+        if (Has("butcher") && ActiveWeapon == 3 && e.currentenemyHealth <= e.startingenemyHealth * 0.4f) m *= V("butcher", 0);
+        return m;
+    }
+
+    // 0 Rod, 1 Sword, 2 Naginata, 3 Cleaver
+    public static int ActiveWeapon => WeaponManager.Instance != null ? WeaponManager.Instance.GetActiveWeaponIndex() : 0;
+
     public static float IncomingMultiplier
     {
         get
         {
             float m = 1f;
-            if (Has("glassjaw")) m *= V("glassjaw", 0);
             if (Has("furcoat")) m *= 1f - Mathf.Min(CatsWithRowdy, 8) * V("furcoat", 0) / 100f;
+            if (Has("silverfur") && NightBoons) m *= 1f - V("silverfur", 0) / 100f;
             if (Werewolf.Active) m *= 0.6f;
             return m;
         }
     }
 
-    public static bool CatsFeral => Has("wolfpack") && (Werewolf.Active || DayNight.IsNight);
+    public static bool CatsFeral => Has("wolfpack") && (Werewolf.Active || NightBoons);
 
     public static float CatDamageMultiplier
     {
@@ -330,9 +361,18 @@ public static class Boons
         {
             float m = 1f;
             if (Has("packleader")) m *= 1f + V("packleader", 0) / 100f;
+            if (Has("catfood")) m *= 1.4f;
             if (CatsFeral) m *= 2f;
             return m;
         }
+    }
+
+    // One cat's damage: everything above, plus Top Cat on the party leader
+    public static float CatDamageFor(PetFollower cat)
+    {
+        float m = CatDamageMultiplier;
+        if (Has("topcat") && cat != null && CatRoster.IsLeader(cat)) m *= 1f + V("topcat", 0) / 100f;
+        return m;
     }
 
     public static float CatCooldownMultiplier
@@ -348,20 +388,54 @@ public static class Boons
 
     public static float ExecuteThresholdMultiplier => Has("packleader") ? 2f : 1f;
 
-    public static float CritChanceBonus => Has("glamourpuss") ? 3f * CatsWithRowdy : 0f;
+    public static float CritChanceBonus
+    {
+        get
+        {
+            float c = 0f;
+            if (Has("glamourpuss")) c += 3f * CatsWithRowdy;
+            if (Has("openwounds")) c += 10f;
+            if (Has("cheese")) c += V("cheese", 0);
+            if (Has("spotlight") && BoonRunner.InSpotlight) c += 15f;
+            return c;
+        }
+    }
+
+    public static float CritMultiplierBonus => Has("cheese") ? 0.2f : 0f;
 
     public static float SpeedMultiplier
     {
         get
         {
             float m = 1f;
-            if (Has("moonrage") && DayNight.IsNight) m *= 1.15f;
+            if (Has("moonrage") && NightBoons) m *= 1.15f;
             if (Werewolf.Active) m *= Werewolf.SpeedMultiplier;
             return m;
         }
     }
 
-    public static float DurabilityCost => Werewolf.Active ? 0f : Has("weaponsnob") ? 2f : 1f;
+    // Whetstone: the attack clips play faster (WeaponManager scales its attack speed floats)
+    public static float AttackSpeedMultiplier => Has("whetstone") ? 1f + V("whetstone", 0) / 100f : 1f;
 
-    public static bool AttackBlocked => BoonRunner.Napping;
+    // Weapon wear per swing: werewolf claws are free, Weapon Snob doubles it, Tempered Steel may skip it, Forged In Sunlight -25%
+    public static float DurabilityCost
+    {
+        get
+        {
+            if (Werewolf.Active) return 0f;
+            if (Has("tempered") && Random.value < V("tempered", 0) / 100f) { BoonRunner.OnDurabilitySaved(); return 0f; }
+            float cost = Has("weaponsnob") ? 2f : 1f;
+            if (Has("forgefire")) cost *= 0.75f;
+            return cost;
+        }
+    }
+
+    // Tempered Steel: weapons picked up come with more durability
+    public static float PickupDurabilityMultiplier => Has("tempered") ? 1.25f : 1f;
+
+    // Secret Sauce: every heal is bigger
+    public static float HealMultiplier => Has("secretsauce") ? 1f + V("secretsauce", 0) / 100f : 1f;
+
+    // Moon Feast: the moon meter fills faster. Eclipse: always at the night rate
+    public static float MoonChargeMultiplier => (Has("feast") ? 1f + V("feast", 0) / 100f : 1f) * (Has("eclipse") || DayNight.IsNight ? 2f : 1f);
 }

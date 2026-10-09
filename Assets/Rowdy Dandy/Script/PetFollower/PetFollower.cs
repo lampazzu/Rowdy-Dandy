@@ -6,7 +6,8 @@ using UnityEngine.Events;
 public class PetFollower : MonoBehaviour
 {
     // Paprika / Mushidon / Peak / Lallo: see StatusEffects.cs (placeholder art = tinted Wig)
-    public enum CatType { Wig, Samurai, Paprika, Mushidon, Peak, Lallo }
+    // Tchogon: pulls every enemy around Rowdy in toward him (vortex)
+    public enum CatType { Wig, Samurai, Paprika, Mushidon, Peak, Lallo, Tchogon }
 
     private static readonly List<PetFollower> ActivePets = new List<PetFollower>();
     public static IReadOnlyList<PetFollower> Pets => ActivePets;
@@ -30,7 +31,7 @@ public class PetFollower : MonoBehaviour
     [SerializeField] private Color tint = Color.white;
 
     [Header("Ability (Paprika / Mushidon / The Peak / Lallo)")]
-    [Tooltip("Seconds before the ability can be used again. -1 = the cat's default (Paprika 14, Mushidon 9, Peak 10 after the armor breaks, Lallo 12 after the burst)")]
+    [Tooltip("Seconds before the ability can be used again. -1 = the cat's default (Paprika 14, Mushidon 9, Peak 10 after the armor breaks, Lallo 12 after the burst, Tchogon 11)")]
     [SerializeField] private float abilityCooldown = -1f;
     [Tooltip("Paprika: how long the poison imbue lasts")]
     [SerializeField] private float poisonDuration = 6f;
@@ -125,6 +126,23 @@ public class PetFollower : MonoBehaviour
     public CatType Type => catType;
     public string CatName => string.IsNullOrEmpty(catName) ? DefaultName : catName;
     private string DefaultName => catType == CatType.Peak ? "The Peak" : catType.ToString();
+    public string PowerName
+    {
+        get
+        {
+            switch (catType)
+            {
+                case CatType.Wig: return "SCRATCH";
+                case CatType.Samurai: return "EXECUTE";
+                case CatType.Paprika: return "SPICY CLAWS";
+                case CatType.Mushidon: return "STOMP";
+                case CatType.Peak: return "ARMOR";
+                case CatType.Lallo: return "DECAY";
+                default: return "VORTEX";
+            }
+        }
+    }
+    public float CooldownSeconds => Cooldown;
     public Sprite Portrait => portrait != null ? portrait : (TryGetComponent(out SpriteRenderer sr) ? sr.sprite : null);
     public Color Tint => tint;
     public bool IsCollected => player != null;
@@ -145,11 +163,14 @@ public class PetFollower : MonoBehaviour
                 case CatType.Paprika: return 14f;
                 case CatType.Mushidon: return 9f;
                 case CatType.Peak: return 10f;
+                case CatType.Tchogon: return 11f;
                 default: return 12f;
             }
         }
     }
-    private float Cooldown => (IsFed ? BaseCooldown * 0.5f : BaseCooldown) * Boons.CatCooldownMultiplier; // Catnip Frenzy, Wolf Pack
+    // x Balance.CatCooldownScale (all cats), the party leader is faster, Catnip Frenzy / Wolf Pack
+    private float Cooldown => (IsFed ? BaseCooldown * 0.5f : BaseCooldown) * Balance.CatCooldownScale * Boons.CatCooldownMultiplier
+                              * (CatRoster.IsLeader(this) ? Balance.LeaderCooldownScale : 1f);
 
     public void Treat()
     {
@@ -164,6 +185,13 @@ public class PetFollower : MonoBehaviour
     }
 
     private bool abilityRunning;
+
+    // For CatVisibility (glow while it acts, off-screen markers) and the Cat Party menu
+    private float lastPowerAt = -10f;
+    public bool IsBusy => player != null && (isExecuting || !isFollowingPlayer || Time.time - lastPowerAt < 0.5f);
+    public float LastPowerAt => lastPowerAt;
+    public void SpeakLine() => PlayVoice();
+    public void SetPartyIndex(int index) => pickupOrder = index + 1;
 
     // 1 = ready, 0 = just used (or mid execution chain)
     public float CooldownFraction
@@ -305,24 +333,31 @@ public class PetFollower : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         if (player != null || !other.CompareTag("Player")) return;
-        if (CatRoster.HasRoom) { Collect(other.transform); return; }
+        // Auto Pick Up (Cat Party menu): walk into a cat to take it while there's room; off = {INTERACT} on it
+        if (CatRoster.HasRoom && CatRoster.AutoPickup && !kickHold) { Collect(other.transform); return; }
         if (!rowdyNearby && Time.time - fullNoticeAt > 4f)
         {
             fullNoticeAt = Time.time;
-            IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, "SWAP?", new Color(1f, 0.75f, 0.9f), 0.8f, 1.6f);
+            IconPopup.Show(transform.position + Vector3.up * 0.6f, Portrait, CatRoster.HasRoom ? "TAKE ME?" : "PARTY FULL!", new Color(1f, 0.75f, 0.9f), 0.8f, 1.6f);
+            // party full and nothing around: straight to the Cat Party menu (only once per visit)
+            if (!CatRoster.HasRoom && !kickHold && BoonFX.EnemiesIn(transform.position, 6f).Count == 0) CatParty.Open(this);
         }
         rowdyNearby = true;
         nearbyRowdy = other.transform;
     }
 
+    // Kicked out of the party: doesn't jump straight back in (until Rowdy walks away and comes back)
+    private bool kickHold;
+    public void MarkKicked() => kickHold = true;
+
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player")) rowdyNearby = false;
+        if (other.CompareTag("Player")) { rowdyNearby = false; kickHold = false; }
     }
 
     private void UpdateSwapPrompt()
     {
-        bool show = player == null && rowdyNearby && !CatRoster.HasRoom && !PauseMenu.IsPaused;
+        bool show = player == null && rowdyNearby && (!CatRoster.HasRoom || !CatRoster.AutoPickup || kickHold) && !PauseMenu.IsPaused;
         if (show && swapPrompt == null)
         {
             var go = new GameObject("Swap Prompt");
@@ -348,7 +383,8 @@ public class PetFollower : MonoBehaviour
         {
             lastSwapFrame = Time.frameCount;
             Interact.Use();
-            CatRoster.Swap(this, nearbyRowdy);
+            if (CatRoster.HasRoom) Collect(nearbyRowdy);
+            else CatParty.Open(this); // party full: choose who stays
         }
     }
 
@@ -512,6 +548,7 @@ public class PetFollower : MonoBehaviour
             EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
             if (enemyHealth == null || enemyHealth.NoPetFollow || (enemyHealth.IsObject && !targetObjects))
                 continue;
+            if (!EnemyFairness.OnScreen(target.transform.position, 0.04f)) continue; // stays where Rowdy can see it
 
             float distance = Vector2.Distance(
                 transform.position,
@@ -549,7 +586,8 @@ public class PetFollower : MonoBehaviour
 
         anim.SetTrigger("Attack");
         PlayVoice();
-        BoonRunner.OnCatPower(this); // Compost, Cat Scratch Fever
+        lastPowerAt = Time.time;
+        BoonRunner.OnCatPower(this); // Compost, Food Fight
 
         while (Time.time < cooldownEnd) yield return null; // (a treat can cut it short)
 
@@ -580,6 +618,9 @@ public class PetFollower : MonoBehaviour
             case CatType.Lallo:
                 if (RowdyBuffs.DecayArmedBy == null) StartCoroutine(LalloRoutine());
                 break;
+            case CatType.Tchogon:
+                if (EnemyNear(4.5f, false)) StartCoroutine(TchogonRoutine());
+                break;
         }
     }
 
@@ -589,6 +630,7 @@ public class PetFollower : MonoBehaviour
         {
             EnemyHealth e = hit.GetComponentInParent<EnemyHealth>();
             if (e == null || e.enemydead || e.IsObject || e.NoPetFollow) continue;
+            if (!EnemyFairness.OnScreen(e.transform.position, 0.02f)) continue;
             if (!groundedOnly) return true;
             if (SolidGround.Under(hit)) return true;
         }
@@ -613,7 +655,8 @@ public class PetFollower : MonoBehaviour
     {
         SetTriggerIfExists("Attack");
         PlayVoice();
-        BoonRunner.OnCatPower(this); // Compost, Cat Scratch Fever
+        lastPowerAt = Time.time;
+        BoonRunner.OnCatPower(this); // Compost, Food Fight
         PulseRing.Spawn(transform.position, new Color(tint.r, tint.g, tint.b, 0.9f), 0.6f, 0.3f);
         CatFX.Afterimage(spriteRenderer, new Color(1f, 1f, 1f, 0.7f), 0.2f);
     }
@@ -697,6 +740,46 @@ public class PetFollower : MonoBehaviour
         }
         transform.localScale = baseScale;
 
+        isExecuting = false;
+        isFollowingPlayer = true;
+        SetTriggerIfExists("back to idle");
+        yield return Cooldown_();
+    }
+
+    // Tchogon: flies up over Rowdy, spins, and everything around him gets sucked in toward him
+    private IEnumerator TchogonRoutine()
+    {
+        abilityRunning = true;
+        isExecuting = true;
+        isFollowingPlayer = false;
+        cooldownEnd = float.MaxValue;
+        CastFlourish();
+        IconPopup.Show(transform.position + Vector3.up * 0.6f, null, "GET OVER HERE!", new Color(0.55f, 1f, 0.85f), 0.85f, 1.1f);
+
+        Vector3 start = transform.position;
+        for (float t = 0f; t < 1f; t += Time.deltaTime / 0.18f)
+        {
+            if (player == null) break;
+            transform.position = Vector3.Lerp(start, player.position + new Vector3(0f, 1.7f, 0f), 1f - (1f - t) * (1f - t));
+            yield return null;
+        }
+
+        // the vortex: three pulls in a row
+        float spin = 0f;
+        for (int pull = 0; pull < 3 && player != null; pull++)
+        {
+            CatPowers.Vortex(player, this, pull == 2);
+            for (float t = 0f; t < 0.28f; t += Time.deltaTime)
+            {
+                if (player == null) break;
+                transform.position = Vector3.Lerp(transform.position, player.position + new Vector3(0f, 1.7f, 0f), Time.deltaTime * 12f);
+                spin += Time.deltaTime * 1080f;
+                transform.rotation = Quaternion.Euler(0f, 0f, spin);
+                if (Random.value < 0.5f) CatFX.Afterimage(spriteRenderer, new Color(tint.r, tint.g, tint.b, 0.45f), 0.15f);
+                yield return null;
+            }
+        }
+        transform.rotation = Quaternion.identity;
         isExecuting = false;
         isFollowingPlayer = true;
         SetTriggerIfExists("back to idle");
@@ -824,6 +907,7 @@ public class PetFollower : MonoBehaviour
 
             EnemyHealth enemy = hit.GetComponentInParent<EnemyHealth>();
             if (enemy == null || !enemy.CompareTag("Enemy") || !IsExecutable(enemy)) continue;
+            if (!EnemyFairness.OnScreen(enemy.transform.position, 0.04f)) continue; // no executions off screen
             if (ClaimedTargets.Contains(enemy) || (skip != null && skip.Contains(enemy))) continue;
 
             float distance = Vector2.Distance(center, enemy.transform.position);
@@ -978,6 +1062,7 @@ public static class CatRoster
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSession()
     {
+        LeaderKey = null;
         collected.Clear();
         visitedSpots.Clear();
         LostNotices.Clear();
@@ -1002,6 +1087,7 @@ public static class CatRoster
     // Dev reset (key 0): forget every collected cat and the remembered hiding spots
     public static void ClearAll()
     {
+        LeaderKey = null;
         Rats = 0;
         collected.Clear();
         visitedSpots.Clear();
@@ -1032,12 +1118,73 @@ public static class CatRoster
         }
         if (leaving != null)
         {
+            if (IsLeader(leaving)) LeaderKey = null;
             collected.Remove(leaving.RosterKey);
             leaving.Dismiss(newcomer.transform.position + new Vector3(0.5f, 0f, 0f));
         }
         else if (!HasRoom) return;
         newcomer.Collect(rowdyBody, leaving != null);
         UISound.Play(UISound.Cue.Confirm);
+    }
+
+    // ---- Cat Party (CatParty menu): order, leader, kicking, auto pick up
+    // Party order = the 'collected' order: the ring around Rowdy follows it, and on death the first ones stay (rats).
+    public static string LeaderKey { get; private set; }
+    public static PetFollower Leader => Find(LeaderKey);
+    public static bool IsLeader(PetFollower p) => p != null && LeaderKey != null && p.IsCollected && p.RosterKey == LeaderKey;
+    public static void SetLeader(PetFollower p) => LeaderKey = p != null && p.IsCollected ? p.RosterKey : null;
+
+    private const string AutoPickupKey = "RD_CatAutoPickup";
+    public static bool AutoPickup
+    {
+        get => PlayerPrefs.GetInt(AutoPickupKey, 1) == 1;
+        set { PlayerPrefs.SetInt(AutoPickupKey, value ? 1 : 0); PlayerPrefs.Save(); }
+    }
+
+    public static PetFollower Find(string key)
+    {
+        if (string.IsNullOrEmpty(key)) return null;
+        foreach (PetFollower pet in PetFollower.Pets)
+            if (pet != null && pet.IsCollected && pet.RosterKey == key) return pet;
+        return null;
+    }
+
+    // Rowdy's cats in party order
+    public static List<PetFollower> Party
+    {
+        get
+        {
+            var list = new List<PetFollower>();
+            foreach (string key in collected) { PetFollower p = Find(key); if (p != null) list.Add(p); }
+            return list;
+        }
+    }
+
+    // Out of the party: the cat stays where it is put, waiting to be picked up again
+    public static void Kick(PetFollower pet, Vector3 at)
+    {
+        if (pet == null || !pet.IsCollected) return;
+        if (IsLeader(pet)) LeaderKey = null;
+        collected.Remove(pet.RosterKey);
+        pet.Dismiss(at);
+        pet.MarkKicked();
+        Reindex();
+    }
+
+    // Moves a cat one place left (-1) or right (+1) in the party
+    public static void Move(PetFollower pet, int direction)
+    {
+        if (pet == null) return;
+        int i = collected.IndexOf(pet.RosterKey);
+        int j = i + direction;
+        if (i < 0 || j < 0 || j >= collected.Count) return;
+        (collected[i], collected[j]) = (collected[j], collected[i]);
+        Reindex();
+    }
+
+    public static void Reindex()
+    {
+        for (int i = 0; i < collected.Count; i++) { PetFollower p = Find(collected[i]); if (p != null) p.SetPartyIndex(i); }
     }
 
     // Level went down (dev tools): the newest cats beyond the capacity leave
@@ -1098,6 +1245,7 @@ public static class CatRoster
         }
         bool died = diedBeforeReload;
         diedBeforeReload = false;
+        if (LeaderKey != null && !collected.Contains(LeaderKey)) LeaderKey = null; // the leader got lost
 
         var pets = new List<PetFollower>();
         foreach (PetFollower pet in PetFollower.Pets)

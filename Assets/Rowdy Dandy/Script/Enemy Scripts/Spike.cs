@@ -16,6 +16,11 @@ public class Spike : MonoBehaviour
 
     private EnemyHealth owner;
     private Collider2D box;
+
+    // The enemy whose hitbox hit Rowdy last (Thorn Skin pricks it back)
+    public static EnemyHealth LastAttacker { get; private set; }
+    public static int LastAttackFrame { get; private set; } = -10;
+    private void MarkAttacker() { LastAttacker = owner; LastAttackFrame = Time.frameCount; }
     private bool pending;
     private float lastAttack = -10f;
 
@@ -61,6 +66,7 @@ public class Spike : MonoBehaviour
             if (playerHealth != null)
             {
                 // Apply damage to the player
+                MarkAttacker();
                 playerHealth.TakeDamage(Damage);
 
                 // Not every spike has an Animator (e.g. Frecha arrows), so only trigger when one is assigned
@@ -121,7 +127,7 @@ public class Spike : MonoBehaviour
         foreach (Collider2D hit in Physics2D.OverlapBoxAll(owner.transform.position + offset, size * 1.1f, 0f))
         {
             if (hit != player) continue;
-            if (player.TryGetComponent(out Health playerHealth)) playerHealth.TakeDamage(Damage);
+            if (player.TryGetComponent(out Health playerHealth)) { MarkAttacker(); playerHealth.TakeDamage(Damage); }
             break;
         }
     }

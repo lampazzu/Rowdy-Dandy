@@ -1,55 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Two balances side by side, switched from the Dev Tools page ("Lamps Balance" / "Jarvis Balance"):
-//   Lamp   = the numbers as they are in the prefabs, scene and code (nothing below is applied)
-//   Jarvis = the rebalance: every number lives in this file, so it's one place to tune
-// Saved in PlayerPrefs RD_Balance. Switching reloads at the saved checkpoint (enemy HP is set when they spawn).
-// Bug and look fixes (Undertow pull, Wipeout staying on screen, Night Fever / Spore Step art) are in both.
+// The game's balance (formerly "Jarvis Balance"; the old Lamps numbers were retired 2026-10-08).
+// Every tuned number lives in this file, so it's one place to tune. A "prefab" value passed in is what
+// the prefab / scene / code had, used when nothing here overrides it.
 public static class Balance
-{
-    public enum Mode { Lamp, Jarvis }
-
-    private const string Key = "RD_Balance";
-    private static int cached = -1;
-
-    public static Mode Current
-    {
-        get
-        {
-            if (cached < 0) cached = Mathf.Clamp(PlayerPrefs.GetInt(Key, 0), 0, 1);
-            return (Mode)cached;
-        }
-    }
-
-    public static bool Jarvis => Current == Mode.Jarvis;
-    public static bool Lamp => Current == Mode.Lamp;
-
-    public static void Set(Mode mode)
-    {
-        if (mode == Current) return;
-        cached = (int)mode;
-        PlayerPrefs.SetInt(Key, cached);
-        PlayerPrefs.Save();
-        DevTools.GoToSavedCheckpoint(); // everything re-reads its numbers on the reload
-    }
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    private static void ResetSession() => cached = -1;
-
-    // ================================================================ Rowdy
+{    // ================================================================ Rowdy
     public const float RowdyMaxHealth = 120f;           // Lamp: 100
 
     // Base damage per hitbox (by object name). Lamp: ground 10, air 4, surf contact 1
     public static float RowdyBaseDamage(string hitbox, float lampValue)
     {
-        if (!Jarvis) return lampValue;
         if (hitbox == "DamageBoxAir") return 8f;
         return lampValue;
     }
 
     // Share of the level-up flat damage a hitbox gets (Lamp: all of it, so the surf contact box hit for 50 at level 10)
-    public static float LevelBonusShare(string hitbox) => Jarvis && hitbox == "SurfDamage" ? 0.25f : 1f;
+    public static float LevelBonusShare(string hitbox) => hitbox == "SurfDamage" ? 0.25f : 1f;
 
     // Per level up (index 0 = reaching level 2). Lamp: +1..+5 damage and +1..+25% crit to level 6, then +6 / +5% per level
     // (level 10: +39 damage, 76% crit, x2.4 crits). Jarvis: steady, ends at +30 damage, 18% crit, x1.95 crits.
@@ -81,6 +48,7 @@ public static class Balance
         { "sharkwolf",      new EnemyStats(90f,   0.6f) },  // Lamp 50 HP, 30 per bite from out of the water
         { "pelich",         new EnemyStats(2000f, 1.3f) },  // Lamp 5000 (scene override; PelichBoss code says 600) - ~55 hits at level 8 here
         { "moonboundelder", new EnemyStats(900f,  1f)   },  // Lamp 450
+        { "voltrat",        new EnemyStats(30f,   1f)   },  // The Frontier's electric rats (new)
     };
 
     // Deeper = tougher. Pelich's zone is his arena, bosses skip this.
@@ -115,10 +83,10 @@ public static class Balance
         return null;
     }
 
-    // EnemyHealth.Awake: the Jarvis max health for this enemy (or the Lamp value)
+    // EnemyHealth.Awake: max health for this enemy (or the prefab's)
     public static float EnemyHealth(EnemyHealth e, float lampValue)
     {
-        if (!Jarvis || e == null || e.IsObject) return lampValue;
+        if (e == null || e.IsObject) return lampValue;
         if (lampValue <= 1f) return lampValue; // one-hit set pieces placed in the scene (e.g. the archer by Pelich) stay that way
         EnemyCatalog.Entry kind = Kind(e);
         if (kind == null || !Enemies.TryGetValue(kind.id, out EnemyStats s) || s.hp <= 0f) return lampValue;
@@ -131,10 +99,10 @@ public static class Balance
         return Mathf.Round(hp);
     }
 
-    // Spike (enemy hitboxes, arrows, bombs): Jarvis damage for a hit worth lampValue
+    // Spike (enemy hitboxes, arrows, bombs): damage for a hit worth lampValue
     public static float EnemyDamage(Component source, EnemyHealth owner, float lampValue)
     {
-        if (!Jarvis || lampValue <= 0f || lampValue >= 500f) return lampValue; // kill boxes stay kill boxes
+        if (lampValue <= 0f || lampValue >= 500f) return lampValue; // kill boxes stay kill boxes
         float m = 1f;
         EnemyCatalog.Entry kind = owner != null ? Kind(owner) : null;
         if (kind != null && Enemies.TryGetValue(kind.id, out EnemyStats s)) m = s.damage;
@@ -144,9 +112,9 @@ public static class Balance
     }
 
     // PelichBoss stomp. Lamp 18
-    public static float PelichStomp(float lampValue) => Jarvis ? 24f : lampValue;
+    public static float PelichStomp(float lampValue) => 24f;
 
-    // ================================================================ wave spawner (Jarvis overrides, applied at Start)
+    // ================================================================ wave spawner (overrides, applied at Start)
     public const float SpawnTimeBetweenWaves = 8f;   // Lamp 10
     public const float SpawnInterval = 0.35f;        // Lamp 0.2 - a portal every 0.2s read as one blob
     public const int SpawnMinPerWave = 4;            // Lamp 5
@@ -154,15 +122,20 @@ public static class Balance
     public const int SpawnMaxAlive = 18;             // Lamp 25
     public const float SpawnNightEliteChance = 0.2f; // Lamp 0.15
 
+    // ================================================================ cats
+    // Every cat's cooldown x this (2026-10-08 nerf: cats act a bit less often). <1 = faster cats.
+    public const float CatCooldownScale = 1.35f;
+    // The party leader (Cat Party menu) cools down this much faster than the others
+    public const float LeaderCooldownScale = 0.6f;
+
     // ================================================================ boons
     // Wipeout: how long the wave carries enemies and the cooldown. Lamp: 0.55s at speed 12 (6.6 units: always off screen), 1s
-    public static float WipeoutTravel => Jarvis ? 0.3f : 0.55f;
-    public static float WipeoutCooldown => Jarvis ? 3f : 1f;
-    public static float WipeoutWallBonus => Jarvis ? 1.4f : 1.6f;
-    public static Vector2 WipeoutFling => Jarvis ? new Vector2(1.5f, 2f) : new Vector2(4f, 3f);
-    public static float GlassJawDamage => Jarvis ? 1.6f : 2f;
+    public static float WipeoutTravel => 0.3f;
+    public static float WipeoutCooldown => 3f;
+    public static float WipeoutWallBonus => 1.4f;
+    public static Vector2 WipeoutFling => new Vector2(1.5f, 2f);
 
-    // Jarvis numbers per boon: { values[0] per rarity, values[1]... } - missing = same as Lamp
+    // Numbers per boon: { values[0] per rarity, values[1]... } - missing = the BoonCatalog values
     public static readonly Dictionary<string, float[][]> BoonValues = new Dictionary<string, float[][]>
     {
         { "hairflip",    new[] { new float[] { 8, 12, 16 } } },        // Lamp 18 / 26 / 36
@@ -177,19 +150,14 @@ public static class Balance
         { "packleader",  new[] { new float[] { 40, 60, 80 } } },       // Lamp 60 / 90 / 120%
         { "sporestep",   new[] { new float[] { 5, 7, 10 } } },         // Lamp 8 / 12 / 16
         { "rottenedge",  new[] { new float[] { 4, 6, 9 } } },          // Lamp 6 / 9 / 13
-        { "chainslap",   new[] { new float[] { 7, 10, 14 }, new float[] { 2, 2, 3 } } }, // Lamp 10 / 15 / 21
-        { "mirrorball",  new[] { new float[] { 6, 9, 12 } } },         // Lamp 8 / 12 / 16
-        { "funkyfeet",   new[] { new float[] { 6, 9, 12 } } },         // Lamp 10 / 14 / 19 on EVERY jump
         { "furcoat",     new[] { new float[] { 2, 3, 4 } } },          // Lamp 3 / 4 / 5% per cat (40% at 8 cats)
         { "felinefury",  new[] { new float[] { 14, 20, 28 } } },       // Lamp 22 / 32 / 44
         { "weaponsnob",  new[] { new float[] { 30, 45, 60 } } },       // Lamp 40 / 60 / 80
     };
 
-    // Descriptions that changed meaning under Jarvis
+    // Descriptions that changed meaning with the rebalance
     public static string BoonDescription(string id, string lampDesc)
     {
-        if (!Jarvis) return lampDesc;
-        if (id == "glassjaw") return "YOU DEAL X1.6 DAMAGE. YOU TAKE X{0} DAMAGE.";
         return lampDesc;
     }
 }

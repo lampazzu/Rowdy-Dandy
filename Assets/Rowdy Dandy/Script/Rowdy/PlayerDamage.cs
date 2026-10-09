@@ -57,7 +57,7 @@ public class PlayerDamage : MonoBehaviour
                 float finalDamage = CalculateTotalDamage(out bool isCrit);
                 bool rowdyHit = isRowdys;
                 if (rowdyHit) finalDamage = BoonRunner.ModifyRowdyHit(enemy, finalDamage, ref isCrit); // boons: damage multipliers, Admire Yourself
-                else if (owningCat != null) finalDamage *= Boons.CatDamageMultiplier;                // Pack Leader, Wolf Pack
+                else if (owningCat != null) finalDamage *= Boons.CatDamageFor(owningCat);           // Pack Leader, Wolf Pack, Top Cat
                 EnemyHealth.CreditNextHit(owningCat != null ? KillCredit.Cat(owningCat) : isKillZone ? KillCredit.Drowning() : KillCredit.Rowdy());
                 enemy.TakeDamageEnemy(finalDamage, isCrit);
                 if (owningCat == null && !isKillZone) RowdyBuffs.OnRowdyHit(enemy); // Paprika's poison imbue
@@ -106,7 +106,7 @@ public class PlayerDamage : MonoBehaviour
         float totalCritChance = critChance;
         foreach (float mod in critChanceModifiers)
             totalCritChance += mod;
-        if (isRowdys) totalCritChance += Boons.CritChanceBonus; // Glamour Puss
+        if (isRowdys) totalCritChance += Boons.CritChanceBonus; // Glamour Puss, Open Wounds, Spotlight, Grate Expectations
 
         isCrit = false;
         if (totalCritChance > 0f)
@@ -119,6 +119,7 @@ public class PlayerDamage : MonoBehaviour
                 float totalCritMultiplier = critMultiplier;
                 foreach (float mod in critMultiplierModifiers)
                     totalCritMultiplier += mod;
+                if (isRowdys) totalCritMultiplier += Boons.CritMultiplierBonus; // Grate Expectations
 
                 totalDamage *= totalCritMultiplier;
             }

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
-// CALL OF THE MOON (Howl's special boon): press B / Circle (K on the keyboard) when the moon meter is full and Rowdy
+// CALL OF THE MOON (Lycanthropy's special boon): press B / Circle (K on the keyboard) when the moon meter is full and Rowdy
 // turns into a werewolf for a while - the TDF shadow werewolf art (ItemArt.werewolf, same sheet as the Moonbound Elder).
 //   - the meter fills over time, faster with hits and kills, and twice as fast at night
 //   - as a wolf: x1.6 damage, x1.35 speed, 40% less damage taken, claw swipes on every attack, lifesteal,
@@ -53,7 +53,7 @@ public class Werewolf : MonoBehaviour
     {
         if (!Boons.Has("moon") || active || transforming) return;
         bool wasReady = Ready;
-        charge = Mathf.Min(100f, charge + amount * (DayNight.IsNight ? 2f : 1f));
+        charge = Mathf.Min(100f, charge + amount * Boons.MoonChargeMultiplier); // night x2 (Eclipse: always), Moon Feast
         if (!wasReady && Ready && instance != null) instance.OnFull();
     }
 
@@ -81,9 +81,9 @@ public class Werewolf : MonoBehaviour
         if (active && (health == null || health.IsDead)) { EndNow(false); return; }
         if (PauseMenu.IsPaused || BoonPicker.IsOpen) return;
 
-        if (!active && !transforming) charge = Mathf.Min(100f, charge + Time.deltaTime * 0.9f * (DayNight.IsNight ? 2f : 1f));
+        if (!active && !transforming) charge = Mathf.Min(100f, charge + Time.deltaTime * 0.9f * Boons.MoonChargeMultiplier);
 
-        bool menuJustClosed = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput;
+        bool menuJustClosed = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput || CatParty.BlocksPause;
         if (!menuJustClosed && GameInput.Down(GameInput.Act.Werewolf) && health != null && !health.IsDead)
         {
             if (Ready && !active && !transforming) StartCoroutine(Transform());
@@ -218,7 +218,7 @@ public class Werewolf : MonoBehaviour
             if (fx != null) fx.transform.localScale = new Vector3(-f * 1.5f, 1.5f, 1f);
             BoonArt.Play(art.claw, 0.45f, Random.Range(0.95f, 1.15f));
         }
-        float damage = (12f + 4f * PlayerStats.Level) * Boons.OutgoingMultiplier;
+        float damage = (12f + 4f * PlayerStats.Level) * Boons.OutgoingMultiplier * (Boons.Has("silverclaws") ? 2f : 1f);
         int hits = 0;
         foreach (EnemyHealth e in BoonFX.EnemiesInBox(at, new Vector2(1.9f, 1.3f)))
         {

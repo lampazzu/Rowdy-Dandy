@@ -44,25 +44,47 @@ public static class BoonArtSetup
         changed |= Fill(ref art.gunImpact, NewStuff + "PIV_GunImpact.png");
         changed |= Fill(ref art.magicCircle, NewStuff + "FX_MagicPlacement.png");
         changed |= Fill(ref art.sparkBurst, NewStuff + "FX_DeckFix_Upgrade.png");
+        changed |= Fill(ref art.groundPound, NewStuff + "FX_GroundPound.png");
+        changed |= Fill(ref art.pinkWave, "Assets/Misc/Test/testWave.png");
+
+        // the Crazy Chef's food (.aseprite files: the sprite inside each)
+        string[] foods = { "ovo", "pao", "tomate", "guejo", "armondega", "arface" };
+        if (art.food == null || art.food.Length != foods.Length) { art.food = new Sprite[foods.Length]; changed = true; }
+        for (int i = 0; i < foods.Length; i++)
+        {
+            if (art.food[i] != null) continue;
+            foreach (Object o in AssetDatabase.LoadAllAssetsAtPath(NewStuff + foods[i] + ".aseprite"))
+                if (o is Sprite s) { art.food[i] = s; changed = true; break; }
+            if (art.food[i] == null) Debug.LogWarning("Boon art: no sprite in " + foods[i] + ".aseprite");
+        }
 
         if (art.rarity == null || art.rarity.Length != 5) { art.rarity = new AudioClip[5]; changed = true; }
         string[] rarityFiles = { "01_MagicPlacement_Commom", "02_MagicPlacement_Uncommom", "03_MagicPlacement_Rare", "04_MagicPlacement_Epic", "05_MagicPlacement_Legendary" };
         for (int i = 0; i < 5; i++) changed |= Fill(ref art.rarity[i], Hags + "MagicPlacement/" + rarityFiles[i] + ".wav");
         if (art.cardHover == null || art.cardHover.Length != 5) { art.cardHover = new AudioClip[5]; changed = true; }
         for (int i = 0; i < 5; i++) changed |= Fill(ref art.cardHover[i], Hags + "CardHover/CardHover" + (i + 1) + ".wav");
+        if (art.rarityLayer == null || art.rarityLayer.Length != 5) { art.rarityLayer = new AudioClip[5]; changed = true; }
+        string[] layerFiles = { "01_TurretPlacement_Commom", "02_TurretPlacement_Umcommom", "03_TurretPlacement_Rare", "04_TurretPlacement_Epic", "05_TurretPlacement_Legendary" };
+        for (int i = 0; i < 5; i++) changed |= Fill(ref art.rarityLayer[i], Hags + "TurretPlacement/" + layerFiles[i] + ".wav");
+        changed |= Fill(ref art.open, Hags + "WaveStart/WaveStart.mp3");
+        changed |= Fill(ref art.whoosh, Sfx + "whoosh-cinematic-161021 1.mp3");
+        changed |= Fill(ref art.coin, Hags + "BuyDrawCard/Buy XP.wav");
+        changed |= Fill(ref art.swap, Hags + "DeckFix/DeckFixSwap.wav");
+        changed |= Fill(ref art.sparkle, Sfx + "Misc_MissionComplete.mp3");
         changed |= Fill(ref art.cardPick, Hags + "UIClickCard/UIClickCard.wav");
         changed |= Fill(ref art.reroll, Hags + "BuyDrawCard/BuyDrawCard.wav");
         changed |= Fill(ref art.upgrade, Hags + "DeckFix/DeckFixUpgrade.wav");
         changed |= Fill(ref art.fanfare, Hags + "UpgradeLevel/UpgradeLevel.wav");
         changed |= Fill(ref art.cancel, Hags + "CardCancel/CardCancel.wav");
 
-        changed |= Fill(ref art.pompadour, Hags + "Cards/Tower/MaeDOuro/MaeDouro Spawn.wav");
-        changed |= Fill(ref art.riptide, Hags + "Cards/Tower/Iara/Iara Spawn.wav");
-        changed |= Fill(ref art.howl, Hags + "Cards/Tower/Lobisomem/Werewolf Spawn.wav");
+        changed |= Fill(ref art.narcissism, Hags + "Cards/Tower/MaeDOuro/MaeDouro Spawn.wav");
+        changed |= Fill(ref art.abyss, Hags + "Cards/Tower/Iara/Iara Spawn.wav");
+        changed |= Fill(ref art.lycanthropy, Hags + "Cards/Tower/Lobisomem/Werewolf Spawn.wav");
         changed |= Fill(ref art.rot, Hags + "Cards/Tower/Curupira/Curupira Spawn.wav");
-        changed |= Fill(ref art.disco, Hags + "Cards/Magic/Boitata/Tatá Summon.wav");
-        changed |= Fill(ref art.meow, Sfx + "RedVelvet Lines/Wig/Main Voice - Attack Build 1.wav");
-        changed |= Fill(ref art.hammock, Hags + "Cards/Magic/Romao/Romaozinho Idle.wav");
+        changed |= Fill(ref art.guild, Sfx + "RedVelvet Lines/Wig/Main Voice - Attack Build 1.wav");
+        changed |= Fill(ref art.chef, Hags + "Cards/Tower/Saci/Saci Spawn.wav");
+        changed |= Fill(ref art.smith, Hags + "Cards/Tower/Mapinguari/Mapinguari Spawn.wav");
+        changed |= Fill(ref art.sun, Hags + "Cards/Magic/Boitata/Tatá Summon.wav");
 
         changed |= Fill(ref art.charmSfx, Hags + "Status/Enemy Charm Status.wav");
         changed |= Fill(ref art.fearSfx, Hags + "Status/Enemy Fear Status.wav");
@@ -80,23 +102,24 @@ public static class BoonArtSetup
         changed |= Fill(ref art.splash, Sfx + "small-waves-onto-the-sand-143040.mp3");
         changed |= Fill(ref art.vines, Hags + "Cards/Tower/Curupira/Curupira Attack.mp3");
         changed |= Fill(ref art.sporePop, Hags + "Cards/Magic/Anhanga/Anhanga.wav");
-        changed |= Fill(ref art.mirrorBall, Hags + "Cards/Magic/Matinta/Matinta Spawn.wav");
-        changed |= Fill(ref art.beam, Sfx + "plasma-gun-fire-162136.mp3");
-        changed |= Fill(ref art.zombieRise, Hags + "Cards/Tower/CorpoSeco/Corpo Seco Spawn.wav");
-        changed |= Fill(ref art.discoFloor, Hags + "Cards/Magic/Mula/Mula Summon.wav");
+        changed |= Fill(ref art.rockBreak, Sfx + "grab-gravel-2-36335.mp3");
+        changed |= Fill(ref art.clang, Sfx + "Enemies/Player_Gauntlet_Hit_V2.wav");
+        changed |= Fill(ref art.sizzle, Sfx + "fire-breath-6922.mp3");
+        changed |= Fill(ref art.sunBeam, Sfx + "Enemies/Treeman_MeteorImpact.mp3");
+        changed |= Fill(ref art.chomp, Sfx + "Imp_Death(crunch).wav");
+        changed |= Fill(ref art.squish, Sfx + "Enemies/Regular_Blood_Hit.wav");
+        changed |= Fill(ref art.plop, Sfx + "Cleric_Land.mp3");
         changed |= Fill(ref art.heal, Sfx + "PelicanHeartSFX.mp3");
-        changed |= Fill(ref art.goldFist, Sfx + "punch-140236.mp3");
         changed |= Fill(ref art.hairFlip, Sfx + "whoosh-cinematic-161021.mp3");
         changed |= Fill(ref art.pose, Hags + "Cards/Tower/MaeDOuro/MaeDouro Idle.wav");
         changed |= Fill(ref art.catPounce, Sfx + "RedVelvet Lines/Nick/Main Voice - Attack 1.wav");
         changed |= Fill(ref art.catCall, Sfx + "RedVelvet Lines/Wig/Main Voice - Attack Build 2.wav");
         changed |= Fill(ref art.nineLives, Sfx + "Enemies/Misc_Teleport.mp3");
         changed |= Fill(ref art.bigBoom, Sfx + "Curupira Explosion.mp3");
-        changed |= Fill(ref art.yawn, Hags + "Cards/Magic/Romao/Romaozinho Spawn 1.wav");
         changed |= Fill(ref art.gel, Hags + "DeckFix/DeckFixRepair.wav");
 
         foreach (Texture2D t in new[] { art.clawSlash, art.waterSonic, art.charm, art.fear, art.slow, art.charge, art.magicalHit, art.physicalHit,
-                                        art.manaRecovery, art.ail, art.earthPillar, art.matinta, art.gunImpact, art.magicCircle, art.sparkBurst })
+                                        art.manaRecovery, art.ail, art.earthPillar, art.matinta, art.gunImpact, art.magicCircle, art.sparkBurst, art.groundPound, art.pinkWave })
             PixelImport(t, true);
 
         // The item-art sheets some boon icons are cut from need to be readable too

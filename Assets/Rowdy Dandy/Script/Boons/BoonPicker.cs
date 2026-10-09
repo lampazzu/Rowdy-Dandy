@@ -32,6 +32,7 @@ public class BoonPicker : MonoBehaviour
         public float select;      // 0..1 eased selection
         public float dealAt, landedAt = -1f;
         public float flip = 1f;   // scale x during a reroll
+        public bool whooshed;
         public Vector2 home;
     }
 
@@ -45,6 +46,7 @@ public class BoonPicker : MonoBehaviour
     private int heldDir;
     private bool picking, rerolling;
     private string quoteFull = "";
+    private int voiceBlips;
     private float quoteShownAt;
     private Color washColor = Color.clear;
     private AudioSource audioSource;
@@ -70,7 +72,7 @@ public class BoonPicker : MonoBehaviour
     {
         if (IsOpen) { Tick(); return; }
         if (Boons.PendingPicks <= 0 || Time.unscaledTime < Boons.OpenNotBefore) { totalThisRun = 0; return; }
-        if (PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || Tutorials.IsOpen || CheckpointRest.Resting || FirstDrop.Running) return;
+        if (PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || Tutorials.IsOpen || CatParty.IsOpen || CheckpointRest.Resting || FirstDrop.Running) return;
         Health rowdy = FindFirstObjectByType<Health>();
         if (rowdy == null || rowdy.IsDead || Werewolf.Transforming) return;
         Open();
@@ -103,7 +105,13 @@ public class BoonPicker : MonoBehaviour
         Deal(offer, 0.35f);
         RefreshHints();
         Tick(); // lay everything out before the first frame is drawn
-        PlaySfx(BoonArt.Get != null ? BoonArt.Get.fanfare : null, 0.7f);
+        BoonArt art = BoonArt.Get;
+        if (art != null)
+        {
+            PlaySfx(art.fanfare, 0.7f);
+            PlaySfx(art.open, 0.35f, 1.1f);
+            PlaySfx(art.sparkle, 0.3f, 1.25f);
+        }
         flash.color = new Color(1f, 1f, 1f, 0.35f);
     }
 
@@ -117,6 +125,7 @@ public class BoonPicker : MonoBehaviour
             Card c = BuildCard(offer[i]);
             c.home = new Vector2(-total / 2f + CardW / 2f + i * (CardW + CardGap), CardsY);
             c.dealAt = Time.unscaledTime + delay + i * 0.14f;
+            c.whooshed = false;
             c.root.anchoredPosition = c.home + new Vector2(0f, -900f);
             c.group.alpha = 0f;
             cards.Add(c);
@@ -138,6 +147,10 @@ public class BoonPicker : MonoBehaviour
         BoonArt art = BoonArt.Get;
         PlaySfx(art != null ? art.cardPick : null, 1f);
         PlaySfx(art != null ? (chosen.offer.upgrade ? art.upgrade : PatronSound(chosen.offer.def.patron)) : null, 0.8f);
+        PlaySfx(art != null ? art.coin : null, 0.45f, 1.05f);
+        PlaySfx(art != null ? art.swap : null, 0.35f, 1.2f);
+        if (chosen.offer.def.IsDuo && art != null) PlaySfx(PatronSound(chosen.offer.def.partner.Value), 0.6f, 1.05f);
+        StartCoroutine(PickSparkle(art, (int)chosen.offer.rarity));
         UISound.Play(UISound.Cue.Confirm);
         string line = chosen.offer.def.IsDuo ? chosen.offer.def.duoLine : p.pick[Random.Range(0, p.pick.Length)];
         SetQuote(chosen, line);
@@ -183,6 +196,15 @@ public class BoonPicker : MonoBehaviour
         CloseNow();
     }
 
+    // a bright little ta-da a beat after the pick, higher for better cards
+    private IEnumerator PickSparkle(BoonArt art, int rarity)
+    {
+        float t = 0f;
+        while (t < 0.22f) { t += Time.unscaledDeltaTime; yield return null; }
+        if (art != null) PlaySfx(art.sparkle, 0.45f, 1f + 0.08f * Mathf.Min(rarity, 3));
+        if (art != null && art.rarity != null && art.rarity.Length == 5) PlaySfx(art.rarity[Mathf.Clamp(rarity, 0, 4)], 0.4f, 1.25f);
+    }
+
     private void CloseNow()
     {
         StopAllCoroutines();
@@ -201,7 +223,7 @@ public class BoonPicker : MonoBehaviour
 
     private void Reroll()
     {
-        if (rerolling || picking) return;
+        if (!IsOpen || rerolling || picking) return;
         if (!Boons.SpendReroll())
         {
             PlaySfx(BoonArt.Get != null ? BoonArt.Get.cancel : null, 0.8f);
@@ -259,6 +281,7 @@ public class BoonPicker : MonoBehaviour
             if (picking) break;
             float since = now - c.dealAt;
             if (since < 0f) { c.group.alpha = 0f; continue; }
+            if (!c.whooshed) { c.whooshed = true; PlaySfx(BoonArt.Get != null ? BoonArt.Get.whoosh : null, 0.18f, 1.5f + i * 0.15f); }
             if (c.landedAt < 0f && since >= 0.32f) Land(c);
             float k = Mathf.Clamp01(since / 0.32f);
             float ease = 1f - Mathf.Pow(1f - k, 3f);
@@ -284,6 +307,8 @@ public class BoonPicker : MonoBehaviour
         BoonArt art = BoonArt.Get;
         int r = (int)c.offer.rarity;
         if (art != null && art.rarity != null && art.rarity.Length == 5) PlaySfx(art.rarity[Mathf.Clamp(r, 0, 4)], 0.75f);
+        if (art != null && art.rarityLayer != null && art.rarityLayer.Length == 5) PlaySfx(art.rarityLayer[Mathf.Clamp(r, 0, 4)], 0.35f, 1.15f);
+        if (art != null && r >= (int)Rarity.Epic) PlaySfx(art.sparkle, 0.25f, 1.1f + 0.1f * r);
         Color rc = BoonCatalog.RarityColors[r];
         if (r >= 1) Burst(c.home + cardsRoot.anchoredPosition, rc, 8 + r * 8, 400f + r * 150f);
     }
@@ -346,6 +371,14 @@ public class BoonPicker : MonoBehaviour
             Card c = cards[Mathf.Clamp(selected, 0, cards.Count - 1)];
             PatronInfo p = BoonCatalog.Of(c.offer.def.patron);
             int chars = Mathf.Clamp((int)((now - quoteShownAt) * 70f), 0, quoteFull.Length);
+            // the patron's voice: a soft blip every few letters while the line types out
+            if (chars / 5 > voiceBlips && chars < quoteFull.Length && !picking)
+            {
+                voiceBlips = chars / 5;
+                BoonArt blipArt = BoonArt.Get;
+                if (blipArt != null && blipArt.cardHover != null && blipArt.cardHover.Length > 0)
+                    PlaySfx(blipArt.cardHover[voiceBlips % blipArt.cardHover.Length], 0.12f, PatronVoice(c.offer.def.patron) * Random.Range(1.6f, 1.8f));
+            }
             quote.SetText(Wrap(quoteFull.Substring(0, chars), 46));
             emblemPlate.color = p.color;
             float bob = Mathf.Sin(now * 2.5f) * 4f;
@@ -436,8 +469,11 @@ public class BoonPicker : MonoBehaviour
     private void OnSelectionChanged()
     {
         BoonArt art = BoonArt.Get;
-        if (art != null && art.cardHover != null && art.cardHover.Length > 0) PlaySfx(art.cardHover[Random.Range(0, art.cardHover.Length)], 0.7f);
+        if (art != null && art.cardHover != null && art.cardHover.Length > 0) PlaySfx(art.cardHover[Random.Range(0, art.cardHover.Length)], 0.7f, 0.92f + 0.08f * selected);
         else UISound.Play(UISound.Cue.Move);
+        Card hovered = cards[selected];
+        if (art != null && (hovered.offer.rarity >= Rarity.Epic || hovered.offer.def.IsDuo)) PlaySfx(art.coin, 0.18f, 1.3f);
+        voiceBlips = 0;
         ShowQuote(cards[selected]);
         dialog.localScale = Vector3.one * 1.04f;
     }
@@ -468,6 +504,7 @@ public class BoonPicker : MonoBehaviour
         emblem.sprite = BoonIcons.Emblem(d.patron);
         quoteFull = line ?? "";
         quoteShownAt = Time.unscaledTime;
+        voiceBlips = 0;
         quote.SetText("");
     }
 
@@ -497,18 +534,33 @@ public class BoonPicker : MonoBehaviour
     }
 
     // ---------------------------------------------------------------- audio (plays while the game is paused)
-    private void PlaySfx(AudioClip clip, float volume)
+    // A few sources so pitched sounds (deal whooshes, hover steps, dialogue blips) don't retune each other
+    private AudioSource[] sources;
+    private int nextSource;
+
+    private void PlaySfx(AudioClip clip, float volume, float pitch = 1f)
     {
         if (clip == null) return;
-        if (audioSource == null)
+        if (sources == null)
         {
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.playOnAwake = false;
-            audioSource.spatialBlend = 0f;
-            audioSource.ignoreListenerPause = true;
-            audioSource.priority = 20;
+            sources = new AudioSource[6];
+            for (int i = 0; i < sources.Length; i++)
+            {
+                AudioSource s = gameObject.AddComponent<AudioSource>();
+                s.playOnAwake = false;
+                s.spatialBlend = 0f;
+                s.ignoreListenerPause = true;
+                s.priority = 20;
+                sources[i] = s;
+            }
+            audioSource = sources[0];
         }
-        audioSource.PlayOneShot(clip, volume * AudioBoost * GameSettings.SfxVolume);
+        float v = volume * AudioBoost * GameSettings.SfxVolume;
+        if (!AudioGuard.Safe(clip, ref v, ref pitch)) return;
+        AudioSource src = sources[nextSource];
+        nextSource = (nextSource + 1) % sources.Length;
+        src.pitch = pitch;
+        src.PlayOneShot(clip, v);
     }
 
     private static AudioClip PatronSound(Patron p)
@@ -517,13 +569,30 @@ public class BoonPicker : MonoBehaviour
         if (art == null) return null;
         switch (p)
         {
-            case Patron.Pompadour: return art.pompadour;
-            case Patron.Riptide: return art.riptide;
-            case Patron.Howl: return art.howl;
+            case Patron.Narcissism: return art.narcissism;
+            case Patron.Abyss: return art.abyss;
+            case Patron.Lycanthropy: return art.lycanthropy;
             case Patron.Rot: return art.rot;
-            case Patron.Disco: return art.disco;
-            case Patron.Meow: return art.meow;
-            default: return art.hammock;
+            case Patron.Guild: return art.guild;
+            case Patron.Chef: return art.chef;
+            case Patron.Smith: return art.smith;
+            default: return art.sun;
+        }
+    }
+
+    // Each patron talks at their own pitch (dialogue blips)
+    private static float PatronVoice(Patron p)
+    {
+        switch (p)
+        {
+            case Patron.Narcissism: return 1.35f;
+            case Patron.Abyss: return 0.6f;
+            case Patron.Lycanthropy: return 0.75f;
+            case Patron.Rot: return 1.1f;
+            case Patron.Guild: return 1.5f;
+            case Patron.Chef: return 1.25f;
+            case Patron.Smith: return 0.7f;
+            default: return 1.0f;
         }
     }
 

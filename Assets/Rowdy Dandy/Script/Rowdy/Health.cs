@@ -37,7 +37,7 @@ public class Health : MonoBehaviour
 
     private void Awake()
     {
-        if (Balance.Jarvis && GetComponent<PlayerMovement>() != null) startingHealth = Balance.RowdyMaxHealth;
+        if (GetComponent<PlayerMovement>() != null) startingHealth = Balance.RowdyMaxHealth;
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
         redboy = GetComponent<SpriteRenderer>();
@@ -53,6 +53,7 @@ public class Health : MonoBehaviour
     {
         if (_value <= 0f) { currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth); return; }
         if (dead) return;
+        if (CanTakeOverheal || overheal) _value = BoonRunner.ModifyHeal(_value); // Secret Sauce
 
         float room = startingHealth - currentHealth;
         float healed = Mathf.Min(room, _value);

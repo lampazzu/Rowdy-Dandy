@@ -8,7 +8,8 @@ using UnityEngine.UI;
 //   + counters, crits, air hits and kills pay extra
 //   + no-hit streak: every hit without taking damage multiplies what you earn (up to x2)
 //   - getting hit: down two ranks, streak and combo gone
-// Pause > Settings: Style Rank on/off, Rank Size, Rank Position (screen corner; default small, top center).
+// Only with the MAIN CHARACTER boon (Narcissism): the rank is part of that boon (+damage per rank). Without it nothing is
+// scored or shown. Pause > Preferences: Rank Size, Rank Position (screen corner).
 // The panel is built at runtime on the overlay canvas: slanted SFV-style plate,
 // huge rank letter that slams in, rank title, draining bar with a ghost trail, combo counter, sliding
 // event tags (COUNTER / CRITICAL / AIR / VARIETY), shockwave + pixel burst + shake + sound on rank up,
@@ -38,6 +39,18 @@ public class StyleRank : MonoBehaviour
     public static int BestRank { get; private set; }
     public static string BestRankLetter => Letters[BestRank];
     public static long Score => instance != null ? instance.score : 0;
+    public static bool Enabled => Boons.Has("mainchar");
+
+    // Main Character was just taken: show the panel and say hello
+    public static void Announce()
+    {
+        StyleRank r = Get();
+        r.shownSince = Time.unscaledTime + 2f;
+        r.letterPunch = 0.6f;
+        r.titleSlide = 1f;
+        r.AddTag("YOU ARE THE MAIN CHARACTER", new Color32(0xFF, 0xD2, 0x4C, 0xFF));
+        r.PlaySound("UISounds/UI_Confirm", 1f, 1.1f);
+    }
 
     private int rank;
     private float points;            // 0..100 inside the current rank
@@ -55,7 +68,7 @@ public class StyleRank : MonoBehaviour
     // ---------------------------------------------------------------- hooks
     public static void OnHit(EnemyHealth enemy, float damage, bool critical, bool counter, KillCredit credit)
     {
-        if (credit == null || credit.kind == KillCredit.Kind.World) return;
+        if (credit == null || credit.kind == KillCredit.Kind.World || !Enabled) return;
         if (enemy != null && enemy.IsObject) return; // cutting plants isn't style
         if (!Application.isPlaying) return;
         Get().Hit(damage, critical, counter, credit);
@@ -63,7 +76,7 @@ public class StyleRank : MonoBehaviour
 
     public static void OnKill(EnemyHealth enemy, KillCredit credit, KillCredit.Finish finish)
     {
-        if (credit == null || credit.kind == KillCredit.Kind.World) return;
+        if (credit == null || credit.kind == KillCredit.Kind.World || !Enabled) return;
         if (enemy != null && enemy.IsObject) return;
         Get().Kill(finish, credit);
     }
@@ -304,7 +317,7 @@ public class StyleRank : MonoBehaviour
         // Show while there's anything to show; slide in from the right, fade out a while after it's all gone
         bool active = rank > 0 || points > 0.5f || combo > 0;
         if (active) shownSince = Mathf.Max(shownSince, now - 0.01f);
-        float target = (active || now - shownSince < 2f) && !PauseMenu.IsPaused && GameSettings.StyleRankOn ? 1f : 0f;
+        float target = (active || now - shownSince < 2f) && !PauseMenu.IsPaused && Enabled ? 1f : 0f;
         group.alpha = Mathf.MoveTowards(group.alpha, target, dt * (target > group.alpha ? 6f : 1.5f));
         float slide = 1f - group.alpha;
         root.anchoredPosition = homePosition + slideFrom * (slide * slide * 160f);
@@ -441,7 +454,7 @@ public class StyleRank : MonoBehaviour
         shownRank = -1;
         SetRankVisuals();
         Burst(RankColors[rank], 10 + rank * 4);
-        if (!GameSettings.StyleRankOn) return; // turned off: no shake / rumble / sound either
+        if (!Enabled) return; // no Main Character: no shake / rumble / sound either
         ScreenShake.Impulse(0.15f + rank * 0.07f);
         if (rank >= 4) GamepadRumble.Pulse(0.3f, 0.6f, 0.12f);
         PlaySound("UISounds/New UI sounds/Ui Confirm", 0.9f, 0.9f + rank * 0.08f);
@@ -462,7 +475,7 @@ public class StyleRank : MonoBehaviour
 
     private void PlaySound(string path, float volume, float pitch)
     {
-        if (!GameSettings.StyleRankOn) return;
+        if (!Enabled) return;
         AudioClip clip = Resources.Load<AudioClip>(path);
         if (clip == null || audioSource == null) return;
         audioSource.pitch = pitch;

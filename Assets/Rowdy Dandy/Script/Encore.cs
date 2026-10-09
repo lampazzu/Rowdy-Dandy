@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// Endgame (Jarvis balance only): beating Pelich unlocks the ENCORE.
+// Endgame: beating Pelich unlocks the ENCORE (and points Rowdy at The Frontier, the island past Pelich).
 //   - Encore levels: past level 10, EXP keeps filling the bar. Every Encore level = a boon pick, +3% damage, full heal.
 //   - Blood Moons: every night after that is a Blood Moon - tougher tiers spawn (+2), more elites, +30% enemy health,
 //     x1.5 EXP, and the screen takes a red haze. Days stay as they are, so there's always a breather.
@@ -23,7 +23,7 @@ public class Encore : MonoBehaviour
     private static readonly Color Blood = new Color(0.95f, 0.15f, 0.22f);
 
     public static bool Unlocked => PlayerPrefs.GetInt(UnlockedKey, 0) == 1;
-    public static bool Active => Balance.Jarvis && Unlocked;
+    public static bool Active => Unlocked;
     public static bool BloodMoon => Active && DayNight.IsNight;
 
     public static int Level => Active ? PlayerPrefs.GetInt(LevelKey, 0) : 0;
@@ -38,12 +38,12 @@ public class Encore : MonoBehaviour
         if (Unlocked) return;
         PlayerPrefs.SetInt(UnlockedKey, 1);
         PlayerPrefs.Save();
-        if (!Balance.Jarvis) return; // saved either way: switching to Jarvis later picks it up
         Transform rowdy = Rowdy;
         if (rowdy == null) return;
         Vector3 head = rowdy.position + Vector3.up * 1.4f;
         IconPopup.Show(head + Vector3.up * 0.5f, null, "ENCORE!", new Color(1f, 0.82f, 0.3f), 1.6f, 3f);
         IconPopup.Show(head, null, "THE BLOOD MOONS RISE...", Blood, 0.9f, 3.5f);
+        IconPopup.Show(head + Vector3.down * 0.5f, null, "SURF EAST: THE FRONTIER AWAITS", new Color(1f, 0.8f, 0.4f), 0.8f, 4f);
         ScreenShake.Impulse(0.6f);
     }
 

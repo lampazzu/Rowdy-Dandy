@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Puts the newer cats (Paprika, Mushidon, The Peak, Lallo) into every level that doesn't place them itself:
+// Puts the newer cats (Paprika, Mushidon, The Peak, Lallo, Tchogon) into every level that doesn't place them itself:
 // one of each from Resources/Interactables/<name>.prefab, "home" next to a checkpoint spread along the map.
 // CatRoster then hides them at random reachable spots like the level-placed cats. Drop a prefab into the scene
 // by hand and this leaves that type alone.
@@ -14,6 +14,7 @@ public static class CatSpawner
         (PetFollower.CatType.Mushidon, "Interactables/Mushidon"),
         (PetFollower.CatType.Peak, "Interactables/ThePeak"),
         (PetFollower.CatType.Lallo, "Interactables/Lallo"),
+        (PetFollower.CatType.Tchogon, "Interactables/Tchogon"),
     };
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

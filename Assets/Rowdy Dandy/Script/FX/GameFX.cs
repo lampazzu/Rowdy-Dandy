@@ -67,7 +67,7 @@ public static class FXSound
 
     public static void Play(AudioClip clip, float volume = 1f, float pitch = 1f)
     {
-        if (clip == null) return;
+        if (!AudioGuard.Safe(clip, ref volume, ref pitch)) return;
         if (sources == null || sources[0] == null)
         {
             var go = new GameObject("FXSound (auto)");

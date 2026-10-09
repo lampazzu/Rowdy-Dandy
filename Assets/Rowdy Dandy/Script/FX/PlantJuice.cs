@@ -118,7 +118,7 @@ public class SliceStreak : MonoBehaviour
         age += Time.unscaledDeltaTime;
         float t = age / 0.14f;
         if (t >= 1f) { Destroy(gameObject); return; }
-        float width = Mathf.Lerp(30f, 60f, Mathf.Sqrt(t));   // in pixels
+        float width = Mathf.Lerp(30f, 60f, Mathf.Sqrt(Mathf.Max(0f, t)));   // in pixels
         float thick = Mathf.Lerp(3f, 1f, t);
         transform.localScale = new Vector3(width, thick, 1f);
         sr.color = new Color(color.r, color.g, color.b, 1f - t * t);

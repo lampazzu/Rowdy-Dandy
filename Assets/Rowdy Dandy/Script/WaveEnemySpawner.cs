@@ -213,7 +213,6 @@ public class WaveEnemySpawner : MonoBehaviour
     {
         FindPlayer();
 
-        if (Balance.Jarvis)
         {
             timeBetweenWaves = Balance.SpawnTimeBetweenWaves;
             spawnInterval = Balance.SpawnInterval;
@@ -403,6 +402,7 @@ public class WaveEnemySpawner : MonoBehaviour
     private bool InQuietArea(Vector2 point)
     {
         if (point.x < quietBeachUntilX) return true;
+        if (FrontierArena.IsQuiet(point)) return true; // the island past Pelich: only its colosseum spawns
         if (quietWholeBeach && ZoneAt(point)?.name == "Beach") return true;
         if (!quietInPelichArena) return false;
 

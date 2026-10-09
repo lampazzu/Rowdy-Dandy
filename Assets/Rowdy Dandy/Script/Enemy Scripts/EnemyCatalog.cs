@@ -210,6 +210,14 @@ public static class EnemyCatalog
         },
         new Entry
         {
+            id = "voltrat", name = "Volt Rat", keys = new[] { "voltrat" }, killsToReveal = 5,
+            about = "Comes in packs on The Frontier. Hovers around you, crackles, then zips straight through where you stand.",
+            weakness = "Paper thin. One or two hits each.",
+            counter = "Watch for the crackle and the flash, then jump or dash out of the line.",
+            drops = "A couple of EXP gems.",
+        },
+        new Entry
+        {
             id = "pelich", name = "Pelich Anus", keys = new[] { "pelichanus", "pelich" }, killsToReveal = 1,
             about = "Lord of the far shore. Stomps the ground, spits, and calls in help. The toughest thing around.",
             weakness = "It barely moves. Stay out of its stomp range and hit it while it's turning around.",

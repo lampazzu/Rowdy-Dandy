@@ -226,6 +226,16 @@ public class SoundtrackManager : MonoBehaviour
         next.Play();
     }
 
+    // AudioGuard restarted the audio system: every source stopped, start the current song again where it was
+    public static void Revive()
+    {
+        if (instance == null) return;
+        AudioSource active = instance.players[instance.activePlayer];
+        if (active.clip == null || active.isPlaying) return;
+        if (instance.resumeTimes.TryGetValue(active.clip, out float time) && time > 0f && time < active.clip.length - 1f) active.time = time;
+        active.Play();
+    }
+
     private void Remember(AudioSource source)
     {
         if (source.clip != null) resumeTimes[source.clip] = source.time;
@@ -240,6 +250,7 @@ public class SoundtrackManager : MonoBehaviour
             bool isActive = i == activePlayer && players[i].clip != null;
             fades[i] = Mathf.MoveTowards(fades[i], isActive ? 1f : 0f, step);
             players[i].volume = fades[i] * sectionVolumes[i] * GameSettings.MusicVolume * pauseVolume;
+            if (isActive && players[i].isPlaying) resumeTimes[players[i].clip] = players[i].time; // for Revive
             if (!isActive && fades[i] <= 0f && players[i].isPlaying)
             {
                 Remember(players[i]);

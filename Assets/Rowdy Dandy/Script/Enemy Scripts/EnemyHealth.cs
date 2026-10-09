@@ -361,7 +361,7 @@ public class EnemyHealth : MonoBehaviour
                 if (byRowdySide) RareDrops.OnEnemyKilled(this); // flying rat / cat treat fish, very rarely
                 if (!isObject) Blood.Spill(EnemyFairness.BodyCenter(this), AwayFromRowdy(), 14);
                 RowdyBuffs.OnEnemyKilled(this, byRowdySide); // Lallo's decay explosion, if armed
-                BoonRunner.OnEnemyKilled(this, credit, byRowdySide); // boons: Bloodthirst, Overgrowth, Mirror Ball, Thriller...
+                BoonRunner.OnEnemyKilled(this, credit, byRowdySide); // boons: Bloodthirst, Earth Erupt, Plague, Sandwich Time...
 
                 // Countering a Waterviva Rider to death sets off its jelly: a long, accelerating string of explosions
                 if (finish == KillCredit.Finish.Counter && byRowdySide)

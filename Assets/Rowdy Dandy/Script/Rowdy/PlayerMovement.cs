@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isGrounded = false;
     public bool IsGrounded => isGrounded;
     public bool IsWatered => isWatered;
+    public bool IsSurfing => isSurfing; // keyframed by the surf clips (Wipeout: Rowdy becomes the wave)
     [SerializeField] private float jumpTimeCounter = 0f;
     [SerializeField] private bool isJumping = false;
     [SerializeField] private bool isDucking = false;
@@ -684,7 +685,7 @@ public class PlayerMovement : MonoBehaviour
             if (isGrounded)
             {
                 onJumping.Invoke();
-                BoonRunner.OnJump(); // Funky Feet
+                BoonRunner.OnJump(); // Blow A Kiss, Hairball
             }
             if (!isGrounded && isWatered && !isJumping)
             {
@@ -722,7 +723,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Implement attack animations
-        if (GameInput.Down(GameInput.Act.Attack) && !Boons.AttackBlocked) // Nap Time boon: no swinging while napping
+        if (GameInput.Down(GameInput.Act.Attack))
         {
             bool attackStarted = false; // weapon durability: 1 per swing, no matter how many enemies it hits
 
@@ -801,7 +802,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("SurfDash");
 
             onPullRod.Invoke();
-            BoonRunner.OnSurfDash(); // dash boons (decoy, wave, dance floor, cat call)
+            BoonRunner.OnSurfDash(); // dash boons (decoy, the wave, carpet, ink, eggs, cat call...)
 
             if (isGrounded)
             {
@@ -938,7 +939,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator SpendWeaponDurability()
     {
         yield return new WaitForSeconds(0.25f);
-        float cost = Boons.DurabilityCost; // Weapon Snob: x2, werewolf claws: free
+        float cost = Boons.DurabilityCost; // Weapon Snob: x2, werewolf claws: free, Tempered Steel: sometimes free
         if (cost > 0f) weaponManager.DepleteActiveWeaponDurability(cost);
     }
 

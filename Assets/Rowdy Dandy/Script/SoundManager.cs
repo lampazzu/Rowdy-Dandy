@@ -50,10 +50,12 @@ public class SoundManager : MonoBehaviour
     // played at the camera so it isn't faded by distance, scaled by the Sound Effects setting.
     public static void PlaySfx(AudioClip clip, float volume = 1f)
     {
-        if (clip == null) return;
+        volume *= GameSettings.SfxVolume;
+        if (!AudioGuard.Safe(clip, ref volume)) return;
         Camera cam = Camera.main;
         Vector3 playPosition = cam != null ? cam.transform.position : Vector3.zero;
-        AudioSource.PlayClipAtPoint(clip, playPosition, volume * GameSettings.SfxVolume);
+        if (!AudioGuard.SafePosition(playPosition)) return;
+        AudioSource.PlayClipAtPoint(clip, playPosition, volume);
     }
 
     public void PlaySound(string soundName)
@@ -76,6 +78,7 @@ public class SoundManager : MonoBehaviour
 
             float volume = sound.volume * GameSettings.SfxVolume;
             if (IsRowdyVoice(sound)) volume *= GameSettings.RowdyVoiceVolume;
+            if (!AudioGuard.Safe(sound.clip, ref volume) || !AudioGuard.SafePosition(playPosition)) return;
             AudioSource.PlayClipAtPoint(sound.clip, playPosition, volume);
         }
         else

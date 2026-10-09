@@ -27,12 +27,27 @@ MonoBehaviour:
   gunImpact: {fileID: 2800000, guid: f75bfaf4f87ade24f812318a7bddd5fb, type: 3}
   magicCircle: {fileID: 2800000, guid: c7bd761506f3da845be9fd15c3f9ee7c, type: 3}
   sparkBurst: {fileID: 2800000, guid: db276f46c2bfe454aa640a3a7ace7abb, type: 3}
+  groundPound: {fileID: 2800000, guid: a151ba29d8a54f345b687e259fa2efdb, type: 3}
+  pinkWave: {fileID: 2800000, guid: fb17c84c055979543a1ff0e899acbca7, type: 3}
+  food:
+  - {fileID: -5627360694644326727, guid: ba2eccfd3b7bfb545ad927127ce87248, type: 3}
+  - {fileID: 1656880556506584872, guid: dc0dfbe10b9147642a13a2ecbe93b754, type: 3}
+  - {fileID: -8634795263154507776, guid: 9a5fc2d26e9276143a00bcd3c708e6fc, type: 3}
+  - {fileID: -6945683682605060645, guid: 45627ebc31040524184393ca46984bfc, type: 3}
+  - {fileID: -9009097954186671465, guid: baa13efdd54c7c445adaa10a8a03f15f, type: 3}
+  - {fileID: 3089376465894961388, guid: 8e204e2308389e34184c3876d08ffedd, type: 3}
   rarity:
   - {fileID: 8300000, guid: 65ed27662bdef5b418d23c048fd5d8a9, type: 3}
   - {fileID: 8300000, guid: 3b7a3014d497dd44da934fb881f3e50c, type: 3}
   - {fileID: 8300000, guid: 899babc8d2844924baf879e3914d697c, type: 3}
   - {fileID: 8300000, guid: 5759f4600245abd4299dd228c8e7d940, type: 3}
   - {fileID: 8300000, guid: fe4c00c305d4fbb4fbb71c4e028d9bd9, type: 3}
+  rarityLayer:
+  - {fileID: 8300000, guid: c1f78619b0bd98b428363052f0cc8221, type: 3}
+  - {fileID: 8300000, guid: d3eb15d14a440a84786f515cc5bf6f94, type: 3}
+  - {fileID: 8300000, guid: de77d500d0e4af34fb601944325ab1e0, type: 3}
+  - {fileID: 8300000, guid: 46c0110837a3921499d4f142e07ef5e2, type: 3}
+  - {fileID: 8300000, guid: 2e26d134204eca642afe65e70f1687fa, type: 3}
   cardHover:
   - {fileID: 8300000, guid: 32d4cdc5c0050704a8964c7cc9892098, type: 3}
   - {fileID: 8300000, guid: edc626615beff624aad89dce6e96dd55, type: 3}
@@ -44,13 +59,19 @@ MonoBehaviour:
   upgrade: {fileID: 8300000, guid: bd4ae42217f420e49a892793d411c5ba, type: 3}
   fanfare: {fileID: 8300000, guid: 3c15b20fbff0d6a44b338671561ab4f2, type: 3}
   cancel: {fileID: 8300000, guid: 1d0fdf460a330044b823925f55363e6f, type: 3}
-  pompadour: {fileID: 8300000, guid: 4d910e13f324958499a90ebd55704e77, type: 3}
-  riptide: {fileID: 8300000, guid: e6198f2ae812ebc41a68ef30a731dfbb, type: 3}
-  howl: {fileID: 8300000, guid: 8ccc63c049b960142a76d6c5ee3e7a0f, type: 3}
+  open: {fileID: 8300000, guid: 88423aeb9ebb29e4abd2061ecfc00296, type: 3}
+  whoosh: {fileID: 8300000, guid: f7259236a09f4984c8867516c7df5369, type: 3}
+  coin: {fileID: 8300000, guid: 1cf0de3d8c5774a4a9fbd2558f4ac99a, type: 3}
+  swap: {fileID: 8300000, guid: 43504d690b4a7de4181c21a120e9ab62, type: 3}
+  sparkle: {fileID: 8300000, guid: 75e7163fdf7a1604498c1c5eab0a9a4e, type: 3}
+  narcissism: {fileID: 8300000, guid: 4d910e13f324958499a90ebd55704e77, type: 3}
+  abyss: {fileID: 8300000, guid: e6198f2ae812ebc41a68ef30a731dfbb, type: 3}
+  lycanthropy: {fileID: 8300000, guid: 8ccc63c049b960142a76d6c5ee3e7a0f, type: 3}
   rot: {fileID: 8300000, guid: b955810494b3c2646a20e46eb7899a38, type: 3}
-  disco: {fileID: 8300000, guid: eab5f2da3c2f8174fa75d65b3b93a893, type: 3}
-  meow: {fileID: 8300000, guid: 45b73691922eac148b4ea7efb8ce2958, type: 3}
-  hammock: {fileID: 8300000, guid: d7226126b1a91d64e8c9ca70a8a141ef, type: 3}
+  guild: {fileID: 8300000, guid: 45b73691922eac148b4ea7efb8ce2958, type: 3}
+  chef: {fileID: 8300000, guid: 1a3ea948256709b428eb6c968033775b, type: 3}
+  smith: {fileID: 8300000, guid: d08230c9c9031ec46b614deee2b53b31, type: 3}
+  sun: {fileID: 8300000, guid: eab5f2da3c2f8174fa75d65b3b93a893, type: 3}
   charmSfx: {fileID: 8300000, guid: 4370192c49adfd24ba5e22e76fac1b20, type: 3}
   fearSfx: {fileID: 8300000, guid: 2fb862bb063b3334086b4d2afd27d1c5, type: 3}
   stunSfx: {fileID: 8300000, guid: 901e7e6b552fd874285bdf60dd4a2c38, type: 3}
@@ -67,17 +88,18 @@ MonoBehaviour:
   splash: {fileID: 8300000, guid: 55807209a2aa0f44f8a5bbea0fd31acd, type: 3}
   vines: {fileID: 8300000, guid: 77faa73f589a7ae40a9f813e479510b7, type: 3}
   sporePop: {fileID: 8300000, guid: 9a046311627ada44798d7ec78db7867e, type: 3}
-  mirrorBall: {fileID: 8300000, guid: 00c2a78809ddf0a4fb448a1e91e0414b, type: 3}
-  beam: {fileID: 8300000, guid: 63800476e818bf645b05f7eaea765547, type: 3}
-  zombieRise: {fileID: 8300000, guid: 1db2c435d856fb14b9f0cef4a0ecaa18, type: 3}
-  discoFloor: {fileID: 8300000, guid: 387efb221e9e93a449098ddcf5a8585b, type: 3}
+  rockBreak: {fileID: 8300000, guid: 67766b3f1cd2f594985ca1127f612c66, type: 3}
   heal: {fileID: 8300000, guid: 456b1f16379667c4f954e2c5d91b7396, type: 3}
-  goldFist: {fileID: 8300000, guid: 17ad2a25785eb234b8b38c9dbd25a91f, type: 3}
   hairFlip: {fileID: 8300000, guid: 07d37a0b7ec1228428591263ea9e3acf, type: 3}
   pose: {fileID: 8300000, guid: 72ce8047372ccc44fb17b7c9553a448c, type: 3}
   catPounce: {fileID: 8300000, guid: 4f04e42154c12584a86a4197caed94aa, type: 3}
   catCall: {fileID: 8300000, guid: b0d53ba9acbe3974dbfee2d7d5556706, type: 3}
   nineLives: {fileID: 8300000, guid: f4e6d44251978a644864c167d1057641, type: 3}
   bigBoom: {fileID: 8300000, guid: f2c60dbcacab2c74fbeacd0663f642eb, type: 3}
-  yawn: {fileID: 8300000, guid: accd08e2bc703264bbb18d89c2e37fa3, type: 3}
   gel: {fileID: 8300000, guid: 45f900462a3a0034d8ad02e39256f519, type: 3}
+  clang: {fileID: 8300000, guid: 877043faaff8a81489923a4d4ed6dab1, type: 3}
+  sizzle: {fileID: 8300000, guid: 4d769ef563104d349af4d1885c3b7762, type: 3}
+  sunBeam: {fileID: 8300000, guid: 4615cea3ef7bdb84ea499681e7b8b4d2, type: 3}
+  chomp: {fileID: 8300000, guid: a8b97a7c0f47f7a46887085a7fad57b7, type: 3}
+  squish: {fileID: 8300000, guid: 88e1aa2ef5c9e76458feb1c8a896714e, type: 3}
+  plop: {fileID: 8300000, guid: bdcaae7ea0d8e9040b12b389c4eb1a8f, type: 3}

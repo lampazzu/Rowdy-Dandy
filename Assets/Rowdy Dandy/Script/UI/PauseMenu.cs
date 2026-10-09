@@ -16,7 +16,7 @@ public class PauseMenu : MonoBehaviour
 
     private static PauseMenu instance;
 
-    private enum Page { Closed, Main, Settings, Controls, Accessibility, DevTools }
+    private enum Page { Closed, Main, Settings, Preferences, Controls, Accessibility, DevTools }
 
     private class Row
     {
@@ -72,13 +72,14 @@ public class PauseMenu : MonoBehaviour
 
     private Page page = Page.Closed;
     private GameObject root;
-    private GameObject mainPanel, settingsPanel, controlsPanel, accessPanel, devPanel;
+    private GameObject mainPanel, settingsPanel, prefsPanel, controlsPanel, accessPanel, devPanel;
     private readonly List<Row> mainRows = new List<Row>();
     private readonly List<Row> settingsRows = new List<Row>();
+    private readonly List<Row> prefsRows = new List<Row>();
     private readonly List<Row> controlsRows = new List<Row>();
     private readonly List<Row> accessRows = new List<Row>();
     private readonly List<Row> devRows = new List<Row>();
-    private PixelText accessDescription, devDescription;
+    private PixelText accessDescription, devDescription, prefsDescription;
     private readonly List<PixelText> hints = new List<PixelText>();
     private readonly List<(PixelText text, string template)> padButtons = new List<(PixelText, string)>();
     private int hintsVersion = -1;
@@ -143,7 +144,7 @@ public class PauseMenu : MonoBehaviour
 
         if (page == Page.Closed)
         {
-            bool blocked = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput;
+            bool blocked = RowdyNotes.BlocksPause || WorldMap.BlocksPause || Tutorials.BlocksPause || BoonPicker.BlocksInput || CatParty.BlocksPause;
             if (pausePressed && !blocked) Open();
             else if (devPressed && !blocked) { Open(); ShowPage(Page.DevTools, 0); }
             return;
@@ -168,7 +169,8 @@ public class PauseMenu : MonoBehaviour
         if (pausePressed || backPressed || (devPressed && page == Page.DevTools))
         {
             UISound.Play(UISound.Cue.Back);
-            if (page == Page.Settings) ShowPage(Page.Main, 1);
+            if (page == Page.Settings) ShowPage(Page.Main, 2);
+            else if (page == Page.Preferences) ShowPage(Page.Main, 3);
             else if (page == Page.Controls) CloseControls();
             else if (page == Page.Accessibility) CloseAccessibility();
             else if (page == Page.DevTools) ShowPage(Page.Main, 0);
@@ -185,7 +187,7 @@ public class PauseMenu : MonoBehaviour
         {
             ChangeValue(selected, horizontal);
         }
-        else if (horizontal != 0 && (page == Page.Settings || page == Page.DevTools))
+        else if (horizontal != 0 && (page == Page.Settings || page == Page.Preferences || page == Page.DevTools))
         {
             JumpColumn(horizontal);
         }
@@ -276,6 +278,7 @@ public class PauseMenu : MonoBehaviour
         page = newPage;
         mainPanel.SetActive(page == Page.Main);
         settingsPanel.SetActive(page == Page.Settings);
+        prefsPanel.SetActive(page == Page.Preferences);
         controlsPanel.SetActive(page == Page.Controls);
         accessPanel.SetActive(page == Page.Accessibility);
         devPanel.SetActive(page == Page.DevTools);
@@ -291,6 +294,7 @@ public class PauseMenu : MonoBehaviour
         switch (page)
         {
             case Page.Settings: return settingsPanel;
+            case Page.Preferences: return prefsPanel;
             case Page.Controls: return controlsPanel;
             case Page.Accessibility: return accessPanel;
             case Page.DevTools: return devPanel;
@@ -303,6 +307,7 @@ public class PauseMenu : MonoBehaviour
         switch (page)
         {
             case Page.Settings: return settingsRows;
+            case Page.Preferences: return prefsRows;
             case Page.Controls: return controlsRows;
             case Page.Accessibility: return accessRows;
             case Page.DevTools: return devRows;
@@ -310,7 +315,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    private PixelText CurrentDescription() => page == Page.Accessibility ? accessDescription : page == Page.DevTools ? devDescription : null;
+    private PixelText CurrentDescription() => page == Page.Accessibility ? accessDescription : page == Page.DevTools ? devDescription : page == Page.Preferences ? prefsDescription : null;
 
     private void OpenAccessibility()
     {
@@ -319,7 +324,7 @@ public class PauseMenu : MonoBehaviour
         ShowPage(Page.Accessibility, 0);
     }
 
-    private void CloseAccessibility() => ShowPage(accessReturnPage == Page.Settings ? Page.Settings : Page.Main, accessReturnRow);
+    private void CloseAccessibility() => ShowPage(Page.Main, accessReturnRow);
 
     private void OpenControls()
     {
@@ -328,7 +333,7 @@ public class PauseMenu : MonoBehaviour
         ShowPage(Page.Controls, 0);
     }
 
-    private void CloseControls() => ShowPage(controlsReturnPage == Page.Settings ? Page.Settings : Page.Main, controlsReturnRow);
+    private void CloseControls() => ShowPage(Page.Main, controlsReturnRow);
 
     // Left / right on a row without a value (a button): hop to the closest row in the other column
     private void JumpColumn(int direction)
@@ -524,22 +529,25 @@ public class PauseMenu : MonoBehaviour
         // ---- Main page
         columnX = 0f;
         buildColumn = 0;
-        float mainHeight = 150 + 6 * (RowHeight + RowGap) + 100;
+        float mainHeight = 150 + 8 * (RowHeight + RowGap) + 100;
         mainPanel = MakePanel("Main", root.transform, 620, mainHeight);
         float top = mainHeight / 2f;
         MakeTitle(mainPanel.transform, "PAUSED", top - 70);
         float y = top - 150;
         AddButton(mainRows, mainPanel.transform, "Resume", ref y, Resume);
+        AddButton(mainRows, mainPanel.transform, "Cat Party", ref y, () => { pendingAction = () => CatParty.Open(null); Resume(); });
         AddButton(mainRows, mainPanel.transform, "Settings", ref y, () => ShowPage(Page.Settings, 0));
+        AddButton(mainRows, mainPanel.transform, "Preferences", ref y, () => ShowPage(Page.Preferences, 0));
         AddButton(mainRows, mainPanel.transform, "Accessibility", ref y, OpenAccessibility);
         AddButton(mainRows, mainPanel.transform, "Controls", ref y, OpenControls);
         AddButton(mainRows, mainPanel.transform, "Restart Level", ref y, RestartLevel);
         AddButton(mainRows, mainPanel.transform, "Quit Game", ref y, QuitGame);
         MakeHint(mainPanel.transform, -top + 34);
 
-        // ---- Settings page (two columns: display + audio | gameplay + controls)
-        float leftHeight = 2 * 44 + 10 + 12 * (RowHeight + RowGap); // right column is the long one now (style rank rows)
-        float settingsHeight = 130 + leftHeight + 70;
+        // ---- Settings page: the machine (display | audio). How the game plays and looks is under Preferences,
+        // things that make it easier to read / follow under Accessibility.
+        float leftHeight = 44 + 6 * (RowHeight + RowGap);
+        float settingsHeight = 130 + leftHeight + 150;
         settingsPanel = MakePanel("Settings", root.transform, 2 * SettingsRowWidth + 140, settingsHeight);
         top = settingsHeight / 2f;
         MakeTitle(settingsPanel.transform, "SETTINGS", top - 66);
@@ -563,7 +571,11 @@ public class PauseMenu : MonoBehaviour
         AddOption(settingsRows, settingsPanel.transform, "Show FPS", ref y,
             () => GameSettings.ShowFps ? "On" : "Off",
             d => GameSettings.SetShowFps(!GameSettings.ShowFps));
+        float bottom = y;
 
+        columnX = ColumnOffset;
+        buildColumn = 1;
+        y = top - 130;
         AddHeader(settingsRows, settingsPanel.transform, "Audio", ref y);
         AddVolume(settingsRows, settingsPanel.transform, "Master Volume", ref y, () => GameSettings.MasterVolume, GameSettings.SetMasterVolume);
         AddVolume(settingsRows, settingsPanel.transform, "Music", ref y, () => GameSettings.MusicVolume, GameSettings.SetMusicVolume);
@@ -571,53 +583,78 @@ public class PauseMenu : MonoBehaviour
         AddVolume(settingsRows, settingsPanel.transform, "Rowdy Voice", ref y, () => GameSettings.RowdyVoiceVolume, GameSettings.SetRowdyVoiceVolume);
         AddVolume(settingsRows, settingsPanel.transform, "Cat Voice", ref y, () => GameSettings.CatVoiceVolume, GameSettings.SetCatVoiceVolume);
 
-        // Right column
-        columnX = ColumnOffset;
-        buildColumn = 1;
-        y = top - 130;
-        AddHeader(settingsRows, settingsPanel.transform, "Gameplay", ref y);
-        AddOption(settingsRows, settingsPanel.transform, "Screen Shake", ref y,
-            () => GameSettings.ScreenShake <= 0f ? "Off" : Mathf.RoundToInt(GameSettings.ScreenShake * 100f) + "%",
-            d => GameSettings.SetScreenShake(GameSettings.ShakeLevels[Wrap(Array.IndexOf(GameSettings.ShakeLevels, GameSettings.ScreenShake) + d, GameSettings.ShakeLevels.Length)]));
-        AddOption(settingsRows, settingsPanel.transform, "Vibration", ref y,
-            () => GameSettings.Vibration ? "On" : "Off",
-            d => GameSettings.SetVibration(!GameSettings.Vibration));
-        AddOption(settingsRows, settingsPanel.transform, "Damage Numbers", ref y,
-            () => GameSettings.DamageNumbers ? "On" : "Off",
-            d => GameSettings.SetDamageNumbers(!GameSettings.DamageNumbers));
-        AddOption(settingsRows, settingsPanel.transform, "Number Size", ref y,
-            () => Mathf.RoundToInt(GameSettings.DamageNumberSize * 100f) + "%",
-            d => GameSettings.SetDamageNumberSize(StepSize(GameSettings.DamageNumberSize, d)));
-        AddOption(settingsRows, settingsPanel.transform, "Message Size", ref y,
-            () => Mathf.RoundToInt(GameSettings.MessageSize * 100f) + "%",
-            d => GameSettings.SetMessageSize(StepSize(GameSettings.MessageSize, d)));
-        AddOption(settingsRows, settingsPanel.transform, "Style Rank", ref y,
-            () => GameSettings.StyleRankOn ? "On" : "Off",
-            d => GameSettings.SetStyleRankOn(!GameSettings.StyleRankOn));
-        AddOption(settingsRows, settingsPanel.transform, "Rank Size", ref y,
-            () => Mathf.RoundToInt(GameSettings.StyleRankSize * 100f) + "%",
-            d => GameSettings.SetStyleRankSize(GameSettings.RankSizes[Mathf.Clamp(NearestIndex(GameSettings.RankSizes, GameSettings.StyleRankSize) + d, 0, GameSettings.RankSizes.Length - 1)]));
-        AddOption(settingsRows, settingsPanel.transform, "Rank Position", ref y,
-            () => GameSettings.RankPositions[GameSettings.StyleRankPosition],
-            d => GameSettings.SetStyleRankPosition(GameSettings.StyleRankPosition + d));
-
-        y -= 16;
-        AddButton(settingsRows, settingsPanel.transform, "Accessibility", ref y, OpenAccessibility, SettingsRowWidth);
-        AddButton(settingsRows, settingsPanel.transform, "Controls", ref y, OpenControls, SettingsRowWidth);
-        AddButton(settingsRows, settingsPanel.transform, "Back", ref y, () => ShowPage(Page.Main, 1), SettingsRowWidth);
-        MakeHint(settingsPanel.transform, -top + 34);
+        y = Mathf.Min(y, bottom) - 16;
         columnX = 0f;
         buildColumn = 0;
+        AddButton(settingsRows, settingsPanel.transform, "Back", ref y, () => ShowPage(Page.Main, 2), SettingsRowWidth);
+        MakeHint(settingsPanel.transform, -top + 34);
 
+        BuildPreferencesPage();
         BuildControlsPage();
         BuildAccessibilityPage();
         BuildDevToolsPage();
     }
 
+    // ---------------------------------------------------------------- preferences page
+    // Taste: what's on the HUD, gameplay conveniences, the style rank panel (Main Character boon)
+    private void BuildPreferencesPage()
+    {
+        float columnHeight = 2 * 44 + 10 + 6 * (RowHeight + RowGap);
+        float height = 130 + columnHeight + 190;
+        prefsPanel = MakePanel("Preferences", root.transform, 2 * SettingsRowWidth + 140, height);
+        float top = height / 2f;
+        MakeTitle(prefsPanel.transform, "PREFERENCES", top - 66);
+        Transform panel = prefsPanel.transform;
+
+        float y = top - 130;
+        columnX = -ColumnOffset;
+        buildColumn = 0;
+        AddHeader(prefsRows, panel, "Gameplay", ref y);
+        AddToggle(prefsRows, panel, "Auto Pick Up Weapons", ref y, () => GameSettings.AutoPickupWeapons, GameSettings.SetAutoPickupWeapons,
+            "Walk over a weapon drop to grab it, no button");
+        AddToggle(prefsRows, panel, "Auto Equip Weapon", ref y, () => GameSettings.AutoEquipWeapon, GameSettings.SetAutoEquipWeapon,
+            "Broken weapon? Switch to the next one. No Rod while you have a weapon");
+        AddToggle(prefsRows, panel, "Auto Pick Up Cats", ref y, () => CatRoster.AutoPickup, v => CatRoster.AutoPickup = v,
+            "Off: cats only join when you press the interact button on them (also in the Cat Party)");
+        AddToggle(prefsRows, panel, "Tutorial Popups", ref y, () => GameSettings.TutorialPopups, GameSettings.SetTutorialPopups,
+            "Short explanation the first time you find something new");
+        AddHeader(prefsRows, panel, "Style Rank", ref y);
+        AddOption(prefsRows, panel, "Rank Size", ref y,
+            () => Mathf.RoundToInt(GameSettings.StyleRankSize * 100f) + "%",
+            d => GameSettings.SetStyleRankSize(GameSettings.RankSizes[Mathf.Clamp(NearestIndex(GameSettings.RankSizes, GameSettings.StyleRankSize) + d, 0, GameSettings.RankSizes.Length - 1)]));
+        prefsRows[prefsRows.Count - 1].description = "The style rank comes with the Main Character boon";
+        AddOption(prefsRows, panel, "Rank Position", ref y,
+            () => GameSettings.RankPositions[GameSettings.StyleRankPosition],
+            d => GameSettings.SetStyleRankPosition(GameSettings.StyleRankPosition + d));
+        prefsRows[prefsRows.Count - 1].description = "Which corner of the screen the style rank sits in";
+        float bottom = y;
+
+        y = top - 130;
+        columnX = ColumnOffset;
+        buildColumn = 1;
+        AddHeader(prefsRows, panel, "HUD And Effects", ref y);
+        AddToggle(prefsRows, panel, "Damage Numbers", ref y, () => GameSettings.DamageNumbers, GameSettings.SetDamageNumbers,
+            "Numbers popping out of enemies when you hit them");
+        AddToggle(prefsRows, panel, "Kill Feed", ref y, () => GameSettings.KillFeedOn, GameSettings.SetKillFeed,
+            "Who killed what, top right");
+        AddToggle(prefsRows, panel, "Button Hints", ref y, () => GameSettings.ButtonHints, GameSettings.SetButtonHints,
+            "Notes / Stats / Map buttons, bottom left");
+        AddToggle(prefsRows, panel, "Blood", ref y, () => GameSettings.BloodOn, GameSettings.SetBlood,
+            "Blood drops and puddles");
+
+        y = Mathf.Min(y, bottom) - 16;
+        columnX = 0f;
+        buildColumn = 0;
+        AddButton(prefsRows, panel, "Back", ref y, () => ShowPage(Page.Main, 3), SettingsRowWidth);
+        prefsDescription = PixelText.Create(panel, "", 2, new Color(1f, 0.85f, 0.95f, 0.8f), 0.5f);
+        Anchor(prefsDescription.Rect, new Vector2(0.5f, 0.5f), new Vector2(0, -top + 76));
+        MakeHint(panel, -top + 34);
+    }
+
     // ---------------------------------------------------------------- accessibility page
     private void BuildAccessibilityPage()
     {
-        const int rowsCount = 11;
+        const int rowsCount = 10;
         float height = 130 + rowsCount * (RowHeight + RowGap) + 140;
         accessPanel = MakePanel("Accessibility", root.transform, SettingsRowWidth + 120, height);
         float top = height / 2f;
@@ -626,26 +663,29 @@ public class PauseMenu : MonoBehaviour
         columnX = 0f;
         buildColumn = 0;
 
+        // Reading the fight and comfort: warnings, outlines, text size, motion
         AddToggle(accessRows, accessPanel.transform, "Enemy Alerts", ref y, () => GameSettings.EnemyAlerts, GameSettings.SetEnemyAlerts,
             "A ! pops over enemies when they notice Rowdy");
         AddToggle(accessRows, accessPanel.transform, "Ranged Aim Lines", ref y, () => GameSettings.RangedAimLines, GameSettings.SetRangedAimLines,
             "Red trace showing where arrows and bombs will fly");
-        AddToggle(accessRows, accessPanel.transform, "Auto Pick Up Weapons", ref y, () => GameSettings.AutoPickupWeapons, GameSettings.SetAutoPickupWeapons,
-            "Walk over a weapon drop to grab it, no button");
-        AddToggle(accessRows, accessPanel.transform, "Auto Equip Weapon", ref y, () => GameSettings.AutoEquipWeapon, GameSettings.SetAutoEquipWeapon,
-            "Broken weapon? Switch to the next one. No Rod while you have a weapon");
         AddToggle(accessRows, accessPanel.transform, "Rowdy Outline", ref y, () => GameSettings.RowdyOutline, GameSettings.SetRowdyOutline,
             "Blue outline so Rowdy is easy to spot");
         AddToggle(accessRows, accessPanel.transform, "Boss Weakness Indicator", ref y, () => GameSettings.BossWeakness, GameSettings.SetBossWeakness,
             "Arrow and brackets on a boss's weak spot (Pelich's head)");
-        AddToggle(accessRows, accessPanel.transform, "Tutorial Popups", ref y, () => GameSettings.TutorialPopups, GameSettings.SetTutorialPopups,
-            "Short explanation the first time you find something new");
-        AddToggle(accessRows, accessPanel.transform, "Blood", ref y, () => GameSettings.BloodOn, GameSettings.SetBlood,
-            "Blood drops and puddles");
-        AddToggle(accessRows, accessPanel.transform, "Kill Feed", ref y, () => GameSettings.KillFeedOn, GameSettings.SetKillFeed,
-            "Who killed what, top right");
-        AddToggle(accessRows, accessPanel.transform, "Button Hints", ref y, () => GameSettings.ButtonHints, GameSettings.SetButtonHints,
-            "Notes / Stats / Map buttons, bottom left");
+        AddOption(accessRows, accessPanel.transform, "Screen Shake", ref y,
+            () => GameSettings.ScreenShake <= 0f ? "Off" : Mathf.RoundToInt(GameSettings.ScreenShake * 100f) + "%",
+            d => GameSettings.SetScreenShake(GameSettings.ShakeLevels[Wrap(Array.IndexOf(GameSettings.ShakeLevels, GameSettings.ScreenShake) + d, GameSettings.ShakeLevels.Length)]));
+        accessRows[accessRows.Count - 1].description = "How hard the camera shakes on big hits";
+        AddToggle(accessRows, accessPanel.transform, "Vibration", ref y, () => GameSettings.Vibration, GameSettings.SetVibration,
+            "Gamepad rumble");
+        AddOption(accessRows, accessPanel.transform, "Number Size", ref y,
+            () => Mathf.RoundToInt(GameSettings.DamageNumberSize * 100f) + "%",
+            d => GameSettings.SetDamageNumberSize(StepSize(GameSettings.DamageNumberSize, d)));
+        accessRows[accessRows.Count - 1].description = "Size of the damage numbers";
+        AddOption(accessRows, accessPanel.transform, "Message Size", ref y,
+            () => Mathf.RoundToInt(GameSettings.MessageSize * 100f) + "%",
+            d => GameSettings.SetMessageSize(StepSize(GameSettings.MessageSize, d)));
+        accessRows[accessRows.Count - 1].description = "Size of CRITICAL! / COUNTER! / EXECUTED! and other pop-up words";
         y -= 10;
         AddButton(accessRows, accessPanel.transform, "Back", ref y, CloseAccessibility);
 
@@ -703,14 +743,9 @@ public class PauseMenu : MonoBehaviour
             () => GameSettings.CrowdLimit <= 0 ? "Off" : GameSettings.CrowdLimit + " at once",
             d => GameSettings.SetCrowdLimit(Wrap(GameSettings.CrowdLimit + d, 9)));
         devRows[devRows.Count - 1].description = "How many wolves may press Rowdy at once";
-        // Two balances to compare (Balance.cs): one is always on, switching reloads at the saved checkpoint
-        AddHeader(devRows, panel, "Balance", ref y);
-        AddToggle(devRows, panel, "Lamps Balance", ref y, () => Balance.Lamp, v => { if (v) SwitchBalance(Balance.Mode.Lamp); },
-            "Your numbers, untouched. Reloads at the saved checkpoint");
-        AddToggle(devRows, panel, "Jarvis Balance", ref y, () => Balance.Jarvis, v => { if (v) SwitchBalance(Balance.Mode.Jarvis); },
-            "The rebalance + Encore endgame. Reloads at the saved checkpoint");
+        AddHeader(devRows, panel, "Endgame", ref y);
         AddToggle(devRows, panel, "Encore Unlocked", ref y, () => Encore.Unlocked, Encore.DevUnlock,
-            "Endgame as if Pelich was beaten (Jarvis only): Blood Moons, Encore levels");
+            "Endgame as if Pelich was beaten: Blood Moons, Encore levels");
 
         y -= 10;
         AddButton(devRows, panel, "Back", ref y, () => ShowPage(Page.Main, 0), SettingsRowWidth);
@@ -720,14 +755,6 @@ public class PauseMenu : MonoBehaviour
         devDescription = PixelText.Create(panel, "", 2, new Color(1f, 0.85f, 0.4f, 0.85f), 0.5f);
         Anchor(devDescription.Rect, new Vector2(0.5f, 0.5f), new Vector2(0, -top + 76));
         MakeHint(panel, -top + 34);
-    }
-
-    // Balance switch: close the menu first (like the travel buttons), then reload with the other numbers
-    private void SwitchBalance(Balance.Mode mode)
-    {
-        if (Balance.Current == mode) return;
-        pendingAction = () => Balance.Set(mode);
-        Resume();
     }
 
     // Dev button: stayOpen = the menu stays up (level up/down...), otherwise the game resumes and it runs

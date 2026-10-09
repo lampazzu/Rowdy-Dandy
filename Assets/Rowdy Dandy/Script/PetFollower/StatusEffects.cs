@@ -247,6 +247,7 @@ public class StatusEffects : MonoBehaviour
 
     public bool IsPoisoned => Time.time < poisonUntil;
     public bool IsSlowed => Time.time < slowUntil;
+    public bool IsCharmed => holdKind == HoldKind.Charm && IsStunned(gameObject);
 
     private EnemyHealth health;
     private SpriteRenderer body;
@@ -647,6 +648,31 @@ public static class CatPowers
         }
         if (stunnedCount > 0) FXSound.Play("Stun", 0.8f, 1f);
         return stunnedCount;
+    }
+
+    // Tchogon: one pull of the vortex. Everything within VortexRadius of Rowdy is dragged in toward him, slowed and nicked.
+    public const float VortexRadius = 4.5f;
+    public static void Vortex(Transform rowdy, PetFollower cat, bool last)
+    {
+        Vector3 c = rowdy.position + Vector3.up * 0.5f;
+        Color swirl = new Color(0.55f, 1f, 0.85f, 1f);
+        InwardMote.Ring(c, VortexRadius, 22, swirl, 0.3f, 1.2f);
+        PulseRing.Spawn(c, new Color(swirl.r, swirl.g, swirl.b, 0.6f), VortexRadius, 0.3f, 90, true);
+        FXSound.Play(BoonArt.Get != null ? BoonArt.Get.tornado : null, 0.35f, 1.3f + (last ? 0.2f : 0f));
+        if (last) { ScreenShake.Impulse(0.35f); GamepadRumble.Pulse(0.3f, 0.4f, 0.2f); }
+        int pulled = 0;
+        foreach (Collider2D hit in Physics2D.OverlapCircleAll(c, VortexRadius, LayerMask.GetMask("Enemy")))
+        {
+            EnemyHealth e = hit.GetComponentInParent<EnemyHealth>();
+            if (e == null || e.enemydead || e.IsObject || !e.CompareTag("Enemy")) continue;
+            float d = Mathf.Abs(e.transform.position.x - rowdy.position.x);
+            UndertowPull.Begin(e, rowdy, Mathf.Clamp(d - 1f, 0f, 1.6f), 0.25f);
+            StatusEffects.Of(e).Slow(1.5f, 0.5f);
+            EnemyHealth.CreditNextHit(KillCredit.Cat(cat));
+            e.TakeDamageEnemy((last ? 8f : 3f) * Boons.CatDamageFor(cat), false, !last);
+            pulled++;
+        }
+        if (last && pulled > 1) IconPopup.Show(c + Vector3.up * 1.4f, null, "SUCKED IN X" + pulled, swirl, 0.8f, 1f);
     }
 
     // One decay burst: damages everything around, and infects the survivors / other enemies so they burst too

@@ -187,30 +187,19 @@ public class WeaponManager : MonoBehaviour
             CycleWeapon();
         }
 
-        if (isWK_Axe)
-        {
-            characterAnimator.SetFloat("JumpAttackSpeed", 1.0f);
-            characterAnimator.SetFloat("DuckAttackSpeed", 1.0f);
-            characterAnimator.SetFloat("NeutralAttackSpeed", 1.0f);
-        }
-        if (isWK_Sword)
-        {
-            characterAnimator.SetFloat("JumpAttackSpeed", 1.5f);
-            characterAnimator.SetFloat("DuckAttackSpeed", 1.5f);
-            characterAnimator.SetFloat("NeutralAttackSpeed", 1.8f);
-        }
-        if (isWK_Naginata)
-        {
-            characterAnimator.SetFloat("JumpAttackSpeed", 3f);
-            characterAnimator.SetFloat("DuckAttackSpeed", 1.0f);
-            characterAnimator.SetFloat("NeutralAttackSpeed", 1.0f);
-        }
-        if (isWK_Cleaver)
-        {
-            characterAnimator.SetFloat("JumpAttackSpeed", 1.5f);
-            characterAnimator.SetFloat("DuckAttackSpeed", 1.8f);
-            characterAnimator.SetFloat("NeutralAttackSpeed", 1.0f);
-        }
+        // attack clip speeds per weapon, x Whetstone (the Blacksmith's attack speed boon)
+        float haste = Boons.AttackSpeedMultiplier;
+        if (isWK_Axe) SetAttackSpeeds(1.0f, 1.0f, 1.0f, haste);
+        if (isWK_Sword) SetAttackSpeeds(1.5f, 1.5f, 1.8f, haste);
+        if (isWK_Naginata) SetAttackSpeeds(3f, 1.0f, 1.0f, haste);
+        if (isWK_Cleaver) SetAttackSpeeds(1.5f, 1.8f, 1.0f, haste);
+    }
+
+    private void SetAttackSpeeds(float jump, float duck, float neutral, float haste)
+    {
+        characterAnimator.SetFloat("JumpAttackSpeed", jump * haste);
+        characterAnimator.SetFloat("DuckAttackSpeed", duck * haste);
+        characterAnimator.SetFloat("NeutralAttackSpeed", neutral * haste);
     }
 
     public void UpdateWeapon()
@@ -322,6 +311,7 @@ public class WeaponManager : MonoBehaviour
         int index = GetIndexFromType(type);
         unlockedWeapons[index] = true;
         RowdyNotes.MarkWeaponFound(index); // unlocks its Weapon Notes page
+        durabilityMax *= Boons.PickupDurabilityMultiplier; // Tempered Steel
         maxDurability[index] = durabilityMax;
         currentDurability[index] = durabilityMax;
 
