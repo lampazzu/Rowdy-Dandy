@@ -37,7 +37,12 @@ public class PlayerDamage : MonoBehaviour
         // (otherwise it's always the stats' Max Damage). Kills soon after Rowdy's hits still count as his.
         isKillZone = owningCat == null && baseDamage >= 500f && GetComponentInParent<Health>(true) == null;
         isRowdys = owningCat == null && GetComponentInParent<Health>(true) != null; // his weapon hitboxes (boons apply)
+        if (isRowdys) baseDamage = Balance.RowdyBaseDamage(name, baseDamage);
     }
+
+    // Share of the level-up flat damage this hitbox gets (PlayerStats)
+    // (by name only, so adding and removing it agree even before Awake ran on an inactive hitbox)
+    public float LevelBonusShare => Balance.LevelBonusShare(name);
 
     private bool isKillZone, isRowdys;
 

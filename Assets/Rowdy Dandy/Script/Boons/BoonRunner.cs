@@ -88,7 +88,7 @@ public class BoonRunner : MonoBehaviour
         }
         if (Boons.Has("wipeout") && now >= r.wipeoutReadyAt)
         {
-            r.wipeoutReadyAt = now + 1f;
+            r.wipeoutReadyAt = now + Balance.WipeoutCooldown;
             RiptideWave.Spawn(r.Feet, r.Facing, Boons.V("wipeout", 0), Boons.Has("beachbod"), Boons.Has("redtide"));
         }
         if (Boons.Has("nightfever") && now >= r.floorReadyAt && r.Grounded)
@@ -158,9 +158,12 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("undertow") && !e.enemydead)
         {
             float toward = Mathf.Sign(r.Center.x - c.x);
-            BoonFX.Push(e, new Vector2(toward * 3.5f, 1f));
+            UndertowPull.Begin(e, r.transform, 1.1f, 0.22f); // after the hit's own knockback would have pushed it away
             BoonFX.Slow(e, 2f, Boons.V("undertow", 0) / 100f);
             FXParticle.Burst(c, BoonFX.Cyan, 6, 1f, 2.5f, 2f, 0.4f);
+            // a streak of water pulling back toward Rowdy, so the drag reads
+            for (int i = 0; i < 5; i++)
+                FXParticle.Burst(c + new Vector3(-toward * (0.15f + i * 0.18f), Random.Range(-0.15f, 0.15f), 0f), BoonFX.Foam, 1, 0.5f, 1.2f + i * 0.4f, 0f, 0.3f);
             if (Random.value < 0.35f) BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.boto : null, 0.25f, Random.Range(1.1f, 1.3f));
         }
         if (Boons.Has("rottenedge") && !e.enemydead) BoonFX.Poison(e, 4f, Boons.V("rottenedge", 0));

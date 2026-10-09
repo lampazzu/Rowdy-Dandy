@@ -49,7 +49,7 @@ public static class Boons
 
     public static int Picks => PlayerPrefs.GetInt(PicksKey, 0);
     public static int Rerolls => PlayerPrefs.GetInt(RerollKey, 0);
-    public static int PendingPicks => Mathf.Max(0, (PlayerStats.Level - 1) - Picks);
+    public static int PendingPicks => Mathf.Max(0, (PlayerStats.Level - 1) + Encore.Level - Picks); // Encore levels: Jarvis endgame
 
     public static BoonDef InSlot(BoonSlot slot)
     {
@@ -302,9 +302,10 @@ public static class Boons
             float m = 1f;
             if (Has("mainchar")) m *= 1f + V("mainchar", 0) * StyleRank.Rank / 100f;
             if (Has("moonrage") && DayNight.IsNight) m *= 1f + V("moonrage", 0) / 100f;
-            if (Has("glassjaw")) m *= 2f;
+            if (Has("glassjaw")) m *= Balance.GlassJawDamage;
             if (BoonRunner.SaltyActive) m *= 1.2f;
             if (Werewolf.Active) m *= Werewolf.DamageMultiplier;
+            m *= Encore.DamageMultiplier;
             return m;
         }
     }

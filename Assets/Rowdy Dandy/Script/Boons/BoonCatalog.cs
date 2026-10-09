@@ -39,6 +39,8 @@ public class BoonDef
     {
         if (values == null || index < 0 || index >= values.Length) return 0f;
         float[] v = values[index];
+        // Jarvis balance: its own numbers for this boon (Balance.BoonValues), Lamp: the ones below
+        if (Balance.Jarvis && Balance.BoonValues.TryGetValue(id, out float[][] jarvis) && index < jarvis.Length) v = jarvis[index];
         int i = r == Rarity.Duo ? 0 : Mathf.Min((int)r, v.Length - 1);
         if ((int)r == 3 && v.Length < 4) return v[v.Length - 1] * 1.25f; // legendary of a 3-value boon
         return v[i];
@@ -46,7 +48,7 @@ public class BoonDef
 
     public string Describe(Rarity r)
     {
-        string s = desc;
+        string s = Balance.BoonDescription(id, desc);
         if (values != null)
             for (int i = 0; i < values.Length; i++)
                 s = s.Replace("{" + i + "}", Format(Value(i, r)));

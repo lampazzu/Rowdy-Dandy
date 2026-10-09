@@ -1,0 +1,3549 @@
+fileFormatVersion: 2
+guid: db276f46c2bfe454aa640a3a7ace7abb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3628501924822759086
+    second: FX_DeckFix_Upgrade_0
+  - first:
+      213: 3064862473410666110
+    second: FX_DeckFix_Upgrade_1
+  - first:
+      213: -8164150095481549192
+    second: FX_DeckFix_Upgrade_2
+  - first:
+      213: 6852172231061511354
+    second: FX_DeckFix_Upgrade_3
+  - first:
+      213: 4715255008571419439
+    second: FX_DeckFix_Upgrade_4
+  - first:
+      213: -6345125862285806781
+    second: FX_DeckFix_Upgrade_5
+  - first:
+      213: -7227170920183184463
+    second: FX_DeckFix_Upgrade_6
+  - first:
+      213: 2212040389951100745
+    second: FX_DeckFix_Upgrade_7
+  - first:
+      213: 3944358049165549304
+    second: FX_DeckFix_Upgrade_8
+  - first:
+      213: -5960832474547535610
+    second: FX_DeckFix_Upgrade_9
+  - first:
+      213: 3778793572108854924
+    second: FX_DeckFix_Upgrade_10
+  - first:
+      213: -1067343323626453346
+    second: FX_DeckFix_Upgrade_11
+  - first:
+      213: -8751042075533378210
+    second: FX_DeckFix_Upgrade_12
+  - first:
+      213: -6819116022599416552
+    second: FX_DeckFix_Upgrade_13
+  - first:
+      213: 8459594951977645239
+    second: FX_DeckFix_Upgrade_14
+  - first:
+      213: -327746102022236386
+    second: FX_DeckFix_Upgrade_15
+  - first:
+      213: -3969430530413475696
+    second: FX_DeckFix_Upgrade_16
+  - first:
+      213: -854140961152300784
+    second: FX_DeckFix_Upgrade_17
+  - first:
+      213: -2048907524673657711
+    second: FX_DeckFix_Upgrade_18
+  - first:
+      213: -3957616746878396019
+    second: FX_DeckFix_Upgrade_19
+  - first:
+      213: -2741852222671935577
+    second: FX_DeckFix_Upgrade_20
+  - first:
+      213: 7478258020710764812
+    second: FX_DeckFix_Upgrade_21
+  - first:
+      213: 3201969255363224491
+    second: FX_DeckFix_Upgrade_22
+  - first:
+      213: -8527850540778105355
+    second: FX_DeckFix_Upgrade_23
+  - first:
+      213: 4216233305166576424
+    second: FX_DeckFix_Upgrade_24
+  - first:
+      213: -7210861096088281249
+    second: FX_DeckFix_Upgrade_25
+  - first:
+      213: -8077900510311398258
+    second: FX_DeckFix_Upgrade_26
+  - first:
+      213: -4217320708857629173
+    second: FX_DeckFix_Upgrade_27
+  - first:
+      213: 5988213985341251643
+    second: FX_DeckFix_Upgrade_28
+  - first:
+      213: 1381299599897184803
+    second: FX_DeckFix_Upgrade_29
+  - first:
+      213: 1897106348271146736
+    second: FX_DeckFix_Upgrade_30
+  - first:
+      213: -7843028216848113555
+    second: FX_DeckFix_Upgrade_31
+  - first:
+      213: 816524003288572891
+    second: FX_DeckFix_Upgrade_32
+  - first:
+      213: -7926981575631640553
+    second: FX_DeckFix_Upgrade_33
+  - first:
+      213: -6852591592773970129
+    second: FX_DeckFix_Upgrade_34
+  - first:
+      213: -3410364536362726517
+    second: FX_DeckFix_Upgrade_35
+  - first:
+      213: -5332469821395417052
+    second: FX_DeckFix_Upgrade_36
+  - first:
+      213: -1273794747595643849
+    second: FX_DeckFix_Upgrade_37
+  - first:
+      213: -1644306615779063887
+    second: FX_DeckFix_Upgrade_38
+  - first:
+      213: -1065819413707348964
+    second: FX_DeckFix_Upgrade_39
+  - first:
+      213: 4631150170645337351
+    second: FX_DeckFix_Upgrade_40
+  - first:
+      213: -8683786842477893974
+    second: FX_DeckFix_Upgrade_41
+  - first:
+      213: -3863662823107784356
+    second: FX_DeckFix_Upgrade_42
+  - first:
+      213: 1520512218097298359
+    second: FX_DeckFix_Upgrade_43
+  - first:
+      213: -1837055021764902116
+    second: FX_DeckFix_Upgrade_44
+  - first:
+      213: 1065026758605556238
+    second: FX_DeckFix_Upgrade_45
+  - first:
+      213: 4091032493552017742
+    second: FX_DeckFix_Upgrade_46
+  - first:
+      213: -1960112725362496968
+    second: FX_DeckFix_Upgrade_47
+  - first:
+      213: 4963308106931321291
+    second: FX_DeckFix_Upgrade_48
+  - first:
+      213: 5798247340952842261
+    second: FX_DeckFix_Upgrade_49
+  - first:
+      213: 8033171852643208486
+    second: FX_DeckFix_Upgrade_50
+  - first:
+      213: 1320504786534388210
+    second: FX_DeckFix_Upgrade_51
+  - first:
+      213: -166728358043432811
+    second: FX_DeckFix_Upgrade_52
+  - first:
+      213: 2468843651299247215
+    second: FX_DeckFix_Upgrade_53
+  - first:
+      213: 5248106448103676812
+    second: FX_DeckFix_Upgrade_54
+  - first:
+      213: -2652835130282514389
+    second: FX_DeckFix_Upgrade_55
+  - first:
+      213: -5162955825282077925
+    second: FX_DeckFix_Upgrade_56
+  - first:
+      213: -5342008233495833769
+    second: FX_DeckFix_Upgrade_57
+  - first:
+      213: -5958515275728143988
+    second: FX_DeckFix_Upgrade_58
+  - first:
+      213: -3335514794261942924
+    second: FX_DeckFix_Upgrade_59
+  - first:
+      213: -6259577253922074260
+    second: FX_DeckFix_Upgrade_60
+  - first:
+      213: -740207289558843930
+    second: FX_DeckFix_Upgrade_61
+  - first:
+      213: 2102409238596766665
+    second: FX_DeckFix_Upgrade_62
+  - first:
+      213: 6148268438339344667
+    second: FX_DeckFix_Upgrade_63
+  - first:
+      213: -274352250788447024
+    second: FX_DeckFix_Upgrade_64
+  - first:
+      213: 2298800042096693090
+    second: FX_DeckFix_Upgrade_65
+  - first:
+      213: 2707598443815455029
+    second: FX_DeckFix_Upgrade_66
+  - first:
+      213: 8151608977337128246
+    second: FX_DeckFix_Upgrade_67
+  - first:
+      213: -182740663678069686
+    second: FX_DeckFix_Upgrade_68
+  - first:
+      213: -2148238302898398456
+    second: FX_DeckFix_Upgrade_69
+  - first:
+      213: -2445657228214587529
+    second: FX_DeckFix_Upgrade_70
+  - first:
+      213: -6687847949284110884
+    second: FX_DeckFix_Upgrade_71
+  - first:
+      213: 1657224730222163568
+    second: FX_DeckFix_Upgrade_72
+  - first:
+      213: -1932412161493618636
+    second: FX_DeckFix_Upgrade_73
+  - first:
+      213: 7291892305998846682
+    second: FX_DeckFix_Upgrade_74
+  - first:
+      213: 7868631552702765126
+    second: FX_DeckFix_Upgrade_75
+  - first:
+      213: -3799840483367334585
+    second: FX_DeckFix_Upgrade_76
+  - first:
+      213: 4370961147388616651
+    second: FX_DeckFix_Upgrade_77
+  - first:
+      213: -4141088410308825402
+    second: FX_DeckFix_Upgrade_78
+  - first:
+      213: -2797544688321390968
+    second: FX_DeckFix_Upgrade_79
+  - first:
+      213: 5843824025066433710
+    second: FX_DeckFix_Upgrade_80
+  - first:
+      213: -548065210903146156
+    second: FX_DeckFix_Upgrade_81
+  - first:
+      213: 8653192267511461721
+    second: FX_DeckFix_Upgrade_82
+  - first:
+      213: -1598264705266616712
+    second: FX_DeckFix_Upgrade_83
+  - first:
+      213: -8452894522040326770
+    second: FX_DeckFix_Upgrade_84
+  - first:
+      213: 3584002219043678832
+    second: FX_DeckFix_Upgrade_85
+  - first:
+      213: 7632735885113409097
+    second: FX_DeckFix_Upgrade_86
+  - first:
+      213: 3813828548922422235
+    second: FX_DeckFix_Upgrade_87
+  - first:
+      213: 6400233551583232912
+    second: FX_DeckFix_Upgrade_88
+  - first:
+      213: -7600739519158827127
+    second: FX_DeckFix_Upgrade_89
+  - first:
+      213: 3760122023497806629
+    second: FX_DeckFix_Upgrade_90
+  - first:
+      213: -190941487655784448
+    second: FX_DeckFix_Upgrade_91
+  - first:
+      213: -8237537317315154070
+    second: FX_DeckFix_Upgrade_92
+  - first:
+      213: 2046088688381974118
+    second: FX_DeckFix_Upgrade_93
+  - first:
+      213: 3487673333334516216
+    second: FX_DeckFix_Upgrade_94
+  - first:
+      213: 2507893976990748209
+    second: FX_DeckFix_Upgrade_95
+  - first:
+      213: -1964504917541607288
+    second: FX_DeckFix_Upgrade_96
+  - first:
+      213: -5496435397519931475
+    second: FX_DeckFix_Upgrade_97
+  - first:
+      213: -2344098202272189830
+    second: FX_DeckFix_Upgrade_98
+  - first:
+      213: -2593877211894800410
+    second: FX_DeckFix_Upgrade_99
+  - first:
+      213: 5220910020266243363
+    second: FX_DeckFix_Upgrade_100
+  - first:
+      213: 5362299522572193464
+    second: FX_DeckFix_Upgrade_101
+  - first:
+      213: -1040857289419442354
+    second: FX_DeckFix_Upgrade_102
+  - first:
+      213: 4163030518920648406
+    second: FX_DeckFix_Upgrade_103
+  - first:
+      213: 8766511680118755524
+    second: FX_DeckFix_Upgrade_104
+  - first:
+      213: 4803922457278436868
+    second: FX_DeckFix_Upgrade_105
+  - first:
+      213: -5789352880609985047
+    second: FX_DeckFix_Upgrade_106
+  - first:
+      213: 5676973434329279515
+    second: FX_DeckFix_Upgrade_107
+  - first:
+      213: 2084807553353379294
+    second: FX_DeckFix_Upgrade_108
+  - first:
+      213: 5089208004842067323
+    second: FX_DeckFix_Upgrade_109
+  - first:
+      213: -5693086857269903222
+    second: FX_DeckFix_Upgrade_110
+  - first:
+      213: 1618310489963723094
+    second: FX_DeckFix_Upgrade_111
+  - first:
+      213: 7957419255768120174
+    second: FX_DeckFix_Upgrade_112
+  - first:
+      213: -4355886348769191981
+    second: FX_DeckFix_Upgrade_113
+  - first:
+      213: -8739578217706590533
+    second: FX_DeckFix_Upgrade_114
+  - first:
+      213: 3131094368442310654
+    second: FX_DeckFix_Upgrade_115
+  - first:
+      213: -5305079225347395263
+    second: FX_DeckFix_Upgrade_116
+  - first:
+      213: 7369296692368022845
+    second: FX_DeckFix_Upgrade_117
+  - first:
+      213: 634674010324662545
+    second: FX_DeckFix_Upgrade_118
+  - first:
+      213: -6796373537104302018
+    second: FX_DeckFix_Upgrade_119
+  - first:
+      213: -5555594006812075680
+    second: FX_DeckFix_Upgrade_120
+  - first:
+      213: -4594681865236734460
+    second: FX_DeckFix_Upgrade_121
+  - first:
+      213: -5828015522470149305
+    second: FX_DeckFix_Upgrade_122
+  - first:
+      213: -191103791764089140
+    second: FX_DeckFix_Upgrade_123
+  - first:
+      213: -2854927725149677729
+    second: FX_DeckFix_Upgrade_124
+  - first:
+      213: 3892595963392339701
+    second: FX_DeckFix_Upgrade_125
+  - first:
+      213: -4791647813508108215
+    second: FX_DeckFix_Upgrade_126
+  - first:
+      213: -6266023017974523950
+    second: FX_DeckFix_Upgrade_127
+  - first:
+      213: 3709372751035707581
+    second: FX_DeckFix_Upgrade_128
+  - first:
+      213: 8951492176613172666
+    second: FX_DeckFix_Upgrade_129
+  - first:
+      213: 6156771973392948183
+    second: FX_DeckFix_Upgrade_130
+  - first:
+      213: 8865294041397076051
+    second: FX_DeckFix_Upgrade_131
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_0
+      rect:
+        serializedVersion: 2
+        x: 1797
+        y: 131
+        width: 128
+        height: 197
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea6b1e7a6470b5230800000000000000
+      internalID: 3628501924822759086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_1
+      rect:
+        serializedVersion: 2
+        x: 2137
+        y: 213
+        width: 133
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7e51156e24988a20800000000000000
+      internalID: 3064862473410666110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_2
+      rect:
+        serializedVersion: 2
+        x: 2475
+        y: 237
+        width: 116
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87ec9d16ebc13be80800000000000000
+      internalID: -8164150095481549192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_3
+      rect:
+        serializedVersion: 2
+        x: 2578
+        y: 309
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abc973cf65ec71f50800000000000000
+      internalID: 6852172231061511354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_4
+      rect:
+        serializedVersion: 2
+        x: 2590
+        y: 290
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2be743a273ff6140800000000000000
+      internalID: 4715255008571419439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_5
+      rect:
+        serializedVersion: 2
+        x: 2814
+        y: 237
+        width: 119
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3437f4b65a591f7a0800000000000000
+      internalID: -6345125862285806781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_6
+      rect:
+        serializedVersion: 2
+        x: 3148
+        y: 247
+        width: 116
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b3c27bd65ee3bb90800000000000000
+      internalID: -7227170920183184463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_7
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 102
+        width: 42
+        height: 179
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9471ad7c30fb2be10800000000000000
+      internalID: 2212040389951100745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_8
+      rect:
+        serializedVersion: 2
+        x: 1134
+        y: 249
+        width: 14
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fe17736fbc2db630800000000000000
+      internalID: 3944358049165549304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_9
+      rect:
+        serializedVersion: 2
+        x: 1144
+        y: 122
+        width: 69
+        height: 177
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6014bfc327ed64da0800000000000000
+      internalID: -5960832474547535610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_10
+      rect:
+        serializedVersion: 2
+        x: 1205
+        y: 266
+        width: 9
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c86e311abb8f07430800000000000000
+      internalID: 3778793572108854924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_11
+      rect:
+        serializedVersion: 2
+        x: 1437
+        y: 178
+        width: 174
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e964cd5f6e80031f0800000000000000
+      internalID: -1067343323626453346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_12
+      rect:
+        serializedVersion: 2
+        x: 2595
+        y: 258
+        width: 10
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5df559e89d0e8680800000000000000
+      internalID: -8751042075533378210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_13
+      rect:
+        serializedVersion: 2
+        x: 2932
+        y: 277
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81589ce4b12ad51a0800000000000000
+      internalID: -6819116022599416552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_14
+      rect:
+        serializedVersion: 2
+        x: 1217
+        y: 238
+        width: 10
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b4b058b9c4866570800000000000000
+      internalID: 8459594951977645239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_15
+      rect:
+        serializedVersion: 2
+        x: 1434
+        y: 248
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e17127c18ac937bf0800000000000000
+      internalID: -327746102022236386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_16
+      rect:
+        serializedVersion: 2
+        x: 1593
+        y: 235
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0984d1aa6ffb9e8c0800000000000000
+      internalID: -3969430530413475696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_17
+      rect:
+        serializedVersion: 2
+        x: 1781
+        y: 251
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 019086e325b7524f0800000000000000
+      internalID: -854140961152300784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_18
+      rect:
+        serializedVersion: 2
+        x: 1935
+        y: 255
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 194a33e3671d093e0800000000000000
+      internalID: -2048907524673657711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_19
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 125
+        width: 15
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d891d2d7988b319c0800000000000000
+      internalID: -3957616746878396019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_20
+      rect:
+        serializedVersion: 2
+        x: 1218
+        y: 226
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a726013eebf2f9d0800000000000000
+      internalID: -2741852222671935577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_21
+      rect:
+        serializedVersion: 2
+        x: 1777
+        y: 226
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c015e2f5c0c18c760800000000000000
+      internalID: 7478258020710764812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_22
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 236
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba3a5afa21eaf6c20800000000000000
+      internalID: 3201969255363224491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_23
+      rect:
+        serializedVersion: 2
+        x: 2204
+        y: 211
+        width: 25
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f55c4b9d1df6a980800000000000000
+      internalID: -8527850540778105355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_24
+      rect:
+        serializedVersion: 2
+        x: 2543
+        y: 208
+        width: 19
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82bff9c3ad1138a30800000000000000
+      internalID: 4216233305166576424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_25
+      rect:
+        serializedVersion: 2
+        x: 2553
+        y: 231
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5f59f2b900edeb90800000000000000
+      internalID: -7210861096088281249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_26
+      rect:
+        serializedVersion: 2
+        x: 1213
+        y: 209
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8441ffc84885ef80800000000000000
+      internalID: -8077900510311398258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_27
+      rect:
+        serializedVersion: 2
+        x: 1849
+        y: 86
+        width: 41
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0674acd8211975c0800000000000000
+      internalID: -4217320708857629173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_28
+      rect:
+        serializedVersion: 2
+        x: 1936
+        y: 214
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b30aa4b84e86a1350800000000000000
+      internalID: 5988213985341251643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_29
+      rect:
+        serializedVersion: 2
+        x: 2114
+        y: 197
+        width: 32
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32ac24ceaac5b2310800000000000000
+      internalID: 1381299599897184803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_30
+      rect:
+        serializedVersion: 2
+        x: 2175
+        y: 209
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f617d52c20e35a10800000000000000
+      internalID: 1897106348271146736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_31
+      rect:
+        serializedVersion: 2
+        x: 2238
+        y: 208
+        width: 26
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6027631467f72390800000000000000
+      internalID: -7843028216848113555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_32
+      rect:
+        serializedVersion: 2
+        x: 2581
+        y: 182
+        width: 14
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd3689e3140e45b00800000000000000
+      internalID: 816524003288572891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_33
+      rect:
+        serializedVersion: 2
+        x: 2881
+        y: 185
+        width: 19
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 718e8638144bdf190800000000000000
+      internalID: -7926981575631640553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_34
+      rect:
+        serializedVersion: 2
+        x: 1590
+        y: 203
+        width: 21
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2711e1c044b6e0a0800000000000000
+      internalID: -6852591592773970129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_35
+      rect:
+        serializedVersion: 2
+        x: 1786
+        y: 195
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8b8287e583fba0d0800000000000000
+      internalID: -3410364536362726517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_36
+      rect:
+        serializedVersion: 2
+        x: 2188
+        y: 125
+        width: 22
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4284c3833f24ff5b0800000000000000
+      internalID: -5332469821395417052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_37
+      rect:
+        serializedVersion: 2
+        x: 2240
+        y: 172
+        width: 39
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 734adc80d62925ee0800000000000000
+      internalID: -1273794747595643849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_38
+      rect:
+        serializedVersion: 2
+        x: 2518
+        y: 152
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b70aa848df3e29e0800000000000000
+      internalID: -1644306615779063887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_39
+      rect:
+        serializedVersion: 2
+        x: 2551
+        y: 197
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c142243e3e27531f0800000000000000
+      internalID: -1065819413707348964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_40
+      rect:
+        serializedVersion: 2
+        x: 2919
+        y: 181
+        width: 12
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7051ec61b86254040800000000000000
+      internalID: 4631150170645337351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_41
+      rect:
+        serializedVersion: 2
+        x: 1531
+        y: 136
+        width: 27
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa6e4ec10edfc7780800000000000000
+      internalID: -8683786842477893974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_42
+      rect:
+        serializedVersion: 2
+        x: 1922
+        y: 186
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5117c80223816ac0800000000000000
+      internalID: -3863662823107784356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_43
+      rect:
+        serializedVersion: 2
+        x: 2113
+        y: 180
+        width: 20
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bba45c6ec1f91510800000000000000
+      internalID: 1520512218097298359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_44
+      rect:
+        serializedVersion: 2
+        x: 2144
+        y: 176
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c130bdad0387186e0800000000000000
+      internalID: -1837055021764902116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_45
+      rect:
+        serializedVersion: 2
+        x: 2155
+        y: 172
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0a48f6b13cb7ce00800000000000000
+      internalID: 1065026758605556238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_46
+      rect:
+        serializedVersion: 2
+        x: 2452
+        y: 176
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e41afbea06446c830800000000000000
+      internalID: 4091032493552017742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_47
+      rect:
+        serializedVersion: 2
+        x: 2578
+        y: 187
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83aab058cd74cc4e0800000000000000
+      internalID: -1960112725362496968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_48
+      rect:
+        serializedVersion: 2
+        x: 2578
+        y: 180
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc935703d6631e440800000000000000
+      internalID: 4963308106931321291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_49
+      rect:
+        serializedVersion: 2
+        x: 2856
+        y: 148
+        width: 25
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 510f8557c33877050800000000000000
+      internalID: 5798247340952842261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_50
+      rect:
+        serializedVersion: 2
+        x: 1479
+        y: 168
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62d07780d3f8b7f60800000000000000
+      internalID: 8033171852643208486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_51
+      rect:
+        serializedVersion: 2
+        x: 1517
+        y: 174
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f1d5956b10635210800000000000000
+      internalID: 1320504786534388210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_52
+      rect:
+        serializedVersion: 2
+        x: 1528
+        y: 164
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59846d41179afadf0800000000000000
+      internalID: -166728358043432811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_53
+      rect:
+        serializedVersion: 2
+        x: 1533
+        y: 167
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f648ba96838134220800000000000000
+      internalID: 2468843651299247215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_54
+      rect:
+        serializedVersion: 2
+        x: 2098
+        y: 157
+        width: 22
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8b18a6420505d840800000000000000
+      internalID: 5248106448103676812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_55
+      rect:
+        serializedVersion: 2
+        x: 2473
+        y: 150
+        width: 7
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2865db118c3f2bd0800000000000000
+      internalID: -2652835130282514389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_56
+      rect:
+        serializedVersion: 2
+        x: 2506
+        y: 165
+        width: 8
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1b270b080f7958b0800000000000000
+      internalID: -5162955825282077925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_57
+      rect:
+        serializedVersion: 2
+        x: 2578
+        y: 166
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 753d44790df5dd5b0800000000000000
+      internalID: -5342008233495833769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_58
+      rect:
+        serializedVersion: 2
+        x: 2790
+        y: 156
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c893c712de91f4da0800000000000000
+      internalID: -5958515275728143988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_59
+      rect:
+        serializedVersion: 2
+        x: 1476
+        y: 150
+        width: 8
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47de4f887fed5b1d0800000000000000
+      internalID: -3335514794261942924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_60
+      rect:
+        serializedVersion: 2
+        x: 1485
+        y: 111
+        width: 23
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c611cd7f6a38129a0800000000000000
+      internalID: -6259577253922074260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_61
+      rect:
+        serializedVersion: 2
+        x: 2242
+        y: 142
+        width: 13
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6edb0b554614ab5f0800000000000000
+      internalID: -740207289558843930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_62
+      rect:
+        serializedVersion: 2
+        x: 2267
+        y: 155
+        width: 21
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cb4f0f30124d2d10800000000000000
+      internalID: 2102409238596766665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_63
+      rect:
+        serializedVersion: 2
+        x: 2436
+        y: 113
+        width: 28
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1956fad199035550800000000000000
+      internalID: 6148268438339344667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_64
+      rect:
+        serializedVersion: 2
+        x: 2493
+        y: 134
+        width: 9
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dcfc6cd41e413cf0800000000000000
+      internalID: -274352250788447024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_65
+      rect:
+        serializedVersion: 2
+        x: 2589
+        y: 156
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26f83de657af6ef10800000000000000
+      internalID: 2298800042096693090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_66
+      rect:
+        serializedVersion: 2
+        x: 2916
+        y: 164
+        width: 17
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 539450e6072539520800000000000000
+      internalID: 2707598443815455029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_67
+      rect:
+        serializedVersion: 2
+        x: 1482
+        y: 155
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63590120d25502170800000000000000
+      internalID: 8151608977337128246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_68
+      rect:
+        serializedVersion: 2
+        x: 2595
+        y: 134
+        width: 17
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a441377a556c67df0800000000000000
+      internalID: -182740663678069686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_69
+      rect:
+        serializedVersion: 2
+        x: 2844
+        y: 141
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80b5ad635acef22e0800000000000000
+      internalID: -2148238302898398456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_70
+      rect:
+        serializedVersion: 2
+        x: 2916
+        y: 142
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77f27e565b74f0ed0800000000000000
+      internalID: -2445657228214587529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_71
+      rect:
+        serializedVersion: 2
+        x: 2133
+        y: 129
+        width: 13
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cdd881f49bdff23a0800000000000000
+      internalID: -6687847949284110884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_72
+      rect:
+        serializedVersion: 2
+        x: 2865
+        y: 123
+        width: 15
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07672ed9c15aff610800000000000000
+      internalID: 1657224730222163568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_73
+      rect:
+        serializedVersion: 2
+        x: 2875
+        y: 142
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4303782a061be25e0800000000000000
+      internalID: -1932412161493618636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_74
+      rect:
+        serializedVersion: 2
+        x: 2933
+        y: 98
+        width: 17
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ada177f0b61023560800000000000000
+      internalID: 7291892305998846682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_75
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 72
+        width: 82
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 648574715bef23d60800000000000000
+      internalID: 7868631552702765126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_76
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 80
+        width: 29
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74dcdb97631444bc0800000000000000
+      internalID: -3799840483367334585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_77
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 118
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcfd1255106c8ac30800000000000000
+      internalID: 4370961147388616651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_78
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 126
+        width: 19
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ce2e000806e786c0800000000000000
+      internalID: -4141088410308825402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_79
+      rect:
+        serializedVersion: 2
+        x: 2528
+        y: 119
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88692519def1d29d0800000000000000
+      internalID: -2797544688321390968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_80
+      rect:
+        serializedVersion: 2
+        x: 2605
+        y: 107
+        width: 16
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eac6af72dfe691150800000000000000
+      internalID: 5843824025066433710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_81
+      rect:
+        serializedVersion: 2
+        x: 2774
+        y: 69
+        width: 28
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4515e5e2891e468f0800000000000000
+      internalID: -548065210903146156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_82
+      rect:
+        serializedVersion: 2
+        x: 2831
+        y: 98
+        width: 9
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9577d2e4580561870800000000000000
+      internalID: 8653192267511461721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_83
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 45
+        width: 27
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 876f981f7b2d1d9e0800000000000000
+      internalID: -1598264705266616712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_84
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 51
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e85e0f1b73941ba80800000000000000
+      internalID: -8452894522040326770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_85
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 78
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07a6f44870fecb130800000000000000
+      internalID: 3584002219043678832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_86
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 86
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94ebf88f8dcece960800000000000000
+      internalID: 7632735885113409097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_87
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 70
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd3b3c4dbd07de430800000000000000
+      internalID: 3813828548922422235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_88
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 98
+        width: 14
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 093c7a9518232d850800000000000000
+      internalID: 6400233551583232912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_89
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 51
+        width: 21
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 987c3428dafb48690800000000000000
+      internalID: -7600739519158827127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_90
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 85
+        width: 11
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 523b5b2fe03ae2430800000000000000
+      internalID: 3760122023497806629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_91
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 47
+        width: 37
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00074678ab3a95df0800000000000000
+      internalID: -190941487655784448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_92
+      rect:
+        serializedVersion: 2
+        x: 529
+        y: 58
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6fe76944736ead80800000000000000
+      internalID: -8237537317315154070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_93
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 82
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 666d3f942da256c10800000000000000
+      internalID: 2046088688381974118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_94
+      rect:
+        serializedVersion: 2
+        x: 772
+        y: 57
+        width: 21
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f1a10e0b64b66030800000000000000
+      internalID: 3487673333334516216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_95
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 62
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13e00e0e844ddc220800000000000000
+      internalID: 2507893976990748209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_96
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 73
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 888ac669f2dacb4e0800000000000000
+      internalID: -1964504917541607288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_97
+      rect:
+        serializedVersion: 2
+        x: 1063
+        y: 61
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da701f7902db8b3b0800000000000000
+      internalID: -5496435397519931475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_98
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 51
+        width: 19
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a723fe6ca17187fd0800000000000000
+      internalID: -2344098202272189830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_99
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 52
+        width: 10
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ef97023b62b00cd0800000000000000
+      internalID: -2593877211894800410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_100
+      rect:
+        serializedVersion: 2
+        x: 1192
+        y: 46
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3253f3a7006647840800000000000000
+      internalID: 5220910020266243363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_101
+      rect:
+        serializedVersion: 2
+        x: 1215
+        y: 53
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8be892e4107ba6a40800000000000000
+      internalID: 5362299522572193464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_102
+      rect:
+        serializedVersion: 2
+        x: 1234
+        y: 63
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e47374a5fc12e81f0800000000000000
+      internalID: -1040857289419442354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_103
+      rect:
+        serializedVersion: 2
+        x: 1378
+        y: 61
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d61065433e06c930800000000000000
+      internalID: 4163030518920648406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_104
+      rect:
+        serializedVersion: 2
+        x: 1424
+        y: 51
+        width: 23
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c09ac41de7e8a970800000000000000
+      internalID: 8766511680118755524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_105
+      rect:
+        serializedVersion: 2
+        x: 1496
+        y: 52
+        width: 12
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4065a9ac506faa240800000000000000
+      internalID: 4803922457278436868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_106
+      rect:
+        serializedVersion: 2
+        x: 1522
+        y: 86
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ed7bd77a3618afa0800000000000000
+      internalID: -5789352880609985047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_107
+      rect:
+        serializedVersion: 2
+        x: 1526
+        y: 97
+        width: 10
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1ca688b249a8ce40800000000000000
+      internalID: 5676973434329279515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_108
+      rect:
+        serializedVersion: 2
+        x: 1538
+        y: 46
+        width: 21
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eddedaa8c69beec10800000000000000
+      internalID: 2084807553353379294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_109
+      rect:
+        serializedVersion: 2
+        x: 1549
+        y: 67
+        width: 11
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b759fa477bf70a640800000000000000
+      internalID: 5089208004842067323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_110
+      rect:
+        serializedVersion: 2
+        x: 1567
+        y: 53
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a808bf4aaa71ef0b0800000000000000
+      internalID: -5693086857269903222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_111
+      rect:
+        serializedVersion: 2
+        x: 1591
+        y: 63
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 659739201d4657610800000000000000
+      internalID: 1618310489963723094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_112
+      rect:
+        serializedVersion: 2
+        x: 2144
+        y: 101
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6b79e427ae6e6e60800000000000000
+      internalID: 7957419255768120174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_113
+      rect:
+        serializedVersion: 2
+        x: 2196
+        y: 93
+        width: 6
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d793abb178cc83c0800000000000000
+      internalID: -4355886348769191981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_114
+      rect:
+        serializedVersion: 2
+        x: 2494
+        y: 96
+        width: 12
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbe6bde4ae7c6b680800000000000000
+      internalID: -8739578217706590533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_115
+      rect:
+        serializedVersion: 2
+        x: 2526
+        y: 59
+        width: 17
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: effda352db1e37b20800000000000000
+      internalID: 3131094368442310654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_116
+      rect:
+        serializedVersion: 2
+        x: 2537
+        y: 91
+        width: 6
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1413dd35d829066b0800000000000000
+      internalID: -5305079225347395263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_117
+      rect:
+        serializedVersion: 2
+        x: 2847
+        y: 67
+        width: 23
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3d9e092c40054660800000000000000
+      internalID: 7369296692368022845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_118
+      rect:
+        serializedVersion: 2
+        x: 2864
+        y: 0
+        width: 28
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 119f29556a0dec800800000000000000
+      internalID: 634674010324662545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_119
+      rect:
+        serializedVersion: 2
+        x: 2943
+        y: 61
+        width: 16
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e307808d64e6ea1a0800000000000000
+      internalID: -6796373537104302018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_120
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 46
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0695da38fa096e2b0800000000000000
+      internalID: -5555594006812075680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_121
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 44
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40e92aeef296c30c0800000000000000
+      internalID: -4594681865236734460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_122
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 43
+        width: 50
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74344bda2cabe1fa0800000000000000
+      internalID: -5828015522470149305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_123
+      rect:
+        serializedVersion: 2
+        x: 1122
+        y: 49
+        width: 18
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc6dba82d10195df0800000000000000
+      internalID: -191103791764089140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_124
+      rect:
+        serializedVersion: 2
+        x: 1156
+        y: 37
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f571a0b2c524168d0800000000000000
+      internalID: -2854927725149677729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_125
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 48
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5feae14a767450630800000000000000
+      internalID: 3892595963392339701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_126
+      rect:
+        serializedVersion: 2
+        x: 1276
+        y: 49
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 940721b63b5a08db0800000000000000
+      internalID: -4791647813508108215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_127
+      rect:
+        serializedVersion: 2
+        x: 1451
+        y: 49
+        width: 22
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d71533934d9a09a0800000000000000
+      internalID: -6266023017974523950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_128
+      rect:
+        serializedVersion: 2
+        x: 1497
+        y: 46
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db03ffc2dd65a7330800000000000000
+      internalID: 3709372751035707581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_129
+      rect:
+        serializedVersion: 2
+        x: 1608
+        y: 48
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab567b425b61a3c70800000000000000
+      internalID: 8951492176613172666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_130
+      rect:
+        serializedVersion: 2
+        x: 1643
+        y: 49
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dbda256d7f317550800000000000000
+      internalID: 6156771973392948183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_DeckFix_Upgrade_131
+      rect:
+        serializedVersion: 2
+        x: 1494
+        y: 37
+        width: 17
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3502cd6d5f9d70b70800000000000000
+      internalID: 8865294041397076051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      FX_DeckFix_Upgrade_0: 3628501924822759086
+      FX_DeckFix_Upgrade_1: 3064862473410666110
+      FX_DeckFix_Upgrade_10: 3778793572108854924
+      FX_DeckFix_Upgrade_100: 5220910020266243363
+      FX_DeckFix_Upgrade_101: 5362299522572193464
+      FX_DeckFix_Upgrade_102: -1040857289419442354
+      FX_DeckFix_Upgrade_103: 4163030518920648406
+      FX_DeckFix_Upgrade_104: 8766511680118755524
+      FX_DeckFix_Upgrade_105: 4803922457278436868
+      FX_DeckFix_Upgrade_106: -5789352880609985047
+      FX_DeckFix_Upgrade_107: 5676973434329279515
+      FX_DeckFix_Upgrade_108: 2084807553353379294
+      FX_DeckFix_Upgrade_109: 5089208004842067323
+      FX_DeckFix_Upgrade_11: -1067343323626453346
+      FX_DeckFix_Upgrade_110: -5693086857269903222
+      FX_DeckFix_Upgrade_111: 1618310489963723094
+      FX_DeckFix_Upgrade_112: 7957419255768120174
+      FX_DeckFix_Upgrade_113: -4355886348769191981
+      FX_DeckFix_Upgrade_114: -8739578217706590533
+      FX_DeckFix_Upgrade_115: 3131094368442310654
+      FX_DeckFix_Upgrade_116: -5305079225347395263
+      FX_DeckFix_Upgrade_117: 7369296692368022845
+      FX_DeckFix_Upgrade_118: 634674010324662545
+      FX_DeckFix_Upgrade_119: -6796373537104302018
+      FX_DeckFix_Upgrade_12: -8751042075533378210
+      FX_DeckFix_Upgrade_120: -5555594006812075680
+      FX_DeckFix_Upgrade_121: -4594681865236734460
+      FX_DeckFix_Upgrade_122: -5828015522470149305
+      FX_DeckFix_Upgrade_123: -191103791764089140
+      FX_DeckFix_Upgrade_124: -2854927725149677729
+      FX_DeckFix_Upgrade_125: 3892595963392339701
+      FX_DeckFix_Upgrade_126: -4791647813508108215
+      FX_DeckFix_Upgrade_127: -6266023017974523950
+      FX_DeckFix_Upgrade_128: 3709372751035707581
+      FX_DeckFix_Upgrade_129: 8951492176613172666
+      FX_DeckFix_Upgrade_13: -6819116022599416552
+      FX_DeckFix_Upgrade_130: 6156771973392948183
+      FX_DeckFix_Upgrade_131: 8865294041397076051
+      FX_DeckFix_Upgrade_14: 8459594951977645239
+      FX_DeckFix_Upgrade_15: -327746102022236386
+      FX_DeckFix_Upgrade_16: -3969430530413475696
+      FX_DeckFix_Upgrade_17: -854140961152300784
+      FX_DeckFix_Upgrade_18: -2048907524673657711
+      FX_DeckFix_Upgrade_19: -3957616746878396019
+      FX_DeckFix_Upgrade_2: -8164150095481549192
+      FX_DeckFix_Upgrade_20: -2741852222671935577
+      FX_DeckFix_Upgrade_21: 7478258020710764812
+      FX_DeckFix_Upgrade_22: 3201969255363224491
+      FX_DeckFix_Upgrade_23: -8527850540778105355
+      FX_DeckFix_Upgrade_24: 4216233305166576424
+      FX_DeckFix_Upgrade_25: -7210861096088281249
+      FX_DeckFix_Upgrade_26: -8077900510311398258
+      FX_DeckFix_Upgrade_27: -4217320708857629173
+      FX_DeckFix_Upgrade_28: 5988213985341251643
+      FX_DeckFix_Upgrade_29: 1381299599897184803
+      FX_DeckFix_Upgrade_3: 6852172231061511354
+      FX_DeckFix_Upgrade_30: 1897106348271146736
+      FX_DeckFix_Upgrade_31: -7843028216848113555
+      FX_DeckFix_Upgrade_32: 816524003288572891
+      FX_DeckFix_Upgrade_33: -7926981575631640553
+      FX_DeckFix_Upgrade_34: -6852591592773970129
+      FX_DeckFix_Upgrade_35: -3410364536362726517
+      FX_DeckFix_Upgrade_36: -5332469821395417052
+      FX_DeckFix_Upgrade_37: -1273794747595643849
+      FX_DeckFix_Upgrade_38: -1644306615779063887
+      FX_DeckFix_Upgrade_39: -1065819413707348964
+      FX_DeckFix_Upgrade_4: 4715255008571419439
+      FX_DeckFix_Upgrade_40: 4631150170645337351
+      FX_DeckFix_Upgrade_41: -8683786842477893974
+      FX_DeckFix_Upgrade_42: -3863662823107784356
+      FX_DeckFix_Upgrade_43: 1520512218097298359
+      FX_DeckFix_Upgrade_44: -1837055021764902116
+      FX_DeckFix_Upgrade_45: 1065026758605556238
+      FX_DeckFix_Upgrade_46: 4091032493552017742
+      FX_DeckFix_Upgrade_47: -1960112725362496968
+      FX_DeckFix_Upgrade_48: 4963308106931321291
+      FX_DeckFix_Upgrade_49: 5798247340952842261
+      FX_DeckFix_Upgrade_5: -6345125862285806781
+      FX_DeckFix_Upgrade_50: 8033171852643208486
+      FX_DeckFix_Upgrade_51: 1320504786534388210
+      FX_DeckFix_Upgrade_52: -166728358043432811
+      FX_DeckFix_Upgrade_53: 2468843651299247215
+      FX_DeckFix_Upgrade_54: 5248106448103676812
+      FX_DeckFix_Upgrade_55: -2652835130282514389
+      FX_DeckFix_Upgrade_56: -5162955825282077925
+      FX_DeckFix_Upgrade_57: -5342008233495833769
+      FX_DeckFix_Upgrade_58: -5958515275728143988
+      FX_DeckFix_Upgrade_59: -3335514794261942924
+      FX_DeckFix_Upgrade_6: -7227170920183184463
+      FX_DeckFix_Upgrade_60: -6259577253922074260
+      FX_DeckFix_Upgrade_61: -740207289558843930
+      FX_DeckFix_Upgrade_62: 2102409238596766665
+      FX_DeckFix_Upgrade_63: 6148268438339344667
+      FX_DeckFix_Upgrade_64: -274352250788447024
+      FX_DeckFix_Upgrade_65: 2298800042096693090
+      FX_DeckFix_Upgrade_66: 2707598443815455029
+      FX_DeckFix_Upgrade_67: 8151608977337128246
+      FX_DeckFix_Upgrade_68: -182740663678069686
+      FX_DeckFix_Upgrade_69: -2148238302898398456
+      FX_DeckFix_Upgrade_7: 2212040389951100745
+      FX_DeckFix_Upgrade_70: -2445657228214587529
+      FX_DeckFix_Upgrade_71: -6687847949284110884
+      FX_DeckFix_Upgrade_72: 1657224730222163568
+      FX_DeckFix_Upgrade_73: -1932412161493618636
+      FX_DeckFix_Upgrade_74: 7291892305998846682
+      FX_DeckFix_Upgrade_75: 7868631552702765126
+      FX_DeckFix_Upgrade_76: -3799840483367334585
+      FX_DeckFix_Upgrade_77: 4370961147388616651
+      FX_DeckFix_Upgrade_78: -4141088410308825402
+      FX_DeckFix_Upgrade_79: -2797544688321390968
+      FX_DeckFix_Upgrade_8: 3944358049165549304
+      FX_DeckFix_Upgrade_80: 5843824025066433710
+      FX_DeckFix_Upgrade_81: -548065210903146156
+      FX_DeckFix_Upgrade_82: 8653192267511461721
+      FX_DeckFix_Upgrade_83: -1598264705266616712
+      FX_DeckFix_Upgrade_84: -8452894522040326770
+      FX_DeckFix_Upgrade_85: 3584002219043678832
+      FX_DeckFix_Upgrade_86: 7632735885113409097
+      FX_DeckFix_Upgrade_87: 3813828548922422235
+      FX_DeckFix_Upgrade_88: 6400233551583232912
+      FX_DeckFix_Upgrade_89: -7600739519158827127
+      FX_DeckFix_Upgrade_9: -5960832474547535610
+      FX_DeckFix_Upgrade_90: 3760122023497806629
+      FX_DeckFix_Upgrade_91: -190941487655784448
+      FX_DeckFix_Upgrade_92: -8237537317315154070
+      FX_DeckFix_Upgrade_93: 2046088688381974118
+      FX_DeckFix_Upgrade_94: 3487673333334516216
+      FX_DeckFix_Upgrade_95: 2507893976990748209
+      FX_DeckFix_Upgrade_96: -1964504917541607288
+      FX_DeckFix_Upgrade_97: -5496435397519931475
+      FX_DeckFix_Upgrade_98: -2344098202272189830
+      FX_DeckFix_Upgrade_99: -2593877211894800410
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

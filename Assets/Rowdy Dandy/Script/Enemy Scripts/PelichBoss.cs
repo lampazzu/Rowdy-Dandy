@@ -69,7 +69,7 @@ public class PelichBoss : MonoBehaviour
 
         if (health.enemydead)
         {
-            if (!deathHandled) OnDeath();
+            if (!deathHandled) { OnDeath(); Encore.Unlock(); } // endgame (Jarvis balance)
             return;
         }
 
@@ -168,7 +168,7 @@ public class PelichBoss : MonoBehaviour
 
         if (RowdyUnderFeet(BodyBounds) && rowdy.TryGetComponent(out Health h))
         {
-            h.TakeDamage(stompDamage);
+            h.TakeDamage(Balance.PelichStomp(stompDamage));
             if (rowdy.TryGetComponent(out Rigidbody2D rb))
                 rb.linearVelocity = new Vector2(Mathf.Sign(rowdy.position.x - body.center.x + 0.001f) * stompKnockback, 4.5f);
         }

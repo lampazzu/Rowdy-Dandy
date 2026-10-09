@@ -32,6 +32,9 @@ public class Spike : MonoBehaviour
 
     private void OnEnable() => pending = false;
 
+    // The hit's damage under the current balance (Jarvis: per enemy + per zone; Lamp: the Inspector value)
+    private float Damage => Balance.EnemyDamage(this, owner, damage);
+
     // Contact box on an enemy that kicks off its attack animation (not arrows / bombs / attack hitboxes)
     private bool IsAttackStarter => telegraphContact && bornWithOwner && anima != null && !isFrecha && owner != null;
 
@@ -58,7 +61,7 @@ public class Spike : MonoBehaviour
             if (playerHealth != null)
             {
                 // Apply damage to the player
-                playerHealth.TakeDamage(damage);
+                playerHealth.TakeDamage(Damage);
 
                 // Not every spike has an Animator (e.g. Frecha arrows), so only trigger when one is assigned
                 if (anima != null)
@@ -118,7 +121,7 @@ public class Spike : MonoBehaviour
         foreach (Collider2D hit in Physics2D.OverlapBoxAll(owner.transform.position + offset, size * 1.1f, 0f))
         {
             if (hit != player) continue;
-            if (player.TryGetComponent(out Health playerHealth)) playerHealth.TakeDamage(damage);
+            if (player.TryGetComponent(out Health playerHealth)) playerHealth.TakeDamage(Damage);
             break;
         }
     }

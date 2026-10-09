@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: c7bd761506f3da845be9fd15c3f9ee7c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5774939530619195471
+    second: FX_MagicPlacement_0
+  - first:
+      213: 8095584932558566812
+    second: FX_MagicPlacement_1
+  - first:
+      213: 6327942969201623647
+    second: FX_MagicPlacement_2
+  - first:
+      213: -4778307353566695968
+    second: FX_MagicPlacement_3
+  - first:
+      213: -208782890533736741
+    second: FX_MagicPlacement_4
+  - first:
+      213: -1511961633387504207
+    second: FX_MagicPlacement_5
+  - first:
+      213: -5185939898010120037
+    second: FX_MagicPlacement_6
+  - first:
+      213: 6000895087141865032
+    second: FX_MagicPlacement_7
+  - first:
+      213: -4513905597718273491
+    second: FX_MagicPlacement_8
+  - first:
+      213: 2589472306903849702
+    second: FX_MagicPlacement_9
+  - first:
+      213: 3854661224809320079
+    second: FX_MagicPlacement_10
+  - first:
+      213: -59611867737707312
+    second: FX_MagicPlacement_11
+  - first:
+      213: 2083461362024994085
+    second: FX_MagicPlacement_12
+  - first:
+      213: 3604388377501286416
+    second: FX_MagicPlacement_13
+  - first:
+      213: -3379544783450940952
+    second: FX_MagicPlacement_14
+  - first:
+      213: 4197526750155330690
+    second: FX_MagicPlacement_15
+  - first:
+      213: 4299159700408627969
+    second: FX_MagicPlacement_16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FX_MagicPlacement_0
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 141
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bfe416081b4bdfa0800000000000000
+      internalID: -5774939530619195471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_1
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 14
+        width: 154
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c95782a9a9b495070800000000000000
+      internalID: 8095584932558566812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_2
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 33
+        width: 145
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5281368a9e51d750800000000000000
+      internalID: 6327942969201623647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_3
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 25
+        width: 149
+        height: 174
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ed250b47ca00bdb0800000000000000
+      internalID: -4778307353566695968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_4
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 0
+        width: 219
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdeae8631114a1df0800000000000000
+      internalID: -208782890533736741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_5
+      rect:
+        serializedVersion: 2
+        x: 962
+        y: 19
+        width: 153
+        height: 171
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bd1be7b7ee640be0800000000000000
+      internalID: -1511961633387504207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_6
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 13
+        width: 149
+        height: 178
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b90d4989327d708b0800000000000000
+      internalID: -5185939898010120037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_7
+      rect:
+        serializedVersion: 2
+        x: 1419
+        y: 27
+        width: 133
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8464a73a946774350800000000000000
+      internalID: 6000895087141865032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_8
+      rect:
+        serializedVersion: 2
+        x: 1641
+        y: 27
+        width: 147
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d22ea5a46c26b51c0800000000000000
+      internalID: -4513905597718273491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_9
+      rect:
+        serializedVersion: 2
+        x: 1877
+        y: 27
+        width: 133
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ea17b0f757afe320800000000000000
+      internalID: 2589472306903849702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_10
+      rect:
+        serializedVersion: 2
+        x: 2096
+        y: 66
+        width: 152
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8e4b3a06f18e7530800000000000000
+      internalID: 3854661224809320079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_11
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 118
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dca81772573c2ff0800000000000000
+      internalID: -59611867737707312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_12
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 104
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52550c2f111f9ec10800000000000000
+      internalID: 2083461362024994085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_13
+      rect:
+        serializedVersion: 2
+        x: 947
+        y: 89
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 010c289e12c550230800000000000000
+      internalID: 3604388377501286416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_14
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 73
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e9d1efcce17911d0800000000000000
+      internalID: -3379544783450940952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_15
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 51
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 284553ef65c904a30800000000000000
+      internalID: 4197526750155330690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FX_MagicPlacement_16
+      rect:
+        serializedVersion: 2
+        x: 2161
+        y: 11
+        width: 29
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 103f78738fea9ab30800000000000000
+      internalID: 4299159700408627969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      FX_MagicPlacement_0: -5774939530619195471
+      FX_MagicPlacement_1: 8095584932558566812
+      FX_MagicPlacement_10: 3854661224809320079
+      FX_MagicPlacement_11: -59611867737707312
+      FX_MagicPlacement_12: 2083461362024994085
+      FX_MagicPlacement_13: 3604388377501286416
+      FX_MagicPlacement_14: -3379544783450940952
+      FX_MagicPlacement_15: 4197526750155330690
+      FX_MagicPlacement_16: 4299159700408627969
+      FX_MagicPlacement_2: 6327942969201623647
+      FX_MagicPlacement_3: -4778307353566695968
+      FX_MagicPlacement_4: -208782890533736741
+      FX_MagicPlacement_5: -1511961633387504207
+      FX_MagicPlacement_6: -5185939898010120037
+      FX_MagicPlacement_7: 6000895087141865032
+      FX_MagicPlacement_8: -4513905597718273491
+      FX_MagicPlacement_9: 2589472306903849702
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

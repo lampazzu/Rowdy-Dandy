@@ -21,6 +21,8 @@ public class BoonArt : ScriptableObject
     public Texture2D earthPillar;    // RDR_EarthPillar, 1 x 19x65
     public Texture2D matinta;        // TDF_Matinta@Projectile, 5 x 306x316
     public Texture2D gunImpact;      // PIV_GunImpact
+    public Texture2D magicCircle;    // FX_MagicPlacement, 17 x 229x206 (Night Fever floor sigil)
+    public Texture2D sparkBurst;     // FX_DeckFix_Upgrade, 10 x 338x358 (Night Fever stun burst)
 
     [Header("Picker sounds")]
     public AudioClip[] rarity = new AudioClip[5];   // common, rare, epic, legendary, duo (MagicPlacement 01-05)

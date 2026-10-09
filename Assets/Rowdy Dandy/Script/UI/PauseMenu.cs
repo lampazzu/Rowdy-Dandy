@@ -658,7 +658,7 @@ public class PauseMenu : MonoBehaviour
     // Testing helpers only - everything a player shouldn't see in the normal settings (Crowd Limit lives here).
     private void BuildDevToolsPage()
     {
-        float columnHeight = 3 * 44 + 10 + 12 * (RowHeight + RowGap);
+        float columnHeight = 3 * 44 + 10 + 13 * (RowHeight + RowGap);
         float height = 130 + columnHeight + 120;
         devPanel = MakePanel("DevTools", root.transform, 2 * SettingsRowWidth + 140, height);
         float top = height / 2f;
@@ -703,6 +703,14 @@ public class PauseMenu : MonoBehaviour
             () => GameSettings.CrowdLimit <= 0 ? "Off" : GameSettings.CrowdLimit + " at once",
             d => GameSettings.SetCrowdLimit(Wrap(GameSettings.CrowdLimit + d, 9)));
         devRows[devRows.Count - 1].description = "How many wolves may press Rowdy at once";
+        // Two balances to compare (Balance.cs): one is always on, switching reloads at the saved checkpoint
+        AddHeader(devRows, panel, "Balance", ref y);
+        AddToggle(devRows, panel, "Lamps Balance", ref y, () => Balance.Lamp, v => { if (v) SwitchBalance(Balance.Mode.Lamp); },
+            "Your numbers, untouched. Reloads at the saved checkpoint");
+        AddToggle(devRows, panel, "Jarvis Balance", ref y, () => Balance.Jarvis, v => { if (v) SwitchBalance(Balance.Mode.Jarvis); },
+            "The rebalance + Encore endgame. Reloads at the saved checkpoint");
+        AddToggle(devRows, panel, "Encore Unlocked", ref y, () => Encore.Unlocked, Encore.DevUnlock,
+            "Endgame as if Pelich was beaten (Jarvis only): Blood Moons, Encore levels");
 
         y -= 10;
         AddButton(devRows, panel, "Back", ref y, () => ShowPage(Page.Main, 0), SettingsRowWidth);
@@ -712,6 +720,14 @@ public class PauseMenu : MonoBehaviour
         devDescription = PixelText.Create(panel, "", 2, new Color(1f, 0.85f, 0.4f, 0.85f), 0.5f);
         Anchor(devDescription.Rect, new Vector2(0.5f, 0.5f), new Vector2(0, -top + 76));
         MakeHint(panel, -top + 34);
+    }
+
+    // Balance switch: close the menu first (like the travel buttons), then reload with the other numbers
+    private void SwitchBalance(Balance.Mode mode)
+    {
+        if (Balance.Current == mode) return;
+        pendingAction = () => Balance.Set(mode);
+        Resume();
     }
 
     // Dev button: stayOpen = the menu stays up (level up/down...), otherwise the game resumes and it runs

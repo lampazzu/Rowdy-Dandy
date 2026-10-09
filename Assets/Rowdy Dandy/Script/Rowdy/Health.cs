@@ -37,6 +37,7 @@ public class Health : MonoBehaviour
 
     private void Awake()
     {
+        if (Balance.Jarvis && GetComponent<PlayerMovement>() != null) startingHealth = Balance.RowdyMaxHealth;
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
         redboy = GetComponent<SpriteRenderer>();

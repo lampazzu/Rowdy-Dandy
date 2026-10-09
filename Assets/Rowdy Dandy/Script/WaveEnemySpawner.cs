@@ -213,6 +213,16 @@ public class WaveEnemySpawner : MonoBehaviour
     {
         FindPlayer();
 
+        if (Balance.Jarvis)
+        {
+            timeBetweenWaves = Balance.SpawnTimeBetweenWaves;
+            spawnInterval = Balance.SpawnInterval;
+            minimumEnemiesPerWave = Balance.SpawnMinPerWave;
+            maximumEnemiesPerWave = Balance.SpawnMaxPerWave;
+            maxAliveEnemies = Balance.SpawnMaxAlive;
+            nightEliteChance = Balance.SpawnNightEliteChance;
+        }
+
         if (waves != null && waves.Count > 0)
         {
             waveRoutine = StartCoroutine(StartWaves());
@@ -424,7 +434,7 @@ public class WaveEnemySpawner : MonoBehaviour
     {
         var result = new List<EnemyEntry>();
         var allowed = new List<EnemyEntry>();
-        int tier = Mathf.Min(10, zone.difficulty + (DayNight.IsNight ? nightDifficultyBonus : 0));
+        int tier = Mathf.Min(10, zone.difficulty + (DayNight.IsNight ? nightDifficultyBonus : 0) + (Encore.BloodMoon ? Encore.BloodMoonTiers : 0));
         foreach (EnemyEntry e in GetValidEnemies()) if (e.difficulty <= tier) allowed.Add(e);
         if (allowed.Count == 0) return result;
 
@@ -479,7 +489,8 @@ public class WaveEnemySpawner : MonoBehaviour
         Track(enemy);
 
         // Nightfall: some come out as elites (before the ground alignment below, since elites are a bit bigger)
-        if (Night > 0.5f && Random.value < nightEliteChance * Night) EliteEnemy.Apply(enemy);
+        float eliteChance = Encore.BloodMoon ? Encore.BloodMoonEliteChance : nightEliteChance;
+        if (Night > 0.5f && Random.value < eliteChance * Night) EliteEnemy.Apply(enemy);
 
         // Archers / bombers stand still: turn them towards Rowdy (the art faces left at +x scale)
         if (ranged && player != null)

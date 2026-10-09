@@ -118,6 +118,7 @@ public class EnemyHealth : MonoBehaviour
         AwakeFrame = Time.frameCount;
         anima = GetComponent<Animator>();
         redco = GetComponent<SpriteRenderer>();
+        startingenemyHealth = Balance.EnemyHealth(this, startingenemyHealth); // Jarvis balance (Lamp: unchanged)
         currentenemyHealth = startingenemyHealth;
         initialpositionenemy = transform.position;
         initialrotationenemy = transform.rotation;

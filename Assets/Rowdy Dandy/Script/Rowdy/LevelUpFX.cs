@@ -18,7 +18,8 @@ public class LevelUpFX : MonoBehaviour
     private static Material unlitMaterial;
     private static AudioClip chime;
 
-    public static void Play(int newLevel)
+    // title: replaces "LEVEL UP! / LV n" (Encore levels)
+    public static void Play(int newLevel, string title = null)
     {
         if (newLevel >= 2) Tutorials.Show(Tutorials.Topic.LevelUp, null, 2.4f); // first level up: +1 cat slot
         Boons.OnLevelUp(); // the boon picker opens once this moment has played
@@ -31,14 +32,14 @@ public class LevelUpFX : MonoBehaviour
         var go = new GameObject("LevelUpFX");
         go.transform.position = rowdy.transform.position;
         var fx = go.AddComponent<LevelUpFX>();
-        fx.StartCoroutine(fx.Run(rowdy.transform, newLevel));
+        fx.StartCoroutine(fx.Run(rowdy.transform, newLevel, title));
         fx.StartCoroutine(fx.Shockwave(rowdy.transform.position));
 
         AudioClip clip = Resources.Load<AudioClip>("LevelUpSound");
         SoundManager.PlaySfx(clip != null ? clip : Chime, 1f);
     }
 
-    private IEnumerator Run(Transform rowdy, int level)
+    private IEnumerator Run(Transform rowdy, int level, string title)
     {
         SpriteRenderer rowdyRenderer = rowdy.GetComponent<SpriteRenderer>();
         int sortingLayer = rowdyRenderer != null ? rowdyRenderer.sortingLayerID : 0;
@@ -64,7 +65,7 @@ public class LevelUpFX : MonoBehaviour
         catch (System.Exception) { glow = null; }
 
         // "LEVEL UP!" + the new level
-        Texture2D textTexture = PixelFont.Render("LEVEL UP!\nLV " + level, PixelFont.Edge.Outline);
+        Texture2D textTexture = PixelFont.Render(title ?? "LEVEL UP!\nLV " + level, PixelFont.Edge.Outline);
         var textSprite = Sprite.Create(textTexture, new Rect(0, 0, textTexture.width, textTexture.height), new Vector2(0.5f, 0f), 64f);
         SpriteRenderer text = MakeRenderer("Text", textSprite, sortingLayer, sortingOrder + 60, Gold);
 

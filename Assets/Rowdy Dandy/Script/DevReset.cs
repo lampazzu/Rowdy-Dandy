@@ -42,6 +42,7 @@ public class DevReset : MonoBehaviour
         OreNode.ForgetAllSaved();
         Tutorials.ResetAll();
         Boons.ClearAll();
+        Encore.ResetAll();
         PlayerPrefs.Save();
 
         RunStats.ResetAll();

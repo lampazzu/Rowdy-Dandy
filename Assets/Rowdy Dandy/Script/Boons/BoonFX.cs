@@ -424,7 +424,7 @@ public class RiptideWave : MonoBehaviour
         w.dir = direction; w.damage = damage; w.pink = pink; w.toxic = toxic;
         w.size = pink ? 2f : 1f;
         if (pink) w.damage *= 2f;
-        w.travel = pink ? 0.75f : 0.55f;
+        w.travel = Balance.WipeoutTravel * (pink ? 1.35f : 1f);
         BoonArt art = BoonArt.Get;
         // the art is cyan: a flat-colour copy behind it turns the wave pink (Beach Bod) or toxic green (Red Tide)
         Color body = pink ? new Color(1f, 0.45f, 0.82f, 0.7f) : toxic ? new Color(0.5f, 1f, 0.3f, 0.6f) : new Color(0.85f, 1f, 1f, 0.35f);
@@ -447,6 +447,14 @@ public class RiptideWave : MonoBehaviour
 
     private static void Play(AudioClip c, float v, float p) => BoonArt.Play(c, v, p);
 
+    private static bool PastScreenEdge(float x)
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return false;
+        float v = cam.WorldToViewportPoint(new Vector3(x, cam.transform.position.y, 0f)).x;
+        return v < 0.08f || v > 0.92f;
+    }
+
     private void Update()
     {
         age += Time.deltaTime;
@@ -457,6 +465,12 @@ public class RiptideWave : MonoBehaviour
         if (!crashed && SolidGround.Blocked(front + new Vector3(step, 0.15f, 0f), new Vector2(0.2f, 0.4f * size)))
         {
             Crash(true);
+            return;
+        }
+        // the edge of the screen: break there, so nobody gets carried off to die where you can't see it
+        if (PastScreenEdge(front.x + step + dir * 0.4f))
+        {
+            Crash(false);
             return;
         }
         transform.position += new Vector3(step, 0f, 0f);
@@ -511,13 +525,56 @@ public class RiptideWave : MonoBehaviour
         {
             EnemyHealth e = pair.Key;
             if (e == null || e.enemydead) continue;
-            BoonFX.Hit(e, damage * (wall ? 1.6f : 1f), pink ? "Beach Bod" : "Wipeout");
+            BoonFX.Hit(e, damage * (wall ? Balance.WipeoutWallBonus : 1f), pink ? "Beach Bod" : "Wipeout");
             if (toxic) BoonFX.Poison(e, 4f, 8f);
-            if (!wall) BoonFX.Push(e, new Vector2(dir * 4f, 3f));
+            Vector2 fling = Balance.WipeoutFling;
+            if (!wall && !PastScreenEdge(BoonFX.Center(e).x + dir * fling.x * 0.5f)) BoonFX.Push(e, new Vector2(dir * fling.x, fling.y));
         }
         if (visual != null) visual.Stop(0.15f);
         if (visual2 != null) visual2.Stop(0.15f);
         Destroy(gameObject, 0.2f);
+        enabled = false;
+    }
+}
+
+// Undertow: drags a hit enemy toward Rowdy for a moment. The enemies' GetHit clips keyframe moveSpeed (their own
+// knockback), and EnemyMovement writes the velocity from it every frame, so a one-off velocity kick was always undone.
+// This runs after everything else for a few physics steps and owns the horizontal speed while it does.
+[DefaultExecutionOrder(1000)]
+public class UndertowPull : MonoBehaviour
+{
+    private Rigidbody2D rb;
+    private Transform toward;
+    private float speed, until, stopDistance;
+
+    public static void Begin(EnemyHealth e, Transform toward, float distance, float seconds)
+    {
+        if (e == null || e.enemydead || toward == null || !e.TryGetComponent(out Rigidbody2D body)) return;
+        UndertowPull p = e.GetComponent<UndertowPull>();
+        if (p == null) p = e.gameObject.AddComponent<UndertowPull>();
+        p.rb = body;
+        p.toward = toward;
+        p.speed = distance / Mathf.Max(0.05f, seconds);
+        p.until = Time.time + seconds;
+        p.stopDistance = 0.85f; // never pulled into Rowdy
+        p.enabled = true;
+    }
+
+    private void FixedUpdate()
+    {
+        if (rb == null || toward == null || Time.time > until || (TryGetComponent(out EnemyHealth h) && h.enemydead)) { enabled = false; return; }
+        float dx = toward.position.x - rb.position.x;
+        if (Mathf.Abs(dx) <= stopDistance) { Stop(); return; }
+        float dir = Mathf.Sign(dx);
+        float step = speed * Time.fixedDeltaTime;
+        if (SolidGround.Blocked(rb.position + new Vector2(dir * (0.35f + step), 0.3f), new Vector2(0.15f, 0.3f))) { Stop(); return; }
+        if (rb.bodyType == RigidbodyType2D.Dynamic) rb.linearVelocity = new Vector2(dir * speed, rb.linearVelocity.y);
+        else rb.MovePosition(rb.position + new Vector2(dir * step, 0f));
+    }
+
+    private void Stop()
+    {
+        if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         enabled = false;
     }
 }
@@ -531,32 +588,85 @@ public class SporeCloud : MonoBehaviour
     private const float Radius = 1.4f;
     private SheetFX visual;
 
+    private readonly List<(Transform t, float delay, float size)> shrooms = new List<(Transform, float, float)>();
+    private float lingerTimer;
+
+    // The poison puff (TBZG_VFX_Poison, 10 x 214x172) plays once, then smaller puffs keep the cloud alive,
+    // and a few little mushrooms pop out of the ground for as long as it lasts
+    private static Texture2D Puff => ItemArt.Get != null ? ItemArt.Get.vfxPoison : null;
+
     public static void Spawn(Vector3 at, float dps, bool rave)
     {
+        Vector3 ground = at;
+        if (SolidGround.Ray(at + Vector3.up * 0.3f, Vector2.down, 1.5f, out RaycastHit2D hit)) ground = hit.point;
         var go = new GameObject("Spore Cloud");
-        go.transform.position = at;
+        go.transform.position = ground;
         var c = go.AddComponent<SporeCloud>();
         c.dps = dps; c.rave = rave;
-        BoonArt art = BoonArt.Get;
-        if (art != null)
+        c.visual = BoonFX.Sheet(Puff, 10, ground + Vector3.up * 0.05f, 16f, 0.8f, new Color(0.85f, 1f, 0.8f, 0.95f), null, false, BoonFX.Order, new Vector2(0.5f, 0.12f));
+
+        int count = Random.Range(3, 6);
+        for (int i = 0; i < count; i++)
         {
-            c.visual = BoonFX.Sheet(art.ail, 10, at + Vector3.up * 0.35f, 12f, 0.75f, new Color(0.55f, 1f, 0.35f, 0.85f), go.transform, true);
-            BoonArt.Play(art.sporePop, 0.35f, Random.Range(1.3f, 1.6f));
+            float x = Random.Range(-Radius, Radius) * 0.75f;
+            if (!SolidGround.Ray(ground + new Vector3(x, 0.4f, 0f), Vector2.down, 0.9f, out RaycastHit2D floor)) continue; // no shrooms on thin air
+            SpriteRenderer sr = BoonFX.MakeRenderer("Shroom", Mushroom(Random.value < 0.6f), new Vector3(ground.x + x, floor.point.y, 0f), 9 + i % 2);
+            sr.flipX = Random.value < 0.5f;
+            sr.transform.localScale = new Vector3(1f, 0f, 1f);
+            c.shrooms.Add((sr.transform, i * 0.05f + Random.Range(0f, 0.08f), Random.Range(1.4f, 2.1f)));
         }
-        FXParticle.Burst(at, BoonFX.Toxic, 14, 0.6f, 2.2f, -0.5f, 0.9f, true);
-        FXParticle.Burst(at, BoonFX.Violet, 6, 0.4f, 1.5f, -0.5f, 0.9f, true);
+
+        BoonArt art = BoonArt.Get;
+        if (art != null) BoonArt.Play(art.sporePop, 0.35f, Random.Range(1.3f, 1.6f));
+        FXParticle.Burst(ground + Vector3.up * 0.2f, BoonFX.Toxic, 10, 0.6f, 2f, -0.5f, 0.9f, true);
+        FXParticle.Burst(ground + Vector3.up * 0.2f, BoonFX.Violet, 5, 0.4f, 1.5f, -0.5f, 0.9f, true);
     }
+
+    // Little pixel mushroom: violet or rot-green cap with spots, pale stem (Mama Rot's colours)
+    private static Sprite Mushroom(bool violet) => BoonFX.FromRows(violet ? "SporeShroomV" : "SporeShroomG", new[]
+    {
+        "..CCC..",
+        ".CWCCC.",
+        "CCCCWCC",
+        "CDDDDDC",
+        "..SSS..",
+        "..SSs..",
+        "..SSs..",
+    }, ch =>
+    {
+        switch (ch)
+        {
+            case 'C': return violet ? new Color32(184, 97, 255, 255) : new Color32(140, 255, 64, 255);
+            case 'D': return violet ? new Color32(110, 50, 170, 255) : new Color32(70, 150, 40, 255);
+            case 'W': return new Color32(255, 250, 235, 255);
+            case 'S': return new Color32(238, 230, 205, 255);
+            case 's': return new Color32(190, 180, 150, 255);
+            default: return new Color32(0, 0, 0, 0);
+        }
+    }, new Vector2(0.5f, 0f));
 
     private void Update()
     {
         age += Time.deltaTime;
-        if (age >= life) { if (visual != null) visual.Stop(0.3f); Destroy(gameObject, 0.3f); enabled = false; return; }
+        UpdateShrooms();
+        if (age >= life + 0.35f) { Destroy(gameObject); return; }
+        if (age >= life) return; // shrooms sinking back in
+
+        // the cloud keeps breathing: smaller puffs drifting inside it
+        lingerTimer -= Time.deltaTime;
+        if (age > 0.45f && lingerTimer <= 0f && age < life - 0.4f)
+        {
+            lingerTimer = 0.55f;
+            Vector3 p = transform.position + new Vector3(Random.Range(-Radius, Radius) * 0.6f, 0.05f, 0f);
+            SheetFX small = BoonFX.Sheet(Puff, 10, p, 14f, Random.Range(0.4f, 0.55f), new Color(0.8f, 1f, 0.75f, 0.6f), null, false, BoonFX.Order - 1, new Vector2(0.5f, 0.12f));
+            if (small != null) small.transform.localScale = new Vector3((Random.value < 0.5f ? -1f : 1f) * small.transform.localScale.x, small.transform.localScale.y, 1f);
+        }
 
         puffTimer -= Time.deltaTime;
         if (puffTimer <= 0f)
         {
-            puffTimer = 0.1f;
-            Vector3 p = transform.position + new Vector3(Random.Range(-Radius, Radius) * 0.7f, Random.Range(0f, 0.8f), 0f);
+            puffTimer = 0.12f;
+            Vector3 p = transform.position + new Vector3(Random.Range(-Radius, Radius) * 0.7f, Random.Range(0.1f, 0.8f), 0f);
             FXParticle.Burst(p, Random.value < 0.75f ? BoonFX.Toxic : BoonFX.Violet, 1, 0.1f, 0.4f, -0.8f, 0.8f);
         }
 
@@ -584,6 +694,25 @@ public class SporeCloud : MonoBehaviour
                 if (any) BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.zap : null, 0.2f, Random.Range(1.4f, 1.7f));
             }
         }
+    }
+
+    // pop up with a little overshoot, wobble while the cloud lives, sink back when it ends
+    private void UpdateShrooms()
+    {
+        foreach (var (t, delay, size) in shrooms)
+        {
+            if (t == null) continue;
+            float k = Mathf.Clamp01((age - delay) / 0.16f);
+            float grow = k < 1f ? Mathf.Sin(k * Mathf.PI * 0.5f) * (1f + 0.25f * Mathf.Sin(k * Mathf.PI)) : 1f;
+            float sink = Mathf.Clamp01((age - life) / 0.3f);
+            float breathe = 1f + 0.06f * Mathf.Sin(age * 7f + delay * 20f);
+            t.localScale = new Vector3(size * (2f - breathe), size * grow * breathe * (1f - sink), 1f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var (t, _, _) in shrooms) if (t != null) Destroy(t.gameObject);
     }
 }
 
@@ -642,13 +771,91 @@ public class VineBurst : MonoBehaviour
 }
 
 // ================================================================================================ DJ Fever
-// Night Fever: a strip of flashing dance floor. Enemies standing on it get stunned (once each).
+// Night Fever: a dance floor lights up under the dash - glossy pixel tiles in a chasing rainbow, light shafts
+// shooting up from the tiles on the beat, the magic circle (FX_MagicPlacement) flattened onto the floor as the
+// DJ's sigil. Enemies stepping on it get stunned once each, with a golden burst (FX_DeckFix_Upgrade).
 public class DiscoFloor : MonoBehaviour
 {
     private readonly List<SpriteRenderer> tiles = new List<SpriteRenderer>();
+    private readonly List<SpriteRenderer> shafts = new List<SpriteRenderer>();
     private readonly HashSet<EnemyHealth> done = new HashSet<EnemyHealth>();
-    private float age, life = 4f, stun, width;
+    private float age, life = 4f, stun, width, dir;
     private const float TileW = 0.5f;
+    private const int TilePixels = 30;
+    private const float ShaftHeight = 1.7f;
+
+    private static Material Glow => CatFX.Unlit;
+
+    // A glossy floor tile: bright top edge, body, darker bottom lip, 1px seams at the sides (tinted per beat)
+    private static Sprite Tile
+    {
+        get
+        {
+            string top = "s" + new string('H', TilePixels - 2) + "s";
+            string body = "s" + new string('M', TilePixels - 2) + "s";
+            string shine = "s" + "MMWW" + new string('M', TilePixels - 6) + "s";
+            string lip = new string('D', TilePixels);
+            return BoonFX.FromRows("DiscoTile", new[] { top, shine, body, lip }, ch =>
+            {
+                switch (ch)
+                {
+                    case 'H': return new Color32(255, 255, 255, 255);
+                    case 'W': return new Color32(255, 255, 255, 255);
+                    case 'M': return new Color32(205, 205, 205, 255);
+                    case 'D': return new Color32(110, 110, 120, 255);
+                    case 's': return new Color32(150, 150, 160, 255);
+                    default: return new Color32(0, 0, 0, 0);
+                }
+            }, new Vector2(0.5f, 0f));
+        }
+    }
+
+    // A column of light fading upward, soft at the sides (digits = alpha steps)
+    private static Sprite Shaft
+    {
+        get
+        {
+            const int h = 28;
+            float[] side = { 0.15f, 0.45f, 0.85f, 1f, 0.85f, 0.45f, 0.15f };
+            var rows = new string[h];
+            for (int y = 0; y < h; y++)
+            {
+                float up = y / (float)(h - 1);                  // rows[0] is the top: 1 at the floor
+                float a = up * up;
+                var row = new char[side.Length];
+                for (int x = 0; x < side.Length; x++) row[x] = (char)('0' + Mathf.RoundToInt(9f * a * side[x]));
+                rows[y] = new string(row);
+            }
+            return BoonFX.FromRows("DiscoShaft2", rows, ch => new Color32(255, 255, 255, (byte)Mathf.RoundToInt((ch - '0') / 9f * 255f)), new Vector2(0.5f, 0f));
+        }
+    }
+
+    // A club spotlight cone hanging from above: narrow at the lamp, wide and soft at the floor
+    private static Sprite Cone
+    {
+        get
+        {
+            const int h = 48, w = 31;
+            var rows = new string[h];
+            for (int y = 0; y < h; y++)
+            {
+                float down = y / (float)(h - 1);                // 0 at the lamp (top), 1 at the floor
+                float half = 1f + down * (w / 2f - 1f);
+                var row = new char[w];
+                for (int x = 0; x < w; x++)
+                {
+                    float d = Mathf.Abs(x - (w - 1) / 2f) / half;
+                    float edge = d >= 1f ? 0f : 1f - d * d;
+                    float a = edge * Mathf.Lerp(0.9f, 0.45f, down);
+                    row[x] = (char)('0' + Mathf.Clamp(Mathf.RoundToInt(9f * a), 0, 9));
+                }
+                rows[y] = new string(row);
+            }
+            return BoonFX.FromRows("DiscoCone", rows, ch => new Color32(255, 255, 255, (byte)Mathf.RoundToInt((ch - '0') / 9f * 255f)), new Vector2(0.5f, 1f));
+        }
+    }
+
+    private readonly List<SpriteRenderer> cones = new List<SpriteRenderer>();
 
     public static void Spawn(Vector3 feet, float direction, float stunSeconds)
     {
@@ -661,20 +868,46 @@ public class DiscoFloor : MonoBehaviour
         var f = go.AddComponent<DiscoFloor>();
         f.stun = stunSeconds;
         f.width = width;
+        f.dir = direction;
+        Sprite tile = Tile, shaft = Shaft;
         for (int i = 0; i < count; i++)
         {
             // revealed in the dash direction
             float x = direction * (-width * 0.5f + TileW * (i + 0.5f));
-            Vector3 at = go.transform.position + new Vector3(x, 2f / 64f, 0f);
+            Vector3 at = go.transform.position + new Vector3(x, 0f, 0f);
             // only where there's floor (no tiles hanging in the air past a ledge)
             if (!SolidGround.Ray(at + Vector3.up * 0.3f, Vector2.down, 0.6f, out RaycastHit2D floor)) continue;
-            at.y = floor.point.y + 2f / 64f;
-            SpriteRenderer sr = BoonFX.MakeRenderer("Tile", BoonFX.Pixel, at, 8, go.transform);
-            sr.transform.localScale = new Vector3(TileW * 64f - 2f, 4f, 1f);
+            at.y = floor.point.y - 1f / 64f;
+            SpriteRenderer sr = BoonFX.MakeRenderer("Tile", tile, at, BoonFX.Order - 1, go.transform, Glow);
             sr.color = new Color(1f, 1f, 1f, 0f);
             f.tiles.Add(sr);
+
+            SpriteRenderer beam = BoonFX.MakeRenderer("Light Shaft", shaft, at + Vector3.up * 3f / 64f, BoonFX.Order - 2, go.transform, Glow);
+            beam.transform.localScale = new Vector3((TilePixels - 4) / 7f, ShaftHeight * 64f / 28f, 1f);
+            beam.color = new Color(1f, 1f, 1f, 0f);
+            f.shafts.Add(beam);
         }
-        BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.discoFloor : null, 0.4f, 1.25f);
+
+        // two club spotlights from above, sweeping across the floor
+        Sprite cone = Cone;
+        for (int k = 0; k < 2 && f.tiles.Count > 0; k++)
+        {
+            float lampX = (k == 0 ? -1f : 1f) * width * 0.3f;
+            SpriteRenderer light = BoonFX.MakeRenderer("Spotlight", cone, go.transform.position + new Vector3(lampX, 2.9f, 0f), BoonFX.Order - 3, go.transform, Glow);
+            light.transform.localScale = new Vector3(2.2f, 4f, 1f); // ~3 units long, ~1 unit wide at the floor
+            light.color = new Color(1f, 1f, 1f, 0f);
+            f.cones.Add(light);
+        }
+
+        // the DJ's sigil, lying flat on the floor under the middle of the strip
+        BoonArt art = BoonArt.Get;
+        if (art != null && art.magicCircle != null && f.tiles.Count > 0)
+        {
+            SheetFX sigil = BoonFX.Sheet(art.magicCircle, 17, go.transform.position + Vector3.up * 0.06f, 22f, 1f, new Color(1f, 0.85f, 1f, 0.9f), null, false, BoonFX.Order - 4);
+            if (sigil != null) sigil.transform.localScale = new Vector3(2.2f, 0.42f, 1f);
+        }
+        BoonArt.Play(art != null ? art.discoFloor : null, 0.4f, 1.25f);
+        PulseRing.Spawn(go.transform.position + Vector3.up * 0.1f, new Color(1f, 0.9f, 0.4f, 0.8f), width * 0.55f, 0.35f, 90, true);
     }
 
     private void Update()
@@ -682,25 +915,48 @@ public class DiscoFloor : MonoBehaviour
         age += Time.deltaTime;
         if (age >= life || tiles.Count == 0) { Destroy(gameObject); return; }
         float fadeIn = Mathf.Clamp01(age / 0.15f), fadeOut = Mathf.Clamp01((life - age) / 0.4f);
-        int beat = (int)(age * 6f);
+        float beatTime = age * 4f;                 // 4 beats a second
+        int beat = (int)beatTime;
+        float kick = 1f - (beatTime - beat);       // 1 on the beat, falling off
         for (int i = 0; i < tiles.Count; i++)
         {
-            bool reveal = age > i * 0.025f;
-            Color c = BoonFX.Rainbow(((i + beat) % 5) / 5f);
-            float flash = (i + beat) % 2 == 0 ? 1f : 0.55f;
-            tiles[i].color = new Color(c.r * flash, c.g * flash, c.b * flash, reveal ? 0.9f * fadeIn * fadeOut : 0f);
+            float reveal = Mathf.Clamp01((age - i * 0.03f) / 0.08f);
+            Color c = Color.HSVToRGB(Mathf.Repeat(((i + beat) % 6) / 6f, 1f), 0.85f, 1f);
+            bool lit = (i + beat) % 2 == 0;
+            float bright = lit ? 0.85f + 0.15f * kick : 0.5f;
+            tiles[i].color = new Color(c.r * bright, c.g * bright, c.b * bright, reveal * fadeIn * fadeOut);
+            // the light shafts come up from the lit tiles and drop back on the off-beat
+            SpriteRenderer s = shafts[i];
+            if (s == null) continue;
+            float rise = lit ? Mathf.Clamp01(kick * 1.6f) : 0f;
+            s.color = new Color(c.r, c.g, c.b, 0.9f * rise * reveal * fadeOut);
+            Vector3 sc = s.transform.localScale;
+            s.transform.localScale = new Vector3(sc.x, ShaftHeight * 64f / 28f * (0.6f + 0.4f * rise), 1f);
         }
-        if (Time.frameCount % 6 == 0)
+        for (int k = 0; k < cones.Count; k++)
+        {
+            SpriteRenderer cone = cones[k];
+            if (cone == null) continue;
+            // sweeping in opposite directions, changing colour every two beats
+            float swing = Mathf.Sin(age * 3.2f + k * Mathf.PI) * 28f;
+            cone.transform.rotation = Quaternion.Euler(0f, 0f, swing);
+            Color cc = Color.HSVToRGB(Mathf.Repeat((beat / 2) * 0.17f + k * 0.5f, 1f), 0.7f, 1f);
+            cone.color = new Color(cc.r, cc.g, cc.b, 0.55f * Mathf.Clamp01(age / 0.25f) * fadeOut);
+        }
+        if (Time.frameCount % 5 == 0)
         {
             int i = Random.Range(0, tiles.Count);
-            BoonFX.Sparkles(tiles[i].transform.position + Vector3.up * 0.1f, BoonFX.Rainbow(Time.time, i * 0.1f), 1, 0.1f, 0.4f);
+            BoonFX.Sparkles(tiles[i].transform.position + Vector3.up * Random.Range(0.1f, 1.2f), BoonFX.Rainbow(Time.time, i * 0.1f), 1, 0.1f, 0.4f);
         }
         foreach (EnemyHealth e in BoonFX.EnemiesInBox(transform.position + Vector3.up * 0.35f, new Vector2(width, 0.7f)))
         {
             if (!done.Add(e)) continue;
             BoonFX.Stun(e, stun);
-            BoonFX.Sparkles(BoonFX.Center(e), BoonFX.Rainbow(Time.time), 5, 0.3f, 0.6f);
-            BoonFX.Popup(BoonFX.Center(e) + Vector3.up * 0.6f, "GET DOWN!", BoonFX.Disco, 0.6f, 0.8f);
+            Vector3 c = BoonFX.Center(e);
+            BoonArt art = BoonArt.Get;
+            if (art != null && art.sparkBurst != null) BoonFX.Sheet(art.sparkBurst, 10, c + Vector3.down * 0.2f, 20f, 0.45f); // its own gold (a tint turns it muddy)
+            BoonFX.Sparkles(c, BoonFX.Rainbow(Time.time), 5, 0.3f, 0.6f);
+            BoonFX.Popup(c + Vector3.up * 0.6f, "GET DOWN!", BoonFX.Disco, 0.6f, 0.8f);
         }
     }
 }

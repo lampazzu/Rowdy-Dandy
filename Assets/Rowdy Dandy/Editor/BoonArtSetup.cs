@@ -42,6 +42,8 @@ public static class BoonArtSetup
         changed |= Fill(ref art.earthPillar, NewStuff + "RDR_EarthPillar.png");
         changed |= Fill(ref art.matinta, NewStuff + "TDF_Matinta@Projectile.png");
         changed |= Fill(ref art.gunImpact, NewStuff + "PIV_GunImpact.png");
+        changed |= Fill(ref art.magicCircle, NewStuff + "FX_MagicPlacement.png");
+        changed |= Fill(ref art.sparkBurst, NewStuff + "FX_DeckFix_Upgrade.png");
 
         if (art.rarity == null || art.rarity.Length != 5) { art.rarity = new AudioClip[5]; changed = true; }
         string[] rarityFiles = { "01_MagicPlacement_Commom", "02_MagicPlacement_Uncommom", "03_MagicPlacement_Rare", "04_MagicPlacement_Epic", "05_MagicPlacement_Legendary" };
@@ -94,7 +96,7 @@ public static class BoonArtSetup
         changed |= Fill(ref art.gel, Hags + "DeckFix/DeckFixRepair.wav");
 
         foreach (Texture2D t in new[] { art.clawSlash, art.waterSonic, art.charm, art.fear, art.slow, art.charge, art.magicalHit, art.physicalHit,
-                                        art.manaRecovery, art.ail, art.earthPillar, art.matinta, art.gunImpact })
+                                        art.manaRecovery, art.ail, art.earthPillar, art.matinta, art.gunImpact, art.magicCircle, art.sparkBurst })
             PixelImport(t, true);
 
         // The item-art sheets some boon icons are cut from need to be readable too

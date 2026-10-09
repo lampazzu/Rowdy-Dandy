@@ -25,6 +25,8 @@ MonoBehaviour:
   earthPillar: {fileID: 2800000, guid: 78685a59ef50ca64fba0422095109420, type: 3}
   matinta: {fileID: 2800000, guid: e772aa61a51a1514f82ca222547ec242, type: 3}
   gunImpact: {fileID: 2800000, guid: f75bfaf4f87ade24f812318a7bddd5fb, type: 3}
+  magicCircle: {fileID: 2800000, guid: c7bd761506f3da845be9fd15c3f9ee7c, type: 3}
+  sparkBurst: {fileID: 2800000, guid: db276f46c2bfe454aa640a3a7ace7abb, type: 3}
   rarity:
   - {fileID: 8300000, guid: 65ed27662bdef5b418d23c048fd5d8a9, type: 3}
   - {fileID: 8300000, guid: 3b7a3014d497dd44da934fb881f3e50c, type: 3}

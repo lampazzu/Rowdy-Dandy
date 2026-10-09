@@ -126,6 +126,13 @@ public class PlayerStats : MonoBehaviour
 
     public void AddEXP(float amount)
     {
+        if (Encore.BloodMoon) amount *= Encore.BloodMoonExp;
+        if (currentLevel >= MaxLevel && Encore.Active)
+        {
+            Encore.AddExp(amount); // endgame: Encore levels past 10
+            UpdateUI();
+            return;
+        }
         currentEXP += amount;
         float requiredEXP = GetRequiredEXPForCurrentLevel();
 
@@ -149,6 +156,7 @@ public class PlayerStats : MonoBehaviour
 
     public float GetRequiredEXPForCurrentLevel()
     {
+        if (Balance.Jarvis) return Balance.ExpRequired(currentLevel);
         int index = currentLevel - 1;
         if (index >= 0 && index < levelProgression.Count && levelProgression[index].expRequiredForNext > 0)
         {
@@ -199,6 +207,7 @@ public class PlayerStats : MonoBehaviour
         currentLevel = 1;
         currentEXP = 0f;
         Boons.ClearAll(); // boons come from level ups
+        Encore.ResetProgress();
         SaveEXPData();
         ApplyCurrentLevelStats();
         CatRoster.EnforceCapacity();
@@ -214,7 +223,13 @@ public class PlayerStats : MonoBehaviour
 
         for (int i = 0; i < currentLevel - 1; i++)
         {
-            if (i < levelProgression.Count)
+            if (Balance.Jarvis)
+            {
+                newDamageBonus += Balance.LevelDamageGain(i);
+                newCritChanceBonus += Balance.CritChanceGain;
+                newCritMultiplierBonus += Balance.CritMultiplierGain;
+            }
+            else if (i < levelProgression.Count)
             {
                 newDamageBonus += levelProgression[i].baseDamageGain;
                 newCritChanceBonus += levelProgression[i].critChanceGain;
@@ -233,11 +248,11 @@ public class PlayerStats : MonoBehaviour
         {
             if (pd == null) continue;
 
-            if (appliedDamageBonus != 0f) pd.RemoveFlatDamage(appliedDamageBonus);
+            if (appliedDamageBonus != 0f) pd.RemoveFlatDamage(appliedDamageBonus * pd.LevelBonusShare);
             if (appliedCritChanceBonus != 0f) pd.RemoveCritChance(appliedCritChanceBonus);
             if (appliedCritMultiplierBonus != 0f) pd.RemoveCritMultiplier(appliedCritMultiplierBonus);
 
-            if (newDamageBonus != 0f) pd.AddFlatDamage(newDamageBonus);
+            if (newDamageBonus != 0f) pd.AddFlatDamage(newDamageBonus * pd.LevelBonusShare);
             if (newCritChanceBonus != 0f) pd.AddCritChance(newCritChanceBonus);
             if (newCritMultiplierBonus != 0f) pd.AddCritMultiplier(newCritMultiplierBonus);
         }
@@ -270,14 +285,16 @@ public class PlayerStats : MonoBehaviour
     {
         // Update Canvas EXP Fill Bar
         float maxEXP = GetRequiredEXPForCurrentLevel();
+        bool encore = IsMaxLevel && Encore.Active && !Encore.Maxed;
         if (expBarFillImage != null)
         {
-            expBarFillImage.fillAmount = IsMaxLevel ? 1f : Mathf.Clamp01(currentEXP / maxEXP);
+            expBarFillImage.fillAmount = encore ? Encore.Progress : IsMaxLevel ? 1f : Mathf.Clamp01(currentEXP / maxEXP);
         }
 
         if (expText != null)
         {
-            expText.text = IsMaxLevel ? "MAX" : $"{currentEXP:F0} / {maxEXP:F0} XP";
+            expText.text = encore ? $"ENCORE {Encore.Level}  {Encore.Exp:F0} / {Encore.ExpPerLevel:F0} XP"
+                         : IsMaxLevel ? "MAX" : $"{currentEXP:F0} / {maxEXP:F0} XP";
         }
 
         // Update Stats UI Panel text: everything here comes from leveling up, so say so
