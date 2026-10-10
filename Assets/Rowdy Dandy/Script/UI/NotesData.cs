@@ -85,10 +85,8 @@ public static class NotesData
             id = "Wig", name = "Wig", glyph = "W", icon = () => CatIcon("Interactables/Wig"), animatedPortrait = "cat_Wig",
             sections = new[]
             {
-                ("WHAT HE DOES", "Swats everything around him: hurts enemies and knocks arrows out of the air. Clears fodder, staggers, blocks shots."),
-                ("IGNORES", "Plants and statues. He has standards."),
-                ("COOLDOWN", "His bar under the weapon slot fills back up after every swat."),
-                (Quip, "Small, fluffy, violent. My kind of guy."),
+                ("WHAT HE DOES", "Swats everything around him: hurts enemies and knocks arrows out of the air. Ignores plants and statues."),
+                (Quip, "A menace, don't let him fool ya."),
             },
         },
         new Topic
@@ -96,10 +94,8 @@ public static class NotesData
             id = "Samurai", name = "Nick", glyph = "N", icon = () => CatIcon("Interactables/SamuraiCat"), animatedPortrait = "cat_Samurai",
             sections = new[]
             {
-                ("WHAT HE DOES", "A samurai cat. When an enemy is nearly dead (10% HP or 10 HP left) he dashes in and executes it, then chains to the next one - up to five."),
-                ("HOW TO USE HIM", "Soften a crowd up and let him finish it. His cuts glow blue and freeze time for a blink so you can see them."),
-                ("COOLDOWN", "Starts after the whole chain, so long chains don't waste it."),
-                (Quip, "He bows before every kill. Show-off. I respect it."),
+                ("WHAT HE DOES", "When an enemy is nearly dead (10% HP or 10 HP left) he dashes in and executes it, then chains to the next one - up to five."),
+                (Quip, "Respect."),
             },
         },
         new Topic
@@ -107,9 +103,7 @@ public static class NotesData
             id = "Paprika", name = "Paprika", glyph = "P", icon = () => CatIcon("Interactables/Paprika"),
             sections = new[]
             {
-                ("WHAT HE DOES", "When enemies are close he spices up Rowdy's weapon: for a few seconds every hit poisons. Poison eats HP over time (green numbers)."),
-                ("HOW TO USE HIM", "Spread hits around the crowd while it's on - every enemy you tag keeps bleeding green."),
-                ("COOLDOWN", "Starts when the poison blade runs out. It blinks right before it ends."),
+                ("WHAT HE DOES", "When enemies are close he spices up Rowdy's weapon: for a few seconds every hit poisons."),
                 (Quip, "Hot, dangerous and a little bit toxic. Like me on a Friday."),
             },
         },
@@ -119,9 +113,7 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT HE DOES", "Jumps sky high and slams the ground. Every enemy standing on the ground nearby is stunned for a second."),
-                ("WATCH OUT", "Flyers and anything mid-jump don't care. He only stomps when Rowdy is on the ground too."),
-                ("COOLDOWN", "Short. He loves the sound."),
-                (Quip, "Big feet, bigger ego. We get along great."),
+                (Quip, "Big Old Fat Mushidon. Lovely guy."),
             },
         },
         new Topic
@@ -129,9 +121,8 @@ public static class NotesData
             id = "Peak", name = "The Peak", glyph = "K", icon = () => CatIcon("Interactables/ThePeak"),
             sections = new[]
             {
-                ("WHAT HE DOES", "Gives Rowdy armor that blocks the next 3 hits. The shield over his head cracks a little with every block."),
-                ("COOLDOWN", "Only starts once the armor breaks. Then he makes a new one."),
-                (Quip, "Finally, someone who protects this face professionally."),
+                ("WHAT HE DOES", "Gives Rowdy armor that blocks the next 3 hits. A new one once the armor breaks."),
+                (Quip, "IT'S THE PEAK!"),
             },
         },
         new Topic
@@ -139,10 +130,8 @@ public static class NotesData
             id = "Lallo", name = "Lallo", glyph = "L", icon = () => CatIcon("Interactables/Lallo"),
             sections = new[]
             {
-                ("WHAT HE DOES", "While his bar is full, the next enemy Rowdy kills bursts in decay. Anything caught in it gets infected and bursts too - chain reaction."),
-                ("HOW TO USE HIM", "Save the kill for the middle of a crowd. Purple shimmer on Rowdy = decay is ready."),
-                ("COOLDOWN", "Starts after the burst."),
-                (Quip, "He's not evil. He's just... thorough."),
+                ("WHAT HE DOES", "While his bar is full, the next enemy Rowdy kills bursts in decay. Anything caught in it bursts too - chain reaction."),
+                (Quip, "Kinda sus."),
             },
         },
         new Topic
@@ -150,10 +139,8 @@ public static class NotesData
             id = "Tchogon", name = "Tchogon", glyph = "T", icon = () => CatIcon("Interactables/Tchogon"),
             sections = new[]
             {
-                ("WHAT HE DOES", "When enemies get close, he flies over Rowdy and spins into a vortex: three pulls drag everything around Rowdy in toward him, slowed and dizzy."),
-                ("HOW TO USE HIM", "Great with anything that hits a crowd: Hang Ten, Spore Step, the werewolf. Stand in the middle and let them come to you."),
-                ("COOLDOWN", "Starts after the third pull."),
-                (Quip, "Everything revolves around him. He says so himself. Constantly."),
+                ("WHAT HE DOES", "When enemies get close, he flies over Rowdy and spins into a vortex that drags everything around Rowdy in toward him."),
+                (Quip, "One of my personal favorites (don't tell the others)"),
             },
         },
     };
@@ -224,7 +211,7 @@ public static class NotesData
             sections = new[]
             {
                 ("LEVEL UP = BOON", "Every level up, three patrons each offer you a boon. Take one. They stay with you, even when you die."),
-                ("THE PATRONS", "Narcissism (gorgeous, and the Style Rank), Sea Abyss (the deep, waves), Lycanthropy (the moon), Mama Rot (poison), the Stinky Bois Guild (cats), the Crazy Chef (food, sandwiches), the Blacksmith (weapons) and the Sun God (daylight, fire)."),
+                ("THE PATRONS", "Narcissism (gorgeous, and the Style Rank), Sea Abyss (the deep, waves), Lycanthropy (the moon), Stephmoss (poison, and the swarm form), the Stinky Bois Guild (cats), the Crazy Chef (food, sandwiches), the Blacksmith (weapons) and the Sun God (daylight, fire)."),
                 ("SLOTS", "Attack, Dash, Jump, Cats and Special hold one boon each - a new one replaces the old. Passives stack."),
                 ("RARITY AND DUOS", "Common, Rare, Epic: same boon, bigger numbers. A boon you own can come back as an UPGRADE. Mix two patrons and a DUO boon may show up."),
                 ("YOUR BUILD", "{STATS} shows every boon you have. The HUD shows your slots at the bottom left."),

@@ -157,7 +157,6 @@ public class RowdyNotes : MonoBehaviour
     {
         if (instance == null) Create();
         instance.toasts.Enqueue((headline, name, face));
-        Tutorials.Show(Tutorials.Topic.Notes, null, 2f);
     }
 
     // ---------------------------------------------------------------- page model
@@ -175,6 +174,7 @@ public class RowdyNotes : MonoBehaviour
         public EnemyCatalog.Entry enemy;
         public AnimatedPortraits.Clip anim;   // animated portrait (idle / walk frames), null = still icon
         public int[] ratings;                 // weapons: jellyfish rows
+        public string drops;                  // enemies: DROPS icons (EnemyCatalog.Entry.dropIds)
     }
 
     private List<Page> BuildPages(Tab tab)
@@ -195,9 +195,8 @@ public class RowdyNotes : MonoBehaviour
                     else
                     {
                         p.subtitle = "DEFEATED  " + kills;
-                        p.sections.Add(("NOTES", e.about, TextColor));
-                        p.sections.Add(("WEAKNESS", e.weakness, TextColor));
-                        p.sections.Add(("DROPS", e.drops, TextColor));
+                        // just three things: Rowdy's note, the counter, the drops (as icons)
+                        p.sections.Add(("NOTES", e.about, QuipColor));
                         if (revealed) p.sections.Add(("COUNTER", e.counter, Counter));
                         else
                         {
@@ -205,7 +204,7 @@ public class RowdyNotes : MonoBehaviour
                             p.progress = (float)kills / need;
                             p.progressLabel = $"DEFEAT {need - kills} MORE TO REVEAL";
                         }
-                        if (!string.IsNullOrEmpty(e.Quip)) p.sections.Add((NotesData.Quip, e.Quip, QuipColor));
+                        p.drops = e.dropIds ?? "";
                     }
                     pages.Add(p);
                 }
@@ -521,7 +520,9 @@ public class RowdyNotes : MonoBehaviour
             y += 16f;
             AddLine(current.progressLabel, Pink, 0f, ref y);
             AddProgressBar(current.progress, ref y);
+            y -= 16f;
         }
+        if (current.drops != null) AddDrops(current.drops, ref y);
 
         RefreshStrip();
     }
@@ -572,6 +573,71 @@ public class RowdyNotes : MonoBehaviour
         }
         y -= rows * rowH + 14f;
     }
+
+    // DROPS as a row of icons, each with a small label under it ("50%", "X40")
+    private void AddDrops(string ids, ref float y)
+    {
+        AddLine("DROPS", Pink, 0f, ref y, 3);
+        y -= 8f;
+        const float size = 48f, gap = 22f;
+        float x = 0f;
+        int n = 0;
+        foreach (string raw in ids.Split(','))
+        {
+            string[] part = raw.Trim().Split(':');
+            if (part[0].Length == 0) continue;
+            Sprite icon = DropIcon(part[0], out Color tint);
+            if (icon == null) continue;
+            Image img = OverlayUI.MakeImage("Drop", textColumn, tint, icon);
+            img.preserveAspect = true;
+            img.rectTransform.anchorMin = img.rectTransform.anchorMax = new Vector2(0f, 1f);
+            img.rectTransform.pivot = new Vector2(0f, 1f);
+            img.rectTransform.sizeDelta = new Vector2(size, size);
+            img.rectTransform.anchoredPosition = new Vector2(x, Mathf.Round(y));
+            pageContent.Add(img.gameObject);
+            if (part.Length > 1)
+            {
+                PixelText label = PixelText.Create(textColumn, part[1], 2, TextColor, 0.5f);
+                label.Rect.anchorMin = label.Rect.anchorMax = new Vector2(0f, 1f);
+                label.Rect.pivot = new Vector2(0.5f, 1f);
+                label.Rect.anchoredPosition = new Vector2(x + size / 2f, Mathf.Round(y - size - 4f));
+                pageContent.Add(label.gameObject);
+            }
+            x += size + gap;
+            n++;
+        }
+        if (n == 0) { AddLine("NOTHING", DimText, 0f, ref y); return; }
+        y -= size + 30f;
+    }
+
+    private static Sprite gemIcon, rubbleIcon;
+
+    private static Sprite DropIcon(string id, out Color tint)
+    {
+        tint = Color.white;
+        switch (id)
+        {
+            case "sword": return WeaponDropIcon(1);
+            case "naginata": return WeaponDropIcon(2);
+            case "cleaver": return WeaponDropIcon(3);
+            case "heart": tint = new Color(1f, 0.4f, 0.5f); return BoonFX.Heart;
+            case "rubble":
+                if (rubbleIcon == null)
+                    rubbleIcon = OverlayUI.PixelSprite(new[] { "...##...", "..####..", ".######.", "##.####.", "########", ".##.###." },
+                        c => new Color32(150, 140, 150, 255), "NotesRubble");
+                return rubbleIcon;
+            default:
+                if (gemIcon == null)
+                {
+                    GameObject gem = Resources.Load<GameObject>("Systems/EXPgem");
+                    SpriteRenderer sr = gem != null ? gem.GetComponentInChildren<SpriteRenderer>(true) : null;
+                    gemIcon = sr != null ? sr.sprite : null;
+                }
+                return gemIcon;
+        }
+    }
+
+    private static Sprite WeaponDropIcon(int index) => WeaponManager.Instance != null ? WeaponManager.Instance.GetProfileByIndex(index) : null;
 
     private readonly List<(Image img, int index)> jellies = new List<(Image, int)>();
     private static Sprite jellySprite;

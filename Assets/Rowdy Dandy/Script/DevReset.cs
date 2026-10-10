@@ -41,6 +41,7 @@ public class DevReset : MonoBehaviour
         DropLuck.Reset();
         OreNode.ForgetAllSaved();
         Tutorials.ResetAll();
+        ShamanAltars.ResetSaved();
         Boons.ClearAll();
         Encore.ResetAll();
         PlayerPrefs.Save();

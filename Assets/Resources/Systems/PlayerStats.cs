@@ -140,8 +140,10 @@ public class PlayerStats : MonoBehaviour
         currentEXP += amount;
         float requiredEXP = GetRequiredEXPForCurrentLevel();
 
+        // a colosseum trial paces the levels (ArenaRun.LevelCap): EXP past the cap waits just short of the next level
+        int cap = ArenaRun.LevelCap > 0 ? Mathf.Min(MaxLevel, ArenaRun.LevelCap) : MaxLevel;
         bool leveledUp = false;
-        while (currentEXP >= requiredEXP && currentLevel < MaxLevel)
+        while (currentEXP >= requiredEXP && currentLevel < cap)
         {
             currentEXP -= requiredEXP;
             currentLevel++;
@@ -151,6 +153,7 @@ public class PlayerStats : MonoBehaviour
             requiredEXP = GetRequiredEXPForCurrentLevel();
         }
         if (currentLevel >= MaxLevel) currentEXP = 0f; // maxed out: the bar just stays full
+        else if (currentLevel >= cap) currentEXP = Mathf.Min(currentEXP, requiredEXP - 1f);
 
         SaveEXPData();
         ApplyCurrentLevelStats();
@@ -200,6 +203,17 @@ public class PlayerStats : MonoBehaviour
             ApplyCurrentLevelStats();
             CatRoster.EnforceCapacity(); // fewer cat slots now
         }
+    }
+
+    // Tops the EXP up to the start of a level (colosseum level plan): plays the real level-ups on the way
+    public void ReachLevel(int targetLevel)
+    {
+        int cap = ArenaRun.LevelCap;
+        ArenaRun.LevelCap = 0;
+        int guard = 0;
+        while (currentLevel < Mathf.Min(targetLevel, MaxLevel) && guard++ < 12)
+            AddEXP(Mathf.Max(0f, GetRequiredEXPForCurrentLevel() - currentEXP) + 0.01f);
+        ArenaRun.LevelCap = cap;
     }
 
     public void SetLevel(int targetLevel)

@@ -116,6 +116,10 @@ public class EnemyHealth : MonoBehaviour
     {
         HasAwoken = true;
         AwakeFrame = Time.frameCount;
+        // enemies built from code (Stephmoss) have no serialized events
+        if (onHurtWolf == null) onHurtWolf = new UnityEvent();
+        if (onEnemyKill == null) onEnemyKill = new UnityEvent();
+        if (onCriticalDamage == null) onCriticalDamage = new UnityEvent();
         anima = GetComponent<Animator>();
         redco = GetComponent<SpriteRenderer>();
         startingenemyHealth = Balance.EnemyHealth(this, startingenemyHealth); // Jarvis balance (Lamp: unchanged)
@@ -206,6 +210,14 @@ public class EnemyHealth : MonoBehaviour
         else SetAnimatorTrigger("back to idle");
     }
 
+    // ShamanAltars: the pillar flags are static (they used to survive a reload half-set); set from the save at load
+    public static void SetAltarState(bool a, bool b, bool cameraDone)
+    {
+        isPillarA = a;
+        isPillarB = b;
+        hasCameraBeenReset = cameraDone;
+    }
+
     private void ActivatePillarSequence()
     {
         SetAnimatorTrigger("Activate");
@@ -244,6 +256,12 @@ public class EnemyHealth : MonoBehaviour
         expGemPrefab = gemPrefab;
         expGemAmount = amount;
     }
+
+    // HYPER ARMOR (some elites, the Moonbound Elder, the Red Jelly): hits don't make it flinch - unless it's stunned,
+    // charmed or rooted (StatusEffects), or the hit is a counter. See TakeDamageEnemy.
+    public bool HyperArmor { get; set; }
+    private float armorFxAt = -10f;
+    public bool ArmorHolds => HyperArmor && !isParryTime && !isObject && !StatusEffects.IsStunned(gameObject);
 
     // Night elite (WaveEnemySpawner): tougher, drops more EXP and more often a weapon
     public bool IsElite { get; private set; }
@@ -298,13 +316,31 @@ public class EnemyHealth : MonoBehaviour
         {
             // poison tick: just the number
         }
+        else if (currentenemyHealth > 0 && ArmorHolds)
+        {
+            // HYPER ARMOR: takes the damage without flinching (no GetHit clip = no stagger, no knockback). The white
+            // flash lives in that clip, so it flashes from code instead. Counters, stuns and charms still break through.
+            if (!isObject && _damage > 0f) Blood.Spill(EnemyFairness.BodyCenter(this), AwayFromRowdy(), isCritical ? 6 : 3);
+            HitFlash.Flash(this);
+            if (Time.time - armorFxAt > 0.25f)
+            {
+                armorFxAt = Time.time;
+                Vector3 c = EnemyFairness.BodyCenter(this);
+                SheetFX clank = GraftFX.Play("MarhgHit", c + (Vector3)UnityEngine.Random.insideUnitCircle * 0.15f, new Color(1f, 0.85f, 0.55f), 96);
+                if (clank != null && UnityEngine.Random.value < 0.5f) clank.transform.localScale = new Vector3(-1f, 1f, 1f);
+                BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.clang : null, 0.22f, UnityEngine.Random.Range(1.5f, 1.8f));
+            }
+            onHurtWolf.Invoke();
+            SoundEffect.PlayUnboundSounds(onHurtWolf);
+        }
         else if (currentenemyHealth > 0)
         {
             if (!isObject && _damage > 0f) Blood.Spill(EnemyFairness.BodyCenter(this), AwayFromRowdy(), isCritical ? 9 : 5);
             isBeingHit = true;
             onHurtWolf.Invoke();
             SoundEffect.PlayUnboundSounds(onHurtWolf);
-            anima.Play("GetHit", 0, 0f);
+            if (anima != null) anima.Play("GetHit", 0, 0f);
+            else HitFlash.Flash(this); // code-animated enemies (Red Jelly) still flash
 
             if (isParryTime)
             {
@@ -396,6 +432,7 @@ public class EnemyHealth : MonoBehaviour
                 {
                     Instantiate(weaponDropPrefab, transform.position, Quaternion.identity);
                 }
+                if (!isObject) WeaponBoons.ExtraDrop(transform.position); // boon weapons drop more often
 
                 if (bloodKill != null && !isObject && GameSettings.BloodOn)
                 {

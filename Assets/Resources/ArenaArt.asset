@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c1e4a92b5d84f0f9a3e6b21c8d7f405, type: 3}
+  m_Name: ArenaArt
+  m_EditorClassIdentifier: Assembly-CSharp::ArenaArt
+  earthPile: {fileID: 2800000, guid: 2c4f310a71eeb924eaeee279ebafd3e1, type: 3}
+  sandPile: {fileID: 2800000, guid: 587a04276ce991a4c93226b4176cafcf, type: 3}
+  earthWall: {fileID: 2800000, guid: b4c6ce1d4f0204249a9a383deb30273a, type: 3}
+  earthWallHole: {fileID: 2800000, guid: a8acbdd8f030d6b48ad950af824d0926, type: 3}
+  fatPillar: {fileID: 2800000, guid: a6e3ab0017d2b71458f50adeff21fa1d, type: 3}
+  pillar: {fileID: 2800000, guid: a66ccde35bf7ef243a347628034b7981, type: 3}
+  doublePillar: {fileID: 2800000, guid: 0949ac403ed18f74b803a2bb199f1d5d, type: 3}
+  megaCliffA: {fileID: 2800000, guid: d345fdfd72bf47a429794b19d2b16a76, type: 3}
+  megaCliffE: {fileID: 2800000, guid: a672e5d7a3c56ab48bf375387d02fbd5, type: 3}
+  wolfSkull: {fileID: 2800000, guid: d4b45bce47dc25e4989807a5d582db6c, type: 3}
+  palm: {fileID: 2800000, guid: cf1f1236a44f6344db1f8c2851d4f948, type: 3}
+  bigPalm: {fileID: 2800000, guid: fa29180a28b75884c8e0dc6d2fa7d918, type: 3}
+  lake: {fileID: 2800000, guid: 87973031df13e224c8293e616c1b68c9, type: 3}
+  fog1: {fileID: 2800000, guid: 06a3c15cb4d426a4d8106bed80666cc9, type: 3}
+  fog2: {fileID: 2800000, guid: 16a730802bb3f534695dbc9272160f4c, type: 3}
+  fog3: {fileID: 2800000, guid: 21eb4d3102c7dd44a89c4c3fbe82a81b, type: 3}
+  frontzada: {fileID: 2800000, guid: 35457c41dba150b408430ab074f16583, type: 3}
+  passThrough: {fileID: 2800000, guid: 2bd7fa0112c8af34d82918e808e5378b, type: 3}

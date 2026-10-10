@@ -29,6 +29,7 @@ MonoBehaviour:
   sparkBurst: {fileID: 2800000, guid: db276f46c2bfe454aa640a3a7ace7abb, type: 3}
   groundPound: {fileID: 2800000, guid: a151ba29d8a54f345b687e259fa2efdb, type: 3}
   pinkWave: {fileID: 2800000, guid: fb17c84c055979543a1ff0e899acbca7, type: 3}
+  flora: {fileID: 2800000, guid: bf88e873bffc6ab4c9687b893104492b, type: 3}
   food:
   - {fileID: -5627360694644326727, guid: ba2eccfd3b7bfb545ad927127ce87248, type: 3}
   - {fileID: 1656880556506584872, guid: dc0dfbe10b9147642a13a2ecbe93b754, type: 3}
@@ -85,7 +86,7 @@ MonoBehaviour:
   waveCrash: {fileID: 8300000, guid: c2e9de1ed9c22a248a464957811472c3, type: 3}
   waterBoom: {fileID: 8300000, guid: be7dc55967b03a947a7ac27f2fcf307d, type: 3}
   boto: {fileID: 8300000, guid: 88352ec90ec5ff84589a178a99063c44, type: 3}
-  splash: {fileID: 8300000, guid: 55807209a2aa0f44f8a5bbea0fd31acd, type: 3}
+  splash: {fileID: 8300000, guid: be7dc55967b03a947a7ac27f2fcf307d, type: 3}
   vines: {fileID: 8300000, guid: 77faa73f589a7ae40a9f813e479510b7, type: 3}
   sporePop: {fileID: 8300000, guid: 9a046311627ada44798d7ec78db7867e, type: 3}
   rockBreak: {fileID: 8300000, guid: 67766b3f1cd2f594985ca1127f612c66, type: 3}

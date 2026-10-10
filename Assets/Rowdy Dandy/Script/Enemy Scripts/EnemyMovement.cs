@@ -344,6 +344,17 @@ public class EnemyMovement : MonoBehaviour
         timeOutOfRange = 0f;
     }
 
+    // Turn to look at a world x right now (arena spawns). Flips THIS transform: on prefabs whose AI lives on a child
+    // (Crabby, Big Werewolf, Horse Rider, Werefast) flipping the root instead mirrored them for good - they chased
+    // Rowdy walking backwards.
+    public void FaceTowards(float worldX)
+    {
+        float d = Mathf.Sign(worldX - transform.position.x);
+        if (d == 0f) return;
+        currentFacingDirection = d;
+        transform.localScale = GetFlippedScale(d);
+    }
+
     private void OnDisable() => LeaveTurnQueue();
     private void OnDestroy() => LeaveTurnQueue();
 
@@ -419,6 +430,9 @@ public class EnemyMovement : MonoBehaviour
     // scene for every drownable enemy (the wave spawner makes new ones all the time)
     private static readonly Dictionary<int, List<Collider2D>> drowningCollidersByMask = new Dictionary<int, List<Collider2D>>();
     private static int drowningCacheScene = -1;
+
+    // Water built at runtime (the Purple Reign's pool): enemies spawned after this look the water up again
+    public static void ForgetWaterCache() { drowningCollidersByMask.Clear(); drowningCacheScene = -1; }
 
     private List<Collider2D> GetDrowningColliders()
     {

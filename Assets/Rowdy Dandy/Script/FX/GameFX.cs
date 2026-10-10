@@ -117,7 +117,7 @@ public class SheetFX : MonoBehaviour
         Sprite[] frames = ItemArt.Frames(sheet, frameCount, 1, pivot ?? new Vector2(0.5f, 0.5f), pixelsPerUnit);
         var go = new GameObject("FX " + sheet.name);
         go.transform.position = position;
-        go.transform.localScale = Vector3.one * scale;
+        go.transform.localScale = Vector3.one * Mathf.Min(1f, scale); // art never shown above its own pixel size
         var fx = go.AddComponent<SheetFX>();
         fx.frames = frames;
         fx.fps = fps;
@@ -320,18 +320,25 @@ public class PulseRing : MonoBehaviour
     private SpriteRenderer sr;
     private float age, life, radius;
     private Color color;
-    private bool flat;
+    private bool flat, shaped;
 
     public static PulseRing Spawn(Vector3 at, Color color, float radius, float life = 0.4f, int order = 90, bool flat = false)
     {
-        var go = new GameObject("Pulse Ring");
+        // drawn per real pixel (PixelShape): a big ring keeps a thin crisp line instead of a 64 px ring blown up
+        SpriteRenderer shape = PixelShape.Make("Pulse Ring", PixelShape.Kind.Ring, at, order, null, radius > 2.5f ? 3f : 2f);
+        GameObject go = shape != null ? shape.gameObject : new GameObject("Pulse Ring");
         go.transform.position = at;
         var p = go.AddComponent<PulseRing>();
-        p.sr = go.AddComponent<SpriteRenderer>();
-        p.sr.sprite = Ring;
-        p.sr.sortingLayerName = "Default";
-        p.sr.sortingOrder = order;
-        if (CatFX.Unlit != null) p.sr.sharedMaterial = CatFX.Unlit;
+        p.shaped = shape != null;
+        if (shape != null) p.sr = shape;
+        else
+        {
+            p.sr = go.AddComponent<SpriteRenderer>();
+            p.sr.sprite = Ring;
+            p.sr.sortingLayerName = "Default";
+            p.sr.sortingOrder = order;
+            if (CatFX.Unlit != null) p.sr.sharedMaterial = CatFX.Unlit;
+        }
         p.color = color;
         p.life = life;
         p.radius = radius;
@@ -347,7 +354,8 @@ public class PulseRing : MonoBehaviour
         if (t >= 1f) { Destroy(gameObject); return; }
         float ease = 1f - (1f - t) * (1f - t);
         float size = Mathf.Lerp(0.15f, radius * 2f, ease) / 1f; // sprite is 1 unit wide
-        transform.localScale = new Vector3(size, flat ? size * 0.3f : size, 1f);
+        if (shaped) PixelShape.Size(sr, size, flat ? size * 0.3f : size);
+        else transform.localScale = new Vector3(size, flat ? size * 0.3f : size, 1f);
         sr.color = new Color(color.r, color.g, color.b, color.a * (1f - t));
     }
 

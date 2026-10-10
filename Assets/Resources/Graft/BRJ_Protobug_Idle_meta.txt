@@ -1,0 +1,9 @@
+frames=4
+w=112
+h=112
+scale=1
+canvasW=273
+canvasH=165
+centerX=57.5
+centerY=29.5
+delays=200,200,200,200

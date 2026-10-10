@@ -48,8 +48,12 @@ public class LevelUpFX : MonoBehaviour
         float feetOffset = body != null ? body.bounds.min.y - rowdy.position.y : -0.5f;
         float headOffset = body != null ? body.bounds.max.y - rowdy.position.y : 0.6f;
 
-        // Pillar of light (behind him) + a soft gold Light2D
-        SpriteRenderer beam = MakeRenderer("Beam", BeamSprite, sortingLayer, sortingOrder - 1, new Color(Gold.r, Gold.g, Gold.b, 0f));
+        // Pillar of light (behind him) + a soft gold Light2D. Drawn per real pixel (PixelShape) so the tall beam
+        // doesn't stretch an 8 px sprite into huge smeared pixels; the old sprite stays as a fallback.
+        SpriteRenderer beam = PixelShape.Make("Beam", PixelShape.Kind.Beam, transform.position, sortingOrder - 1, transform);
+        bool shapedBeam = beam != null;
+        if (beam != null) { beam.sortingLayerID = sortingLayer; beam.color = new Color(Gold.r, Gold.g, Gold.b, 0f); }
+        else beam = MakeRenderer("Beam", BeamSprite, sortingLayer, sortingOrder - 1, new Color(Gold.r, Gold.g, Gold.b, 0f));
         Light2D glow = null;
         try
         {
@@ -98,15 +102,16 @@ public class LevelUpFX : MonoBehaviour
             float fade = 1f - Mathf.Clamp01((t - 0.6f) / 1.0f);
             float width = Mathf.Lerp(1.1f, 0.35f, Mathf.Clamp01(t / duration));
             beam.transform.localPosition = new Vector3(0f, feetOffset, 0f);
-            beam.transform.localScale = new Vector3(width, Mathf.Lerp(0.2f, 4.5f, grow), 1f);
+            if (shapedBeam) PixelShape.Size(beam, width * 8f / 32f, Mathf.Lerp(0.2f, 4.5f, grow)); // same size as the old 8 x 32 px sprite at 32 ppu
+            else beam.transform.localScale = new Vector3(width, Mathf.Lerp(0.2f, 4.5f, grow), 1f);
             beam.color = new Color(Gold.r, Gold.g, Gold.b, 0.55f * fade * Mathf.Clamp01(t / 0.1f));
 
             if (glow != null) glow.intensity = 2.2f * Mathf.Sin(Mathf.Clamp01(t / duration) * Mathf.PI);
 
-            // Text pops in, floats up, fades out
-            float pop = t < 0.12f ? Mathf.Lerp(1.6f, 1f, t / 0.12f) : 1f;
-            text.transform.localPosition = new Vector3(0f, headOffset + 0.25f + t * 0.35f, 0f);
-            text.transform.localScale = Vector3.one * pop;
+            // Text pops in (a little hop, always at its own pixel size), floats up, fades out
+            float hop = t < 0.18f ? Mathf.Sin(t / 0.18f * Mathf.PI) * 0.18f : 0f;
+            float y = headOffset + 0.25f + t * 0.35f + hop;
+            text.transform.localPosition = new Vector3(0f, Mathf.Round(y * 64f) / 64f, 0f);
             text.color = new Color(Gold.r, Gold.g, Gold.b, 1f - Mathf.Clamp01((t - 1.2f) / 0.6f));
 
             for (int i = 0; i < sparkCount; i++)
@@ -132,13 +137,19 @@ public class LevelUpFX : MonoBehaviour
     // Gold ring rushing outwards; every enemy it passes takes AoeDamage (once), credited to Rowdy
     private IEnumerator Shockwave(Vector3 center)
     {
-        var ringObject = new GameObject("Shockwave");
-        ringObject.transform.position = center;
-        var ring = ringObject.AddComponent<SpriteRenderer>();
-        ring.sprite = RingSprite;
-        ring.sortingLayerName = "Default";
-        ring.sortingOrder = 150;
-        if (UnlitMaterial != null) ring.sharedMaterial = UnlitMaterial;
+        // per-pixel ring (PixelShape): 3 px line at any radius, not a 48 px ring scaled 9x
+        SpriteRenderer ring = PixelShape.Make("Shockwave", PixelShape.Kind.Ring, center, 150, null, 3f);
+        bool shaped = ring != null;
+        GameObject ringObject = shaped ? ring.gameObject : new GameObject("Shockwave");
+        if (!shaped)
+        {
+            ringObject.transform.position = center;
+            ring = ringObject.AddComponent<SpriteRenderer>();
+            ring.sprite = RingSprite;
+            ring.sortingLayerName = "Default";
+            ring.sortingOrder = 150;
+            if (UnlitMaterial != null) ring.sharedMaterial = UnlitMaterial;
+        }
 
         var hit = new System.Collections.Generic.HashSet<EnemyHealth>();
         GameObject boom = Resources.Load<GameObject>("VFX/Explosion");
@@ -151,8 +162,8 @@ public class LevelUpFX : MonoBehaviour
             t += Time.unscaledDeltaTime;
             float k = Mathf.Clamp01(t / expand);
             float radius = Mathf.Lerp(0.2f, AoeRadius, 1f - (1f - k) * (1f - k));
-            float diameter = RingSprite.bounds.size.x;
-            ringObject.transform.localScale = Vector3.one * (radius * 2f / diameter);
+            if (shaped) PixelShape.Size(ring, radius * 2f, radius * 2f);
+            else ringObject.transform.localScale = Vector3.one * (radius * 2f / RingSprite.bounds.size.x);
             float fade = 1f - Mathf.Clamp01((t - expand) / linger);
             ring.color = new Color(Gold.r, Gold.g, Gold.b, 0.9f * fade);
 

@@ -46,6 +46,7 @@ public static class BoonArtSetup
         changed |= Fill(ref art.sparkBurst, NewStuff + "FX_DeckFix_Upgrade.png");
         changed |= Fill(ref art.groundPound, NewStuff + "FX_GroundPound.png");
         changed |= Fill(ref art.pinkWave, "Assets/Misc/Test/testWave.png");
+        changed |= Fill(ref art.flora, "Assets/Scenery/Assets/RDR_Flowers.png");
 
         // the Crazy Chef's food (.aseprite files: the sprite inside each)
         string[] foods = { "ovo", "pao", "tomate", "guejo", "armondega", "arface" };
@@ -99,7 +100,7 @@ public static class BoonArtSetup
         changed |= Fill(ref art.waveCrash, Hags + "Cards/Tower/Iara/Iara Attack.mp3");
         changed |= Fill(ref art.waterBoom, Hags + "Cards/Tower/Iara/Iara Explosion.mp3");
         changed |= Fill(ref art.boto, Hags + "Cards/Magic/Boto/Boto Attack.wav");
-        changed |= Fill(ref art.splash, Sfx + "small-waves-onto-the-sand-143040.mp3");
+        changed |= Fill(ref art.splash, Hags + "Cards/Tower/Iara/Iara Explosion.mp3"); // (the beach ambience was silent for its first seconds)
         changed |= Fill(ref art.vines, Hags + "Cards/Tower/Curupira/Curupira Attack.mp3");
         changed |= Fill(ref art.sporePop, Hags + "Cards/Magic/Anhanga/Anhanga.wav");
         changed |= Fill(ref art.rockBreak, Sfx + "grab-gravel-2-36335.mp3");

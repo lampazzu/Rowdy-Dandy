@@ -195,7 +195,7 @@ public class EXPGem : MonoBehaviour
         // Add EXP
         if (PlayerStats.Instance != null)
         {
-            PlayerStats.Instance.AddEXP(expValue);
+            PlayerStats.Instance.AddEXP(Balance.GemValue(expValue)); // Balance owns the number (the prefab's 0.2 was far too low)
         }
 
         // Chime: each gem in a quick streak plays a step higher

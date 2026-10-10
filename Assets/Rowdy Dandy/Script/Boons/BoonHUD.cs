@@ -161,24 +161,32 @@ public class BoonHUD : MonoBehaviour
 
     private void UpdateMoon()
     {
-        bool has = Boons.Has("moon");
+        // the Special slot's meter: Call of the Moon (werewolf) or Stephmoss (the poison patron's form)
+        bool steph = Boons.Has("stephmoss");
+        bool has = Boons.Has("moon") || steph;
+        bool active = steph ? StephmossForm.Active : Werewolf.Active;
+        bool readyNow = steph ? StephmossForm.Ready : Werewolf.Ready;
+        float charge = steph ? StephmossForm.Charge01 : Werewolf.Charge01;
+        float left = steph ? StephmossForm.TimeLeft01 : Werewolf.TimeLeft01;
+        Color tone = steph ? new Color(0.75f, 1f, 0.25f) : new Color(1f, 0.2f, 0.3f);
         moonFill.enabled = has;
         moonGlow.enabled = has;
         moonText.gameObject.SetActive(has);
-        moonButton.enabled = has && Werewolf.Ready && !Werewolf.Active;
+        moonButton.enabled = has && readyNow && !active;
+        if (slots == null || slots.Count < 5) return;
         Image special = slots[4].plate;
         Image specialIcon = slots[4].icon;
         if (!has) { special.rectTransform.localScale = Vector3.one; return; }
 
         float now = Time.unscaledTime;
-        specialIcon.color = new Color(1f, 1f, 1f, Werewolf.Active ? 1f : 0.35f + 0.65f * Werewolf.Charge01);
-        moonFill.fillAmount = Werewolf.Active ? Werewolf.TimeLeft01 : Werewolf.Charge01;
-        bool ready = Werewolf.Ready && !Werewolf.Active;
+        specialIcon.color = new Color(1f, 1f, 1f, active ? 1f : 0.35f + 0.65f * charge);
+        moonFill.fillAmount = active ? left : charge;
+        bool ready = readyNow && !active;
         float pulse = 0.5f + 0.5f * Mathf.Sin(now * 6f);
-        moonFill.color = Werewolf.Active ? new Color(1f, 0.2f, 0.3f, 0.75f) : ready ? new Color(1f, 0.35f + 0.3f * pulse, 0.45f, 0.75f) : new Color(0.9f, 0.85f, 1f, 0.45f);
+        moonFill.color = active ? new Color(tone.r, tone.g, tone.b, 0.75f) : ready ? new Color(tone.r, Mathf.Min(1f, tone.g + 0.3f * pulse), tone.b + 0.15f, 0.75f) : new Color(0.9f, 0.85f, 1f, 0.45f);
         moonFlash = Mathf.Max(0f, moonFlash - Time.unscaledDeltaTime * 1.5f);
-        float glow = ready ? 0.35f + 0.35f * pulse : Werewolf.Active ? 0.4f : 0f;
-        moonGlow.color = new Color(1f, 0.2f, 0.3f, Mathf.Clamp01(glow + moonFlash));
+        float glow = ready ? 0.35f + 0.35f * pulse : active ? 0.4f : 0f;
+        moonGlow.color = new Color(tone.r, tone.g, tone.b, Mathf.Clamp01(glow + moonFlash));
 
         moonShake = Mathf.Max(0f, moonShake - Time.unscaledDeltaTime);
         float shake = moonShake > 0f ? Mathf.Sin(now * 70f) * 6f * moonShake / 0.35f : 0f;
@@ -191,10 +199,9 @@ public class BoonHUD : MonoBehaviour
             moonButton.sprite = ButtonIcons.Get(GameInput.IconId(GameInput.Act.Werewolf));
             moonButton.rectTransform.sizeDelta = ButtonIcons.UISize(moonButton.sprite, 2);
         }
-        moonText.SetText(Werewolf.Active ? "WOLF!" : ready ? "FULL!" : Mathf.FloorToInt(Werewolf.Charge01 * 100f) + "%");
-        moonText.Color = Werewolf.Active || ready ? new Color(1f, 0.45f + 0.3f * pulse, 0.5f) : new Color(0.85f, 0.8f, 0.95f);
+        moonText.SetText(active ? (steph ? "BUG!" : "WOLF!") : ready ? "FULL!" : Mathf.FloorToInt(charge * 100f) + "%");
+        moonText.Color = active || ready ? new Color(tone.r, Mathf.Min(1f, tone.g * 0.6f + 0.3f * pulse + 0.2f), tone.b + 0.2f) : new Color(0.85f, 0.8f, 0.95f);
     }
-
     // ---------------------------------------------------------------- the BUILD panel (with the stats screen)
     private void UpdateBuildPanel(IReadOnlyList<string> owned)
     {

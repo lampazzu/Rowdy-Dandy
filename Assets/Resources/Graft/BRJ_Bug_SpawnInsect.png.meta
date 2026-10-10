@@ -1,0 +1,429 @@
+fileFormatVersion: 2
+guid: 7554da627bbd8b246a4ef0f9c2d6fb0b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2403721634119517290
+    second: BRJ_Bug_SpawnInsect_0
+  - first:
+      213: -2460482499360374205
+    second: BRJ_Bug_SpawnInsect_1
+  - first:
+      213: 2273085380790310610
+    second: BRJ_Bug_SpawnInsect_2
+  - first:
+      213: -2040044604515971649
+    second: BRJ_Bug_SpawnInsect_3
+  - first:
+      213: 8096763518304447769
+    second: BRJ_Bug_SpawnInsect_4
+  - first:
+      213: 7360043566470329251
+    second: BRJ_Bug_SpawnInsect_5
+  - first:
+      213: 3803920724546963013
+    second: BRJ_Bug_SpawnInsect_6
+  - first:
+      213: -6859729732923665344
+    second: BRJ_Bug_SpawnInsect_7
+  - first:
+      213: 7854851265241780169
+    second: BRJ_Bug_SpawnInsect_8
+  - first:
+      213: 678226022530798603
+    second: BRJ_Bug_SpawnInsect_9
+  - first:
+      213: 6373821800696558947
+    second: BRJ_Bug_SpawnInsect_10
+  - first:
+      213: 2866568163448156364
+    second: BRJ_Bug_SpawnInsect_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_0
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 8
+        width: 61
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a648d9c371cbb5120800000000000000
+      internalID: 2403721634119517290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_1
+      rect:
+        serializedVersion: 2
+        x: 851
+        y: 10
+        width: 132
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3424f89f33c9addd0800000000000000
+      internalID: -2460482499360374205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_2
+      rect:
+        serializedVersion: 2
+        x: 993
+        y: 11
+        width: 131
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d6d32a4c1f9b8f10800000000000000
+      internalID: 2273085380790310610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_3
+      rect:
+        serializedVersion: 2
+        x: 1135
+        y: 10
+        width: 132
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbd8fd5ad3e40b3e0800000000000000
+      internalID: -2040044604515971649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_4
+      rect:
+        serializedVersion: 2
+        x: 1302
+        y: 3
+        width: 114
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91de0ea758b7d5070800000000000000
+      internalID: 8096763518304447769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_5
+      rect:
+        serializedVersion: 2
+        x: 1374
+        y: 114
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a3fcd6e0a0242660800000000000000
+      internalID: 7360043566470329251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_6
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 0
+        width: 131
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5464e54bebd3ac430800000000000000
+      internalID: 3803920724546963013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_7
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 0
+        width: 140
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04456edf6285dc0a0800000000000000
+      internalID: -6859729732923665344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_8
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 126
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cf8344eb99020d60800000000000000
+      internalID: 7854851265241780169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_9
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 66
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b04df5e59fa896900800000000000000
+      internalID: 678226022530798603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_10
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 14
+        width: 89
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 365b824682d547850800000000000000
+      internalID: 6373821800696558947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_SpawnInsect_11
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 16
+        width: 93
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc075c29e8818c720800000000000000
+      internalID: 2866568163448156364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BRJ_Bug_SpawnInsect_0: 2403721634119517290
+      BRJ_Bug_SpawnInsect_1: -2460482499360374205
+      BRJ_Bug_SpawnInsect_10: 6373821800696558947
+      BRJ_Bug_SpawnInsect_11: 2866568163448156364
+      BRJ_Bug_SpawnInsect_2: 2273085380790310610
+      BRJ_Bug_SpawnInsect_3: -2040044604515971649
+      BRJ_Bug_SpawnInsect_4: 8096763518304447769
+      BRJ_Bug_SpawnInsect_5: 7360043566470329251
+      BRJ_Bug_SpawnInsect_6: 3803920724546963013
+      BRJ_Bug_SpawnInsect_7: -6859729732923665344
+      BRJ_Bug_SpawnInsect_8: 7854851265241780169
+      BRJ_Bug_SpawnInsect_9: 678226022530798603
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

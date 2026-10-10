@@ -130,12 +130,12 @@ public static class BoonCatalog
                     "THE WOLVES OUT THERE ARE MY CHILDREN. EAT THEM ANYWAY.", "THE SUN? A BIG BRIGHT SHOW-OFF. IGNORE HIM." },
             new[] { "FEED. GROW. HOWL.", "NOW YOU HUNT WITH ME.", "GRRRR. YES." });
 
-        Add(Patron.Rot, "MAMA ROT", "PATRON OF ROT AND BLOOM", new Color(0.55f, 1f, 0.25f), new Color(0.72f, 0.38f, 1f), "draw:sporestep",
-            new[] { "HELLO DEARIE. EVERYTHING ROTS. THAT IS WHAT MAKES THE FLOWERS SO PRETTY.", "COME, SWEETIE. MAMA HAS SOMETHING SPECIAL GROWING FOR YOU.",
-                    "SUCH A HEALTHY BOY. WE CAN FIX THAT. FOR THEM, I MEAN.", "MY GARDEN NEEDS FERTILIZER, DEARIE. YOU KNOW WHERE IT IS.",
-                    "EAT YOUR GREENS. THEN MAKE THEM GREEN." },
-            new[] { "THERE YOU GO. NOW GO MAKE MAMA SOME COMPOST.", "GROW BIG AND MEAN, DEARIE.", "SO PROUD OF YOU, SWEETIE." });
-
+        // The poison patron is STEPHMOSS, LORD OF SEVERED WOODS (the user's boss from Graft). Enum stays Rot (saves).
+        Add(Patron.Rot, "STEPHMOSS", "LORD OF SEVERED WOODS", new Color(0.72f, 1f, 0.25f), new Color(0.95f, 0.8f, 0.25f), "draw:sporestep",
+            new[] { "...SNIP. SNIP. THE WOODS WERE QUIET BEFORE YOU, SURFER.", "EVERYTHING WITH A STEM GETS CUT. EVERYTHING WITH A HEART GETS POISON.",
+                    "MY SWARM LIKES YOUR HAIR. IT WANTS TO NEST IN IT.", "THE GROVE BLEEDS GREEN. LET THEM BLEED GREEN TOO.",
+                    "I HAVE SIX LEGS AND TWO BLADES. YOU HAVE A FISHING ROD. ADORABLE.", "BUZZ... DO NOT SWAT. TAKE THE GIFT." },
+            new[] { "GO. ROT THEM FROM THE INSIDE.", "THE SWARM GOES WITH YOU.", "SNIP SNIP, LITTLE DANDY." });
         Add(Patron.Guild, "STINKY BOIS GUILD", "PATRON OF THE STRAYS", new Color(0.8f, 0.62f, 1f), new Color(1f, 0.72f, 0.56f), "draw:catface",
             new[] { "WE ARE THE GUILD. WE SMELL. WE RULE THE ALLEYS.", "OI, DANDY. YOU FEED OUR BOYS, WE WATCH YOUR BACK. DEAL?",
                     "NINE LIVES EACH, BOSS. THAT IS A LOT OF LIVES.", "THE BOSS SAYS HI. THE BOSS IS ASLEEP IN A BOX.",
@@ -240,15 +240,15 @@ public static class BoonCatalog
         Add("openwounds", "OPEN WOUNDS", Patron.Lycanthropy, BoonSlot.Attack,
             "+10% CRIT CHANCE. CRITICAL HITS MAKE ENEMIES BLEED {0} DAMAGE PER SECOND FOR 4S.", "draw:drop", V(6, 9, 13));
         Add("alpharoar", "ALPHA ROAR", Patron.Lycanthropy, BoonSlot.Dash,
-            "SURF DASH ROARS: ENEMIES NEAR YOU ARE TERRIFIED FOR {0}S. ONCE EVERY 6S.", "sheet:fear:9:5", V(1.2f, 1.6f, 2.1f));
+            "SURF DASH ROARS: ENEMIES NEAR YOU ARE TERRIFIED FOR {0}S.", "sheet:fear:9:5", V(1.2f, 1.6f, 2.1f));
         Add("feast", "MOON FEAST", Patron.Lycanthropy, BoonSlot.Passive,
             "THE MOON METER FILLS {0}% FASTER. AS A WEREWOLF, EVERY KILL HEALS 3.", "draw:moonbite", V(40, 60, 80)).condition = () => Boons.Has("moon");
         Add("silverfur", "SILVER FUR", Patron.Lycanthropy, BoonSlot.Passive,
             "AT NIGHT YOU TAKE {0}% LESS DAMAGE.", "draw:fur", V(15, 22, 30));
 
-        // ---------------------------------------------------------------- MAMA ROT
+        // ---------------------------------------------------------------- STEPHMOSS (was Mama Rot)
         Add("sporestep", "SPORE STEP", Patron.Rot, BoonSlot.Jump,
-            "EVERY LANDING PUFFS A MUSHROOM CLOUD: {0} POISON DAMAGE PER SECOND FOR 3S.", "draw:sporestep", V(8, 12, 16));
+            "EVERY LANDING PUFFS A MUSHROOM CLOUD: {0} POISON DAMAGE PER SECOND FOR 3S.", "flora:1:toxic", V(8, 12, 16));
         Add("rottenedge", "ROTTEN EDGE", Patron.Rot, BoonSlot.Attack,
             "ALL YOUR HITS POISON: {0} DAMAGE PER SECOND FOR 4S.", "item:vfxPoison:10:4", V(6, 9, 13));
         Add("overgrowth", "EARTH ERUPT", Patron.Rot, BoonSlot.Passive,
@@ -263,8 +263,12 @@ public static class BoonCatalog
             "ENEMIES THAT HIT YOU TAKE {0} THORN DAMAGE AND GET POISONED.", "draw:thorn", V(10, 16, 22));
         Add("rootsnare", "ROOT SNARE", Patron.Rot, BoonSlot.Dash,
             "SURF DASH LEAVES GRASPING ROOTS WHERE YOU STARTED. ENEMIES THAT STEP IN ARE ROOTED {0}S AND POISONED.", "draw:roots", V(1.5f, 2f, 2.5f));
+        BoonDef steph = Add("stephmoss", "BECOME STEPHMOSS", Patron.Rot, BoonSlot.Special,
+            "PRESS {WOLF} WHEN THE SWARM IS READY: BECOME STEPHMOSS FOR {0}S. WALK TO ROLL A WHIRLWIND, DASH TO TELEPORT, ATTACK FOR A CROSS BLADE, DOWN + ATTACK FOR EXPLODING MOSQUITOES.", "draw:sporestep", F(12));
+        steph.legendaryOnly = true;
+        steph.iconTint = new Color(0.85f, 1f, 0.4f);
         Add("bloom", "BLOOM", Patron.Rot, BoonSlot.Passive,
-            "EVERY 5TH POISON KILL GROWS A FLOWER. TOUCH IT TO HEAL {0} HP.", "draw:flower", V(10, 15, 20));
+            "EVERY 5TH POISON KILL GROWS A FLOWER. TOUCH IT TO HEAL {0} HP.", "flora:0", V(10, 15, 20));
         Add("sporelob", "SPORE LOB", Patron.Rot, BoonSlot.Attack,
             "EVERY 3RD SWING LOBS A SPORE POD THAT BURSTS INTO A POISON CLOUD: {0} DAMAGE PER SECOND.", "draw:pod", V(5, 8, 11));
 
@@ -278,13 +282,13 @@ public static class BoonCatalog
         Add("felinefury", "FELINE FURY", Patron.Guild, BoonSlot.Attack,
             "EVERY 4TH HIT, A GHOST CAT POUNCES ON THE ENEMY FOR {0} DAMAGE.", "draw:catface", V(22, 32, 44));
         Add("catcall", "CAT CALL", Patron.Guild, BoonSlot.Dash,
-            "SURF DASH WAKES YOUR CATS: ALL THEIR POWERS ARE READY AGAIN. ONCE EVERY {0}S.", "draw:bell", V(9, 7, 5));
+            "SURF DASH WAKES YOUR CATS: ALL THEIR POWERS ARE READY AGAIN.", "draw:bell", V(9, 7, 5));
         Add("straytax", "STRAY TAX", Patron.Guild, BoonSlot.Passive,
             "KILLS HAVE A {0}% CHANCE TO DROP A FISH TREAT. GRAB IT: HEAL 8 AND YOUR CATS COOL DOWN.", "draw:fish", V(8, 12, 16));
         Add("hairball", "HAIRBALL", Patron.Guild, BoonSlot.Jump,
             "WHEN YOU JUMP, ONE OF YOUR CATS HACKS A HAIRBALL AT THE NEAREST ENEMY: {0} DAMAGE, SLOWED 40%.", "draw:hairball", V(10, 15, 20)).condition = () => Boons.CatsWithRowdy > 0;
         Add("ambush", "ALLEY AMBUSH", Patron.Guild, BoonSlot.Dash,
-            "SURF DASH SENDS YOUR CATS LEAPING AT THE NEAREST ENEMIES: {0} DAMAGE EACH. ONCE EVERY 5S.", "draw:ambush", V(12, 18, 25)).condition = () => Boons.CatsWithRowdy > 0;
+            "SURF DASH SENDS YOUR CATS LEAPING AT THE NEAREST ENEMIES: {0} DAMAGE EACH.", "draw:ambush", V(12, 18, 25)).condition = () => Boons.CatsWithRowdy > 0;
         Add("stench", "STENCH", Patron.Guild, BoonSlot.Cats,
             "YOUR CATS REEK. ENEMIES NEAR THEM TAKE {0} DAMAGE PER SECOND AND MOVE 25% SLOWER.", "draw:stench", V(3, 5, 7));
         Add("topcat", "TOP CAT", Patron.Guild, BoonSlot.Cats,
@@ -294,7 +298,7 @@ public static class BoonCatalog
         Add("sandwich", "SANDWICH TIME", Patron.Chef, BoonSlot.Passive,
             "EVERY {0} KILLS A GIANT SANDWICH FALLS FROM THE SKY. EAT IT: HEAL 25 AND +20% DAMAGE FOR 8S.", "draw:sandwich", V(14, 11, 8));
         Add("meatball", "MEATBALL MORTAR", Patron.Chef, BoonSlot.Attack,
-            "EVERY 3RD SWING LOBS A MEATBALL THAT EXPLODES IN SAUCE: {0} DAMAGE AROUND IT.", "food:armondega", V(14, 20, 28));
+            "EVERY 3RD SWING LOBS A MEATBALL THAT EXPLODES IN SAUCE: {0} DAMAGE AROUND IT.", "food:armondega", V(17, 24, 33));
         Add("eggs", "EGG TOSS", Patron.Chef, BoonSlot.Dash,
             "SURF DASH THROWS 3 EGGS. THEY CRACK ON ENEMIES: {0} DAMAGE AND YOLK IN THE EYES (STUNNED 0.8S).", "food:ovo", V(8, 12, 16));
         Add("tomato", "TOMATO SPLAT", Patron.Chef, BoonSlot.Jump,
@@ -304,7 +308,7 @@ public static class BoonCatalog
         Add("secretsauce", "SECRET SAUCE", Patron.Chef, BoonSlot.Passive,
             "ALL YOUR HEALING IS {0}% STRONGER, AND EVERY BIG HEAL SPLASHES HOT SAUCE ON ENEMIES NEAR YOU FOR 10.", "draw:sauce", V(25, 40, 55));
         Add("foodfight", "FOOD FIGHT", Patron.Chef, BoonSlot.Cats,
-            "WHEN A CAT ATTACKS, IT ALSO THROWS FOOD AT A NEARBY ENEMY: {0} DAMAGE.", "food:pao", V(8, 12, 16));
+            "WHEN A CAT ATTACKS, IT ALSO THROWS FOOD AT A NEARBY ENEMY: {0} DAMAGE.", "food:pao", V(9, 13, 18));
 
         // ---------------------------------------------------------------- THE BLACKSMITH
         Add("weaponsnob", "WEAPON SNOB", Patron.Smith, BoonSlot.Passive,
@@ -336,7 +340,7 @@ public static class BoonCatalog
         Add("halo", "HALO", Patron.Sun, BoonSlot.Passive,
             "THREE LITTLE SUNS CIRCLE YOU, BURNING ENEMIES THEY TOUCH FOR {0}.", "draw:halo", V(6, 9, 12));
         Add("blinding", "BLINDING DASH", Patron.Sun, BoonSlot.Dash,
-            "SURF DASH FLASHES LIKE HIGH NOON: ENEMIES NEAR YOU ARE BLINDED (STUNNED) FOR {0}S. ONCE EVERY 4S.", "draw:flash", V(1f, 1.4f, 1.8f));
+            "SURF DASH FLASHES LIKE HIGH NOON: ENEMIES NEAR YOU ARE BLINDED (STUNNED) FOR {0}S.", "draw:flash", V(1f, 1.4f, 1.8f));
         Add("sunspot", "SUNSPOT", Patron.Sun, BoonSlot.Jump,
             "LANDING LEAVES A POOL OF SUNLIGHT FOR 3S: ENEMIES IN IT BURN FOR {0} PER SECOND, YOU HEAL 2 PER SECOND.", "draw:sunspot", V(6, 9, 12));
 
@@ -350,7 +354,7 @@ public static class BoonCatalog
             narc, new[] { "wipeout" }).iconTint = new Color(1f, 0.55f, 0.85f);
         Duo("redtide", "RED TIDE", Patron.Rot, Patron.Abyss,
             "YOUR WAVES AND WATER BURSTS ARE TOXIC: THEY POISON FOR 8 DAMAGE PER SECOND.", "sheet:waterSonic:9:6",
-            "MAMA ROT: A LITTLE SOMETHING IN THE WATER, DEARIE. SEA ABYSS: THE DEEP APPROVES.",
+            "STEPHMOSS: A LITTLE VENOM IN THE TIDE. SEA ABYSS: THE DEEP APPROVES.",
             rot, new[] { "wipeout", "hangten", "saltwater", "pressure", "ripcurrent" }).iconTint = new Color(0.55f, 1f, 0.35f);
         Duo("wolfwhistle", "WOLF WHISTLE", Patron.Narcissism, Patron.Lycanthropy,
             "EVERY FEW SECONDS, ENEMIES NEAR YOU MAY FREEZE TO STARE AT YOU (CHARMED 1.5S).", "sheet:charm:9:5",
@@ -373,7 +377,7 @@ public static class BoonCatalog
             "CRAZY CHEF: FOR THE KITTIES, ONLY THE BEST! THE GUILD: WE WOULD HAVE EATEN THE BOX. BUT THANKS.", chef, guild).iconTint = new Color(1f, 0.8f, 0.5f);
         Duo("fermented", "FERMENTATION", Patron.Chef, Patron.Rot,
             "YOUR FOOD IS... AGED. MEATBALLS, EGGS AND TOMATOES POISON FOR 8 DAMAGE PER SECOND.", "draw:fester",
-            "CRAZY CHEF: IT IS NOT ROTTEN, IT IS AGED! MAMA ROT: SAME THING, SWEETIE.", chef, rot).iconTint = new Color(0.8f, 1f, 0.5f);
+            "CRAZY CHEF: IT IS NOT ROTTEN, IT IS AGED! STEPHMOSS: AGED, ROTTEN, POISONED. ALL DELICIOUS.", chef, rot).iconTint = new Color(0.8f, 1f, 0.5f);
         Duo("silverclaws", "SILVER CLAWS", Patron.Smith, Patron.Lycanthropy,
             "THE BLACKSMITH FORGES YOUR CLAWS: FERAL SWIPE, POUNCE AND WEREWOLF CLAWS DEAL DOUBLE DAMAGE.", "sheet:clawSlash:6:3",
             "THE BLACKSMITH: SILVER. ON A WEREWOLF. I KNOW. LYCANTHROPY: IT TICKLES.", smith, new[] { "feral", "pounce", "moon" }).iconTint = new Color(0.85f, 0.9f, 1f);

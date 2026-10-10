@@ -19,6 +19,7 @@ public class CursedElder : MonoBehaviour
     [Tooltip("Root scale (hitbox). The art is always drawn at the game's 64 px per unit, whatever this is.")]
     [SerializeField] private float size = 1f;
     [SerializeField] private float maxHealth = 450f;
+    [HideInInspector] public float healthScale = 1f; // the colosseums make it tougher wave by wave
     [SerializeField] private float speedMultiplier = 1.35f;
     [SerializeField] private Color skin = Color.white;
     [SerializeField] private Color glow = new Color(0.65f, 0.55f, 1f, 1f);
@@ -104,7 +105,8 @@ public class CursedElder : MonoBehaviour
         root.localScale = Vector3.Scale(root.localScale, new Vector3(size, size, 1f));
         if (health != null)
         {
-            health.SetMaxHealth(900f);
+            health.SetMaxHealth(900f * healthScale);
+            health.HyperArmor = true; // shrugs off hits (stuns, charms and counters still stagger it)
             health.SetExpDropIfMissing(Resources.Load<GameObject>("Systems/EXPgem"), expGems);
         }
         if (movement != null) movement.moveSpeed *= speedMultiplier;
@@ -133,7 +135,7 @@ public class CursedElder : MonoBehaviour
         }
 
         // Phase 2
-        if (!raging && health.currentenemyHealth <= maxHealth * 0.5f) StartCoroutine(Howl());
+        if (!raging && health.currentenemyHealth <= health.startingenemyHealth * 0.5f) StartCoroutine(Howl());
 
         if (body != null && !busy) body.color = raging ? Color.Lerp(skin, rageGlow, 0.35f) : skin;
 

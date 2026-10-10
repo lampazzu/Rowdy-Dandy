@@ -371,6 +371,7 @@ MonoBehaviour:
   isObject: 0
   pelicanHeartPrefab: {fileID: 2588819697324153842, guid: 5d2a6dbcca5d4e245868b342013713c0, type: 3}
   transformWolf: {fileID: 6359789178061750400, guid: 8f47755fa787d6a4eb4a2330e633ad56, type: 3}
+  oldManBecomesElder: 1
   bloodPrefab: {fileID: 0}
   parryDamage: 0
   expGemPrefab: {fileID: 1320025317354522123, guid: 7a2fdb8d4cdbd4c4daac4f041540aeee, type: 3}
@@ -381,6 +382,7 @@ MonoBehaviour:
   dropChancePercent: 30
   damageTextPrefab: {fileID: 0}
   critFXPrefab: {fileID: 0}
+  showHealthBar: 1
   enableParryRumble: 1
   parryLowFrequency: 0.6
   parryHighFrequency: 1
@@ -416,8 +418,21 @@ MonoBehaviour:
   waterLayer:
     serializedVersion: 2
     m_Bits: 0
-  aquaticBounceForce: 6
-  aquaticStuckThreshold: 4
+  shoreMargin: 0.6
+  enableAquaticLeap: 1
+  leapTriggerRange: 4
+  leapShoreReach: 2.5
+  leapShoreOvershoot: 1.5
+  leapMinHeight: 1.2
+  leapMaxHeight: 3
+  leapMaxSpeedX: 7
+  leapCooldown: 2.5
+  leapWhenPlayerAbove: 1
+  hopBackHeight: 1
+  enableLeapTilt: 1
+  maxLeapTilt: 20
+  leapTiltSpeed: 120
+  leapTiltStep: 0
   wallCheckDistance: 0.8
   obstacleCheckHeight: 0.5
   headClearanceDistance: 1.5
@@ -474,6 +489,18 @@ MonoBehaviour:
     m_Bits: 0
   enableChaseTimeout: 0
   loseTargetTime: 3
+  enableFloorAwareChase: 1
+  floorHeightTolerance: 1.5
+  giveUpTime: 2.5
+  playerOnOtherFloor: 0
+  keepAttackDistance: 0
+  stopAtReachFraction: 0.75
+  waitingDistance: 2.2
+  turnLength: 5
+  waitingForTurn: 0
+  patrolBlockedTime: 0.6
+  sleepWhenFar: 1
+  sleepDistance: 40
   enableDustParticles: 0
   landingDustParticle: {fileID: 0}
   jumpDustParticle: {fileID: 0}

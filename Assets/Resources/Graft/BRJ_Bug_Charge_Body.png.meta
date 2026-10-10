@@ -1,0 +1,1235 @@
+fileFormatVersion: 2
+guid: c6816d2106118ad46bc0d9978850770d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3532726551246728079
+    second: BRJ_Bug_Charge_Body_0
+  - first:
+      213: -3163732675764402953
+    second: BRJ_Bug_Charge_Body_1
+  - first:
+      213: 1435853613232179141
+    second: BRJ_Bug_Charge_Body_2
+  - first:
+      213: -5965978945598658934
+    second: BRJ_Bug_Charge_Body_3
+  - first:
+      213: 8373028499428802175
+    second: BRJ_Bug_Charge_Body_4
+  - first:
+      213: 8056775342268393080
+    second: BRJ_Bug_Charge_Body_5
+  - first:
+      213: -913466763013286996
+    second: BRJ_Bug_Charge_Body_6
+  - first:
+      213: 6131655300292868269
+    second: BRJ_Bug_Charge_Body_7
+  - first:
+      213: -3686888418688459131
+    second: BRJ_Bug_Charge_Body_8
+  - first:
+      213: -6043671101920854523
+    second: BRJ_Bug_Charge_Body_9
+  - first:
+      213: -5665383692114149209
+    second: BRJ_Bug_Charge_Body_10
+  - first:
+      213: -2288609186428859336
+    second: BRJ_Bug_Charge_Body_11
+  - first:
+      213: -8751474325462465139
+    second: BRJ_Bug_Charge_Body_12
+  - first:
+      213: -1597953349523941746
+    second: BRJ_Bug_Charge_Body_13
+  - first:
+      213: -4783599501190757132
+    second: BRJ_Bug_Charge_Body_14
+  - first:
+      213: 9054340437185860635
+    second: BRJ_Bug_Charge_Body_15
+  - first:
+      213: -6165707101285696789
+    second: BRJ_Bug_Charge_Body_16
+  - first:
+      213: -851082959336336510
+    second: BRJ_Bug_Charge_Body_17
+  - first:
+      213: 6056262114443453483
+    second: BRJ_Bug_Charge_Body_18
+  - first:
+      213: 5258232899542330051
+    second: BRJ_Bug_Charge_Body_19
+  - first:
+      213: -109501216802183126
+    second: BRJ_Bug_Charge_Body_20
+  - first:
+      213: 4216594256673118141
+    second: BRJ_Bug_Charge_Body_21
+  - first:
+      213: -7320724811613170794
+    second: BRJ_Bug_Charge_Body_22
+  - first:
+      213: 5476538928097919199
+    second: BRJ_Bug_Charge_Body_23
+  - first:
+      213: -1435882847693805966
+    second: BRJ_Bug_Charge_Body_24
+  - first:
+      213: 5434054545485467053
+    second: BRJ_Bug_Charge_Body_25
+  - first:
+      213: 245285762184931044
+    second: BRJ_Bug_Charge_Body_26
+  - first:
+      213: -871483926854870668
+    second: BRJ_Bug_Charge_Body_27
+  - first:
+      213: -6968679268612867676
+    second: BRJ_Bug_Charge_Body_28
+  - first:
+      213: 2121076763973942209
+    second: BRJ_Bug_Charge_Body_29
+  - first:
+      213: -7757552194368566853
+    second: BRJ_Bug_Charge_Body_30
+  - first:
+      213: -4461816553642421361
+    second: BRJ_Bug_Charge_Body_31
+  - first:
+      213: -5309817888232720145
+    second: BRJ_Bug_Charge_Body_32
+  - first:
+      213: 1590971381653888009
+    second: BRJ_Bug_Charge_Body_33
+  - first:
+      213: 610262886054789121
+    second: BRJ_Bug_Charge_Body_34
+  - first:
+      213: 9132527626922563409
+    second: BRJ_Bug_Charge_Body_35
+  - first:
+      213: -4329051431968049222
+    second: BRJ_Bug_Charge_Body_36
+  - first:
+      213: -1415510298058688771
+    second: BRJ_Bug_Charge_Body_37
+  - first:
+      213: -610206020064817072
+    second: BRJ_Bug_Charge_Body_38
+  - first:
+      213: -2669355536341353938
+    second: BRJ_Bug_Charge_Body_39
+  - first:
+      213: -403238883296410463
+    second: BRJ_Bug_Charge_Body_40
+  - first:
+      213: -6234081607217736311
+    second: BRJ_Bug_Charge_Body_41
+  - first:
+      213: 3336708969337708886
+    second: BRJ_Bug_Charge_Body_42
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 112
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8be6a7c414c60130800000000000000
+      internalID: 3532726551246728079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_1
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 0
+        width: 94
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f444c0c4e92814d0800000000000000
+      internalID: -3163732675764402953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_2
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 0
+        width: 101
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c74a26f04d2de310800000000000000
+      internalID: 1435853613232179141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_3
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 0
+        width: 100
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a86e12212c5943da0800000000000000
+      internalID: -5965978945598658934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_4
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 0
+        width: 100
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7efcaade09f23470800000000000000
+      internalID: 8373028499428802175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_5
+      rect:
+        serializedVersion: 2
+        x: 1116
+        y: 0
+        width: 100
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 876a807bc7a6fcf60800000000000000
+      internalID: 8056775342268393080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_6
+      rect:
+        serializedVersion: 2
+        x: 1329
+        y: 0
+        width: 100
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca3977c91d6b253f0800000000000000
+      internalID: -913466763013286996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_7
+      rect:
+        serializedVersion: 2
+        x: 1542
+        y: 0
+        width: 101
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da8f81b3204081550800000000000000
+      internalID: 6131655300292868269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_8
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 15
+        width: 83
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58e9295648a85dcc0800000000000000
+      internalID: -3686888418688459131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_9
+      rect:
+        serializedVersion: 2
+        x: 1967
+        y: 56
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50eb6be4721902ca0800000000000000
+      internalID: -6043671101920854523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_10
+      rect:
+        serializedVersion: 2
+        x: 1969
+        y: 52
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a0ce3b6c838061b0800000000000000
+      internalID: -5665383692114149209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_11
+      rect:
+        serializedVersion: 2
+        x: 1978
+        y: 51
+        width: 11
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83c463d021a3d30e0800000000000000
+      internalID: -2288609186428859336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_12
+      rect:
+        serializedVersion: 2
+        x: 1980
+        y: 5
+        width: 110
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d85cbd1e7748c8680800000000000000
+      internalID: -8751474325462465139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_13
+      rect:
+        serializedVersion: 2
+        x: 2194
+        y: 7
+        width: 109
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e86daf915ede2d9e0800000000000000
+      internalID: -1597953349523941746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_14
+      rect:
+        serializedVersion: 2
+        x: 2394
+        y: 0
+        width: 130
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f40ac7299d3d9db0800000000000000
+      internalID: -4783599501190757132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_15
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 39
+        width: 23
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b141be9d7aa77ad70800000000000000
+      internalID: 9054340437185860635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_16
+      rect:
+        serializedVersion: 2
+        x: 2600
+        y: 0
+        width: 141
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bea33c60f020f6aa0800000000000000
+      internalID: -6165707101285696789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_17
+      rect:
+        serializedVersion: 2
+        x: 2768
+        y: 33
+        width: 14
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2839e56ce885034f0800000000000000
+      internalID: -851082959336336510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_18
+      rect:
+        serializedVersion: 2
+        x: 2788
+        y: 0
+        width: 194
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b24ee0e3e4a2c0450800000000000000
+      internalID: 6056262114443453483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_19
+      rect:
+        serializedVersion: 2
+        x: 3036
+        y: 0
+        width: 123
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ca2e7b76fef8f840800000000000000
+      internalID: 5258232899542330051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_20
+      rect:
+        serializedVersion: 2
+        x: 3249
+        y: 0
+        width: 123
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2868063939fa7ef0800000000000000
+      internalID: -109501216802183126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_21
+      rect:
+        serializedVersion: 2
+        x: 3462
+        y: 0
+        width: 123
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db714fec22a548a30800000000000000
+      internalID: 4216594256673118141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_22
+      rect:
+        serializedVersion: 2
+        x: 1976
+        y: 35
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6939869129f876a90800000000000000
+      internalID: -7320724811613170794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_23
+      rect:
+        serializedVersion: 2
+        x: 2573
+        y: 29
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd000ef9323900c40800000000000000
+      internalID: 5476538928097919199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_24
+      rect:
+        serializedVersion: 2
+        x: 2734
+        y: 40
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 276622c5828b21ce0800000000000000
+      internalID: -1435882847693805966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_25
+      rect:
+        serializedVersion: 2
+        x: 2977
+        y: 41
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dad02c971d3a96b40800000000000000
+      internalID: 5434054545485467053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_26
+      rect:
+        serializedVersion: 2
+        x: 2388
+        y: 30
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e66e73e91e676300800000000000000
+      internalID: 245285762184931044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_27
+      rect:
+        serializedVersion: 2
+        x: 2567
+        y: 25
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4795a506cfdd7e3f0800000000000000
+      internalID: -871483926854870668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_28
+      rect:
+        serializedVersion: 2
+        x: 2744
+        y: 30
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a973b870274a4f90800000000000000
+      internalID: -6968679268612867676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_29
+      rect:
+        serializedVersion: 2
+        x: 2747
+        y: 15
+        width: 9
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cb700234149f6d10800000000000000
+      internalID: 2121076763973942209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_30
+      rect:
+        serializedVersion: 2
+        x: 2749
+        y: 28
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb90c186163a75490800000000000000
+      internalID: -7757552194368566853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_31
+      rect:
+        serializedVersion: 2
+        x: 2569
+        y: 5
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f839f23fb717412c0800000000000000
+      internalID: -4461816553642421361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_32
+      rect:
+        serializedVersion: 2
+        x: 2579
+        y: 19
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe8bfd563ccbf46b0800000000000000
+      internalID: -5309817888232720145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_33
+      rect:
+        serializedVersion: 2
+        x: 2738
+        y: 22
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90cda43da04441610800000000000000
+      internalID: 1590971381653888009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_34
+      rect:
+        serializedVersion: 2
+        x: 2795
+        y: 19
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10086ee8cd6187800800000000000000
+      internalID: 610262886054789121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_35
+      rect:
+        serializedVersion: 2
+        x: 1995
+        y: 0
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15719209d714dbe70800000000000000
+      internalID: 9132527626922563409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_36
+      rect:
+        serializedVersion: 2
+        x: 2009
+        y: 1
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab7f52fa8ae1ce3c0800000000000000
+      internalID: -4329051431968049222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_37
+      rect:
+        serializedVersion: 2
+        x: 2579
+        y: 0
+        width: 24
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df6fd4432e81b5ce0800000000000000
+      internalID: -1415510298058688771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_38
+      rect:
+        serializedVersion: 2
+        x: 2600
+        y: 1
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0505b369bdc1887f0800000000000000
+      internalID: -610206020064817072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_39
+      rect:
+        serializedVersion: 2
+        x: 2606
+        y: 0
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2ab625584b84fad0800000000000000
+      internalID: -2669355536341353938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_40
+      rect:
+        serializedVersion: 2
+        x: 2735
+        y: 3
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a40e714f58676af0800000000000000
+      internalID: -403238883296410463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_41
+      rect:
+        serializedVersion: 2
+        x: 2820
+        y: 4
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9859dfccec71c79a0800000000000000
+      internalID: -6234081607217736311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Charge_Body_42
+      rect:
+        serializedVersion: 2
+        x: 2938
+        y: 0
+        width: 11
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 651eb34012f5e4e20800000000000000
+      internalID: 3336708969337708886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BRJ_Bug_Charge_Body_0: 3532726551246728079
+      BRJ_Bug_Charge_Body_1: -3163732675764402953
+      BRJ_Bug_Charge_Body_10: -5665383692114149209
+      BRJ_Bug_Charge_Body_11: -2288609186428859336
+      BRJ_Bug_Charge_Body_12: -8751474325462465139
+      BRJ_Bug_Charge_Body_13: -1597953349523941746
+      BRJ_Bug_Charge_Body_14: -4783599501190757132
+      BRJ_Bug_Charge_Body_15: 9054340437185860635
+      BRJ_Bug_Charge_Body_16: -6165707101285696789
+      BRJ_Bug_Charge_Body_17: -851082959336336510
+      BRJ_Bug_Charge_Body_18: 6056262114443453483
+      BRJ_Bug_Charge_Body_19: 5258232899542330051
+      BRJ_Bug_Charge_Body_2: 1435853613232179141
+      BRJ_Bug_Charge_Body_20: -109501216802183126
+      BRJ_Bug_Charge_Body_21: 4216594256673118141
+      BRJ_Bug_Charge_Body_22: -7320724811613170794
+      BRJ_Bug_Charge_Body_23: 5476538928097919199
+      BRJ_Bug_Charge_Body_24: -1435882847693805966
+      BRJ_Bug_Charge_Body_25: 5434054545485467053
+      BRJ_Bug_Charge_Body_26: 245285762184931044
+      BRJ_Bug_Charge_Body_27: -871483926854870668
+      BRJ_Bug_Charge_Body_28: -6968679268612867676
+      BRJ_Bug_Charge_Body_29: 2121076763973942209
+      BRJ_Bug_Charge_Body_3: -5965978945598658934
+      BRJ_Bug_Charge_Body_30: -7757552194368566853
+      BRJ_Bug_Charge_Body_31: -4461816553642421361
+      BRJ_Bug_Charge_Body_32: -5309817888232720145
+      BRJ_Bug_Charge_Body_33: 1590971381653888009
+      BRJ_Bug_Charge_Body_34: 610262886054789121
+      BRJ_Bug_Charge_Body_35: 9132527626922563409
+      BRJ_Bug_Charge_Body_36: -4329051431968049222
+      BRJ_Bug_Charge_Body_37: -1415510298058688771
+      BRJ_Bug_Charge_Body_38: -610206020064817072
+      BRJ_Bug_Charge_Body_39: -2669355536341353938
+      BRJ_Bug_Charge_Body_4: 8373028499428802175
+      BRJ_Bug_Charge_Body_40: -403238883296410463
+      BRJ_Bug_Charge_Body_41: -6234081607217736311
+      BRJ_Bug_Charge_Body_42: 3336708969337708886
+      BRJ_Bug_Charge_Body_5: 8056775342268393080
+      BRJ_Bug_Charge_Body_6: -913466763013286996
+      BRJ_Bug_Charge_Body_7: 6131655300292868269
+      BRJ_Bug_Charge_Body_8: -3686888418688459131
+      BRJ_Bug_Charge_Body_9: -6043671101920854523
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

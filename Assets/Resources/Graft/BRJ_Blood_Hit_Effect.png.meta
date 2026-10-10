@@ -1,0 +1,689 @@
+fileFormatVersion: 2
+guid: 45a9277625c83164aa87776884074930
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8807037719805860270
+    second: BRJ_Blood_Hit_Effect_0
+  - first:
+      213: -1764765008234095862
+    second: BRJ_Blood_Hit_Effect_1
+  - first:
+      213: 2339843114232698521
+    second: BRJ_Blood_Hit_Effect_2
+  - first:
+      213: 101697736839032840
+    second: BRJ_Blood_Hit_Effect_3
+  - first:
+      213: -3380822104368092970
+    second: BRJ_Blood_Hit_Effect_4
+  - first:
+      213: 2091869575795834233
+    second: BRJ_Blood_Hit_Effect_5
+  - first:
+      213: 1389221333753313097
+    second: BRJ_Blood_Hit_Effect_6
+  - first:
+      213: -2700171902180644229
+    second: BRJ_Blood_Hit_Effect_7
+  - first:
+      213: -1158782537961050692
+    second: BRJ_Blood_Hit_Effect_8
+  - first:
+      213: 7631138208402811661
+    second: BRJ_Blood_Hit_Effect_9
+  - first:
+      213: 7701752010250642505
+    second: BRJ_Blood_Hit_Effect_10
+  - first:
+      213: -6199449494462977289
+    second: BRJ_Blood_Hit_Effect_11
+  - first:
+      213: 5127457195024741798
+    second: BRJ_Blood_Hit_Effect_12
+  - first:
+      213: 2593746352324127396
+    second: BRJ_Blood_Hit_Effect_13
+  - first:
+      213: 3110161032868190371
+    second: BRJ_Blood_Hit_Effect_14
+  - first:
+      213: -7913462258532917824
+    second: BRJ_Blood_Hit_Effect_15
+  - first:
+      213: 7978845598741046784
+    second: BRJ_Blood_Hit_Effect_16
+  - first:
+      213: -2527782991420148897
+    second: BRJ_Blood_Hit_Effect_17
+  - first:
+      213: 8014573531258494203
+    second: BRJ_Blood_Hit_Effect_18
+  - first:
+      213: -2049921617140174677
+    second: BRJ_Blood_Hit_Effect_19
+  - first:
+      213: -1906965749844296761
+    second: BRJ_Blood_Hit_Effect_20
+  - first:
+      213: 6641448190102823265
+    second: BRJ_Blood_Hit_Effect_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_0
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 13
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25661830bdd17c580800000000000000
+      internalID: -8807037719805860270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_1
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 9
+        width: 69
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0bda2c339b4287e0800000000000000
+      internalID: -1764765008234095862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_2
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 2
+        width: 89
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 996dbf55aeac87020800000000000000
+      internalID: 2339843114232698521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_3
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 8
+        width: 69
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80070c68d8d496100800000000000000
+      internalID: 101697736839032840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_4
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 51
+        width: 20
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d8e95c5538e411d0800000000000000
+      internalID: -3380822104368092970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_5
+      rect:
+        serializedVersion: 2
+        x: 547
+        y: 45
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97df1c5cb40d70d10800000000000000
+      internalID: 2091869575795834233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_6
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 32
+        width: 24
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 947b2c05171874310800000000000000
+      internalID: 1389221333753313097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 42
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7a280a06ff078ad0800000000000000
+      internalID: -2700171902180644229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_8
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 34
+        width: 19
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbde7e4db6d2befe0800000000000000
+      internalID: -1158782537961050692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_9
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 43
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0ba2cfd4cf37e960800000000000000
+      internalID: 7631138208402811661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_10
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 4
+        width: 28
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 944e32fc5ae12ea60800000000000000
+      internalID: 7701752010250642505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_11
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 17
+        width: 23
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fa2f87e78127f9a0800000000000000
+      internalID: -6199449494462977289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_12
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 20
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a578760723682740800000000000000
+      internalID: 5127457195024741798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_13
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 29
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4aaaebfa096def320800000000000000
+      internalID: 2593746352324127396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_14
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 17
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a8de562bf2892b20800000000000000
+      internalID: 3110161032868190371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_15
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 32
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cd5fa0d00cbd2290800000000000000
+      internalID: -7913462258532917824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_16
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 6
+        width: 31
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00626ae5ccd8abe60800000000000000
+      internalID: 7978845598741046784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_17
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 16
+        width: 25
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f53b02713c28becd0800000000000000
+      internalID: -2527782991420148897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_18
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 18
+        width: 17
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfc19e4e92c793f60800000000000000
+      internalID: 8014573531258494203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_19
+      rect:
+        serializedVersion: 2
+        x: 553
+        y: 24
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba037f076273d83e0800000000000000
+      internalID: -2049921617140174677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_20
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 0
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cbb1b901c81985e0800000000000000
+      internalID: -1906965749844296761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Blood_Hit_Effect_21
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 4
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1616d35e0f92b2c50800000000000000
+      internalID: 6641448190102823265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BRJ_Blood_Hit_Effect_0: -8807037719805860270
+      BRJ_Blood_Hit_Effect_1: -1764765008234095862
+      BRJ_Blood_Hit_Effect_10: 7701752010250642505
+      BRJ_Blood_Hit_Effect_11: -6199449494462977289
+      BRJ_Blood_Hit_Effect_12: 5127457195024741798
+      BRJ_Blood_Hit_Effect_13: 2593746352324127396
+      BRJ_Blood_Hit_Effect_14: 3110161032868190371
+      BRJ_Blood_Hit_Effect_15: -7913462258532917824
+      BRJ_Blood_Hit_Effect_16: 7978845598741046784
+      BRJ_Blood_Hit_Effect_17: -2527782991420148897
+      BRJ_Blood_Hit_Effect_18: 8014573531258494203
+      BRJ_Blood_Hit_Effect_19: -2049921617140174677
+      BRJ_Blood_Hit_Effect_2: 2339843114232698521
+      BRJ_Blood_Hit_Effect_20: -1906965749844296761
+      BRJ_Blood_Hit_Effect_21: 6641448190102823265
+      BRJ_Blood_Hit_Effect_3: 101697736839032840
+      BRJ_Blood_Hit_Effect_4: -3380822104368092970
+      BRJ_Blood_Hit_Effect_5: 2091869575795834233
+      BRJ_Blood_Hit_Effect_6: 1389221333753313097
+      BRJ_Blood_Hit_Effect_7: -2700171902180644229
+      BRJ_Blood_Hit_Effect_8: -1158782537961050692
+      BRJ_Blood_Hit_Effect_9: 7631138208402811661
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 // CHECKPOINT MENU: {INTERACT} on a checkpoint while Rowdy carries legendary rats. (No rats = it rests straight away,
 // like before.) The game pauses while it's open.
-//   BEAUTY SLEEP      - rest (CheckpointRest: reload here, full health, morning)
+//   REST              - rest (CheckpointRest: reload here, full health, morning)
 //   DROP A RAT (xN)   - RatBait: a lost cat smells it and comes running back
 //   NEVER MIND
 public class CheckpointMenu : MonoBehaviour
@@ -104,7 +104,7 @@ public class CheckpointMenu : MonoBehaviour
         hintVersion = GameInput.DeviceVersion;
         info.SetText(CatRoster.Rats + " LEGENDARY RAT" + (CatRoster.Rats == 1 ? "" : "S") + "     " +
                      (lurable != null ? lurable.CatName + " IS OUT THERE SOMEWHERE" : "NO LOST CATS AROUND"));
-        options[0].SetText("BEAUTY SLEEP");
+        options[0].SetText("REST");
         options[1].SetText("DROP A RAT  (X" + CatRoster.Rats + ")");
         options[2].SetText("NEVER MIND");
         for (int i = 0; i < 3; i++)

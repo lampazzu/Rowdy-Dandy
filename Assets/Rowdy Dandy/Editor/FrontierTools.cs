@@ -40,6 +40,7 @@ public static class FrontierTools
                 case "play": EditorApplication.isPlaying = true; break;
                 case "prefsrestore": RestorePrefs(cmd.Substring(13).Trim()); break;
                 case "list": List(float.Parse(p[1]), float.Parse(p[2]), float.Parse(p[3]), float.Parse(p[4])); break;
+                case "find": Find(cmd.Substring(5).Trim()); break;
             }
         }
         catch (System.Exception e) { File.WriteAllText("Temp/rd_cmd_error.txt", e.ToString()); }
@@ -98,6 +99,24 @@ public static class FrontierTools
             sb.AppendLine(string.Format(inv, "{0} | {1} | c({2:F1},{3:F1}) s({4:F1},{5:F1}) | {6} | act {7}{8}", Path(r.transform), comps, c.x, c.y, r.bounds.size.x, r.bounds.size.y, sort, r.gameObject.activeInHierarchy, pf));
         }
         File.WriteAllText("Temp/frontier_list.txt", sb.ToString());
+    }
+
+    // Every object (active or not) whose name contains one of the |-separated words: path, world position, components,
+    // collider bounds -> Temp/frontier_find.txt
+    public static void Find(string words)
+    {
+        var sb = new StringBuilder();
+        var inv = System.Globalization.CultureInfo.InvariantCulture;
+        string[] w = words.ToLowerInvariant().Split('|');
+        foreach (Transform t in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            string n = t.name.ToLowerInvariant();
+            if (!w.Any(x => x.Length > 0 && n.Contains(x))) continue;
+            string comps = string.Join(",", t.GetComponents<Component>().Select(k => k == null ? "null" : k.GetType().Name).Where(c => c != "Transform"));
+            string cols = string.Join(" ", t.GetComponents<Collider2D>().Select(c => string.Format(inv, "{0}{1}[{2:F1},{3:F1}..{4:F1},{5:F1}]", c.GetType().Name, c.isTrigger ? "(T)" : "", c.bounds.min.x, c.bounds.min.y, c.bounds.max.x, c.bounds.max.y)));
+            sb.AppendLine(string.Format(inv, "{0} | pos ({1:F2},{2:F2}) | act {3} | layer {4} tag {5} | {6} | {7}", Path(t), t.position.x, t.position.y, t.gameObject.activeInHierarchy, LayerMask.LayerToName(t.gameObject.layer), t.tag, comps, cols));
+        }
+        File.WriteAllText("Temp/frontier_find.txt", sb.ToString());
     }
 
     // Puts the PlayerPrefs back from a 'reg export' of the project's key (the editor caches prefs, so this goes through Unity)

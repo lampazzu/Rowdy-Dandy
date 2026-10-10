@@ -15,6 +15,8 @@ public class OreNode : MonoBehaviour
 
     [Tooltip("Hand-placed ores: leave empty, the save id comes from the position.")]
     public string saveId;
+    [Tooltip("Arena ores (FrontierArena): never saved as broken")]
+    public bool transient;
 
     private SpriteRenderer body, flash;
     private BoxCollider2D box;
@@ -30,8 +32,8 @@ public class OreNode : MonoBehaviour
     {
         ItemArt art = ItemArt.Get;
         Sprite[] frames = art != null ? ItemArt.Frames(art.oreBreak, 10, 1, new Vector2(0.5f, 0.1f), PixelsPerUnit) : null;
-        if (frames == null || PlayerPrefs.GetInt(Key, 0) == 1) { Destroy(gameObject); return; }
-        Remember(Key);
+        if (frames == null || (!transient && PlayerPrefs.GetInt(Key, 0) == 1)) { Destroy(gameObject); return; }
+        if (!transient) Remember(Key);
         home = transform.position;
 
         var bodyGo = new GameObject("Ore");
@@ -99,7 +101,7 @@ public class OreNode : MonoBehaviour
     {
         broken = true;
         RowdyNotes.MarkTopicNews("ores");
-        PlayerPrefs.SetInt(Key, 1);
+        if (!transient) PlayerPrefs.SetInt(Key, 1);
         PlayerPrefs.Save();
         if (box != null) box.enabled = false;
         ScreenShake.Impulse(0.35f);

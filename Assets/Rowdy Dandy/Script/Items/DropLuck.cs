@@ -65,11 +65,23 @@ public static class RareDrops
     public const float RatChance = 0.8f;    // % per kill, x drop luck
     public const float FishChance = 1.2f;
 
+    // In a colosseum trial rats are what you lure cats back with (drop one at the gong), so they come more often
+    // there (x3) and never stay away too long: a rat is guaranteed after ArenaPity arena kills without one.
+    public const int ArenaPity = 22;
+    private static int arenaDry;
+
     public static void OnEnemyKilled(EnemyHealth enemy)
     {
         if (enemy == null || enemy.IsObject) return;
         Vector3 at = EnemyFairness.BodyCenter(enemy);
-        if (DropLuck.Roll(RatChance)) FlyingRat.Spawn(at);
+        bool arena = FrontierArena.Running;
+        bool rat = DropLuck.Roll(RatChance * (arena ? 3f : 1f));
+        if (arena)
+        {
+            arenaDry = rat ? 0 : arenaDry + 1;
+            if (arenaDry >= ArenaPity) { rat = true; arenaDry = 0; }
+        }
+        if (rat) FlyingRat.Spawn(at);
         else if (DropLuck.Roll(FishChance)) CatTreat.Spawn(at);
     }
 }

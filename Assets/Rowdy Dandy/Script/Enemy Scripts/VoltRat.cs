@@ -1,24 +1,30 @@
 using UnityEngine;
 
-// RED JELLY (was the Volt Rat; the script / prefab keep the old name): an angry red jellyfish that hovers around Rowdy,
-// pulses to charge up, then jets straight
-// through where he stands. Small, fragile, comes in packs. Art: PIV_Flying_Rat ("New Stuff you can use"), animated by
-// real clips in Rowdy Dandy/Enemies/VoltRat (made by Tools > Rowdy Dandy > Frontier > Build Volt Rat):
-//   Fly (hover)  Charge (crackling)  Dash (zipping)  Recover  GetHit  Death (the burst on the sheet's second row)
+// RED JELLY (was the Volt Rat; the script / prefab keep the old name): an angry red jellyfish that drifts around Rowdy
+// at his own height, pulses to charge up, then jets straight through where he stands. Small, fragile, comes in packs.
+// Art: the little jellyfish (Enemies/WaterViva/WaterViva.png, 7 frames of 24 x 24) recoloured red at runtime and drawn
+// over whatever the animator does; the clips (Fly / Charge / Dash / Recover / GetHit / Death) only pick the frames.
 // Its hitbox (child "Hitbox", Spike) is only on during the dash, so touching it otherwise doesn't hurt.
+//   - moves in FixedUpdate with a smoothed velocity (the old MovePosition from Update stuttered against interpolation)
+//   - HYPER ARMOR (EnemyHealth.HyperArmor): hits flash it white but don't knock it out of a charge / dash, unless it's
+//     stunned or charmed
+//   - dies with a pop: hit-stop, white flash, a red goo burst (Graft blood hit), droplets and a ring
 [RequireComponent(typeof(EnemyHealth))]
 public class VoltRat : MonoBehaviour
 {
     private enum State { Hover, Charge, Dash, Recover, Dead }
 
-    [SerializeField] private float hoverRadius = 2.4f;
-    [SerializeField] private float hoverHeight = 1.3f;
+    [SerializeField] private float hoverRadius = 2.2f;
+    [Tooltip("Above Rowdy's middle. Keep it low: he reaches ~1.3 units up")]
+    [SerializeField] private float hoverHeight = 0.35f;
     [SerializeField] private float hoverSpeed = 3.5f;
     [SerializeField] private float chargeTime = 0.6f;
     [SerializeField] private float dashSpeed = 11f;
     [SerializeField] private float recoverTime = 0.5f;
     [SerializeField] private Vector2 attackEvery = new Vector2(1.6f, 3f);
     [SerializeField] private AudioClip crackle;
+
+    public static readonly Color Goo = new Color(1f, 0.32f, 0.38f);
 
     private EnemyHealth health;
     private Animator anim;
@@ -28,6 +34,8 @@ public class VoltRat : MonoBehaviour
     private State state = State.Hover;
     private float stateAt, nextAttackAt, angle, lastHealth, diedAt = -1f, afterimageTimer;
     private Vector3 dashTarget, dashDir;
+    private Vector2 wanted, smoothVel, knock;
+    private bool dashing;
     private string playing;
 
     private void Awake()
@@ -36,17 +44,20 @@ public class VoltRat : MonoBehaviour
         anim = GetComponent<Animator>();
         body = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        if (rb != null) rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         Transform h = transform.Find("Hitbox");
         hitbox = h != null ? h.gameObject : null;
         if (hitbox != null) hitbox.SetActive(false);
         angle = Random.Range(0f, Mathf.PI * 2f);
         nextAttackAt = Time.time + Random.Range(attackEvery.x, attackEvery.y) + 0.8f;
         health.SetExpDropIfMissing(Resources.Load<GameObject>("Systems/EXPgem"), 2);
-        // reads against the red sunset: a dark rim and a small red glow
+        health.HyperArmor = true;
+        hoverHeight = Mathf.Min(hoverHeight, 0.4f); // old prefab value (1.3) floated out of reach
+        wanted = transform.position;
+        // a small red glow so it reads against the sunset (no dark rim: it drew a heavy black outline)
         if (body != null)
         {
             body.color = Color.white;
-            rim = SpriteOutline.Add(body, new Color(0.12f, 0.02f, 0.06f, 1f), 1, -1);
             var glow = new GameObject("Glow").AddComponent<UnityEngine.Rendering.Universal.Light2D>();
             glow.transform.SetParent(transform, false);
             glow.lightType = UnityEngine.Rendering.Universal.Light2D.LightType.Point;
@@ -63,15 +74,12 @@ public class VoltRat : MonoBehaviour
 
     private void Play(string clip)
     {
-        if (playing == clip || anim == null || !anim.isActiveAndEnabled) return;
+        if (playing == clip) return;
         playing = clip;
-        anim.Play(clip, 0, 0f);
+        if (anim != null && anim.isActiveAndEnabled) anim.Play(clip, 0, 0f);
     }
 
-    // RED JELLY: the art is the little jellyfish (Enemies/WaterViva/WaterViva.png, 7 frames of 24 x 24), recoloured
-    // angry red at runtime and drawn over whatever the animator does. The AI (hover, charge, dash) is the Volt Rat's.
     [SerializeField] private Texture2D jellySheet;
-    private SpriteOutline rim;
     private static Sprite[] frames;
     private string drawn;
     private float drawnAt;
@@ -93,15 +101,10 @@ public class VoltRat : MonoBehaviour
         int i;
         switch (clip)
         {
-            case "Charge": i = (int)(t * 24f) % n; c = Mathf.Repeat(t * 10f, 1f) < 0.5f ? Color.white : new Color(1f, 0.75f, 0.75f); break; // pulsing fast
+            case "Charge": i = (int)(t * 24f) % n; c = Mathf.Repeat(t * 10f, 1f) < 0.5f ? Color.white : new Color(1f, 0.7f, 0.7f); break; // pulsing fast
             case "Dash": i = 3; break;                                   // tentacles trailing
-            case "GetHit": i = (int)(t * 14f) % n; c = Mathf.Repeat(t * 14f, 1f) < 0.5f ? new Color(1f, 1f, 1f, 0.5f) : Color.white; break;
-            case "Death":
-                i = Mathf.Min((int)(t * 14f), n - 1);
-                float k = Mathf.Clamp01(t / 0.5f);
-                c = new Color(1f, 1f, 1f, 1f - k);                      // pops and fades
-                transform.localScale = new Vector3(Mathf.Sign(transform.localScale.x), 1f, 1f) * (1f + k * 0.6f);
-                break;
+            case "GetHit": i = (int)(t * 14f) % n; break;
+            case "Death": i = Mathf.Min(2 + (int)(t * 20f), n - 1); break;
             default: i = (int)(t * 9f) % n; break;                       // floating
         }
         body.sprite = frames[i];
@@ -136,9 +139,10 @@ public class VoltRat : MonoBehaviour
         {
             if (px[p].a == 0) continue;
             Color.RGBToHSV(px[p], out float hh, out float s, out float v);
-            // blues / pinks -> reds, keeping the light and dark of the art; the glowing core turns hot orange
+            // blues / pinks -> reds, keeping the light and dark of the art; the darkest outline pixels lift to a
+            // deep wine red (pure black read as a thick black rim against the sunset)
             float hue = Mathf.Lerp(0.98f, 1.04f, v) % 1f;
-            Color col = Color.HSVToRGB(hue, Mathf.Clamp01(s * 0.6f + 0.45f), Mathf.Clamp01(v * 1.05f));
+            Color col = Color.HSVToRGB(hue, Mathf.Clamp01(s * 0.6f + 0.45f), Mathf.Clamp(v * 1.05f, 0.32f, 1f));
             col.a = px[p].a / 255f;
             px[p] = col;
         }
@@ -155,6 +159,7 @@ public class VoltRat : MonoBehaviour
     {
         state = s;
         stateAt = Time.time;
+        dashing = s == State.Dash;
         if (hitbox != null) hitbox.SetActive(s == State.Dash);
         switch (s)
         {
@@ -162,7 +167,7 @@ public class VoltRat : MonoBehaviour
             case State.Charge:
                 Play("Charge");
                 if (crackle != null) FXSound.Play(crackle, 0.35f, Random.Range(1.4f, 1.7f));
-                else FXSound.Play(BoonArt.Get != null ? BoonArt.Get.zap : null, 0.25f, Random.Range(1.6f, 1.9f));
+                else BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.zap : null, 0.25f, Random.Range(1.6f, 1.9f));
                 PulseRing.Spawn(transform.position, new Color(1f, 0.35f, 0.3f, 0.9f), 0.6f, 0.25f);
                 break;
             case State.Dash: Play("Dash"); break;
@@ -174,25 +179,36 @@ public class VoltRat : MonoBehaviour
     {
         if (state == State.Dead)
         {
-            if (Time.time - diedAt > 0.8f) Destroy(gameObject);
+            if (Time.time - diedAt > 0.35f) Destroy(gameObject);
             return;
         }
         if (health.enemydead) { Die(); return; }
 
-        // got hit: drop whatever it was doing (EnemyHealth plays the GetHit clip itself)
+        // got hit
         if (health.currentenemyHealth < lastHealth - 0.01f)
         {
             lastHealth = health.currentenemyHealth;
-            if (hitbox != null) hitbox.SetActive(false);
-            playing = "GetHit";
-            state = State.Recover;
-            stateAt = Time.time - recoverTime * 0.3f;
-            Vector3 away = Rowdy != null ? (transform.position - Rowdy.position).normalized : Vector3.up;
-            transform.position += away * 0.35f;
-            return;
+            Vector2 away = Rowdy != null ? ((Vector2)(transform.position - BoonRunner.RowdyCenter)).normalized : Vector2.up;
+            HitFlash.Flash(this, 0.1f); // every hit flashes it white
+            if (health.ArmorHolds)
+            {
+                knock += away * 4f; // knocked back, but keeps doing what it was doing
+            }
+            else
+            {
+                if (hitbox != null) hitbox.SetActive(false);
+                dashing = false;
+                playing = null;
+                Play("GetHit");
+                state = State.Recover;
+                stateAt = Time.time - recoverTime * 0.3f;
+                knock += away * 7f;          // knocked back smoothly (it used to teleport 0.35 units)
+                wanted = transform.position;
+                return;
+            }
         }
 
-        if (StatusEffects.IsStunned(gameObject)) return;
+        if (StatusEffects.IsStunned(gameObject)) { wanted = transform.position; return; }
         Transform rowdy = Rowdy;
         if (rowdy == null) return;
         Vector3 target = BoonRunner.RowdyCenter;
@@ -202,8 +218,8 @@ public class VoltRat : MonoBehaviour
         {
             case State.Hover:
                 angle += Time.deltaTime * 1.4f;
-                Vector3 spot = target + new Vector3(Mathf.Cos(angle) * hoverRadius, hoverHeight + Mathf.Sin(angle * 2f) * 0.4f, 0f);
-                Move(Vector3.MoveTowards(transform.position, spot, hoverSpeed * Time.deltaTime));
+                // circles Rowdy at about his own height, dipping low now and then - always in reach
+                wanted = target + new Vector3(Mathf.Cos(angle) * hoverRadius, hoverHeight + Mathf.Sin(angle * 2f) * 0.25f, 0f);
                 Face(target.x);
                 if (playing != "Fly" && playing != "GetHit") Play("Fly");
                 if (playing == "GetHit" && t > 0.3f) Play("Fly");
@@ -212,9 +228,8 @@ public class VoltRat : MonoBehaviour
 
             case State.Charge:
                 Face(target.x);
-                // crackling jitter, a whole pixel at a time
-                transform.position += new Vector3(Mathf.Round(Random.Range(-1f, 1f)) / 64f, Mathf.Round(Random.Range(-1f, 1f)) / 64f, 0f);
-                if (Random.value < 0.3f) FXParticle.Burst(transform.position, new Color(1f, 0.45f, 0.35f), 1, 0.5f, 1.5f, 0f, 0.2f);
+                wanted = transform.position; // holds still while it crackles
+                if (Random.value < 0.35f) FXParticle.Burst(transform.position + (Vector3)Random.insideUnitCircle * 0.2f, new Color(1f, 0.45f, 0.35f), 1, 0.5f, 1.5f, 0f, 0.2f);
                 if (t >= chargeTime)
                 {
                     dashDir = (target - transform.position).normalized;
@@ -224,15 +239,13 @@ public class VoltRat : MonoBehaviour
                 break;
 
             case State.Dash:
-                Vector3 next = Vector3.MoveTowards(transform.position, dashTarget, dashSpeed * Time.deltaTime);
-                bool blocked = SolidGround.Blocked(next, new Vector2(0.2f, 0.15f));
-                if (!blocked) Move(next);
                 afterimageTimer -= Time.deltaTime;
                 if (afterimageTimer <= 0f) { afterimageTimer = 0.03f; CatFX.Afterimage(body, new Color(1f, 0.3f, 0.3f, 0.5f), 0.15f); }
-                if (blocked || (transform.position - dashTarget).sqrMagnitude < 0.01f || t > 1f) Go(State.Recover);
+                if ((transform.position - dashTarget).sqrMagnitude < 0.01f || t > 1f) Go(State.Recover);
                 break;
 
             case State.Recover:
+                wanted = transform.position;
                 if (playing == "GetHit" && t > recoverTime * 0.3f + 0.25f) Play("Recover");
                 if (t >= recoverTime)
                 {
@@ -243,10 +256,23 @@ public class VoltRat : MonoBehaviour
         }
     }
 
-    private void Move(Vector3 p)
+    private void FixedUpdate()
     {
-        if (rb != null && rb.bodyType != RigidbodyType2D.Static) rb.MovePosition(p);
-        else transform.position = p;
+        if (state == State.Dead || rb == null) return;
+        float dt = Time.fixedDeltaTime;
+        Vector2 pos = rb.position;
+        Vector2 next;
+        if (dashing)
+        {
+            next = Vector2.MoveTowards(pos, dashTarget, dashSpeed * dt);
+            if (SolidGround.Blocked(next, new Vector2(0.2f, 0.15f))) { next = pos; Go(State.Recover); }
+        }
+        else next = Vector2.SmoothDamp(pos, wanted, ref smoothVel, 0.22f, hoverSpeed, dt);
+        next += knock * dt;
+        knock = Vector2.MoveTowards(knock, Vector2.zero, 14f * dt);
+        if (knock.sqrMagnitude > 0.0001f && SolidGround.Blocked(next, new Vector2(0.2f, 0.15f))) { knock = Vector2.zero; next = pos; }
+        if (rb.bodyType != RigidbodyType2D.Static) rb.MovePosition(next);
+        else transform.position = next;
     }
 
     // the art faces left
@@ -262,9 +288,22 @@ public class VoltRat : MonoBehaviour
         if (hitbox != null) hitbox.SetActive(false);
         foreach (Collider2D c in GetComponents<Collider2D>()) c.enabled = false;
         playing = "Death";
-        if (rim != null) Destroy(rim.gameObject);
-        if (anim != null) anim.Play("Death", 0, 0f);
-        FXSound.Play("Jelly", 0.45f, 0.7f); // squelch
-        FXParticle.Burst(transform.position, new Color(1f, 0.35f, 0.3f), 14, 1f, 3.5f, 3f, 0.5f);
+        if (anim != null && anim.isActiveAndEnabled) anim.Play("Death", 0, 0f);
+        Vector3 p = transform.position;
+        // the pop: a beat of hit-stop and a white flash, then it bursts into goo
+        TimeSlowController.HitStop(0.05f, 0.08f);
+        HitFlash.Flash(this, 0.07f);
+        FXSound.Play("Jelly", 0.5f, 0.75f);                                                 // squelch
+        BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.45f, Random.Range(1.2f, 1.4f));
+        BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.plop : null, 0.3f, 1.6f);
+        SheetFX burst = GraftFX.Play("BRJ_Blood_Hit_Effect", p, Goo, 96);
+        if (burst != null && Random.value < 0.5f) burst.transform.localScale = new Vector3(-1f, 1f, 1f);
+        PulseRing.Spawn(p, new Color(1f, 0.5f, 0.5f, 0.9f), 0.9f, 0.25f);
+        FXParticle.Burst(p, Goo, 16, 1.5f, 4.5f, 9f, 0.7f, true);                         // goo droplets that fall
+        FXParticle.Burst(p, new Color(1f, 0.8f, 0.75f), 8, 1f, 3f, 2f, 0.35f);
+        ScreenShake.Impulse(0.22f);
+        Invoke(nameof(HideBody), 0.08f);
     }
+
+    private void HideBody() { if (body != null) body.enabled = false; }
 }

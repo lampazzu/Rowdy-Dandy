@@ -405,6 +405,7 @@ public class WaveEnemySpawner : MonoBehaviour
         if (FrontierArena.IsQuiet(point)) return true; // the island past Pelich: only its colosseum spawns
         if (quietWholeBeach && ZoneAt(point)?.name == "Beach") return true;
         if (!quietInPelichArena) return false;
+        if (point.x >= 205f || ZoneAt(point)?.name == "Pelich") return true; // Pelich's whole island: his boss fight stays clean
 
         if (float.IsNaN(pelichHomeX) && Time.time - pelichSearchedAt > 3f)
         {

@@ -135,6 +135,8 @@ public class RowdyBuffs : MonoBehaviour
         if (art != null) SheetFX.Play(art.vfxPoison, 10, b.Center, 20f, 64f, b.body != null ? b.body.sortingOrder + 3 : 90, b.transform, false, null, 0.6f);
         PulseRing.Spawn(b.Center, new Color(0.55f, 1f, 0.3f, 0.9f), 1.2f, 0.4f);
         FXParticle.Burst(b.Center, new Color(0.5f, 1f, 0.35f), 16, 1f, 3f, -1f, 0.7f);
+        GraftFX.Play("spr_bug_special_whirlwindCut", b.Center, PoisonGreen, (b.body != null ? b.body.sortingOrder : 80) + 4, b.transform);
+        if (owner != null) GraftFX.Play("StephHit", owner.transform.position, PoisonGreen, 96);
         FXSound.Play("Poison", 0.9f, 1f);
         IconPopup.Show(b.HeadTop + Vector3.up * 0.3f, null, "POISON BLADE!", new Color(0.55f, 1f, 0.35f), 1f, 1.4f);
     }
@@ -143,7 +145,19 @@ public class RowdyBuffs : MonoBehaviour
     {
         if (!PoisonActive || enemy == null || enemy.enemydead || enemy.IsObject) return;
         StatusEffects.Of(enemy).Poison(4f, 6f + enemy.startingenemyHealth * 0.02f, instance.poisonOwner);
+        // Paprika's poison shows on every hit: a green venom slash (Graft cut) and drips, a puddle under the enemy
+        Vector3 c = EnemyFairness.BodyCenter(enemy);
+        SheetFX cut = GraftFX.Play("spr_bug_special_whirlwindCut", c, PoisonGreen, 96, null, false, Random.value < 0.5f, 1.4f);
+        FXParticle.Burst(c, PoisonGreen, 8, 1f, 3f, 7f, 0.5f, true);
+        if (Time.time - instance.lastPuddle > 0.4f && SolidGround.Ray(c, Vector2.down, 3f, out RaycastHit2D hit))
+        {
+            instance.lastPuddle = Time.time;
+            GraftFX.Play("StephPoolt", hit.point + Vector2.up * 2f / 64f, new Color(0.55f, 1f, 0.3f, 0.85f), 70, null, false, false, 0.7f, new Vector2(0.5f, 0f));
+        }
     }
+
+    private static readonly Color PoisonGreen = new Color(0.55f, 1f, 0.3f);
+    private float lastPuddle = -10f;
 
     // ================================================================ decay (Lallo)
     public static void ArmDecay(PetFollower owner)

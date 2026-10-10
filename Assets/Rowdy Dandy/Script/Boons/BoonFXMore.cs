@@ -514,7 +514,11 @@ public class BoonDot : MonoBehaviour
     {
         if (e == null || e.enemydead || e.IsObject) return;
         BoonDot d = Of(e);
-        if (Time.time >= d.bleedUntil) Blood.Spill(BoonFX.Center(e), Random.value < 0.5f ? -1f : 1f, 3);
+        if (Time.time >= d.bleedUntil)
+        {
+            Blood.Spill(BoonFX.Center(e), Random.value < 0.5f ? -1f : 1f, 3);
+            BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.3f, Random.Range(0.9f, 1.1f));
+        }
         d.bleedUntil = Mathf.Max(d.bleedUntil, Time.time + seconds);
         d.bleedDps = Mathf.Max(Time.time < d.bleedUntil - seconds ? d.bleedDps : 0f, dps);
     }
@@ -604,6 +608,7 @@ public class BoonDot : MonoBehaviour
 public class Glossed : MonoBehaviour
 {
     private float until, glint;
+    private static float sprayedAt = -10f;
     private EnemyHealth health;
 
     public static bool On(EnemyHealth e) => e != null && e.TryGetComponent(out Glossed g) && Time.time < g.until;
@@ -613,6 +618,11 @@ public class Glossed : MonoBehaviour
         if (e == null) return;
         Glossed g = e.GetComponent<Glossed>();
         if (g == null) { g = e.gameObject.AddComponent<Glossed>(); g.health = e; }
+        if (Time.time >= g.until && Time.time >= sprayedAt + 0.15f)
+        {
+            sprayedAt = Time.time; // pssst
+            BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sizzle : null, 0.18f, Random.Range(2.2f, 2.5f));
+        }
         g.until = Time.time + seconds;
     }
 
@@ -741,7 +751,6 @@ public class TideRider : MonoBehaviour
             BoonArt.Play(art.tornado, 0.4f, pink ? 0.85f : 1.1f);
             BoonArt.Play(art.waveCrash, 0.45f, 1f);
         }
-        if (pink) BoonFX.Popup(feet + Vector3.up * 2.2f, "BEACH BOD!", BoonFX.Pink, 1f, 1.2f);
         FXParticle.Burst(feet + Vector3.up * 0.3f, pink ? BoonFX.Pink : BoonFX.Foam, 14, 1f, 4f, 8f, 0.5f, true);
         ScreenShake.Impulse(0.25f);
     }
@@ -847,7 +856,6 @@ public class TideRider : MonoBehaviour
         {
             ScreenShake.Impulse(wall ? 0.5f : 0.3f);
             TimeSlowController.HitStop(wall ? 0.06f : 0.03f, 0.08f);
-            BoonFX.Popup(at + Vector3.up * 0.7f, wall ? "WIPEOUT!" : "SPLASH!", pink ? BoonFX.Pink : BoonFX.Cyan, wall ? 0.95f : 0.7f, 1f);
         }
         foreach (EnemyHealth e in carried)
         {
@@ -967,7 +975,6 @@ public static class AbyssFX
             BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.waterBoom : null, 0.45f, 0.65f);
             TimeSlowController.HitStop(0.05f, 0.06f);
             ScreenShake.Impulse(0.3f);
-            BoonFX.Popup(at + Vector3.up * 0.7f, "CRUSH!", new Color(0.4f, 0.65f, 1f), 0.75f, 0.8f);
         });
     }
 
@@ -994,7 +1001,6 @@ public static class AbyssFX
         float[] xs = { -2.1f, -1.05f, 1.05f, 2.1f };
         BoonArt art = BoonArt.Get;
         if (art != null) { BoonArt.Play(art.waterBoom, 0.6f, 0.55f); BoonArt.Play(art.vines, 0.4f, 0.6f); }
-        BoonFX.Popup(feet + Vector3.up * 2.2f, "LEVIATHAN!", new Color(0.55f, 0.45f, 1f), 1.1f, 1.4f);
         ScreenShake.Impulse(0.6f);
         GamepadRumble.Pulse(0.5f, 0.7f, 0.35f);
         for (int i = 0; i < xs.Length; i++)
@@ -1099,7 +1105,8 @@ public class InkCloud : MonoBehaviour
         main.simulationSpace = ParticleSystemSimulationSpace.World;
         main.startColor = new ParticleSystem.MinMaxGradient(InkDark, InkSheen);
         main.startSpeed = new ParticleSystem.MinMaxCurve(2.5f * strength, 7.5f * strength);
-        main.startSize = new ParticleSystem.MinMaxCurve(4f / 64f, 12f / 64f); // chunky pixel drops
+        // drops at the game's own pixel size (whole pixels: 2 px, the odd 3 px one) - the old 4-12 px squares read as blocks
+        main.startSize = (strength >= 1f ? 3f : 2f) / 64f;
         main.startLifetime = new ParticleSystem.MinMaxCurve(0.45f, 0.95f);
         main.gravityModifier = 0.9f;
         main.maxParticles = 600;
@@ -1108,7 +1115,7 @@ public class InkCloud : MonoBehaviour
         shape.angle = 28f;
         shape.radius = 0.12f;
         var emission = ps.emission;
-        emission.rateOverTime = 420f * strength;
+        emission.rateOverTime = 700f * strength;
         var col = ps.colorOverLifetime;
         col.enabled = true;
         var g = new Gradient();
@@ -1116,8 +1123,7 @@ public class InkCloud : MonoBehaviour
                   new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 0.6f), new GradientAlphaKey(0f, 1f) });
         col.color = g;
         var size = ps.sizeOverLifetime;
-        size.enabled = true;
-        size.size = new ParticleSystem.MinMaxCurve(1f, AnimationCurve.Linear(0f, 1f, 1f, 0.4f));
+        size.enabled = false; // shrinking drops ended up between pixel sizes
         var psr = go.GetComponent<ParticleSystemRenderer>();
         if (inkMaterial == null && CatFX.Unlit != null) inkMaterial = new Material(CatFX.Unlit) { name = "Ink", mainTexture = Texture2D.whiteTexture };
         if (inkMaterial != null) psr.sharedMaterial = inkMaterial;
@@ -1137,7 +1143,7 @@ public class InkCloud : MonoBehaviour
             {
                 if (ps == null) continue;
                 var emission = ps.emission;
-                emission.rateOverTimeMultiplier = age < 0.25f ? 420f : age < Life ? 45f : 0f;
+                emission.rateOverTimeMultiplier = age < 0.25f ? 700f : age < Life ? 70f : 0f;
             }
         if (age >= Life) return;
         if (Random.value < 0.4f) FXParticle.Burst(transform.position + (Vector3)(Random.insideUnitCircle * Radius * 0.8f), InkDark, 1, 0.1f, 0.4f, -0.5f, 0.7f);
@@ -1296,7 +1302,6 @@ public class KissHeart : MonoBehaviour
         k.target = target; k.damage = damage; k.sr = sr;
         k.velocity = new Vector3(Random.Range(-1f, 1f), 3.5f, 0f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.charmSfx : null, 0.3f, 1.5f);
-        BoonFX.Popup(from + Vector3.up * 0.3f, "MWAH!", BoonFX.Pink, 0.55f, 0.6f);
     }
 
     private void Update()
@@ -1335,11 +1340,15 @@ public class SpotlightFX : MonoBehaviour
         var go = new GameObject("Spotlight");
         var s = go.AddComponent<SpotlightFX>();
         s.rowdy = rowdy; s.life = seconds;
-        s.cone = BoonFX.MakeRenderer("Cone", MoreSprites.Cone, rowdy.position, BoonFX.Order - 3, go.transform);
-        s.cone.transform.localScale = new Vector3(2.2f, 4.2f, 1f);
+        s.cone = PixelShape.Make("Cone", PixelShape.Kind.Cone, rowdy.position, BoonFX.Order - 3, go.transform);
+        if (s.cone != null) PixelShape.Size(s.cone, 31f * 2.2f / 64f, 48f * 4.2f / 64f); // same size, real pixels
+        else
+        {
+            s.cone = BoonFX.MakeRenderer("Cone", MoreSprites.Cone, rowdy.position, BoonFX.Order - 3, go.transform);
+            s.cone.transform.localScale = new Vector3(2.2f, 4.2f, 1f);
+        }
         s.cone.color = new Color(1f, 0.95f, 0.75f, 0f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.pose : null, 0.4f, 1f);
-        BoonFX.Popup(BoonRunner.RowdyHead + Vector3.up * 0.4f, "SPOTLIGHT!", BoonFX.Gold, 0.8f, 1f);
         BoonFX.Sparkles(BoonRunner.RowdyHead, BoonFX.Gold, 6, 0.4f, 0.6f);
     }
 
@@ -1371,7 +1380,6 @@ public static class NarcFX
             BoonFX.Hit(victim, damage, "Jealousy");
             PulseRing.Spawn(at, new Color(1f, 0.6f, 0.85f, 0.9f), 0.45f, 0.15f);
             FXParticle.Burst(at, BoonFX.Pink, 5, 1f, 2.5f, 3f, 0.35f);
-            if (Random.value < 0.35f) BoonFX.Popup(from + Vector3.up * 0.6f, Random.value < 0.5f ? "HMPH!" : "MINE!", BoonFX.Pink, 0.55f, 0.7f);
             BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.18f, Random.Range(1.5f, 1.8f));
         }
     }
@@ -1509,7 +1517,6 @@ public class EarthErupt : MonoBehaviour
         ScreenShake.Impulse(0.3f);
         int rooted = 0;
         foreach (EnemyHealth e in BoonFX.EnemiesIn(groundPoint + Vector3.up * 0.5f, 3f)) { BoonFX.Root(e, rootSeconds); rooted++; }
-        if (rooted > 0) BoonFX.Popup(groundPoint + Vector3.up * 1.4f, rooted > 1 ? "ROOTED X" + rooted : "ROOTED!", BoonFX.Toxic, 0.85f, 1f);
     }
 
     private void Update()
@@ -1598,7 +1605,11 @@ public static class RotFX
             BoonFX.Lightning(at, BoonFX.Center(next), BoonFX.Toxic, 0.25f);
             BoonFX.Poison(next, 4f, dps);
         }
-        if (skip.Count > 1) BoonFX.Popup(at + Vector3.up * 0.6f, "SPREAD!", BoonFX.Toxic, 0.6f, 0.7f);
+        if (skip.Count > 1)
+        {
+            BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sporePop : null, 0.35f, Random.Range(1.6f, 1.8f));
+            BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.zap : null, 0.15f, 0.7f);
+        }
     }
 
     // Thorn Skin: whoever hit Rowdy gets pricked and poisoned
@@ -1614,6 +1625,7 @@ public static class RotFX
         BoonFX.Lightning(c, BoonFX.Center(attacker), new Color(0.5f, 0.9f, 0.3f), 0.15f);
         BoonFX.Hit(attacker, damage, "Thorn Skin");
         BoonFX.Poison(attacker, 4f, 6f);
+        BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.vines : null, 0.35f, Random.Range(1.4f, 1.6f));
     }
 }
 
@@ -1682,18 +1694,21 @@ public class BloomFlower : MonoBehaviour
 {
     private SpriteRenderer sr;
     private float heal, age;
+    private Color glow;
     private const float Life = 20f;
 
     public static void Spawn(Vector3 at, float heal)
     {
         Vector3 ground = at;
         if (SolidGround.Ray(at + Vector3.up * 0.2f, Vector2.down, 6f, out RaycastHit2D hit)) ground = hit.point;
-        SpriteRenderer sr = BoonFX.MakeRenderer("Bloom", MoreSprites.Flower, ground, 72, null, ItemArt.Lit);
+        // the user's flowers (FloraArt: purple or blue from RDR_Flowers) with a glow in their colour
+        Sprite mine = FloraArt.RandomFlower(out Color glow);
+        SpriteRenderer sr = BoonFX.MakeRenderer("Bloom", mine != null ? mine : MoreSprites.Flower, ground, 72, null, ItemArt.Lit);
         sr.transform.localScale = new Vector3(1f, 0f, 1f);
+        if (mine != null) FloraArt.Pop(sr, glow, 0.9f, 1.2f);
         var b = sr.gameObject.AddComponent<BloomFlower>();
-        b.sr = sr; b.heal = heal;
+        b.sr = sr; b.heal = heal; b.glow = mine != null ? glow : BoonFX.Pink;
         FXParticle.Burst(ground + Vector3.up * 0.2f, BoonFX.Pink, 10, 1f, 2.5f, 2f, 0.5f, true);
-        BoonFX.Popup(ground + Vector3.up * 0.8f, "A FLOWER!", BoonFX.Pink, 0.6f, 0.9f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sporePop : null, 0.35f, 1.8f);
     }
 
@@ -1705,14 +1720,15 @@ public class BloomFlower : MonoBehaviour
         transform.localScale = new Vector3(1f, grow, 1f);
         transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Sin(age * 2.5f) * 4f);
         float fade = age > Life - 2f ? (Mathf.Repeat(age * 6f, 1f) < 0.5f ? 0.35f : 1f) : 1f;
-        sr.color = new Color(1f, 1f, 1f, fade);
-        if (Random.value < 0.06f) BoonFX.Sparkles(transform.position + Vector3.up * 0.15f, BoonFX.Pink, 1, 0.1f, 0.5f);
+        // a slow heartbeat of light in its own colour, so it reads as "touch me" from across the screen
+        float beat = 0.5f + 0.5f * Mathf.Sin(age * 4f);
+        sr.color = new Color(Mathf.Lerp(1f, glow.r, 0.25f * beat) + 0.1f * beat, Mathf.Lerp(1f, glow.g, 0.25f * beat) + 0.1f * beat, Mathf.Lerp(1f, glow.b, 0.25f * beat) + 0.1f * beat, fade);
+        if (Random.value < 0.08f) BoonFX.Sparkles(transform.position + new Vector3(Random.Range(-0.15f, 0.15f), 0.2f, 0f), glow, 1, 0.1f, 0.5f);
         if (age >= Life) { Shard.Break(sr, 2, 3, transform.position, 1.5f); Destroy(gameObject); return; }
 
         Transform rowdy = BoonRunner.Rowdy;
         if (rowdy == null || Vector2.Distance(BoonRunner.RowdyCenter, transform.position + Vector3.up * 0.12f) > 0.75f) return;
         if (rowdy.TryGetComponent(out Health h)) h.AddHealth(heal, false);
-        BoonFX.Popup(transform.position + Vector3.up * 0.7f, "BLOOM!", BoonFX.Pink, 0.75f, 0.9f);
         FXParticle.Burst(transform.position + Vector3.up * 0.15f, BoonFX.Pink, 16, 1f, 3.5f, 1f, 0.6f);
         FXParticle.Burst(transform.position + Vector3.up * 0.15f, BoonFX.Toxic, 8, 1f, 2.5f, 1f, 0.6f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.heal : null, 0.4f, 1.3f);
@@ -1801,7 +1817,6 @@ public class FishTreat : MonoBehaviour
         var f = sr.gameObject.AddComponent<FishTreat>();
         f.sr = sr;
         f.velocity = new Vector2(Random.Range(-1.5f, 1.5f), 4.5f);
-        BoonFX.Popup(at + Vector3.up * 0.5f, "STRAY TAX!", BoonFX.Lavender, 0.55f, 0.8f);
     }
 
     private void Update()
@@ -1835,7 +1850,6 @@ public class FishTreat : MonoBehaviour
             if (Boons.Has("catfood")) p.WakeUp(); else p.Treat();
             BoonFX.Sparkles(p.transform.position, BoonFX.Lavender, 2, 0.2f, 0.4f);
         }
-        BoonFX.Popup(transform.position + Vector3.up * 0.6f, "NOM!", BoonFX.Lavender, 0.7f, 0.8f);
         FXParticle.Burst(transform.position + Vector3.up * 0.15f, BoonFX.Lavender, 10, 1f, 3f, 2f, 0.5f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.chomp : null, 0.4f, 1.3f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.guild : null, 0.4f * GameSettings.CatVoiceVolume, 1.3f);
@@ -1855,16 +1869,18 @@ public static class Lobbed
             SporeCloud.Spawn(ground, dps, false);
         });
         l.trail = BoonFX.Toxic;
+        BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.hairFlip : null, 0.22f, 1.3f);
     }
 
     public static void Meatball(Vector3 from, float facing, float damage, bool fermented)
     {
         Sprite s = BoonArt.FoodSprite(BoonArt.Food.Meatball);
+        // the food art is tiny now (6-10 px, was drawn ~40-60 px on a 64 canvas): hit radius / blast sized to match
         Lob l = Lob.Throw(s != null ? s : MoreSprites.Pod, from, new Vector2(facing * 5f, 4.5f), facing * -420f, (at, e) =>
         {
-            ChefFX.SauceBoom(at, damage, 1.4f, fermented, "Meatball Mortar");
+            ChefFX.SauceBoom(at, damage, 1.15f, fermented, "Meatball Mortar");
         });
-        l.radius = 0.35f;
+        l.radius = 0.22f;
         l.trail = new Color(0.75f, 0.2f, 0.1f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.hairFlip : null, 0.25f, 1.1f);
     }
@@ -1887,10 +1903,8 @@ public static class Lobbed
             if (e == null) return;
             BoonFX.Hit(e, damage, "Hairball");
             BoonFX.Slow(e, 2f, 0.4f);
-            BoonFX.Popup(at + Vector3.up * 0.5f, "EWW!", new Color(0.75f, 0.85f, 0.4f), 0.55f, 0.7f);
         });
         l.radius = 0.3f;
-        BoonFX.Popup(from + Vector3.up * 0.35f, "HKK!", BoonFX.Lavender, 0.5f, 0.6f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.guild : null, 0.3f * GameSettings.CatVoiceVolume, 1.6f);
     }
 
@@ -1905,7 +1919,7 @@ public static class Lobbed
             if (e != null) BoonFX.Hit(e, damage, "Food Fight", cat);
             BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.2f, Random.Range(1.2f, 1.5f));
         });
-        l.radius = 0.35f;
+        l.radius = 0.22f; // small food (it's aimed at the target, so it still lands)
     }
 }
 
@@ -1972,14 +1986,13 @@ public static class ChefFX
     {
         FXParticle.Burst(at, new Color(1f, 0.82f, 0.25f), 12, 2f, 5f, 8f, 0.5f);
         FXParticle.Burst(at, new Color(1f, 0.95f, 0.55f), 6, 1f, 3f, 8f, 0.4f);
-        if (Random.value < 0.25f) BoonFX.Popup(at + Vector3.up * 0.6f, "CHEESY!", new Color(1f, 0.85f, 0.3f), 0.55f, 0.7f);
+        BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.2f, Random.Range(1.6f, 1.9f));
     }
 
     public static void SauceSplash(Vector3 center, float damage)
     {
         PulseRing.Spawn(center, new Color(1f, 0.3f, 0.15f, 0.95f), 1.8f, 0.3f);
         FXParticle.Burst(center, BoonFX.Sauce, 20, 2f, 5f, 8f, 0.55f);
-        BoonFX.Popup(center + Vector3.up * 0.9f, "HOT SAUCE!", new Color(1f, 0.4f, 0.2f), 0.65f, 0.8f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sizzle : null, 0.3f, 1.2f);
         foreach (EnemyHealth e in BoonFX.EnemiesIn(center, 1.8f)) BoonFX.Hit(e, damage, "Secret Sauce");
     }
@@ -2034,7 +2047,6 @@ public class GiantSandwich : MonoBehaviour
         SpriteRenderer sr = BoonFX.MakeRenderer("Giant Sandwich", MoreSprites.Sandwich, ground + Vector3.up * 6f, 76, null, ItemArt.Lit);
         var s = sr.gameObject.AddComponent<GiantSandwich>();
         s.sr = sr; s.groundY = ground.y;
-        BoonFX.Popup(ground + Vector3.up * 1.6f, "SANDWICH INCOMING!", new Color(1f, 0.6f, 0.25f), 0.7f, 1.2f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.chef : null, 0.4f, 1.1f);
     }
 
@@ -2071,7 +2083,6 @@ public class GiantSandwich : MonoBehaviour
         BoonRunner.Feed(8f);
         if (Boons.Has("catfood"))
             foreach (PetFollower p in PetFollower.Pets) if (p != null && p.IsCollected) p.WakeUp();
-        BoonFX.Popup(transform.position + Vector3.up * 0.9f, "SANDWICH!", new Color(1f, 0.6f, 0.25f), 1f, 1.1f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.chomp : null, 0.6f, 1f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sparkle : null, 0.4f, 1.2f);
         // the ingredients fly out
@@ -2102,6 +2113,7 @@ public static class SmithFX
             BoonFX.Lightning(at, BoonFX.Center(e), BoonFX.Ember, 0.1f);
             BoonFX.Hit(e, damage, "Spark Shower", null, true);
         }
+        if (Random.value < 0.6f) BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.clang : null, 0.15f, Random.Range(1.9f, 2.2f)); // tink
     }
 
     public static void Skewer(EnemyHealth first, float facing, float damage)
@@ -2196,7 +2208,6 @@ public class FallingAnvil : MonoBehaviour
             BoonFX.Stun(e, 1f);
             n++;
         }
-        if (n > 0) BoonFX.Popup(at + Vector3.up * 1f, "CLANG!", BoonFX.Steel, 0.9f, 0.9f);
     }
 }
 
@@ -2216,7 +2227,6 @@ public static class SunFX
             BoonFX.Stun(e, seconds);
             n++;
         }
-        if (n > 0) BoonFX.Popup(center + Vector3.up * 1.2f, "BLINDING!", BoonFX.Sunny, 0.85f, 0.9f);
     }
 
     // Solar Flare: a pillar of sunlight slams down on the target
@@ -2234,7 +2244,7 @@ public class SunBeam : MonoBehaviour
 {
     private SpriteRenderer beam, core;
     private float age, damage;
-    private bool struck;
+    private bool struck, shaped;
     private const float Life = 0.5f, Height = 7f;
 
     public static void Spawn(Vector3 ground, float damage)
@@ -2243,8 +2253,17 @@ public class SunBeam : MonoBehaviour
         go.transform.position = ground;
         var b = go.AddComponent<SunBeam>();
         b.damage = damage;
-        b.beam = BoonFX.MakeRenderer("Beam", MoreSprites.Shaft, ground, BoonFX.Order + 2, go.transform);
-        b.core = BoonFX.MakeRenderer("Core", MoreSprites.Shaft, ground, BoonFX.Order + 3, go.transform);
+        // per real pixel (PixelShape) when possible: the old 9 px shaft stretched 7 units tall smeared into blocks
+        b.beam = PixelShape.Make("Beam", PixelShape.Kind.Shaft, ground, BoonFX.Order + 2, go.transform);
+        b.core = PixelShape.Make("Core", PixelShape.Kind.Shaft, ground, BoonFX.Order + 3, go.transform);
+        b.shaped = b.beam != null && b.core != null;
+        if (!b.shaped)
+        {
+            if (b.beam != null) Destroy(b.beam.gameObject);
+            if (b.core != null) Destroy(b.core.gameObject);
+            b.beam = BoonFX.MakeRenderer("Beam", MoreSprites.Shaft, ground, BoonFX.Order + 2, go.transform);
+            b.core = BoonFX.MakeRenderer("Core", MoreSprites.Shaft, ground, BoonFX.Order + 3, go.transform);
+        }
         b.beam.color = new Color(1f, 0.8f, 0.3f, 0f);
         b.core.color = new Color(1f, 1f, 0.95f, 0f);
         BoonArt art = BoonArt.Get;
@@ -2263,8 +2282,16 @@ public class SunBeam : MonoBehaviour
         if (k >= 1f) { Destroy(gameObject); return; }
         float width = k < 0.25f ? Mathf.Lerp(0.2f, 1.4f, k / 0.25f) : Mathf.Lerp(1.4f, 0.1f, (k - 0.25f) / 0.75f);
         float alpha = k < 0.15f ? k / 0.15f : 1f - (k - 0.15f) / 0.85f;
-        beam.transform.localScale = new Vector3(width * 5f, Height * 64f / 32f, 1f);
-        core.transform.localScale = new Vector3(width * 2f, Height * 64f / 32f, 1f);
+        if (shaped)
+        {
+            PixelShape.Size(beam, width * 5f * 9f / 64f, Height);
+            PixelShape.Size(core, width * 2f * 9f / 64f, Height);
+        }
+        else
+        {
+            beam.transform.localScale = new Vector3(width * 5f, Height * 64f / 32f, 1f);
+            core.transform.localScale = new Vector3(width * 2f, Height * 64f / 32f, 1f);
+        }
         beam.color = new Color(1f, 0.8f, 0.3f, 0.75f * alpha);
         core.color = new Color(1f, 1f, 0.95f, alpha);
         if (Random.value < 0.6f) FXParticle.Burst(transform.position + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(0f, 2.5f), 0f), BoonFX.Sunny, 1, 0.2f, 0.6f, -3f, 0.5f);
@@ -2295,9 +2322,14 @@ public class SunPool : MonoBehaviour
         go.transform.position = ground;
         var s = go.AddComponent<SunPool>();
         s.dps = dps;
-        s.pool = BoonFX.MakeRenderer("Pool", MoreSprites.Pool, ground + Vector3.up * 2f / 64f, BoonFX.Order - 2, go.transform);
+        s.pool = PixelShape.Make("Pool", PixelShape.Kind.Pool, ground + Vector3.up * 2f / 64f, BoonFX.Order - 2, go.transform);
+        if (s.pool != null) PixelShape.Size(s.pool, Width, 8f / 64f); // 8 px tall at its real pixel size
+        else
+        {
+            s.pool = BoonFX.MakeRenderer("Pool", MoreSprites.Pool, ground + Vector3.up * 2f / 64f, BoonFX.Order - 2, go.transform);
+            s.pool.transform.localScale = new Vector3(Width * 64f / 48f, 1f, 1f);
+        }
         s.pool.color = new Color(1f, 0.85f, 0.35f, 0f);
-        s.pool.transform.localScale = new Vector3(Width * 64f / 48f, 1f, 1f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sunBeam : null, 0.25f, 1.8f);
     }
 

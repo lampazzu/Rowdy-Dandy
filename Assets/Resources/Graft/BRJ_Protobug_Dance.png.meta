@@ -1,0 +1,377 @@
+fileFormatVersion: 2
+guid: 8965d02fac7c49f439cb0e1eb177f427
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8863447412742870810
+    second: BRJ_Protobug_Dance_0
+  - first:
+      213: 2661099578378007864
+    second: BRJ_Protobug_Dance_1
+  - first:
+      213: -2017554048289174847
+    second: BRJ_Protobug_Dance_2
+  - first:
+      213: 6997503194341922196
+    second: BRJ_Protobug_Dance_3
+  - first:
+      213: 755680654083992500
+    second: BRJ_Protobug_Dance_4
+  - first:
+      213: 3826390421753105603
+    second: BRJ_Protobug_Dance_5
+  - first:
+      213: 6692896341860793071
+    second: BRJ_Protobug_Dance_6
+  - first:
+      213: 551181290171560340
+    second: BRJ_Protobug_Dance_7
+  - first:
+      213: -6131905009892482383
+    second: BRJ_Protobug_Dance_8
+  - first:
+      213: 2470677150959435852
+    second: BRJ_Protobug_Dance_9
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_0
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 0
+        width: 129
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e82b16e985bef480800000000000000
+      internalID: -8863447412742870810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_1
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 0
+        width: 116
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 835b929a7ff1ee420800000000000000
+      internalID: 2661099578378007864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_2
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 0
+        width: 109
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ca829458453004e0800000000000000
+      internalID: -2017554048289174847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_3
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 0
+        width: 106
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4955965b4102c1160800000000000000
+      internalID: 6997503194341922196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_4
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 0
+        width: 114
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bbaf461d87bc7a00800000000000000
+      internalID: 755680654083992500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_5
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 0
+        width: 129
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cc0d84c0d11a1530800000000000000
+      internalID: 3826390421753105603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_6
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 0
+        width: 116
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: feabf1f23c1f1ec50800000000000000
+      internalID: 6692896341860793071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_7
+      rect:
+        serializedVersion: 2
+        x: 977
+        y: 0
+        width: 109
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 491748f867036a700800000000000000
+      internalID: 551181290171560340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_8
+      rect:
+        serializedVersion: 2
+        x: 1116
+        y: 0
+        width: 106
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b2abe8b1e817eaa0800000000000000
+      internalID: -6131905009892482383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Protobug_Dance_9
+      rect:
+        serializedVersion: 2
+        x: 1243
+        y: 0
+        width: 114
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c408c9157cb994220800000000000000
+      internalID: 2470677150959435852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BRJ_Protobug_Dance_0: -8863447412742870810
+      BRJ_Protobug_Dance_1: 2661099578378007864
+      BRJ_Protobug_Dance_2: -2017554048289174847
+      BRJ_Protobug_Dance_3: 6997503194341922196
+      BRJ_Protobug_Dance_4: 755680654083992500
+      BRJ_Protobug_Dance_5: 3826390421753105603
+      BRJ_Protobug_Dance_6: 6692896341860793071
+      BRJ_Protobug_Dance_7: 551181290171560340
+      BRJ_Protobug_Dance_8: -6131905009892482383
+      BRJ_Protobug_Dance_9: 2470677150959435852
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

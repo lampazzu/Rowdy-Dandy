@@ -1,0 +1,9 @@
+frames=6
+w=130
+h=140
+scale=1
+canvasW=273
+canvasH=165
+centerX=65.5
+centerY=57.5
+delays=50,50,50,50,50,50

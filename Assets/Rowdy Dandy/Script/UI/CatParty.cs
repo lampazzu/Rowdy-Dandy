@@ -240,7 +240,7 @@ public class CatParty : MonoBehaviour
 
         Image plate = OverlayUI.MakeImage("Plate", c.root, new Color(0.1f, 0.05f, 0.14f, 0.85f), BoonIcons.Medallion);
         Center(plate.rectTransform, new Vector2(0f, 52f), new Vector2(124f, 124f));
-        c.face = OverlayUI.MakeImage("Face", c.root, tint, p.Portrait);
+        c.face = OverlayUI.MakeImage("Face", c.root, p.FaceTint, p.Portrait);
         c.face.preserveAspect = true;
         Center(c.face.rectTransform, new Vector2(0f, 52f), new Vector2(96f, 96f));
         c.crown = OverlayUI.MakeImage("Crown", c.root, Color.white, MoreSprites.Crown);
@@ -283,8 +283,9 @@ public class CatParty : MonoBehaviour
                 c.tag.Color = isSub ? new Color(0.75f, 0.85f, 1f) : new Color(1f, 0.85f, 0.3f);
             }
         }
-        autoText.SetText(GameInput.Format("{NOTES} AUTO PICK UP: " + (CatRoster.AutoPickup ? "ON" : "OFF")));
-        autoText.Color = CatRoster.AutoPickup ? new Color(0.55f, 1f, 0.6f) : new Color(1f, 0.55f, 0.5f);
+        autoText.SetText(GameInput.Format("{NOTES} AUTO PICK UP: " + (CatRoster.AutoPickup ? "ON" : "OFF")
+                                          + "      {MAP} COMPACT CAT HUD: " + (GameSettings.CatHudCollapsed ? "ON" : "OFF")));
+        autoText.Color = new Color(1f, 0.85f, 0.95f);
     }
 
     private void RefreshHints()
@@ -365,6 +366,14 @@ public class CatParty : MonoBehaviour
             CatRoster.AutoPickup = !CatRoster.AutoPickup;
             UISound.Play(CatRoster.AutoPickup ? UISound.Cue.Unlock : UISound.Cue.Change);
             Burst(autoText.Rect.anchoredPosition, CatRoster.AutoPickup ? new Color(0.55f, 1f, 0.6f) : new Color(1f, 0.55f, 0.5f), 14, 380f);
+            RefreshTexts();
+        }
+        else if (GameInput.Down(GameInput.Act.Map) && mode == Mode.Browse)
+        {
+            // the cat HUD folds into one CAT PARTY row (cooldowns as little squares) - also in Pause > Preferences
+            GameSettings.SetCatHudCollapsed(!GameSettings.CatHudCollapsed);
+            UISound.Play(GameSettings.CatHudCollapsed ? UISound.Cue.Unlock : UISound.Cue.Change);
+            Burst(autoText.Rect.anchoredPosition, new Color(1f, 0.85f, 0.95f), 14, 380f);
             RefreshTexts();
         }
     }

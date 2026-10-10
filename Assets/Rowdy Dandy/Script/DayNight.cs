@@ -90,4 +90,26 @@ public class DayNight : MonoBehaviour
 
         if (NightAmount > 0.9f) Tutorials.Show(Tutorials.Topic.Night); // first nightfall
     }
+
+    // The night was too dark to read: the clip's Global Light2D colour gets lifted toward a cool moonlight at night
+    // (after the animator wrote it this frame, so it never builds up). The blue vignette lives in Global Volume Fake Profile.
+    public const float NightLift = 0.3f;
+    private static readonly Color Moonlight = new Color(0.62f, 0.66f, 0.85f);
+    private UnityEngine.Rendering.Universal.Light2D globalLight;
+    private bool lightSearched;
+
+    private void LateUpdate()
+    {
+        if (animator == null || NightAmount <= 0f) return;
+        if (!lightSearched)
+        {
+            lightSearched = true;
+            foreach (var l in FindObjectsByType<UnityEngine.Rendering.Universal.Light2D>(FindObjectsSortMode.None))
+                if (l.lightType == UnityEngine.Rendering.Universal.Light2D.LightType.Global && l.name == "Global Light2D") { globalLight = l; break; }
+        }
+        if (globalLight == null) return;
+        Color c = globalLight.color;
+        Color lifted = new Color(Mathf.Max(c.r, Moonlight.r), Mathf.Max(c.g, Moonlight.g), Mathf.Max(c.b, Moonlight.b), c.a);
+        globalLight.color = Color.Lerp(c, lifted, NightLift * NightAmount);
+    }
 }

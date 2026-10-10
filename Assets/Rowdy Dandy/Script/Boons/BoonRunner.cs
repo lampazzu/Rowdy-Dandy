@@ -55,6 +55,7 @@ public class BoonRunner : MonoBehaviour
         body = GetComponent<SpriteRenderer>();
         bodyCollider = GetComponent<Collider2D>();
         if (GetComponent<Werewolf>() == null) gameObject.AddComponent<Werewolf>();
+        if (GetComponent<StephmossForm>() == null) gameObject.AddComponent<StephmossForm>();
     }
 
     private void OnDestroy() { if (instance == this) instance = null; }
@@ -102,55 +103,57 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("meatball") && r.swings % 3 == 0) Lobbed.Meatball(front + Vector3.up * 0.2f, r.Facing, Boons.V("meatball", 0), Boons.Has("fermented"));
         if (Boons.Has("splitedge") && Boons.ActiveWeapon == 1) HairCrescent.FireSteel(front, r.Facing, Boons.V("splitedge", 0));
         Werewolf.OnSwing();
+        StephmossForm.OnSwing();
     }
 
+    // Surf dash boons have no cooldown (user rule): every surf dash sets them all off
     public static void OnSurfDash()
     {
         if (!Ok) return;
         BoonRunner r = instance;
         float now = Time.time;
-        if (Boons.Has("decoy") && now >= r.decoyReadyAt)
+        if (Boons.Has("decoy"))
         {
             r.decoyReadyAt = now + 4f;
             Decoy.Spawn(r.body, Boons.V("decoy", 0));
         }
-        if (Boons.Has("wipeout") && now >= r.wipeoutReadyAt)
+        if (Boons.Has("wipeout"))
         {
             r.wipeoutReadyAt = now + Balance.WipeoutCooldown;
             TideRider.Begin(r, Boons.V("wipeout", 0), Boons.Has("beachbod"), Boons.Has("redtide"));
         }
-        if (Boons.Has("runway") && now >= r.runwayReadyAt && r.Grounded)
+        if (Boons.Has("runway") && r.Grounded)
         {
             r.runwayReadyAt = now + 2.5f;
             RunwayCarpet.Spawn(r.Feet, r.Facing, Boons.V("runway", 0));
         }
-        if (Boons.Has("ink") && now >= r.inkReadyAt)
+        if (Boons.Has("ink"))
         {
             r.inkReadyAt = now + 3f;
             InkCloud.Spawn(r.Center, r.Facing, Boons.V("ink", 0));
         }
-        if (Boons.Has("rootsnare") && now >= r.snareReadyAt && r.Grounded)
+        if (Boons.Has("rootsnare") && r.Grounded)
         {
             r.snareReadyAt = now + 3f;
             RootSnare.Spawn(r.Feet, Boons.V("rootsnare", 0));
         }
-        if (Boons.Has("alpharoar") && now >= r.roarReadyAt)
+        if (Boons.Has("alpharoar"))
         {
             r.roarReadyAt = now + 6f;
             r.AlphaRoar(Boons.V("alpharoar", 0));
         }
-        if (Boons.Has("eggs") && now >= r.eggsReadyAt)
+        if (Boons.Has("eggs"))
         {
             r.eggsReadyAt = now + 1.5f;
             for (int i = 0; i < 3; i++) Lobbed.Egg(r.Center + new Vector3(r.Facing * 0.3f, 0.2f, 0f), r.Facing, i, Boons.V("eggs", 0), Boons.Has("fermented"));
             BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.hairFlip : null, 0.3f, 1.6f);
         }
-        if (Boons.Has("blinding") && now >= r.flashReadyAt)
+        if (Boons.Has("blinding"))
         {
             r.flashReadyAt = now + 4f;
             SunFX.BlindingFlash(r.Center, Boons.V("blinding", 0));
         }
-        if (Boons.Has("catcall") && now >= r.catCallReadyAt && Boons.CatsWithRowdy > 0)
+        if (Boons.Has("catcall") && Boons.CatsWithRowdy > 0)
         {
             r.catCallReadyAt = now + Boons.V("catcall", 0);
             foreach (PetFollower p in PetFollower.Pets)
@@ -161,9 +164,8 @@ public class BoonRunner : MonoBehaviour
                 BoonFX.Sparkles(p.transform.position, BoonFX.Lavender, 3, 0.2f, 0.5f);
             }
             BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.catCall : null, 0.5f * GameSettings.CatVoiceVolume, 1.15f);
-            BoonFX.Popup(r.HeadTop + Vector3.up * 0.3f, "PSPSPS!", BoonFX.Lavender, 0.7f, 0.9f);
         }
-        if (Boons.Has("ambush") && now >= r.ambushReadyAt && Boons.CatsWithRowdy > 0)
+        if (Boons.Has("ambush") && Boons.CatsWithRowdy > 0)
         {
             r.ambushReadyAt = now + 5f;
             r.AlleyAmbush(Boons.V("ambush", 0));
@@ -178,7 +180,6 @@ public class BoonRunner : MonoBehaviour
             BoonArt.Play(art.wolfHowl, 0.45f, 1.35f);
             BoonArt.Play(art.fearSfx, 0.5f, 0.9f);
         }
-        BoonFX.Popup(HeadTop + Vector3.up * 0.4f, "GRRRAAAH!", BoonFX.Blood, 1f, 1f);
         PulseRing.Spawn(Center, new Color(1f, 0.2f, 0.3f, 1f), 3.5f, 0.35f);
         PulseRing.Spawn(Center, new Color(1f, 0.9f, 0.9f, 0.7f), 2.2f, 0.25f);
         ScreenShake.Impulse(0.4f);
@@ -205,7 +206,6 @@ public class BoonRunner : MonoBehaviour
             GhostCat.Pounce(p.transform.position + Vector3.up * 0.3f, target, damage * Boons.CatDamageFor(p), s, BoonFX.Lavender, "Alley Ambush", false);
             n++;
         }
-        if (n > 0) BoonFX.Popup(HeadTop + Vector3.up * 0.3f, "GET EM, BOYS!", BoonFX.Lavender, 0.7f, 0.9f);
     }
 
     public static void OnJump()
@@ -257,7 +257,6 @@ public class BoonRunner : MonoBehaviour
             r.posed = false;
             damage *= Boons.V("admire", 0);
             Vector3 c = BoonFX.Center(e);
-            BoonFX.Popup(c + Vector3.up * 0.7f, "GORGEOUS!", BoonFX.Pink, 1.1f, 1.1f);
             BoonFX.Sparkles(c, BoonFX.Gold, 10, 0.5f, 0.7f);
             PulseRing.Spawn(c, new Color(1f, 0.6f, 0.9f, 1f), 1.4f, 0.3f);
             TimeSlowController.HitStop(0.09f, 0.05f);
@@ -272,6 +271,7 @@ public class BoonRunner : MonoBehaviour
         BoonRunner r = instance;
         Vector3 c = BoonFX.Center(e);
         Werewolf.AddCharge(2.5f);
+        StephmossForm.AddCharge(2.5f);
         if (Werewolf.Active) BankHeal(1f, true); // lifesteal
         r.hits++;
 
@@ -320,7 +320,6 @@ public class BoonRunner : MonoBehaviour
             n = 0;
             BoonFX.Stun(e, 1f);
             BoonFX.Hit(e, Boons.V("hookline", 0), "Hook Line And Sinker");
-            BoonFX.Popup(c + Vector3.up * 0.6f, "SINKER!", new Color(0.7f, 0.85f, 1f), 0.8f, 0.9f);
             PulseRing.Spawn(c, new Color(0.7f, 0.85f, 1f, 1f), 1f, 0.25f);
             BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.clang : null, 0.5f, 0.8f);
             TimeSlowController.HitStop(0.05f, 0.08f);
@@ -429,6 +428,8 @@ public class BoonRunner : MonoBehaviour
         Vector3 c = BoonFX.Center(e);
         Werewolf.AddCharge(8f);
         Werewolf.OnKill();
+        StephmossForm.AddCharge(8f);
+        StephmossForm.OnKill(c);
         bool poisoned = e.TryGetComponent(out StatusEffects s) && s.IsPoisoned;
 
         if (Boons.Has("bloodthirst") && r.health != null)
@@ -443,7 +444,6 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("huntmark") && HuntersMark.Target == e)
         {
             r.health.AddHealth(10f, false);
-            BoonFX.Popup(c + Vector3.up * 0.8f, "PREY DOWN!", BoonFX.Blood, 0.85f, 1f);
             HuntersMark.Clear();
         }
         if (Boons.Has("straytax") && Random.value < Boons.V("straytax", 0) / 100f) FishTreat.Drop(c);
@@ -493,8 +493,7 @@ public class BoonRunner : MonoBehaviour
     {
         if (instance == null) return;
         BoonRunner r = instance;
-        if (r.posed) { r.posed = false; BoonFX.Popup(r.HeadTop + Vector3.up * 0.3f, "MY HAIR!", BoonFX.Pink, 0.6f, 0.8f); }
-        if (Boons.Has("flawless") && Random.value < 0.4f) BoonFX.Popup(r.HeadTop + Vector3.up * 0.3f, "MY FACE!", BoonFX.Pink, 0.55f, 0.7f);
+        if (r.posed) r.posed = false;
 
         // Thorn Skin: the enemy whose hitbox just landed
         if (Boons.Has("thornskin") && Spike.LastAttackFrame >= Time.frameCount - 1 && Spike.LastAttacker != null && !Spike.LastAttacker.enemydead)
@@ -521,7 +520,6 @@ public class BoonRunner : MonoBehaviour
         GamepadRumble.Pulse(0.6f, 0.9f, 0.4f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.nineLives : null, 0.8f, 1f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.guild : null, 0.6f * GameSettings.CatVoiceVolume, 1.2f);
-        BoonFX.Popup(r.HeadTop + Vector3.up * 0.5f, "NINE LIVES!", BoonFX.Lavender, 1.3f, 1.8f);
         PulseRing.Spawn(r.Center, new Color(0.9f, 0.8f, 1f, 1f), 3f, 0.5f);
         BoonFX.Sparkles(r.Center, BoonFX.Lavender, 16, 0.8f, 0.9f);
         // ghost cats fly up out of him
@@ -556,7 +554,6 @@ public class BoonRunner : MonoBehaviour
         ExplosionChain.Boom(c, 1.4f, 0.6f, 0.7f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.bigBoom : null, 0.6f, 1f);
         TimeSlowController.HitStop(0.1f, 0.05f);
-        BoonFX.Popup(c + Vector3.up * 0.9f, "SNOB BOMB!", new Color(1f, 0.75f, 0.35f), 1f, 1.3f);
         foreach (EnemyHealth e in BoonFX.EnemiesIn(c, 2.8f))
         {
             BoonFX.Hit(e, Boons.V("weaponsnob", 0), "Weapon Snob");
@@ -567,6 +564,7 @@ public class BoonRunner : MonoBehaviour
     // ================================================================ the boon you just took
     public static void OnBoonTaken(BoonDef d)
     {
+        if (d != null) WeaponBoons.OnTaken(d.id); // a weapon boon comes with the weapon
         if (instance == null || d == null) return;
         instance.StartCoroutine(instance.Celebrate(d));
     }
@@ -590,6 +588,11 @@ public class BoonRunner : MonoBehaviour
         {
             Werewolf.Fill(); // the first moon is on the house
             Tutorials.Show(Tutorials.Topic.Werewolf, BoonIcons.Get(d), 0.9f);
+        }
+        else if (d.id == "stephmoss")
+        {
+            StephmossForm.Fill(); // the first swarm is on the house
+            Tutorials.Show(Tutorials.Topic.Boons, BoonIcons.Get(d), 0.9f);
         }
         else if (d.id == "mainchar") StyleRank.Announce();
         else Tutorials.Show(Tutorials.Topic.Boons, BoonIcons.Get(d), 0.9f);
@@ -651,7 +654,6 @@ public class BoonRunner : MonoBehaviour
             else if (wasWatered)
             {
                 saltyUntil = now + 4f;
-                BoonFX.Popup(HeadTop + Vector3.up * 0.3f, "SALTY!", BoonFX.Cyan, 0.7f, 0.9f);
                 FXParticle.Burst(Center, BoonFX.Foam, 10, 1f, 3f, 6f, 0.5f);
             }
         }
@@ -794,7 +796,6 @@ public class BoonRunner : MonoBehaviour
         posed = true;
         stillTime = 0f;
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.pose : null, 0.5f, 1.2f);
-        BoonFX.Popup(HeadTop + Vector3.up * 0.35f, "LOOKING GOOD!", BoonFX.Pink, 0.8f, 1.1f);
         BoonFX.Sparkles(HeadTop, BoonFX.Gold, 8, 0.4f, 0.7f);
         PulseRing.Spawn(Center, new Color(1f, 0.6f, 0.9f, 0.9f), 1f, 0.3f);
         if (body != null) CatFX.Afterimage(body, new Color(1f, 1f, 1f, 0.9f), 0.2f);

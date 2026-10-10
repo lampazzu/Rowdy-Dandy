@@ -143,8 +143,11 @@ public class PetFollower : MonoBehaviour
         }
     }
     public float CooldownSeconds => Cooldown;
-    public Sprite Portrait => portrait != null ? portrait : (TryGetComponent(out SpriteRenderer sr) ? sr.sprite : null);
+    public Sprite Portrait => skinPortrait != null ? skinPortrait : portrait != null ? portrait : (TryGetComponent(out SpriteRenderer sr) ? sr.sprite : null);
     public Color Tint => tint;
+    // the HUD / map face colour: a cat with its own skin (CatSkin) shows its real colours
+    public Color FaceTint => skinPortrait != null ? Color.white : tint;
+    private Sprite skinPortrait;
     public bool IsCollected => player != null;
     public bool IsAbilityCat => catType >= CatType.Paprika;
 
@@ -226,6 +229,14 @@ public class PetFollower : MonoBehaviour
         ActivePets.Remove(this);
     }
 
+    // CatSpawner reshuffles the hiding cats every load: this one leaves right now (out of the pet list this frame)
+    public void Retire()
+    {
+        ActivePets.Remove(this);
+        gameObject.SetActive(false);
+        Destroy(gameObject);
+    }
+
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -254,7 +265,14 @@ public class PetFollower : MonoBehaviour
         // Glowing outline while nobody has found him yet (see CatFX.cs)
         if (GetComponent<LostCatGlow>() == null) gameObject.AddComponent<LostCatGlow>();
 
-        if (spriteRenderer != null && tint != Color.white) spriteRenderer.color = tint;
+        // its own art (New Cat skin files) if it has some, else the placeholder: Wig tinted
+        string skin = CatSkin.SkinName(catType);
+        if (skin != null && CatSkin.Attach(spriteRenderer, skin))
+        {
+            spriteRenderer.color = Color.white;
+            skinPortrait = CatSkin.Portrait(skin);
+        }
+        else if (spriteRenderer != null && tint != Color.white) spriteRenderer.color = tint;
 
         // Ability cats reuse Wig's art / animator: his attack clip's damage box stays harmless on them
         if (IsAbilityCat)
@@ -292,6 +310,7 @@ public class PetFollower : MonoBehaviour
         }
 
         UpdateSwapPrompt();
+        RecoverIdle();
 
         if (player == null)
             return;
@@ -305,6 +324,9 @@ public class PetFollower : MonoBehaviour
             if (catType == CatType.Samurai) TryStartExecution();
             else DetectNearestEnemy();
         }
+
+        // never left hanging: no execution running and nothing alive to attack = back to Rowdy
+        if (!isFollowingPlayer && !isExecuting && !TargetAlive()) { targetEnemy = null; isFollowingPlayer = true; }
 
         if (isFollowingPlayer)
         {
@@ -589,14 +611,14 @@ public class PetFollower : MonoBehaviour
         lastPowerAt = Time.time;
         BoonRunner.OnCatPower(this); // Compost, Food Fight
 
+        // the attack itself: until the clip sends him back (backToIdle), the target dies, or 1.5 s at most -
+        // then he always comes back to Rowdy and waits out the rest of the cooldown next to him
+        float attackUntil = Time.time + 1.5f;
+        while (!isFollowingPlayer && Time.time < attackUntil && TargetAlive()) yield return null;
+        targetEnemy = null;
+        isFollowingPlayer = true;
+
         while (Time.time < cooldownEnd) yield return null; // (a treat can cut it short)
-
-        if (targetEnemy != null && targetEnemy.gameObject != null)
-        {
-            targetEnemy = null;
-            isFollowingPlayer = true;
-        }
-
         canAttack = true;
     }
 
@@ -947,6 +969,13 @@ public class PetFollower : MonoBehaviour
 
     // ----------------------------------------------------------------
 
+    private bool TargetAlive()
+    {
+        if (targetEnemy == null || !targetEnemy.gameObject.activeInHierarchy) return false;
+        EnemyHealth e = targetEnemy.GetComponentInParent<EnemyHealth>();
+        return e == null || !e.enemydead;
+    }
+
     private void ResetToIdle()
     {
         anim.SetTrigger("back to idle");
@@ -964,44 +993,48 @@ public class PetFollower : MonoBehaviour
             isFollowingPlayer = true;
     }
 
+    // Facing is set from the target side every frame (+x scale = facing right), never toggled: the old Flip() flipped
+    // a bool and the scale together, so anything that restored the scale (squash / stretch) left Nick facing away
+    // from where Rowdy looked for good.
     private void FlipTowards(Transform target)
     {
-        if (target == null)
-            return;
-
-        if (target.position.x > transform.position.x && !facingRight)
-        {
-            Flip();
-        }
-        else if (target.position.x < transform.position.x && facingRight)
-        {
-            Flip();
-        }
+        if (target == null) return;
+        float dx = target.position.x - transform.position.x;
+        if (Mathf.Abs(dx) < 0.05f) return;
+        Face(dx > 0f);
     }
 
     private void MatchPlayerDirection()
     {
-        if (player == null)
-            return;
-
-        if ((player.localScale.x > 0 && !facingRight) ||
-            (player.localScale.x < 0 && facingRight))
-        {
-            Flip();
-        }
+        if (player == null) return;
+        Face(player.localScale.x > 0f);
     }
 
-    private void Flip()
+    private void Face(bool right)
     {
-        facingRight = !facingRight;
-
-        transform.localScale = new Vector3(
-            -transform.localScale.x,
-            transform.localScale.y,
-            transform.localScale.z
-        );
+        facingRight = right;
+        Vector3 s = transform.localScale;
+        float x = Mathf.Abs(s.x) * (right ? 1f : -1f);
+        if (s.x != x) transform.localScale = new Vector3(x, s.y, s.z);
     }
 
+    // The strike clip loops and only leaves on 'back to idle': a chain cut short (swapped out, dismissed, a cut-freeze
+    // eating the trigger) left Nick frozen in it - no idle animation. Out of it once it has played and he isn't striking.
+    private float stuckInStrike;
+    private void RecoverIdle()
+    {
+        if (anim == null || isExecuting || abilityRunning || string.IsNullOrEmpty(strikeState) || !anim.isActiveAndEnabled) { stuckInStrike = 0f; return; }
+        AnimatorStateInfo s = anim.GetCurrentAnimatorStateInfo(0);
+        if (!s.IsName(strikeState) || anim.IsInTransition(0)) { stuckInStrike = 0f; return; }
+        stuckInStrike += Time.deltaTime;
+        if (stuckInStrike < (catType == CatType.Samurai ? 0.6f : 1.6f)) return; // Wig's clip is 1.33 s: let it finish
+        stuckInStrike = 0f;
+        if (catType != CatType.Samurai) { targetEnemy = null; isFollowingPlayer = true; }
+        anim.speed = Mathf.Max(anim.speed, 1f);
+        foreach (string idle in new[] { "NickIdle", "Idle", "WigIdle" })
+            if (anim.HasState(0, Animator.StringToHash(idle))) { anim.Play(idle, 0, 0f); return; }
+        SetTriggerIfExists("back to idle");
+    }
     private void OnDisable()
     {
         // Disabled mid-chain (coroutines stop): don't leave enemies claimed or him stuck unable to attack
@@ -1077,6 +1110,43 @@ public static class CatRoster
         return true;
     }
     public static int CatCount => collected.Count;
+
+    // Colosseum trials start every build from scratch (ArenaRun): the party leaves - back to their hiding spots in the
+    // level, first in line for a rat (so a rat dropped at the gong lures them back one by one). Returns their keys.
+    public static List<string> SendAllAway()
+    {
+        var keys = new List<string>(collected);
+        foreach (string key in keys)
+        {
+            PetFollower pet = Find(key);
+            lostOrder.Remove(key);
+            lostOrder.Add(key);
+            if (pet != null) pet.Dismiss(pet.HomePosition);
+        }
+        collected.Clear();
+        LeaderKey = SubLeaderKey = null;
+        return keys;
+    }
+
+    // A colosseum seal brings the party it saved back (ArenaRun)
+    public static void Recall(IEnumerable<string> keys, Transform rowdyBody)
+    {
+        if (rowdyBody == null || keys == null) return;
+        foreach (string key in keys)
+        {
+            if (!HasRoom) break;
+            foreach (PetFollower pet in PetFollower.Pets)
+            {
+                if (pet == null || pet.IsCollected || pet.RosterKey != key) continue;
+                RecordCollected(key);
+                pet.Rejoin(rowdyBody, collected.Count);
+                break;
+            }
+        }
+        Reindex();
+    }
+
+    public static List<string> PartyKeys => new List<string>(collected);
     private static readonly Dictionary<string, List<Vector3>> visitedSpots = new Dictionary<string, List<Vector3>>();
     private static bool needsApply = true;
     private static bool diedBeforeReload;
@@ -1087,6 +1157,7 @@ public static class CatRoster
     private static Collider2D[] rowdyColliders;
     private static float findRowdyTimer;
     private static Vector3 lastSample = new Vector3(float.MaxValue, float.MaxValue, 0f);
+    private static float nextAutoBait;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSession()
@@ -1096,6 +1167,7 @@ public static class CatRoster
         visitedSpots.Clear();
         LostNotices.Clear();
         Rats = 0;
+        nextAutoBait = 0f;
         needsApply = true;
         diedBeforeReload = false;
         lastTickFrame = -1;
@@ -1112,6 +1184,10 @@ public static class CatRoster
     }
 
     public static void MarkDied() => diedBeforeReload = true;
+
+    // The cats CatSpawner must not reshuffle away on a load: the party. After a death only the leader / sub-leader
+    // stay with Rowdy (ApplyToScene); the others wander off but still exist - "GOT LOST", and a rat lures them back.
+    public static List<string> KeptKeys() => new List<string>(collected);
 
     // Dev reset (key 0): forget every collected cat and the remembered hiding spots
     public static void ClearAll()
@@ -1132,6 +1208,7 @@ public static class CatRoster
         if (!collected.Contains(key)) collected.Add(key);
         everOwned.Add(key);
         lostOrder.Remove(key);
+        AutoRanks();
         SortRanks(); // a newcomer never cuts in front of the leader / sub-leader
     }
 
@@ -1190,6 +1267,14 @@ public static class CatRoster
     {
         if (IsLeader(p)) LeaderKey = null;
         if (IsSubLeader(p)) SubLeaderKey = null;
+    }
+
+    // No leader yet: the first cat in line takes the crown. Sub-leader unlocked (level 10) and free: the next one.
+    public static void AutoRanks()
+    {
+        if (LeaderKey == null && collected.Count > 0) LeaderKey = collected[0];
+        if (SubLeaderUnlocked && SubLeaderKey == null)
+            foreach (string k in collected) if (k != LeaderKey) { SubLeaderKey = k; break; }
     }
 
     // Leader to slot 1, sub-leader to slot 2; everybody else keeps their order
@@ -1289,6 +1374,17 @@ public static class CatRoster
         if (needsApply) ApplyToScene();
 
         SampleVisitedSpot();
+
+        // Preferences > Auto Use Cat Bait: a rat + a free slot + a cat to call = the rat goes down by itself
+        if (GameSettings.AutoCatBait && Rats > 0 && HasRoom && Time.time >= nextAutoBait && !PauseMenu.IsPaused && !FirstDrop.Running
+            && rowdyMovement != null && rowdyMovement.IsGrounded)
+        {
+            nextAutoBait = Time.time + 6f; // one at a time: the cat needs a moment to come running
+            if (SpendRat(out PetFollower cat)) RatBait.Drop(rowdy.position, cat);
+        }
+
+        // the sub-leader slot unlocks at level 10: filled right away
+        if (SubLeaderUnlocked && SubLeaderKey == null && collected.Count > 1) { AutoRanks(); SortRanks(); }
     }
 
     private static bool FindRowdy()
@@ -1312,9 +1408,10 @@ public static class CatRoster
 
         // Death penalty: ALL cats get lost (legendary rats no longer shield them: they're bait to call cats back at a
         // checkpoint, see RatBait). Also never more cats than the Magical Cat Capacity.
+        // The leader and sub-leader never get lost: they stand first in line, so they're the ones kept.
         var lostKeys = new List<string>();
         int keep = Mathf.Min(collected.Count, Capacity);
-        if (diedBeforeReload) keep = 0;
+        if (diedBeforeReload) keep = Mathf.Min(keep, RankedCount);
         while (collected.Count > keep)
         {
             lostKeys.Insert(0, collected[collected.Count - 1]);
@@ -1342,10 +1439,15 @@ public static class CatRoster
             }
         }
 
-        // Hide the rest again
+        // Hide the rest again - only past the Mountain Pass gate (the Pillar of Dandy), so the start of the game
+        // isn't one new mechanic after another. Checkpoints past the gate are extra hiding spots.
+        CatZoneStartX = FindCatZoneStart();
         var homeSpots = new List<Vector3>();
-        foreach (PetFollower pet in pets) homeSpots.Add(pet.HomePosition);
+        foreach (PetFollower pet in pets) if (pet.HomePosition.x >= CatZoneStartX) homeSpots.Add(pet.HomePosition);
+        foreach (RespawnTrigger r in Object.FindObjectsByType<RespawnTrigger>(FindObjectsSortMode.None))
+            if (r.transform.position.x >= CatZoneStartX && !FrontierArena.InGloom(r.transform.position)) homeSpots.Add(r.transform.position + new Vector3(1.6f, 0.7f, 0f));
         visitedSpots.TryGetValue(sceneName, out List<Vector3> visited);
+        if (visited != null) visited = visited.FindAll(v => v.x >= CatZoneStartX);
 
         var taken = new List<Vector3>();
         var lostPets = new List<PetFollower>();
@@ -1366,6 +1468,14 @@ public static class CatRoster
         if (died)
             foreach (PetFollower lost in lostPets)
                 LostNotices.Add(new LostCat { name = lost.CatName, portrait = lost.Portrait, pet = lost });
+    }
+
+    // Cats only hide past the Mountain Pass gate (object AnimationPillar, the Pillar of Dandy by the Jungle)
+    public static float CatZoneStartX { get; private set; } = 104f;
+    private static float FindCatZoneStart()
+    {
+        GameObject gate = GameObject.Find("AnimationPillar");
+        return gate != null ? gate.transform.position.x + 2f : 104f;
     }
 
     // The cats lost by the last death, picked up by CatHUD (their slots linger and fade: "NICK GOT LOST")
@@ -1394,7 +1504,10 @@ public static class CatRoster
                 return;
             }
         }
-        taken.Add(pet.HomePosition); // nowhere better: stays where the level put it
+        // nowhere valid at all: its home if that's past the gate, else the first hiding spot past it
+        Vector3 fallback = pet.HomePosition.x >= CatZoneStartX || homeSpots.Count == 0 ? pet.HomePosition : homeSpots[0];
+        pet.Relocate(fallback);
+        taken.Add(fallback);
     }
 
     // Remembers where Rowdy stands on solid ground (not water) as future hiding spots

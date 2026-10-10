@@ -143,7 +143,11 @@ public class SoundtrackManager : MonoBehaviour
             }
         }
 
-        if (rowdy != null) ChooseSection(rowdy.position.x);
+        if (overrideClip != null)
+        {
+            if (players[activePlayer].clip != overrideClip || !players[activePlayer].isPlaying) { current = null; PlayClip(overrideClip, overrideVolume); }
+        }
+        else if (rowdy != null) ChooseSection(rowdy.position.x);
         UpdateMuffle();
         UpdateFades();
     }
@@ -225,6 +229,11 @@ public class SoundtrackManager : MonoBehaviour
         if (resumeTimes.TryGetValue(clip, out float time) && time > 0f && time < clip.length - 1f) next.time = time;
         next.Play();
     }
+
+    // A boss song over the level's music (crossfades like a section change); null hands the music back
+    private static AudioClip overrideClip;
+    private static float overrideVolume = 1f;
+    public static void Override(AudioClip clip, float volume = 1f) { overrideClip = clip; overrideVolume = volume; if (clip == null && instance != null) instance.current = null; }
 
     // AudioGuard restarted the audio system: every source stopped, start the current song again where it was
     public static void Revive()

@@ -1,0 +1,1261 @@
+fileFormatVersion: 2
+guid: cc15d61c340e64f48bb825dc2c4be40e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -602485347797273415
+    second: Mahrg_EnergyShield_0
+  - first:
+      213: 3607613185391659824
+    second: Mahrg_EnergyShield_1
+  - first:
+      213: -3967043241036589369
+    second: Mahrg_EnergyShield_2
+  - first:
+      213: -8456513476682695445
+    second: Mahrg_EnergyShield_3
+  - first:
+      213: 2899019366121342086
+    second: Mahrg_EnergyShield_4
+  - first:
+      213: 5936418543409861229
+    second: Mahrg_EnergyShield_5
+  - first:
+      213: 6512928004402146413
+    second: Mahrg_EnergyShield_6
+  - first:
+      213: -6405866148513783524
+    second: Mahrg_EnergyShield_7
+  - first:
+      213: -30715790107563631
+    second: Mahrg_EnergyShield_8
+  - first:
+      213: -1017198972265853659
+    second: Mahrg_EnergyShield_9
+  - first:
+      213: -1214684055125506081
+    second: Mahrg_EnergyShield_10
+  - first:
+      213: -6090758163311146377
+    second: Mahrg_EnergyShield_11
+  - first:
+      213: -5098558262322011252
+    second: Mahrg_EnergyShield_12
+  - first:
+      213: 6101660240850325274
+    second: Mahrg_EnergyShield_13
+  - first:
+      213: 3640993688467291120
+    second: Mahrg_EnergyShield_14
+  - first:
+      213: 7491271465796437248
+    second: Mahrg_EnergyShield_15
+  - first:
+      213: 7055382781220233672
+    second: Mahrg_EnergyShield_16
+  - first:
+      213: -4891790237879107022
+    second: Mahrg_EnergyShield_17
+  - first:
+      213: -1312165762817354393
+    second: Mahrg_EnergyShield_18
+  - first:
+      213: -648782392141892287
+    second: Mahrg_EnergyShield_19
+  - first:
+      213: 3772429871222598810
+    second: Mahrg_EnergyShield_20
+  - first:
+      213: 3276164767382108956
+    second: Mahrg_EnergyShield_21
+  - first:
+      213: -8987892176247209112
+    second: Mahrg_EnergyShield_22
+  - first:
+      213: 7514818663538929169
+    second: Mahrg_EnergyShield_23
+  - first:
+      213: -3979568321766807410
+    second: Mahrg_EnergyShield_24
+  - first:
+      213: 2450380905440441533
+    second: Mahrg_EnergyShield_25
+  - first:
+      213: -7273509557287728135
+    second: Mahrg_EnergyShield_26
+  - first:
+      213: -8146878315180695223
+    second: Mahrg_EnergyShield_27
+  - first:
+      213: -428194017322330982
+    second: Mahrg_EnergyShield_28
+  - first:
+      213: 6318474218722918132
+    second: Mahrg_EnergyShield_29
+  - first:
+      213: -5188774810214526172
+    second: Mahrg_EnergyShield_30
+  - first:
+      213: -7537931625694309599
+    second: Mahrg_EnergyShield_31
+  - first:
+      213: -776894483949138559
+    second: Mahrg_EnergyShield_32
+  - first:
+      213: 4546818589651100234
+    second: Mahrg_EnergyShield_33
+  - first:
+      213: 960325760855620262
+    second: Mahrg_EnergyShield_34
+  - first:
+      213: -2667612140902155250
+    second: Mahrg_EnergyShield_35
+  - first:
+      213: -8587562634305221954
+    second: Mahrg_EnergyShield_36
+  - first:
+      213: -1152390374663401836
+    second: Mahrg_EnergyShield_37
+  - first:
+      213: -2817176674224693982
+    second: Mahrg_EnergyShield_38
+  - first:
+      213: 2332003545065349995
+    second: Mahrg_EnergyShield_39
+  - first:
+      213: -6729059488400308978
+    second: Mahrg_EnergyShield_40
+  - first:
+      213: -205028160842591411
+    second: Mahrg_EnergyShield_41
+  - first:
+      213: 8765972852187980085
+    second: Mahrg_EnergyShield_42
+  - first:
+      213: 8728202524282889508
+    second: Mahrg_EnergyShield_43
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_0
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 50
+        width: 89
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b47a2ea4ca83a7f0800000000000000
+      internalID: -602485347797273415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_1
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 158
+        width: 20
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03b09420411d01230800000000000000
+      internalID: 3607613185391659824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_2
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 6
+        width: 85
+        height: 163
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c65669c03b32f8c0800000000000000
+      internalID: -3967043241036589369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_3
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 161
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bec36082ccd64aa80800000000000000
+      internalID: -8456513476682695445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_4
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 131
+        width: 16
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68404aaf0c26b3820800000000000000
+      internalID: 2899019366121342086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_5
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 5
+        width: 105
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d629cf57635626250800000000000000
+      internalID: 5936418543409861229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_6
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 130
+        width: 34
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6c65165381926a50800000000000000
+      internalID: 6512928004402146413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_7
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 30
+        width: 103
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c11e22b7daac917a0800000000000000
+      internalID: -6405866148513783524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_8
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 71
+        width: 66
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 199a4a1d620e29ff0800000000000000
+      internalID: -30715790107563631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_9
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 186
+        height: 178
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52d83309cee22e1f0800000000000000
+      internalID: -1017198972265853659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_10
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 30
+        width: 97
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd7c9eb9943942fe0800000000000000
+      internalID: -1214684055125506081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_11
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 29
+        width: 94
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77a470f78b7497ba0800000000000000
+      internalID: -6090758163311146377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_12
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 0
+        width: 103
+        height: 178
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c83e9a316484e39b0800000000000000
+      internalID: -5098558262322011252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_13
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 1
+        width: 96
+        height: 175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1f020c39a37da450800000000000000
+      internalID: 6101660240850325274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_14
+      rect:
+        serializedVersion: 2
+        x: 1187
+        y: 0
+        width: 97
+        height: 178
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fb38860878678230800000000000000
+      internalID: 3640993688467291120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_15
+      rect:
+        serializedVersion: 2
+        x: 1283
+        y: 0
+        width: 104
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00501da25b756f760800000000000000
+      internalID: 7491271465796437248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_16
+      rect:
+        serializedVersion: 2
+        x: 1411
+        y: 143
+        width: 141
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c12a0d2241c9e160800000000000000
+      internalID: 7055382781220233672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_17
+      rect:
+        serializedVersion: 2
+        x: 1609
+        y: 143
+        width: 141
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2320e7b42bedc1cb0800000000000000
+      internalID: -4891790237879107022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_18
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 127
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76597dcd0304acde0800000000000000
+      internalID: -1312165762817354393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_19
+      rect:
+        serializedVersion: 2
+        x: 875
+        y: 120
+        width: 26
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 145badb0adf0ff6f0800000000000000
+      internalID: -648782392141892287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_20
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 120
+        width: 26
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9cab4e0bfc5a5430800000000000000
+      internalID: 3772429871222598810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_21
+      rect:
+        serializedVersion: 2
+        x: 1271
+        y: 120
+        width: 26
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1bf5718f76477d20800000000000000
+      internalID: 3276164767382108956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_22
+      rect:
+        serializedVersion: 2
+        x: 1390
+        y: 0
+        width: 105
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 863c5438fa7944380800000000000000
+      internalID: -8987892176247209112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_23
+      rect:
+        serializedVersion: 2
+        x: 1469
+        y: 120
+        width: 26
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11ea6bf52cff94860800000000000000
+      internalID: 7514818663538929169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_24
+      rect:
+        serializedVersion: 2
+        x: 1494
+        y: 1
+        width: 88
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8821bd22bbb5c8c0800000000000000
+      internalID: -3979568321766807410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_25
+      rect:
+        serializedVersion: 2
+        x: 1583
+        y: 0
+        width: 110
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db47d296370810220800000000000000
+      internalID: 2450380905440441533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_26
+      rect:
+        serializedVersion: 2
+        x: 1667
+        y: 120
+        width: 26
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fbc477289d4f0b90800000000000000
+      internalID: -7273509557287728135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_27
+      rect:
+        serializedVersion: 2
+        x: 1692
+        y: 1
+        width: 88
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 941625b165970fe80800000000000000
+      internalID: -8146878315180695223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_28
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 54
+        width: 9
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a941e865fcfbe0af0800000000000000
+      internalID: -428194017322330982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_29
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 30
+        width: 42
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fe717143dabfa750800000000000000
+      internalID: 6318474218722918132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_30
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 20
+        width: 38
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4231ba92dc4cdf7b0800000000000000
+      internalID: -5188774810214526172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_31
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 40
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 123de45cf13e36790800000000000000
+      internalID: -7537931625694309599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_32
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 40
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18d4040459ae735f0800000000000000
+      internalID: -776894483949138559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_33
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 21
+        width: 26
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a42eb4eca6b891f30800000000000000
+      internalID: 4546818589651100234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_34
+      rect:
+        serializedVersion: 2
+        x: 875
+        y: 46
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6aab4740133c35d00800000000000000
+      internalID: 960325760855620262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_35
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 46
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0cf10734ecbafad0800000000000000
+      internalID: -2667612140902155250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_36
+      rect:
+        serializedVersion: 2
+        x: 1271
+        y: 46
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebac1df6849d2d880800000000000000
+      internalID: -8587562634305221954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_37
+      rect:
+        serializedVersion: 2
+        x: 1469
+        y: 46
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49ecb935f03e100f0800000000000000
+      internalID: -1152390374663401836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_38
+      rect:
+        serializedVersion: 2
+        x: 1667
+        y: 46
+        width: 26
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22d1257adb067e8d0800000000000000
+      internalID: -2817176674224693982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_39
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 29
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6362966ed0fc5020800000000000000
+      internalID: 2332003545065349995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_40
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 15
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e058d612c049d92a0800000000000000
+      internalID: -6729059488400308978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_41
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 19
+        width: 27
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d43960859f7972df0800000000000000
+      internalID: -205028160842591411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_42
+      rect:
+        serializedVersion: 2
+        x: 823
+        y: 0
+        width: 138
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 531e16d6dddf6a970800000000000000
+      internalID: 8765972852187980085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mahrg_EnergyShield_43
+      rect:
+        serializedVersion: 2
+        x: 1077
+        y: 0
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 425ac8ba3fdc02970800000000000000
+      internalID: 8728202524282889508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Mahrg_EnergyShield_0: -602485347797273415
+      Mahrg_EnergyShield_1: 3607613185391659824
+      Mahrg_EnergyShield_10: -1214684055125506081
+      Mahrg_EnergyShield_11: -6090758163311146377
+      Mahrg_EnergyShield_12: -5098558262322011252
+      Mahrg_EnergyShield_13: 6101660240850325274
+      Mahrg_EnergyShield_14: 3640993688467291120
+      Mahrg_EnergyShield_15: 7491271465796437248
+      Mahrg_EnergyShield_16: 7055382781220233672
+      Mahrg_EnergyShield_17: -4891790237879107022
+      Mahrg_EnergyShield_18: -1312165762817354393
+      Mahrg_EnergyShield_19: -648782392141892287
+      Mahrg_EnergyShield_2: -3967043241036589369
+      Mahrg_EnergyShield_20: 3772429871222598810
+      Mahrg_EnergyShield_21: 3276164767382108956
+      Mahrg_EnergyShield_22: -8987892176247209112
+      Mahrg_EnergyShield_23: 7514818663538929169
+      Mahrg_EnergyShield_24: -3979568321766807410
+      Mahrg_EnergyShield_25: 2450380905440441533
+      Mahrg_EnergyShield_26: -7273509557287728135
+      Mahrg_EnergyShield_27: -8146878315180695223
+      Mahrg_EnergyShield_28: -428194017322330982
+      Mahrg_EnergyShield_29: 6318474218722918132
+      Mahrg_EnergyShield_3: -8456513476682695445
+      Mahrg_EnergyShield_30: -5188774810214526172
+      Mahrg_EnergyShield_31: -7537931625694309599
+      Mahrg_EnergyShield_32: -776894483949138559
+      Mahrg_EnergyShield_33: 4546818589651100234
+      Mahrg_EnergyShield_34: 960325760855620262
+      Mahrg_EnergyShield_35: -2667612140902155250
+      Mahrg_EnergyShield_36: -8587562634305221954
+      Mahrg_EnergyShield_37: -1152390374663401836
+      Mahrg_EnergyShield_38: -2817176674224693982
+      Mahrg_EnergyShield_39: 2332003545065349995
+      Mahrg_EnergyShield_4: 2899019366121342086
+      Mahrg_EnergyShield_40: -6729059488400308978
+      Mahrg_EnergyShield_41: -205028160842591411
+      Mahrg_EnergyShield_42: 8765972852187980085
+      Mahrg_EnergyShield_43: 8728202524282889508
+      Mahrg_EnergyShield_5: 5936418543409861229
+      Mahrg_EnergyShield_6: 6512928004402146413
+      Mahrg_EnergyShield_7: -6405866148513783524
+      Mahrg_EnergyShield_8: -30715790107563631
+      Mahrg_EnergyShield_9: -1017198972265853659
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

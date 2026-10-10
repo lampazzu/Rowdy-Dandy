@@ -1,0 +1,9 @@
+frames=7
+w=90
+h=84
+scale=1
+canvasW=273
+canvasH=165
+centerX=6.5
+centerY=68.5
+delays=100,100,100,100,100,100,100

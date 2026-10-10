@@ -35,16 +35,19 @@ public static class GameSettings
     public static int StyleRankPosition { get; private set; } = 5; // index into RankPositions
 
     // Accessibility page
-    public static bool EnemyAlerts { get; private set; } = true;          // "!" over enemies that notice Rowdy
+    public static bool EnemyAlerts { get; private set; } = false;         // "!" over enemies that notice Rowdy
     public static bool RangedAimLines { get; private set; } = false;      // red aim trace before archers / bombers shoot
-    public static bool AutoPickupWeapons { get; private set; } = false;   // walk over a weapon drop = pick it up
-    public static bool AutoEquipWeapon { get; private set; } = false;     // broken weapon -> next weapon, never the Rod while you have one
+    public static bool AutoPickupWeapons { get; private set; } = true;    // walk over a weapon drop = pick it up
+    public static bool AutoEquipWeapon { get; private set; } = true;      // broken weapon -> next weapon, never the Rod while you have one
     public static bool RowdyOutline { get; private set; } = false;        // blue outline around Rowdy
     public static bool BossWeakness { get; private set; } = false;        // arrow + brackets on a boss's weak spot (Pelich's head)
     public static bool TutorialPopups { get; private set; } = true;       // first-time explanation cards (Tutorials)
     public static bool BloodOn { get; private set; } = true;              // blood drops / pools / spatter
     public static bool KillFeedOn { get; private set; } = true;           // kill feed, top right
     public static bool ButtonHints { get; private set; } = true;          // [SELECT] NOTES  [L2] STATS  [R2] MAP, bottom left
+
+    public static bool AutoCatBait { get; private set; } = false;         // a rat + a free cat slot + a cat waiting for one = the rat is used by itself
+    public static bool CatHudCollapsed { get; private set; } = false;     // the cat HUD folded into one CAT PARTY row
 
     public static event Action Changed;
 
@@ -132,16 +135,18 @@ public static class GameSettings
         // (keys renamed when the defaults changed to off / bottom right, so old saves pick up the new defaults)
         StyleRankSize = PlayerPrefs.GetFloat(Prefix + "RankSize", 0.6f);
         StyleRankPosition = Mathf.Clamp(PlayerPrefs.GetInt(Prefix + "RankPosition2", 5), 0, RankPositions.Length - 1);
-        EnemyAlerts = PlayerPrefs.GetInt(Prefix + "EnemyAlerts", 1) == 1;
+        EnemyAlerts = PlayerPrefs.GetInt(Prefix + "EnemyAlerts", 0) == 1;
         RangedAimLines = PlayerPrefs.GetInt(Prefix + "AimLines", 0) == 1;
-        AutoPickupWeapons = PlayerPrefs.GetInt(Prefix + "AutoPickup", 0) == 1;
-        AutoEquipWeapon = PlayerPrefs.GetInt(Prefix + "AutoEquip", 0) == 1;
+        AutoPickupWeapons = PlayerPrefs.GetInt(Prefix + "AutoPickup", 1) == 1;
+        AutoEquipWeapon = PlayerPrefs.GetInt(Prefix + "AutoEquip", 1) == 1;
         RowdyOutline = PlayerPrefs.GetInt(Prefix + "RowdyOutline", 0) == 1;
         BossWeakness = PlayerPrefs.GetInt(Prefix + "BossWeakness", 0) == 1;
         TutorialPopups = PlayerPrefs.GetInt(Prefix + "Tutorials", 1) == 1;
         BloodOn = PlayerPrefs.GetInt(Prefix + "Blood", 1) == 1;
         KillFeedOn = PlayerPrefs.GetInt(Prefix + "KillFeed", 1) == 1;
         ButtonHints = PlayerPrefs.GetInt(Prefix + "ButtonHints", 1) == 1;
+        AutoCatBait = PlayerPrefs.GetInt(Prefix + "AutoCatBait", 0) == 1;
+        CatHudCollapsed = PlayerPrefs.GetInt(Prefix + "CatHudCollapsed", 0) == 1;
     }
 
     private static void Save()
@@ -174,6 +179,8 @@ public static class GameSettings
         PlayerPrefs.SetInt(Prefix + "Blood", BloodOn ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "KillFeed", KillFeedOn ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "ButtonHints", ButtonHints ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "AutoCatBait", AutoCatBait ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "CatHudCollapsed", CatHudCollapsed ? 1 : 0);
         PlayerPrefs.Save();
     }
 
@@ -224,6 +231,26 @@ public static class GameSettings
     public static void SetBlood(bool on) { BloodOn = on; Commit(); }
     public static void SetKillFeed(bool on) { KillFeedOn = on; Commit(); }
     public static void SetButtonHints(bool on) { ButtonHints = on; Commit(); }
+    public static void SetAutoCatBait(bool on) { AutoCatBait = on; Commit(); }
+    public static void SetCatHudCollapsed(bool on) { CatHudCollapsed = on; Commit(); }
+
+    // Dev Tools: every Preferences / Accessibility choice back to its default (display and audio are kept)
+    private static readonly string[] GameplayKeys = { "Shake", "Vibration", "DamageNumbers", "NumberSize", "MessageSize", "ShowFps", "CrowdLimit",
+        "RankSize", "RankPosition2", "EnemyAlerts", "AimLines", "AutoPickup", "AutoEquip", "RowdyOutline", "BossWeakness", "Tutorials", "Blood",
+        "KillFeed", "ButtonHints", "AutoCatBait", "CatHudCollapsed", "SeenPreferences", "SeenAccessibility" };
+
+    public static void ResetPreferences()
+    {
+        foreach (string k in GameplayKeys) PlayerPrefs.DeleteKey(Prefix + k);
+        PlayerPrefs.DeleteKey("RD_CatAutoPickup");
+        loaded = false;
+        Load();
+        Commit();
+    }
+
+    // The little spark next to a settings page nobody opened yet
+    public static bool Seen(string page) => PlayerPrefs.GetInt(Prefix + "Seen" + page, 0) == 1;
+    public static void MarkSeen(string page) { PlayerPrefs.SetInt(Prefix + "Seen" + page, 1); PlayerPrefs.Save(); }
 
     public static string DisplayModeName(FullScreenMode mode)
     {

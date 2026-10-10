@@ -214,8 +214,8 @@ public class Werewolf : MonoBehaviour
         BoonArt art = BoonArt.Get;
         if (art != null)
         {
-            SheetFX fx = BoonFX.Sheet(art.clawSlash, 6, at, 26f, 1.5f, new Color(1f, 0.85f, 0.88f));
-            if (fx != null) fx.transform.localScale = new Vector3(-f * 1.5f, 1.5f, 1f);
+            SheetFX fx = BoonFX.Sheet(art.clawSlash, 6, at, 26f, 1f, new Color(1f, 0.85f, 0.88f));
+            if (fx != null) fx.transform.localScale = new Vector3(-f, 1f, 1f); // the slash art at its own pixel size
             BoonArt.Play(art.claw, 0.45f, Random.Range(0.95f, 1.15f));
         }
         float damage = (12f + 4f * PlayerStats.Level) * Boons.OutgoingMultiplier * (Boons.Has("silverclaws") ? 2f : 1f);

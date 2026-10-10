@@ -24,7 +24,7 @@ public class HairGel : Pickup
         go.transform.position = at;
         var gel = go.AddComponent<HairGel>();
         gel.sprite = MakeRenderer(go, JarSprite, 63);
-        gel.sprite.transform.localScale = Vector3.one * 1.5f;
+        gel.sprite.transform.localScale = Vector3.one; // its own pixel size (1.5x made lumpy pixels)
         gel.outline = SpriteOutline.Add(gel.sprite, Color.white, 1, -1);
         gel.Launch(new Vector2(Random.Range(-1f, 1f), 7f));
         BoonFX.Popup(at + Vector3.up * 0.8f, "HAIR GEL?!", new Color(0.6f, 1f, 0.9f), 0.9f, 1.4f);
@@ -38,7 +38,7 @@ public class HairGel : Pickup
         if (sprite == null) return;
         float t = Time.time;
         if (outline != null) outline.color = BoonFX.Rainbow(t * 0.8f);
-        sprite.transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Sin(t * 4f) * 8f);
+        sprite.transform.localPosition = new Vector3(0f, Mathf.Round(Mathf.Sin(t * 4f) * 1.5f) / 64f, 0f); // bobs a pixel (rotating pixel art jags)
         sparkleTimer -= Time.deltaTime;
         if (sparkleTimer <= 0f)
         {

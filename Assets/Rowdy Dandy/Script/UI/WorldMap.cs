@@ -71,6 +71,18 @@ public class WorldMap : MonoBehaviour
     }
 
     // Dev reset (key 0)
+    // Revealed places (a found altar marks the other one): saved, shown even where the map is unexplored
+    public static void Mark(string key, Vector2 at, Color color)
+    {
+        PlayerPrefs.SetString("RD_MapMark_" + key, at.x.ToString(System.Globalization.CultureInfo.InvariantCulture) + ";" + at.y.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                              + ";" + ColorUtility.ToHtmlStringRGB(color));
+        PlayerPrefs.Save();
+    }
+
+    public static void Unmark(string key) { PlayerPrefs.DeleteKey("RD_MapMark_" + key); PlayerPrefs.Save(); }
+
+    private static readonly string[] MarkKeys = { "RD_AltarA", "RD_AltarB" };
+
     public static void ResetProgress()
     {
         if (instance == null) return;
@@ -665,11 +677,21 @@ public class WorldMap : MonoBehaviour
                 AddIcon(PinKind.Question, Pink, e.transform.position, 26f, delay += 0.03f);
         }
 
+        // Revealed marks
+        foreach (string key in MarkKeys)
+        {
+            string[] m = PlayerPrefs.GetString("RD_MapMark_" + key, "").Split(';');
+            if (m.Length < 3 || !float.TryParse(m[0], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float mx)
+                || !float.TryParse(m[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float my)) continue;
+            Color mc = ColorUtility.TryParseHtmlString("#" + m[2], out Color parsed) ? parsed : Pink;
+            AddIcon(PinKind.Question, mc, new Vector2(mx, my), 30f, delay += 0.03f);
+        }
+
         // Cats Rowdy has seen but not picked up (they hide somewhere new on every load, so it's per load)
         foreach (PetFollower pet in PetFollower.Pets)
         {
             if (pet == null || pet.IsCollected || !seenCats.Contains(pet)) continue;
-            Image face = OverlayUI.MakeImage("Cat Pin", content, pet.Tint, pet.Portrait);
+            Image face = OverlayUI.MakeImage("Cat Pin", content, pet.FaceTint, pet.Portrait);
             face.preserveAspect = true;
             face.rectTransform.sizeDelta = new Vector2(34f, 34f);
             AddPin(face.rectTransform, pet.transform.position, delay += 0.03f);

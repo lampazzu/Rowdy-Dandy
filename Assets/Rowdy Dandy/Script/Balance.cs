@@ -26,8 +26,15 @@ public static class Balance
     public static float LevelDamageGain(int levelIndex) => DamageGain[Mathf.Clamp(levelIndex, 0, DamageGain.Length - 1)];
 
     // EXP to go from level N to N+1 (index 0 = level 1). Faster first boons, steeper end. Lamp: 100 x5, then 305..596.
-    private static readonly float[] ExpToNext = { 70, 100, 135, 175, 220, 275, 340, 415, 500 };
+    // 2026-10-09 (mega fix 8): level 3 after ~110 EXP and level 5 after ~330, so Rowdy meets Pelich around level 5.
+    // 2026-10-09 (mega fix 9): was too fast. Level 3 is still quick (~110 EXP), then each level costs a lot more.
+    private static readonly float[] ExpToNext = { 40, 70, 180, 300, 450, 620, 820, 1050, 1300 };
     public static float ExpRequired(int level) => ExpToNext[Mathf.Clamp(level - 1, 0, ExpToNext.Length - 1)];
+
+    // EXP per gem picked up. The gem prefab says 0.2 (since the very first commit), which made levels crawl:
+    // a Gnoll Warrior's 15 gems were worth 3 EXP. Every enemy's gem count stays as it is; each gem is worth this now.
+    public const float GemExp = 2.5f;
+    public static float GemValue(float prefabValue) => GemExp;
 
     // ================================================================ enemies (by EnemyCatalog id)
     private struct EnemyStats { public float hp, damage; public EnemyStats(float hp, float damage) { this.hp = hp; this.damage = damage; } }

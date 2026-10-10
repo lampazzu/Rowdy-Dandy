@@ -73,6 +73,7 @@ public static class EnemyCatalog
         public string weakness;
         public string counter;
         public string drops = "EXP gems only.";  // weapon drops (from the prefabs' Weapon Drop settings)
+        public string dropIds = "exp";           // Rowdy Notes DROPS icons: exp, sword, naginata, cleaver, heart, rubble (+ ":50%" label)
         public bool inNotes = true;    // false = only used for its kill feed name
         public string Quip => Quips.TryGetValue(id, out string q) ? q : null; // ROWDY SAYS line on its notes page
         public Sprite fallbackPortrait;
@@ -99,14 +100,15 @@ public static class EnemyCatalog
         new Entry
         {
             id = "crabby", name = "Crabby", keys = new[] { "crabby" }, killsToReveal = 5,
-            about = "A grumpy beach crab. When you get close it pulls into its shell and waits you out.",
+            about = "Kinda disgusting i don't know man.. them lil legs creeps me out.",
             weakness = "Paper thin once it's out of the shell - one clean hit. Strike as it walks, not when it's tucked in.",
             counter = "Nothing to counter: it never swings. Wait for the shell to open and tap it.",
         },
         new Entry
         {
             id = "gnollwarrior", name = "Gnoll Warrior", keys = new[] { "gnollwarrior" }, killsToReveal = 8,
-            about = "A heavy brute with a huge blade. Very tough (200 HP) and keeps hopping at you to close the gap.",
+            about = "Wish he would stop moving for once",
+            dropIds = "exp,cleaver:50%",
             weakness = "It can be kicked. Knock it into deep water and it sinks like a rock.",
             counter = "Hit it while the blade is going up - the moment the swing starts, before it comes down. Counters stagger it and hurt a lot.",
             drops = "CLEAVER half the time, plus EXP gems.",
@@ -114,21 +116,22 @@ public static class EnemyCatalog
         new Entry
         {
             id = "gnollarcher", name = "Gnoll Archer", keys = new[] { "gnollarcher" }, killsToReveal = 6,
-            about = "Plants its feet and fires arrows from afar. Doesn't move, doesn't need to.",
+            about = "I mean they can summon magic arrows, how cool is that?",
             weakness = "Only 10 HP. Close the distance between shots, or jump the arrows. Wig can swat arrows out of the air.",
             counter = "No counter window. Get inside its range and it's done.",
         },
         new Entry
         {
             id = "gnollbomber", name = "Gnoll Bomber", keys = new[] { "gnollbomber" }, killsToReveal = 6,
-            about = "Lobs bombs in a high arc. Hangs back and lets the explosions do the work.",
+            about = "Why do this to the precious jellyfish? Nah man.. this just cruel",
             weakness = "Only 10 HP and slow to reload. Keep moving so the bombs land behind you, then rush it.",
             counter = "No counter window. Punish it right after a throw.",
         },
         new Entry
         {
             id = "horserider", name = "Horse Rider", keys = new[] { "horserider", "riderwerewolf", "werewolfrider", "wolfrider" }, killsToReveal = 6,
-            about = "A werewolf on horseback that patrols its stretch of road and tramples anything in the way.",
+            about = "Poor horse.",
+            dropIds = "exp,naginata:50%",
             weakness = "Turns slowly at the end of its patrol. Jump the charge and hit it from behind.",
             counter = "Right after it flinches from a hit there's a short window: a fast follow-up hit counts as a counter.",
             drops = "NAGINATA half the time.",
@@ -136,14 +139,15 @@ public static class EnemyCatalog
         new Entry
         {
             id = "transformwolf", name = "Transform Wolf", keys = new[] { "transformwolf" }, killsToReveal = 8,
-            about = "A cursed wolf, fast, angry, and never stops coming.",
+            about = "Puberty hits differnt for some people",
             weakness = "Only 25 HP. Trade hits early before it builds up speed.",
             counter = "Tight timing: hit it just as each claw comes down. Both of its swipes have a split-second window.",
         },
         new Entry
         {
             id = "sharkwolf", name = "Sharkwolf", keys = new[] { "sharkwolf", "wolfshark" }, killsToReveal = 6,
-            about = "Half shark, half wolf. Swims under the surface and leaps out at anything near the shore.",
+            about = "I want that shark man.",
+            dropIds = "exp,sword:50%",
             drops = "SWORD half the time - it floats on the water where it died.",
             weakness = "It can't leave the water. Stay back from the shoreline and hit it when it lands from a leap. Kickable.",
             counter = "Hit it at the start of the bite, as the jaws open. The window is generous.",
@@ -151,7 +155,8 @@ public static class EnemyCatalog
         new Entry
         {
             id = "statue", name = "Statue", keys = new[] { "wolfstatue" }, killsToReveal = 5,
-            about = "Old wolf idols left by the shamans. Something is sealed inside them.",
+            about = "Smash. Pass.",
+            dropIds = "rubble",
             weakness = "Crumbles in one hit. Cats leave them alone - this one is on you.",
             counter = "Statues don't fight back.",
             drops = "Rubble.",
@@ -159,7 +164,8 @@ public static class EnemyCatalog
         new Entry
         {
             id = "watervivarider", name = "Waterviva Rider", keys = new[] { "watervivarider" }, killsToReveal = 6,
-            about = "Rides a giant jellyfish across the water with three different strikes.",
+            about = "jellyfish again? what's wrong with these people?",
+            dropIds = "exp,naginata:50%",
             weakness = "Kickable. Bounce off the blue jellies to get above it and strike from the air.",
             counter = "Each of its three attacks has a window in the middle of the swing. Its flinch can also be countered.",
             drops = "NAGINATA half the time.",
@@ -167,7 +173,8 @@ public static class EnemyCatalog
         new Entry
         {
             id = "wereknight", name = "Wereknight", keys = new[] { "wereknight" }, killsToReveal = 6,
-            about = "An armored werewolf with a long reach. Slow, but its thrust goes far.",
+            about = "Skips leg day",
+            dropIds = "exp,sword:50%",
             weakness = "Fragile under the armor (10 HP). Get past the tip of the weapon.",
             counter = "Hit it halfway through the thrust, when the weapon is fully raised.",
             drops = "SWORD half the time.",
@@ -175,28 +182,29 @@ public static class EnemyCatalog
         new Entry
         {
             id = "werefast", name = "Werefast", keys = new[] { "werefast" }, killsToReveal = 10,
-            about = "Small, quick werewolf. Darts in, jumps over gaps, and hits in quick bursts.",
+            about = "Clingy guy.. I need some space, seriously, it's not you, it's me.",
             weakness = "Only 20 HP. A single crit usually drops it.",
             counter = "Its quick jab has two tiny windows. The long lunge stays counterable for most of the leap - swing into it.",
         },
         new Entry
         {
             id = "bigwolf", name = "Big Wolf", keys = new[] { "bigwerewolf", "bigwolf", "werewolf", "wwolf", "wolfprefab" }, killsToReveal = 8,
-            about = "A towering werewolf. Leaps across platforms to reach you and swings with both claws.",
+            about = "Good boy",
             weakness = "Slow to recover after a big leap. Punish the landing.",
             counter = "Strike as it rears back, right before the claws come down. Its double swipe has a second window on the follow-up.",
         },
         new Entry
         {
             id = "megacreature", name = "Mega Creature", keys = new[] { "megacreature", "dashcreature" }, killsToReveal = 5,
-            about = "A huge beast (100 HP) that winds up and barrels forward.",
+            about = "Kinda scary but I can manage it",
             weakness = "Its attack takes ages to start. Get behind it while it charges up.",
             counter = "The easiest counter in the jungle: hit it any time during the first second of its attack wind-up.",
         },
         new Entry
         {
             id = "pelican", name = "Pelican", keys = new[] { "pelican" }, killsToReveal = 3,
-            about = "Harmless sea bird gliding over the beach.",
+            about = "Love these guys. Good with tomato sauce.",
+            dropIds = "heart",
             weakness = "One hit. Some of them carry a heart.",
             counter = "It's a bird. It doesn't fight.",
             drops = "Sometimes a heart (heals 10 HP).",
@@ -204,14 +212,15 @@ public static class EnemyCatalog
         new Entry
         {
             id = "mantaray", name = "Manta Ray", keys = new[] { "mantaray" }, killsToReveal = 3,
-            about = "Glides just above the waves. Peaceful unless you go looking for trouble.",
+            about = "I don't know... They seem cute but if you look closely it's kinda disgusting too... You know, they smell weird like fish, also they're gooey and slimey and, you know what? They don't even seem cute. Doesn't go with tomato sauce.",
+            dropIds = "",
             weakness = "One hit. Kickable.",
             counter = "Nothing to counter.",
         },
         new Entry
         {
             id = "voltrat", name = "Red Jelly", keys = new[] { "voltrat", "redjelly" }, killsToReveal = 5,
-            about = "Angry red jellyfish that float in packs in the colosseums. Hovers around you, pulses, then jets straight through where you stand.",
+            about = "You know what they say about jellyfish wounds.. Let's be careful... Don't anybody doing.. you know...",
             weakness = "Paper thin. One or two hits each.",
             counter = "Watch for the fast pulsing and the white flash, then jump or dash out of the line.",
             drops = "A couple of EXP gems.",
@@ -219,7 +228,8 @@ public static class EnemyCatalog
         new Entry
         {
             id = "pelich", name = "Pelich Anus", keys = new[] { "pelichanus", "pelich" }, killsToReveal = 1,
-            about = "Lord of the far shore. Stomps the ground, spits, and calls in help. The toughest thing around.",
+            about = "I don't even know his real name, I know he is a pelichan and he has a big fat ass but so...",
+            dropIds = "exp:X40",
             weakness = "It barely moves. Stay out of its stomp range and hit it while it's turning around.",
             counter = "No known counter. Patience and good spacing.",
             drops = "A pile of EXP gems.",
@@ -227,7 +237,8 @@ public static class EnemyCatalog
         new Entry
         {
             id = "moonboundelder", name = "Moonbound Elder", keys = new[] { "moonboundelder" }, killsToReveal = 1,
-            about = "What the old man really is. Hurt him and the curse wakes up: a huge shadow werewolf that crawls out of the ground. 450 HP, leaps, claws, and a MOON NOVA ring of explosions.",
+            about = "Nah, I'd win",
+            dropIds = "exp",
             weakness = "When he crouches and glows, the nova is coming - jump or run out of the ring. At half health he howls, turns red, calls two Werefasts and gets faster.",
             counter = "Same windows as a Big Wolf: strike as he rears back before the claws come down. His size makes the swipes reach further, so stay close.",
             drops = "A big pile of EXP gems.",

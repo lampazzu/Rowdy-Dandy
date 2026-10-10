@@ -1,0 +1,819 @@
+fileFormatVersion: 2
+guid: 77ec2c9275728604cbd7f63fb3460317
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5947828045884099810
+    second: BRJ_Bug_WhirlEnd_Effect_0
+  - first:
+      213: 49450016459183033
+    second: BRJ_Bug_WhirlEnd_Effect_1
+  - first:
+      213: 8134017002200326617
+    second: BRJ_Bug_WhirlEnd_Effect_2
+  - first:
+      213: -8520466843070425793
+    second: BRJ_Bug_WhirlEnd_Effect_3
+  - first:
+      213: 8166431448017997687
+    second: BRJ_Bug_WhirlEnd_Effect_4
+  - first:
+      213: -5570392004994999693
+    second: BRJ_Bug_WhirlEnd_Effect_5
+  - first:
+      213: 2166349808136528081
+    second: BRJ_Bug_WhirlEnd_Effect_6
+  - first:
+      213: 6734853478308330901
+    second: BRJ_Bug_WhirlEnd_Effect_7
+  - first:
+      213: -6666626913845909103
+    second: BRJ_Bug_WhirlEnd_Effect_8
+  - first:
+      213: -6143969259253438087
+    second: BRJ_Bug_WhirlEnd_Effect_9
+  - first:
+      213: 7306606950035905519
+    second: BRJ_Bug_WhirlEnd_Effect_10
+  - first:
+      213: 8705223876843481058
+    second: BRJ_Bug_WhirlEnd_Effect_11
+  - first:
+      213: -2525148224294761468
+    second: BRJ_Bug_WhirlEnd_Effect_12
+  - first:
+      213: -7603199110506613990
+    second: BRJ_Bug_WhirlEnd_Effect_13
+  - first:
+      213: -6684116884377385136
+    second: BRJ_Bug_WhirlEnd_Effect_14
+  - first:
+      213: 5756902875191238585
+    second: BRJ_Bug_WhirlEnd_Effect_15
+  - first:
+      213: 5168215757726342866
+    second: BRJ_Bug_WhirlEnd_Effect_16
+  - first:
+      213: 4127179838605906008
+    second: BRJ_Bug_WhirlEnd_Effect_17
+  - first:
+      213: -2542278448535166039
+    second: BRJ_Bug_WhirlEnd_Effect_18
+  - first:
+      213: 6972527348520980260
+    second: BRJ_Bug_WhirlEnd_Effect_19
+  - first:
+      213: -3950281338291429416
+    second: BRJ_Bug_WhirlEnd_Effect_20
+  - first:
+      213: -7960647557042399829
+    second: BRJ_Bug_WhirlEnd_Effect_21
+  - first:
+      213: 5325253816389255797
+    second: BRJ_Bug_WhirlEnd_Effect_22
+  - first:
+      213: 3065628555397968365
+    second: BRJ_Bug_WhirlEnd_Effect_23
+  - first:
+      213: 1245118871133209405
+    second: BRJ_Bug_WhirlEnd_Effect_24
+  - first:
+      213: -5823544364092196822
+    second: BRJ_Bug_WhirlEnd_Effect_25
+  - first:
+      213: -5250835136909370494
+    second: BRJ_Bug_WhirlEnd_Effect_26
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_0
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 14
+        width: 11
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e13f8fbb7e1157da0800000000000000
+      internalID: -5947828045884099810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_1
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 17
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b3df29278eafa000800000000000000
+      internalID: 49450016459183033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_2
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 0
+        width: 27
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d1632d1e55d1e070800000000000000
+      internalID: 8134017002200326617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_3
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 28
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f351b42bc8831c980800000000000000
+      internalID: -8520466843070425793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_4
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 29
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77f01b5622ef45170800000000000000
+      internalID: 8166431448017997687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_5
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 9
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37ad8921cfdf1b2b0800000000000000
+      internalID: -5570392004994999693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_6
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 14
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d0a6353cab601e10800000000000000
+      internalID: 2166349808136528081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_7
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 0
+        width: 38
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59d3fd44e81077d50800000000000000
+      internalID: 6734853478308330901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_8
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 0
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 199e726a4226b73a0800000000000000
+      internalID: -6666626913845909103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_9
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 0
+        width: 51
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9796747c28c3cbaa0800000000000000
+      internalID: -6143969259253438087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_10
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 0
+        width: 39
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: feb5a4a1f48466560800000000000000
+      internalID: 7306606950035905519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_11
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 15
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e721856efa2fc870800000000000000
+      internalID: 8705223876843481058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_12
+      rect:
+        serializedVersion: 2
+        x: 373
+        y: 0
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40cc3bd911fd4fcd0800000000000000
+      internalID: -2525148224294761468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_13
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a13ffa541b20c7690800000000000000
+      internalID: -7603199110506613990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_14
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 15
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 057ce7d8b1f3d33a0800000000000000
+      internalID: -6684116884377385136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_15
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 11
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bfd232e9a0a4ef40800000000000000
+      internalID: 5756902875191238585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_16
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 6
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dedad969d039b740800000000000000
+      internalID: 5168215757726342866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_17
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 0
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 850524c4230b64930800000000000000
+      internalID: 4127179838605906008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_18
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 0
+        width: 43
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a32eea783308bcd0800000000000000
+      internalID: -2542278448535166039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_19
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 0
+        width: 37
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42f0a437ea463c060800000000000000
+      internalID: 6972527348520980260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_20
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 0
+        width: 20
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dfd8446d08cd29c0800000000000000
+      internalID: -3950281338291429416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_21
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 20
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba518646939168190800000000000000
+      internalID: -7960647557042399829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_22
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 0
+        width: 23
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 572cca0b12a17e940800000000000000
+      internalID: 5325253816389255797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_23
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 0
+        width: 27
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de13ac1cdec4b8a20800000000000000
+      internalID: 3065628555397968365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_24
+      rect:
+        serializedVersion: 2
+        x: 471
+        y: 0
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d33c701340d874110800000000000000
+      internalID: 1245118871133209405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_25
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 18
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a287e8c514d9e2fa0800000000000000
+      internalID: -5823544364092196822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_WhirlEnd_Effect_26
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 0
+        width: 106
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28b906a53494127b0800000000000000
+      internalID: -5250835136909370494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BRJ_Bug_WhirlEnd_Effect_0: -5947828045884099810
+      BRJ_Bug_WhirlEnd_Effect_1: 49450016459183033
+      BRJ_Bug_WhirlEnd_Effect_10: 7306606950035905519
+      BRJ_Bug_WhirlEnd_Effect_11: 8705223876843481058
+      BRJ_Bug_WhirlEnd_Effect_12: -2525148224294761468
+      BRJ_Bug_WhirlEnd_Effect_13: -7603199110506613990
+      BRJ_Bug_WhirlEnd_Effect_14: -6684116884377385136
+      BRJ_Bug_WhirlEnd_Effect_15: 5756902875191238585
+      BRJ_Bug_WhirlEnd_Effect_16: 5168215757726342866
+      BRJ_Bug_WhirlEnd_Effect_17: 4127179838605906008
+      BRJ_Bug_WhirlEnd_Effect_18: -2542278448535166039
+      BRJ_Bug_WhirlEnd_Effect_19: 6972527348520980260
+      BRJ_Bug_WhirlEnd_Effect_2: 8134017002200326617
+      BRJ_Bug_WhirlEnd_Effect_20: -3950281338291429416
+      BRJ_Bug_WhirlEnd_Effect_21: -7960647557042399829
+      BRJ_Bug_WhirlEnd_Effect_22: 5325253816389255797
+      BRJ_Bug_WhirlEnd_Effect_23: 3065628555397968365
+      BRJ_Bug_WhirlEnd_Effect_24: 1245118871133209405
+      BRJ_Bug_WhirlEnd_Effect_25: -5823544364092196822
+      BRJ_Bug_WhirlEnd_Effect_26: -5250835136909370494
+      BRJ_Bug_WhirlEnd_Effect_3: -8520466843070425793
+      BRJ_Bug_WhirlEnd_Effect_4: 8166431448017997687
+      BRJ_Bug_WhirlEnd_Effect_5: -5570392004994999693
+      BRJ_Bug_WhirlEnd_Effect_6: 2166349808136528081
+      BRJ_Bug_WhirlEnd_Effect_7: 6734853478308330901
+      BRJ_Bug_WhirlEnd_Effect_8: -6666626913845909103
+      BRJ_Bug_WhirlEnd_Effect_9: -6143969259253438087
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

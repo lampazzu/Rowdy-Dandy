@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Level-up boons (Hades style): every level up = pick 1 of 3 boons from the patrons (BoonCatalog). Owned boons are
+// Level-up boons (Hades style): every level up = pick 1 of 3 boons from the patrons (BoonCatalog). Locked until Rowdy
+// reaches a colosseum; inside a trial the colosseum grants them instead (3 at the gong + 1 every 5 waves). Owned boons are
 // saved (PlayerPrefs RD_Boons) and survive death; the dev reset / Reset Level wipe them.
 //   - Attack / Dash / Jump / Cats / Special hold one boon each: taking another one for the same slot replaces it.
 //   - Passives (and duos) stack.
@@ -15,6 +16,8 @@ public static class Boons
     private const string PicksKey = "RD_BoonPicks";
     private const string RerollKey = "RD_BoonRerolls";
     private const string FirstOfferKey = "RD_BoonFirstOffer";
+    private const string GrantsKey = "RD_BoonGrants";
+    private const string UnlockKey = "RD_BoonsUnlocked";
 
     public struct Offer
     {
@@ -49,7 +52,32 @@ public static class Boons
 
     public static int Picks => PlayerPrefs.GetInt(PicksKey, 0);
     public static int Rerolls => PlayerPrefs.GetInt(RerollKey, 0);
-    public static int PendingPicks => Mathf.Max(0, (PlayerStats.Level - 1) + Encore.Level - Picks); // Encore levels: Jarvis endgame
+    // Picks granted so far (level ups once boons are unlocked, colosseum gifts, dev) minus picks taken
+    public static int Grants
+    {
+        get
+        {
+            if (!PlayerPrefs.HasKey(GrantsKey)) PlayerPrefs.SetInt(GrantsKey, Picks); // older saves: nothing pending
+            return PlayerPrefs.GetInt(GrantsKey, 0);
+        }
+    }
+    public static int PendingPicks => Mathf.Max(0, Grants - Picks);
+
+    // Boons are locked in the tutorial area: they unlock the first time Rowdy reaches a colosseum
+    public static bool Unlocked => PlayerPrefs.GetInt(UnlockKey, 0) == 1 || PlayerPrefs.GetInt("RD_FrontierClears", 0) > 0;
+    public static void Unlock()
+    {
+        if (PlayerPrefs.GetInt(UnlockKey, 0) == 1) return;
+        PlayerPrefs.SetInt(UnlockKey, 1);
+        PlayerPrefs.Save();
+    }
+
+    public static void Grant(int n = 1)
+    {
+        PlayerPrefs.SetInt(GrantsKey, Grants + n);
+        PlayerPrefs.Save();
+        OpenNotBefore = Mathf.Max(OpenNotBefore, Time.unscaledTime + 0.3f);
+    }
 
     public static BoonDef InSlot(BoonSlot slot)
     {
@@ -153,16 +181,60 @@ public static class Boons
         PlayerPrefs.DeleteKey(PicksKey);
         PlayerPrefs.DeleteKey(RerollKey);
         PlayerPrefs.DeleteKey(FirstOfferKey);
+        PlayerPrefs.DeleteKey(GrantsKey);
         PlayerPrefs.Save();
         Werewolf.ResetCharge();
     }
 
-    // Dev tools: offer one more pick right now
-    public static void DevOfferPick()
+    // Colosseum trials (ArenaRun): every trial starts with no boons. Hair gel stays.
+    public static void ResetBuild()
     {
-        PlayerPrefs.SetInt(PicksKey, Picks - 1);
+        owned = new Dictionary<string, Rarity>();
+        order.Clear();
+        PlayerPrefs.DeleteKey(OwnedKey);
+        PlayerPrefs.SetInt(PicksKey, 0);
+        PlayerPrefs.SetInt(GrantsKey, 0); // the trial hands its own boons out (FrontierArena)
         PlayerPrefs.Save();
-        OpenNotBefore = Time.unscaledTime + 0.3f;
+        Werewolf.ResetCharge();
+        StephmossForm.ResetCharge();
+    }
+
+    // The build as one string (colosseum seals save it) and back
+    public static string Export() => PlayerPrefs.GetString(OwnedKey, "") + "|" + Picks;
+
+    public static void Import(string state)
+    {
+        if (string.IsNullOrEmpty(state)) return;
+        int bar = state.LastIndexOf('|');
+        string list = bar >= 0 ? state.Substring(0, bar) : state;
+        int picks = bar >= 0 && int.TryParse(state.Substring(bar + 1), out int p) ? p : Picks;
+        PlayerPrefs.SetString(OwnedKey, list);
+        PlayerPrefs.SetInt(PicksKey, picks);
+        PlayerPrefs.SetInt(GrantsKey, picks);
+        PlayerPrefs.Save();
+        owned = null; // reloaded on the next look
+        order.Clear();
+    }
+
+    // Dev tools: offer one more pick right now
+    public static void DevOfferPick() => Grant(1);
+
+    // Dev tools > Get Specific Boon: takes this boon right now (replacing whatever is in its slot, like a real pick).
+    // Granted and taken together, so it doesn't eat a pick you're owed.
+    public static void DevGive(BoonDef d, Rarity r)
+    {
+        if (d == null) return;
+        if (d.legendaryOnly) r = Rarity.Legendary;
+        if (d.IsDuo) r = Rarity.Duo;
+        var o = new Offer { def = d, rarity = r };
+        if (Has(d.id)) { o.upgrade = true; o.oldRarity = RarityOf(d.id); }
+        else
+        {
+            BoonDef current = InSlot(d.slot);
+            if (current != null && current != d) { o.replaces = current; o.replacesRarity = RarityOf(current.id); }
+        }
+        Grant(1);
+        Take(o);
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -178,7 +250,12 @@ public static class Boons
     private static void OnSceneLoaded(Scene s, LoadSceneMode m) => OpenNotBefore = Time.unscaledTime + 1.6f;
 
     // LevelUpFX: the picker opens once the level-up moment has played
-    public static void OnLevelUp() => OpenNotBefore = Mathf.Max(OpenNotBefore, Time.unscaledTime + 1.35f);
+    // A level up grants a pick once boons are unlocked - not during a colosseum trial (it hands out its own)
+    public static void OnLevelUp()
+    {
+        if (Unlocked && !ArenaRun.InTrial) Grant(1);
+        OpenNotBefore = Mathf.Max(OpenNotBefore, Time.unscaledTime + 1.35f);
+    }
 
     // ---------------------------------------------------------------- offers
     private static bool Eligible(BoonDef d)
@@ -272,6 +349,25 @@ public static class Boons
             int slot = result.Count - 1 - Random.Range(0, first ? result.Count - 1 : result.Count);
             result[Mathf.Clamp(slot, 0, result.Count - 1)] = Build(duos[Random.Range(0, duos.Count)]);
         }
+
+        // Always at least one PASSIVE card (passives stack: taking one never replaces anything)
+        if (result.Count > 0 && !result.Exists(o => o.def != null && o.def.slot == BoonSlot.Passive))
+        {
+            var passives = new List<BoonDef>();
+            foreach (BoonDef d in BoonCatalog.All)
+            {
+                if (d.IsDuo || d.slot != BoonSlot.Passive || !Eligible(d) || result.Exists(o => o.def == d)) continue;
+                if (Has(d.id) && (d.legendaryOnly || RarityOf(d.id) >= Rarity.Epic)) continue;
+                passives.Add(d);
+            }
+            if (passives.Count > 0)
+            {
+                // the last card makes room (the moon card on the very first offer stays)
+                int at = result.Count - 1;
+                if (first && at == 0) result.Add(Build(passives[Random.Range(0, passives.Count)]));
+                else result[at] = Build(passives[Random.Range(0, passives.Count)]);
+            }
+        }
         return result;
     }
 
@@ -321,6 +417,7 @@ public static class Boons
             if (BoonRunner.SaltyActive) m *= 1.2f;
             if (BoonRunner.WellFed) m *= 1.2f; // Sandwich Time
             if (Werewolf.Active) m *= Werewolf.DamageMultiplier;
+            if (StephmossForm.Active) m *= StephmossForm.DamageMultiplier;
             m *= Encore.DamageMultiplier;
             return m;
         }
@@ -349,6 +446,7 @@ public static class Boons
             if (Has("furcoat")) m *= 1f - Mathf.Min(CatsWithRowdy, 8) * V("furcoat", 0) / 100f;
             if (Has("silverfur") && NightBoons) m *= 1f - V("silverfur", 0) / 100f;
             if (Werewolf.Active) m *= 0.6f;
+            if (StephmossForm.Active) m *= 0.65f;
             return m;
         }
     }
@@ -422,7 +520,7 @@ public static class Boons
     {
         get
         {
-            if (Werewolf.Active) return 0f;
+            if (Werewolf.Active || StephmossForm.Active) return 0f;
             if (Has("tempered") && Random.value < V("tempered", 0) / 100f) { BoonRunner.OnDurabilitySaved(); return 0f; }
             float cost = Has("weaponsnob") ? 2f : 1f;
             if (Has("forgefire")) cost *= 0.75f;

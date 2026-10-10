@@ -25,6 +25,7 @@ public class BoonArt : ScriptableObject
     public Texture2D sparkBurst;     // FX_DeckFix_Upgrade, 10 x 338x358
     public Texture2D groundPound;    // FX_GroundPound, 12 x 128x128 (Anvil Drop)
     public Texture2D pinkWave;       // Misc/Test/testWave.png, the pink wave (Beach Bod)
+    public Texture2D flora;          // Scenery/Assets/RDR_Flowers.png, 3 x 32x32: purple flower, mushrooms, blue flower (FloraArt)
 
     [Header("Food (the Crazy Chef): ovo, pao, tomate, guejo, armondega, arface")]
     public Sprite[] food = new Sprite[6];

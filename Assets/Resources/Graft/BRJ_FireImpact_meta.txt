@@ -1,0 +1,9 @@
+frames=5
+w=44
+h=29
+scale=1
+canvasW=44
+canvasH=42
+centerX=22
+centerY=15
+delays=60,60,60,60,60

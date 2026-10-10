@@ -113,7 +113,7 @@ public class CheckpointRest : MonoBehaviour
             fade.rectTransform.anchorMax = Vector2.one;
             fade.rectTransform.offsetMin = fade.rectTransform.offsetMax = Vector2.zero;
             fade.transform.SetAsLastSibling();
-            PixelText text = PixelText.Create(fade.transform, "BEAUTY SLEEP...", 5, new Color(1f, 0.85f, 0.95f, 0f), 0.5f);
+            PixelText text = PixelText.Create(fade.transform, "RESTING...", 5, new Color(1f, 0.85f, 0.95f, 0f), 0.5f);
             text.Rect.anchorMin = text.Rect.anchorMax = new Vector2(0.5f, 0.5f);
             text.Rect.anchoredPosition = Vector2.zero;
 

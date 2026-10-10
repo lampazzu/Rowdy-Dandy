@@ -121,10 +121,14 @@ public class Health : MonoBehaviour
             if (before - currentHealth + soaked > 0f) { StyleRank.OnPlayerHurt(); BoonRunner.OnPlayerHurt(); } // drops two style ranks
             if (currentHealth > 0)
             {
-                anim.SetTrigger("hit");
-                bloodhit.Play();
+                // Sword cast / Stephmoss: no flinch (Stephmoss has his own hurt sound, nothing of Rowdy plays)
+                bool armored = StephmossForm.Active || (TryGetComponent(out PlayerMovement pm) && pm.HyperArmor);
+                if (!armored) anim.SetTrigger("hit");
+                else if (!StephmossForm.Active) HitFlash.Flash(this, 0.1f, new Color(1f, 0.9f, 0.5f));
+                if (StephmossForm.Active) FXSound.Play("StephmossHit", 0.45f, 0.6f);
+                else bloodhit.Play();
                 lastDamageTime = Time.time;
-                if (TryGetComponent(out PlayerHitReaction reaction)) reaction.OnHit(_damage);
+                if (!armored && TryGetComponent(out PlayerHitReaction reaction)) reaction.OnHit(_damage);
                 Blood.Spill(BodyCenter(), -Mathf.Sign(transform.localScale.x), 6);
                 Tutorials.Show(Tutorials.Topic.Hurt, null, 0.8f);
             }

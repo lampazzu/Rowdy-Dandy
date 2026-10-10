@@ -53,6 +53,7 @@ public class CatHUD : MonoBehaviour
         public PixelText status;
         public RectTransform bar;
         public Image crown; // the Cat Party leader (gold) / sub-leader (silver)
+        public Image sideCrown; // ...and one beside the name
         public Vector2 home; // its place in the layout
     }
 
@@ -118,10 +119,21 @@ public class CatHUD : MonoBehaviour
         foreach (Entry e in entries)
         {
             if (e.crown == null) continue;
-            bool sub = CatRoster.IsSubLeader(e.pet);
-            e.crown.enabled = !e.lost && (CatRoster.IsLeader(e.pet) || sub);
-            e.crown.color = sub ? new Color(0.75f, 0.85f, 1f) : Color.white;
+            bool sub = CatRoster.IsSubLeader(e.pet), lead = CatRoster.IsLeader(e.pet);
+            bool ranked = !e.lost && (lead || sub);
+            e.crown.enabled = ranked;
+            e.crown.color = sub ? SubColor : Color.white;
+            if (e.sideCrown != null) { e.sideCrown.enabled = ranked; e.sideCrown.color = e.crown.color; }
+            // the leader's cooldown bar is gold, the sub-leader's silver
+            if (e.fill != null && !e.lost)
+            {
+                e.fill.sprite = ranked ? OverlayUI.WhiteSprite : barFillSprite;
+                e.fill.color = lead ? LeaderColor : sub ? SubColor : Color.white;
+            }
         }
+        bool compact = GameSettings.CatHudCollapsed && entries.Exists(e => !e.lost);
+        foreach (Entry e in entries) if (!e.lost && e.root.gameObject.activeSelf == compact) e.root.gameObject.SetActive(!compact);
+        UpdateCompact(compact);
         UpdateFreeSlot();
         if (freeSlot != null)
         {
@@ -152,7 +164,7 @@ public class CatHUD : MonoBehaviour
             entry.fill.fillAmount = fraction;
 
             bool ready = fraction >= 1f;
-            entry.icon.color = ready ? entry.pet.Tint : rechargingTint * entry.pet.Tint;
+            entry.icon.color = ready ? entry.pet.FaceTint : rechargingTint * entry.pet.FaceTint;
             if (ready && !entry.wasReady) entry.punchTimer = readyPunchTime;
             entry.wasReady = ready;
 
@@ -232,7 +244,8 @@ public class CatHUD : MonoBehaviour
         List<PetFollower> party = CatRoster.Party;
         var live = entries.FindAll(e => !e.lost);
         live.Sort((a, b) => Order(party, a.pet).CompareTo(Order(party, b.pet)));
-        foreach (Entry e in live) { e.home = Next(); e.root.anchoredPosition = e.home; }
+        if (compactRoot != null && compactRoot.gameObject.activeSelf) compactRoot.anchoredPosition = Next(); // one row for all
+        else foreach (Entry e in live) { e.home = Next(); e.root.anchoredPosition = e.home; }
         if (freeSlot != null && freeSlot.gameObject.activeSelf) freeSlot.anchoredPosition = Next();
         foreach (Entry e in entries) if (e.lost) e.home = Next();
         ratSpot = Next();
@@ -383,6 +396,15 @@ public class CatHUD : MonoBehaviour
         labelRect.anchorMin = labelRect.anchorMax = new Vector2(0f, 1f);
         labelRect.anchoredPosition = new Vector2(textX, -(2 * s + labelRect.sizeDelta.y / 2f));
 
+        // leader / sub-leader: a crown beside the name too
+        RectTransform sideRect = CreateUI("Side Crown", entry.root);
+        sideRect.anchorMin = sideRect.anchorMax = new Vector2(0f, 1f);
+        sideRect.pivot = new Vector2(0f, 0.5f);
+        sideRect.anchoredPosition = new Vector2(textX + labelRect.sizeDelta.x + 2 * s, labelRect.anchoredPosition.y + s);
+        sideRect.sizeDelta = new Vector2(9 * s, 5 * s);
+        entry.sideCrown = AddImage(sideRect, MoreSprites.Crown);
+        entry.sideCrown.enabled = false;
+
         // Cooldown bar: dark back, pink fill, purple frame (like the HP / XP / DUR bars)
         RectTransform bar = CreateUI("CooldownBar", entry.root);
         entry.bar = bar;
@@ -396,6 +418,90 @@ public class CatHUD : MonoBehaviour
         Stretch(AddImage(CreateUI("Frame", bar), barFrameSprite).rectTransform);
 
         return entry;
+    }
+
+    // ---------------------------------------------------------------- compact view (Preferences / Cat Party)
+    // All cats in one row: [leader face]  CAT PARTY
+    //                                     [] [] [] []   <- one little square per cat, filling up as it recharges
+    public static readonly Color LeaderColor = new Color(1f, 0.82f, 0.25f);
+    public static readonly Color SubColor = new Color(0.75f, 0.85f, 1f);
+    private static readonly Color SquareColor = new Color(1f, 0.45f, 0.8f);
+
+    private RectTransform compactRoot;
+    private Image compactFace, compactCrown;
+    private readonly List<(Image back, Image fill, Image glow)> squares = new List<(Image, Image, Image)>();
+
+    private void UpdateCompact(bool on)
+    {
+        if (!on) { if (compactRoot != null && compactRoot.gameObject.activeSelf) { compactRoot.gameObject.SetActive(false); Layout(); } return; }
+        int s = pixelScale;
+        float slotSize = 22 * s, textX = slotSize + 2 * s;
+        if (compactRoot == null)
+        {
+            compactRoot = CreateUI("Cat Party (compact)", transform);
+            Place(compactRoot, 0f, 0f, textX + 76 * s, slotSize);
+            RectTransform slot = CreateUI("Slot", compactRoot);
+            Place(slot, 0f, 0f, slotSize, slotSize);
+            Image slotImage = AddImage(slot, slotSprite);
+            slotImage.type = Image.Type.Sliced;
+            slotImage.pixelsPerUnitMultiplier = slicedMultiplier;
+            RectTransform faceRect = CreateUI("Face", slot);
+            faceRect.anchorMin = faceRect.anchorMax = faceRect.pivot = new Vector2(0.5f, 0.5f);
+            faceRect.sizeDelta = new Vector2(16 * s, 16 * s);
+            compactFace = AddImage(faceRect, null);
+            compactFace.preserveAspect = true;
+            RectTransform crownRect = CreateUI("Crown", slot);
+            crownRect.anchorMin = crownRect.anchorMax = crownRect.pivot = new Vector2(0.5f, 0f);
+            crownRect.anchoredPosition = new Vector2(0f, slotSize - 3 * s);
+            crownRect.sizeDelta = new Vector2(9 * s, 5 * s);
+            compactCrown = AddImage(crownRect, MoreSprites.Crown);
+            PixelText label = PixelText.Create(compactRoot, "CAT PARTY", s, Color.white, 0f);
+            label.Rect.anchorMin = label.Rect.anchorMax = new Vector2(0f, 1f);
+            label.Rect.anchoredPosition = new Vector2(textX, -(2 * s + label.Rect.sizeDelta.y / 2f));
+        }
+        if (!compactRoot.gameObject.activeSelf) { compactRoot.gameObject.SetActive(true); Layout(); }
+
+        List<PetFollower> party = CatRoster.Party;
+        PetFollower face = party.Count > 0 ? party[0] : null;
+        compactFace.sprite = face != null ? face.Portrait : null;
+        compactFace.enabled = face != null;
+        if (face != null) compactFace.color = face.FaceTint;
+        compactCrown.enabled = face != null && CatRoster.IsLeader(face);
+
+        // one square per cat, in party order, where the cooldown bar would be
+        while (squares.Count < party.Count)
+        {
+            RectTransform sq = CreateUI("Square", compactRoot);
+            sq.anchorMin = sq.anchorMax = sq.pivot = new Vector2(0f, 1f);
+            sq.sizeDelta = new Vector2(6 * s, 6 * s);
+            Image back = AddImage(sq, OverlayUI.WhiteSprite);
+            back.color = new Color(0.1f, 0.03f, 0.12f, 0.9f);
+            Image fill = AddImage(CreateUI("Fill", sq), OverlayUI.WhiteSprite);
+            fill.rectTransform.anchorMin = Vector2.zero; fill.rectTransform.anchorMax = Vector2.one;
+            fill.rectTransform.offsetMin = new Vector2(s, s); fill.rectTransform.offsetMax = new Vector2(-s, -s);
+            fill.type = Image.Type.Filled;
+            fill.fillMethod = Image.FillMethod.Vertical;
+            fill.fillOrigin = (int)Image.OriginVertical.Bottom;
+            Image glow = AddImage(CreateUI("Ready", sq), OverlayUI.WhiteSprite);
+            glow.rectTransform.anchorMin = Vector2.zero; glow.rectTransform.anchorMax = Vector2.one;
+            glow.rectTransform.offsetMin = glow.rectTransform.offsetMax = Vector2.zero;
+            squares.Add((back, fill, glow));
+        }
+        for (int i = 0; i < squares.Count; i++)
+        {
+            bool used = i < party.Count;
+            squares[i].back.gameObject.SetActive(used);
+            if (!used) continue;
+            PetFollower p = party[i];
+            RectTransform sq = squares[i].back.rectTransform;
+            sq.anchoredPosition = new Vector2(textX + i * 8 * s, -(slotSize - 10 * s));
+            float fr = p.CooldownFraction;
+            Color c = CatRoster.IsLeader(p) ? LeaderColor : CatRoster.IsSubLeader(p) ? SubColor : SquareColor;
+            squares[i].fill.fillAmount = fr;
+            squares[i].fill.color = fr >= 1f ? c : new Color(c.r * 0.6f, c.g * 0.6f, c.b * 0.6f, 1f);
+            // ready: a soft pulse over the square
+            squares[i].glow.color = new Color(1f, 1f, 1f, fr >= 1f ? 0.15f + 0.15f * Mathf.Sin(Time.unscaledTime * 6f + i) : 0f);
+        }
     }
 
     private static RectTransform CreateUI(string objectName, Transform parent)

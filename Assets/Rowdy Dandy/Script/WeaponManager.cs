@@ -70,6 +70,7 @@ public class WeaponManager : MonoBehaviour
 
     // Rowdy's weapon manager (kill feed / stats read the active weapon from here)
     public static WeaponManager Instance { get; private set; }
+    public RectTransform DurabilityBar => durabilityBarImage != null ? durabilityBarImage.rectTransform : null; // Tutorials points at it
 
     public Sprite ActiveProfile
     {
@@ -257,7 +258,7 @@ public class WeaponManager : MonoBehaviour
             PlayBreakMoment(activeIndex); // before the switch, while the HUD still shows the broken weapon
             BoonRunner.OnWeaponBroken(transform.position); // Weapon Snob: it explodes
             onWeaponBroken?.Invoke();
-            Tutorials.Show(Tutorials.Topic.WeaponBroke, null, 1.2f);
+            // (the weapon card already explained breaking: one tutorial for pick up, durability and breaking)
             // Accessibility > Auto Equip Weapon: straight to the next weapon he has; otherwise back to the Rod
             int next = GameSettings.AutoEquipWeapon ? BestOtherWeapon(activeIndex) : -1;
             if (next > 0) SetWeaponByIndex(next);
@@ -328,6 +329,20 @@ public class WeaponManager : MonoBehaviour
         suppressSwitchSound = false;
 
         SoundManager.PlaySfx(equipSound, equipVolume);
+    }
+
+    public bool IsUnlocked(WeaponType type) => unlockedWeapons[GetIndexFromType(type)];
+
+    // In his hands now (WeaponBoons: a respawn with the boon weapon)
+    public void Equip(WeaponType type)
+    {
+        switch (type)
+        {
+            case WeaponType.Sword: SetWeaponToSword(); break;
+            case WeaponType.Axe: SetWeaponToAxe(); break;
+            case WeaponType.Naginata: SetWeaponToNaginata(); break;
+            case WeaponType.Cleaver: SetWeaponToCleaver(); break;
+        }
     }
 
     // Icon for a weapon type (weapon drops show the same art as the HUD)

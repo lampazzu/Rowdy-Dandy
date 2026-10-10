@@ -1,0 +1,715 @@
+fileFormatVersion: 2
+guid: f79f7f1ac63aa8d4e964ec82d9605e02
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8243872288747521267
+    second: GilliHit_0
+  - first:
+      213: -2105934602967401633
+    second: GilliHit_1
+  - first:
+      213: 6283503866266067999
+    second: GilliHit_2
+  - first:
+      213: 1743582296267451800
+    second: GilliHit_3
+  - first:
+      213: 2717106625639541745
+    second: GilliHit_4
+  - first:
+      213: -251027222844358315
+    second: GilliHit_5
+  - first:
+      213: 2044212936283889259
+    second: GilliHit_6
+  - first:
+      213: 8033050257469481169
+    second: GilliHit_7
+  - first:
+      213: 4955312692283994864
+    second: GilliHit_8
+  - first:
+      213: 6199620780095907031
+    second: GilliHit_9
+  - first:
+      213: -14924179291962496
+    second: GilliHit_10
+  - first:
+      213: 4964022612861039342
+    second: GilliHit_11
+  - first:
+      213: 3580258745455743254
+    second: GilliHit_12
+  - first:
+      213: -300187477878061923
+    second: GilliHit_13
+  - first:
+      213: -8455887703829381514
+    second: GilliHit_14
+  - first:
+      213: -7718403729898288037
+    second: GilliHit_15
+  - first:
+      213: 3877834752398038037
+    second: GilliHit_16
+  - first:
+      213: -2145183034607359651
+    second: GilliHit_17
+  - first:
+      213: 7735589024032326330
+    second: GilliHit_18
+  - first:
+      213: 7797765474166798705
+    second: GilliHit_19
+  - first:
+      213: -3597722197650901241
+    second: GilliHit_20
+  - first:
+      213: -4705679417305130038
+    second: GilliHit_21
+  - first:
+      213: 3437189885581494180
+    second: GilliHit_22
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GilliHit_0
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 2
+        width: 89
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0b748fc4d1e79d80800000000000000
+      internalID: -8243872288747521267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_1
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 37
+        width: 27
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5bbce5e2a736c2e0800000000000000
+      internalID: -2105934602967401633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_2
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 69
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f142595997d733750800000000000000
+      internalID: 6283503866266067999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_3
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 57
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89d6ead4cd2723810800000000000000
+      internalID: 1743582296267451800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_4
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 51
+        width: 20
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fbea16841a15b520800000000000000
+      internalID: 2717106625639541745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_5
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 40
+        width: 26
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 551c861221c248cf0800000000000000
+      internalID: -251027222844358315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_6
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 63
+        width: 6
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6e9578b5d08e5c10800000000000000
+      internalID: 2044212936283889259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_7
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 58
+        width: 9
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d02453f5a02b7f60800000000000000
+      internalID: 8033050257469481169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_8
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 13
+        width: 64
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f27296a3aec4c440800000000000000
+      internalID: 4955312692283994864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_9
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 12
+        width: 64
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d42fb3a04a790650800000000000000
+      internalID: 6199620780095907031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_10
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 47
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0830dbab98afacff0800000000000000
+      internalID: -14924179291962496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_11
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 8
+        width: 51
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee2b6901440c3e440800000000000000
+      internalID: 4964022612861039342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_12
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 32
+        width: 28
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61110e62c52afa130800000000000000
+      internalID: 3580258745455743254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_13
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 34
+        width: 19
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d94ce0f441585dbf0800000000000000
+      internalID: -300187477878061923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_14
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 43
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67ef7a04fe6a6aa80800000000000000
+      internalID: -8455887703829381514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_15
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 20
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5ccc5693b8b2e490800000000000000
+      internalID: -7718403729898288037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_16
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 29
+        width: 19
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51499526926d0d530800000000000000
+      internalID: 3877834752398038037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_17
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 32
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d59a80c4567ca32e0800000000000000
+      internalID: -2145183034607359651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_18
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 26
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab28bd18b355a5b60800000000000000
+      internalID: 7735589024032326330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_19
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 16
+        width: 25
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1797489626a373c60800000000000000
+      internalID: 7797765474166798705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_20
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 28
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 707fa7809b2521ec0800000000000000
+      internalID: -3597722197650901241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_21
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 17
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acb19a0708112beb0800000000000000
+      internalID: -4705679417305130038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GilliHit_22
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 0
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a786ab6df953bf20800000000000000
+      internalID: 3437189885581494180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GilliHit_0: -8243872288747521267
+      GilliHit_1: -2105934602967401633
+      GilliHit_10: -14924179291962496
+      GilliHit_11: 4964022612861039342
+      GilliHit_12: 3580258745455743254
+      GilliHit_13: -300187477878061923
+      GilliHit_14: -8455887703829381514
+      GilliHit_15: -7718403729898288037
+      GilliHit_16: 3877834752398038037
+      GilliHit_17: -2145183034607359651
+      GilliHit_18: 7735589024032326330
+      GilliHit_19: 7797765474166798705
+      GilliHit_2: 6283503866266067999
+      GilliHit_20: -3597722197650901241
+      GilliHit_21: -4705679417305130038
+      GilliHit_22: 3437189885581494180
+      GilliHit_3: 1743582296267451800
+      GilliHit_4: 2717106625639541745
+      GilliHit_5: -251027222844358315
+      GilliHit_6: 2044212936283889259
+      GilliHit_7: 8033050257469481169
+      GilliHit_8: 4955312692283994864
+      GilliHit_9: 6199620780095907031
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

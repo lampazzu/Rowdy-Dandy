@@ -1,0 +1,9 @@
+frames=9
+w=198
+h=182
+scale=1
+canvasW=208
+canvasH=183
+centerX=98
+centerY=91.5
+delays=50,50,50,50,50,50,50,50,50

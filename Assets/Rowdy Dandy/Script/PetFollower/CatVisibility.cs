@@ -118,7 +118,7 @@ public class CatVisibility : MonoBehaviour
         t.markerArrow.rectTransform.localRotation = Quaternion.Euler(0f, 0f, angle - 90f);
         float pulse = 0.85f + 0.15f * Mathf.Sin(Time.unscaledTime * 12f);
         t.markerPlate.color = new Color(tint.r * 0.5f, tint.g * 0.5f, tint.b * 0.5f, 0.85f * t.markerAlpha);
-        t.markerFace.color = new Color(pet.Tint.r, pet.Tint.g, pet.Tint.b, t.markerAlpha);
+        t.markerFace.color = new Color(pet.FaceTint.r, pet.FaceTint.g, pet.FaceTint.b, t.markerAlpha);
         t.markerArrow.color = new Color(tint.r, tint.g, tint.b, t.markerAlpha * pulse);
         t.marker.localScale = Vector3.one * (0.9f + 0.1f * pulse);
     }

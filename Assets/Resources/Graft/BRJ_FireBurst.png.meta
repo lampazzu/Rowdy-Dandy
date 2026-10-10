@@ -1,0 +1,949 @@
+fileFormatVersion: 2
+guid: ac137e3eb112bbf4bbfe4e2cf9f0dbf2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 954378165701903707
+    second: BRJ_FireBurst_0
+  - first:
+      213: 8635698637707969373
+    second: BRJ_FireBurst_1
+  - first:
+      213: -5198390639791909276
+    second: BRJ_FireBurst_2
+  - first:
+      213: 8478184091533159246
+    second: BRJ_FireBurst_3
+  - first:
+      213: -640031559783394730
+    second: BRJ_FireBurst_4
+  - first:
+      213: -6656293922712964169
+    second: BRJ_FireBurst_5
+  - first:
+      213: 3332230161675601072
+    second: BRJ_FireBurst_6
+  - first:
+      213: -7332518454578866549
+    second: BRJ_FireBurst_7
+  - first:
+      213: -445575576532043791
+    second: BRJ_FireBurst_8
+  - first:
+      213: 5508440894652861922
+    second: BRJ_FireBurst_9
+  - first:
+      213: -8696595497924191038
+    second: BRJ_FireBurst_10
+  - first:
+      213: 5810265667579301663
+    second: BRJ_FireBurst_11
+  - first:
+      213: -475469272128257439
+    second: BRJ_FireBurst_12
+  - first:
+      213: 3923619509918194024
+    second: BRJ_FireBurst_13
+  - first:
+      213: 754701515163426939
+    second: BRJ_FireBurst_14
+  - first:
+      213: -6650346100750313957
+    second: BRJ_FireBurst_15
+  - first:
+      213: 2614835679648054429
+    second: BRJ_FireBurst_16
+  - first:
+      213: 6707202784230722285
+    second: BRJ_FireBurst_17
+  - first:
+      213: -7378007115243564299
+    second: BRJ_FireBurst_18
+  - first:
+      213: -1146264941034532497
+    second: BRJ_FireBurst_19
+  - first:
+      213: -7372131138676219582
+    second: BRJ_FireBurst_20
+  - first:
+      213: -1958145258888150491
+    second: BRJ_FireBurst_21
+  - first:
+      213: 1297596553362327359
+    second: BRJ_FireBurst_22
+  - first:
+      213: -3691049991953590697
+    second: BRJ_FireBurst_23
+  - first:
+      213: -770023028761934034
+    second: BRJ_FireBurst_24
+  - first:
+      213: 4379744491486364897
+    second: BRJ_FireBurst_25
+  - first:
+      213: -5158677567548735558
+    second: BRJ_FireBurst_26
+  - first:
+      213: -707139136171919148
+    second: BRJ_FireBurst_27
+  - first:
+      213: 1800811878920545285
+    second: BRJ_FireBurst_28
+  - first:
+      213: -5756479313421566976
+    second: BRJ_FireBurst_29
+  - first:
+      213: 6659853222961044384
+    second: BRJ_FireBurst_30
+  - first:
+      213: -4627979926799464955
+    second: BRJ_FireBurst_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BRJ_FireBurst_0
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 0
+        width: 65
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b550d0c92e1ae3d00800000000000000
+      internalID: 954378165701903707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_1
+      rect:
+        serializedVersion: 2
+        x: 871
+        y: 1
+        width: 71
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5388e7382a28d770800000000000000
+      internalID: 8635698637707969373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_2
+      rect:
+        serializedVersion: 2
+        x: 917
+        y: 125
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 466dc7f514b9bd7b0800000000000000
+      internalID: -5198390639791909276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_3
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 47
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4ba33c038f88a570800000000000000
+      internalID: 8478184091533159246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_4
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 0
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 652521affa62e17f0800000000000000
+      internalID: -640031559783394730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_5
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 15
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b33a10a1f710a3a0800000000000000
+      internalID: -6656293922712964169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_6
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 0
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b444885da57e3e20800000000000000
+      internalID: 3332230161675601072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_7
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 15
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8694dd9059ad3a90800000000000000
+      internalID: -7332518454578866549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_8
+      rect:
+        serializedVersion: 2
+        x: 962
+        y: 0
+        width: 65
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f7b738bf5ff0d9f0800000000000000
+      internalID: -445575576532043791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_9
+      rect:
+        serializedVersion: 2
+        x: 1054
+        y: 0
+        width: 41
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2edc4080fc9e17c40800000000000000
+      internalID: 5508440894652861922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_10
+      rect:
+        serializedVersion: 2
+        x: 1115
+        y: 0
+        width: 57
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cc97fe987c7f4780800000000000000
+      internalID: -8696595497924191038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_11
+      rect:
+        serializedVersion: 2
+        x: 1184
+        y: 0
+        width: 65
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1f46be27d532a050800000000000000
+      internalID: 5810265667579301663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_12
+      rect:
+        serializedVersion: 2
+        x: 1214
+        y: 23
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1628e25573bc669f0800000000000000
+      internalID: -475469272128257439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_13
+      rect:
+        serializedVersion: 2
+        x: 1282
+        y: 0
+        width: 54
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8695772f72f737630800000000000000
+      internalID: 3923619509918194024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_14
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 0
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b70e3ca870d397a00800000000000000
+      internalID: 754701515163426939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_15
+      rect:
+        serializedVersion: 2
+        x: 1450
+        y: 0
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b169f57d47935b3a0800000000000000
+      internalID: -6650346100750313957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_16
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 14
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9c70775233c94420800000000000000
+      internalID: 2614835679648054429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_17
+      rect:
+        serializedVersion: 2
+        x: 1773
+        y: 0
+        width: 90
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dea459e5565c41d50800000000000000
+      internalID: 6707202784230722285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_18
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 0
+        width: 29
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f25a997e9d0c9990800000000000000
+      internalID: -7378007115243564299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_19
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 1
+        width: 27
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f61172bfb16a710f0800000000000000
+      internalID: -1146264941034532497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_20
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 27
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 241ab91e9cde0b990800000000000000
+      internalID: -7372131138676219582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_21
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 28
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5224b51034543d4e0800000000000000
+      internalID: -1958145258888150491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_22
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 12
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f37cee8b03df10210800000000000000
+      internalID: 1297596553362327359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_23
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 0
+        width: 29
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 756d56d9691c6ccc0800000000000000
+      internalID: -3691049991953590697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_24
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 1
+        width: 27
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2746c592245055f0800000000000000
+      internalID: -770023028761934034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_25
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 0
+        width: 27
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e4c40ef86af7cc30800000000000000
+      internalID: 4379744491486364897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_26
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 0
+        width: 28
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abf3b7b8512b868b0800000000000000
+      internalID: -5158677567548735558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_27
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 12
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d832b5c3bcbf26f0800000000000000
+      internalID: -707139136171919148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_28
+      rect:
+        serializedVersion: 2
+        x: 1528
+        y: 0
+        width: 25
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 504ec5edcd4cdf810800000000000000
+      internalID: 1800811878920545285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_29
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 8
+        width: 18
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00c7f964090ec10b0800000000000000
+      internalID: -5756479313421566976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_30
+      rect:
+        serializedVersion: 2
+        x: 1693
+        y: 0
+        width: 25
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ab55da883d8c6c50800000000000000
+      internalID: 6659853222961044384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_FireBurst_31
+      rect:
+        serializedVersion: 2
+        x: 1614
+        y: 1
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 506ca73d6cc16cfb0800000000000000
+      internalID: -4627979926799464955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BRJ_FireBurst_0: 954378165701903707
+      BRJ_FireBurst_1: 8635698637707969373
+      BRJ_FireBurst_10: -8696595497924191038
+      BRJ_FireBurst_11: 5810265667579301663
+      BRJ_FireBurst_12: -475469272128257439
+      BRJ_FireBurst_13: 3923619509918194024
+      BRJ_FireBurst_14: 754701515163426939
+      BRJ_FireBurst_15: -6650346100750313957
+      BRJ_FireBurst_16: 2614835679648054429
+      BRJ_FireBurst_17: 6707202784230722285
+      BRJ_FireBurst_18: -7378007115243564299
+      BRJ_FireBurst_19: -1146264941034532497
+      BRJ_FireBurst_2: -5198390639791909276
+      BRJ_FireBurst_20: -7372131138676219582
+      BRJ_FireBurst_21: -1958145258888150491
+      BRJ_FireBurst_22: 1297596553362327359
+      BRJ_FireBurst_23: -3691049991953590697
+      BRJ_FireBurst_24: -770023028761934034
+      BRJ_FireBurst_25: 4379744491486364897
+      BRJ_FireBurst_26: -5158677567548735558
+      BRJ_FireBurst_27: -707139136171919148
+      BRJ_FireBurst_28: 1800811878920545285
+      BRJ_FireBurst_29: -5756479313421566976
+      BRJ_FireBurst_3: 8478184091533159246
+      BRJ_FireBurst_30: 6659853222961044384
+      BRJ_FireBurst_31: -4627979926799464955
+      BRJ_FireBurst_4: -640031559783394730
+      BRJ_FireBurst_5: -6656293922712964169
+      BRJ_FireBurst_6: 3332230161675601072
+      BRJ_FireBurst_7: -7332518454578866549
+      BRJ_FireBurst_8: -445575576532043791
+      BRJ_FireBurst_9: 5508440894652861922
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

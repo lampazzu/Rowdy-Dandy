@@ -52,6 +52,9 @@ public static class BoonIcons
                 return Draw(parts[1], a, b);
             case "food":
                 return FoodIcon(parts[1]) ?? Draw("sandwich", a, b);
+            case "flora": // the user's RDR_Flowers frames (FloraArt): flora:<frame>[:toxic|violet]
+                FloraArt.Look look = parts.Length > 2 && parts[2] == "toxic" ? FloraArt.Look.Toxic : parts.Length > 2 && parts[2] == "violet" ? FloraArt.Look.Violet : FloraArt.Look.Natural;
+                return FloraArt.Get(int.Parse(parts[1]), look) ?? Draw(parts[1] == "1" ? "sporestep" : "flower", a, b);
             case "sheet":
             case "item":
                 Texture2D tex = parts[0] == "sheet" ? SheetTexture(parts[1]) : ItemTexture(parts[1]);

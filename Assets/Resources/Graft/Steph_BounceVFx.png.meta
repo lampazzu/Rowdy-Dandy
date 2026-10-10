@@ -1,0 +1,1261 @@
+fileFormatVersion: 2
+guid: 5227c2eec85ba77488e381f851e15f57
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5547406057229623378
+    second: Steph_BounceVFx_0
+  - first:
+      213: -6436338864519198675
+    second: Steph_BounceVFx_1
+  - first:
+      213: -1796631517282601531
+    second: Steph_BounceVFx_2
+  - first:
+      213: 1449778299727609789
+    second: Steph_BounceVFx_3
+  - first:
+      213: 2568048034311653869
+    second: Steph_BounceVFx_4
+  - first:
+      213: -1451488998403613466
+    second: Steph_BounceVFx_5
+  - first:
+      213: 1880596965790378339
+    second: Steph_BounceVFx_6
+  - first:
+      213: 283080479365702965
+    second: Steph_BounceVFx_7
+  - first:
+      213: 7665828577175910013
+    second: Steph_BounceVFx_8
+  - first:
+      213: -7737283808681059510
+    second: Steph_BounceVFx_9
+  - first:
+      213: 2056535524045636520
+    second: Steph_BounceVFx_10
+  - first:
+      213: 5610955873500057975
+    second: Steph_BounceVFx_11
+  - first:
+      213: -4345697498343956974
+    second: Steph_BounceVFx_12
+  - first:
+      213: -8626303126983721464
+    second: Steph_BounceVFx_13
+  - first:
+      213: -3592336013872079649
+    second: Steph_BounceVFx_14
+  - first:
+      213: 8468563926987963173
+    second: Steph_BounceVFx_15
+  - first:
+      213: -4010651750339294089
+    second: Steph_BounceVFx_16
+  - first:
+      213: 1983162615756669131
+    second: Steph_BounceVFx_17
+  - first:
+      213: 1097912501742933189
+    second: Steph_BounceVFx_18
+  - first:
+      213: 7046952208926689266
+    second: Steph_BounceVFx_19
+  - first:
+      213: 5783632462253679472
+    second: Steph_BounceVFx_20
+  - first:
+      213: 1713103192927695606
+    second: Steph_BounceVFx_21
+  - first:
+      213: 9022106566925983955
+    second: Steph_BounceVFx_22
+  - first:
+      213: 6656797269788080776
+    second: Steph_BounceVFx_23
+  - first:
+      213: -1845363666380087083
+    second: Steph_BounceVFx_24
+  - first:
+      213: -12248931565841068
+    second: Steph_BounceVFx_25
+  - first:
+      213: 4965340486513601272
+    second: Steph_BounceVFx_26
+  - first:
+      213: -2547387687748119389
+    second: Steph_BounceVFx_27
+  - first:
+      213: -4620110554842300280
+    second: Steph_BounceVFx_28
+  - first:
+      213: -1968739485991677781
+    second: Steph_BounceVFx_29
+  - first:
+      213: 7522816969618449035
+    second: Steph_BounceVFx_30
+  - first:
+      213: -204631545109812117
+    second: Steph_BounceVFx_31
+  - first:
+      213: -7220286478144066507
+    second: Steph_BounceVFx_32
+  - first:
+      213: 9096587858615163468
+    second: Steph_BounceVFx_33
+  - first:
+      213: -6646881980328108552
+    second: Steph_BounceVFx_34
+  - first:
+      213: 3471064446410093220
+    second: Steph_BounceVFx_35
+  - first:
+      213: -3006325569610937164
+    second: Steph_BounceVFx_36
+  - first:
+      213: 5159867740252690772
+    second: Steph_BounceVFx_37
+  - first:
+      213: 1628865517337137666
+    second: Steph_BounceVFx_38
+  - first:
+      213: -6119025053480415879
+    second: Steph_BounceVFx_39
+  - first:
+      213: 1724639586985828638
+    second: Steph_BounceVFx_40
+  - first:
+      213: -7822453265643114387
+    second: Steph_BounceVFx_41
+  - first:
+      213: -1362045289752575621
+    second: Steph_BounceVFx_42
+  - first:
+      213: -1923010296775582970
+    second: Steph_BounceVFx_43
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Steph_BounceVFx_0
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 102
+        width: 7
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaf5af51597a303b0800000000000000
+      internalID: -5547406057229623378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_1
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 79
+        width: 19
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d28ca4667e78da6a0800000000000000
+      internalID: -6436338864519198675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_2
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 0
+        width: 241
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c5791c67251117e0800000000000000
+      internalID: -1796631517282601531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_3
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 105
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbf755eaea5ae1410800000000000000
+      internalID: 1449778299727609789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_4
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 79
+        width: 9
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de94943c41a83a320800000000000000
+      internalID: 2568048034311653869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_5
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 96
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ecd3ce32764bdbe0800000000000000
+      internalID: -1451488998403613466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_6
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 101
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 369ec9ff9f8391a10800000000000000
+      internalID: 1880596965790378339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_7
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 80
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 535a0773234bde300800000000000000
+      internalID: 283080479365702965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_8
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 86
+        width: 28
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d76bb93c97e726a60800000000000000
+      internalID: 7665828577175910013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_9
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 72
+        width: 12
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4b1f21be55af9490800000000000000
+      internalID: -7737283808681059510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_10
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 0
+        width: 199
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a346b2c9284a8c10800000000000000
+      internalID: 2056535524045636520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_11
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 83
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 771dc5a83ae1edd40800000000000000
+      internalID: 5610955873500057975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_12
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 82
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21e97e5562bf0b3c0800000000000000
+      internalID: -4345697498343956974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_13
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 56
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80e3b479207394880800000000000000
+      internalID: -8626303126983721464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_14
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 63
+        width: 11
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdcdf4bad65752ec0800000000000000
+      internalID: -3592336013872079649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_15
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 67
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52bfdc1f502668570800000000000000
+      internalID: 8468563926987963173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_16
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 60
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77c4a3f7b7d4758c0800000000000000
+      internalID: -4010651750339294089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_17
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 68
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc0c20c44eb958b10800000000000000
+      internalID: 1983162615756669131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_18
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 0
+        width: 214
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c419d47a919c3f00800000000000000
+      internalID: 1097912501742933189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_19
+      rect:
+        serializedVersion: 2
+        x: 1067
+        y: 69
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f7ca3a92bdcbc160800000000000000
+      internalID: 7046952208926689266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_20
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 46
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0736c08d417934050800000000000000
+      internalID: 5783632462253679472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_21
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 7
+        width: 42
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f2fa0e074a26c710800000000000000
+      internalID: 1713103192927695606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_22
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 44
+        width: 12
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d0a7571f16f43d70800000000000000
+      internalID: 9022106566925983955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_23
+      rect:
+        serializedVersion: 2
+        x: 823
+        y: 19
+        width: 53
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88a328ff8d1b16c50800000000000000
+      internalID: 6656797269788080776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_24
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 33
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d0a008c583f366e0800000000000000
+      internalID: -1845363666380087083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_25
+      rect:
+        serializedVersion: 2
+        x: 547
+        y: 28
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 455d32169ab74dff0800000000000000
+      internalID: -12248931565841068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_26
+      rect:
+        serializedVersion: 2
+        x: 1052
+        y: 33
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fa228f6dde68e440800000000000000
+      internalID: 4965340486513601272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_27
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 25
+        width: 23
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a4d196056cd5acd0800000000000000
+      internalID: -2547387687748119389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_28
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 20
+        width: 32
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8808793cde112efb0800000000000000
+      internalID: -4620110554842300280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_29
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 21
+        width: 17
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba05e2a4ed1ada4e0800000000000000
+      internalID: -1968739485991677781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_30
+      rect:
+        serializedVersion: 2
+        x: 970
+        y: 0
+        width: 98
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8263602d2a666860800000000000000
+      internalID: 7522816969618449035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_31
+      rect:
+        serializedVersion: 2
+        x: 1116
+        y: 8
+        width: 74
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6ce3e3a1b0092df0800000000000000
+      internalID: -204631545109812117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_32
+      rect:
+        serializedVersion: 2
+        x: 1203
+        y: 23
+        width: 40
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53caaade3b36ccb90800000000000000
+      internalID: -7220286478144066507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_33
+      rect:
+        serializedVersion: 2
+        x: 1249
+        y: 14
+        width: 26
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4a53ec26729d3e70800000000000000
+      internalID: 9096587858615163468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_34
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 0
+        width: 31
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fd199a3e0881c3a0800000000000000
+      internalID: -6646881980328108552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_35
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 0
+        width: 147
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a2f2c839b2bb2030800000000000000
+      internalID: 3471064446410093220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_36
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 10
+        width: 16
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bc8a2892d26746d0800000000000000
+      internalID: -3006325569610937164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_37
+      rect:
+        serializedVersion: 2
+        x: 1137
+        y: 8
+        width: 15
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45952c12f588b9740800000000000000
+      internalID: 5159867740252690772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_38
+      rect:
+        serializedVersion: 2
+        x: 1192
+        y: 2
+        width: 45
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20253c3de84ea9610800000000000000
+      internalID: 1628865517337137666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_39
+      rect:
+        serializedVersion: 2
+        x: 1249
+        y: 0
+        width: 59
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97d8593422bd41ba0800000000000000
+      internalID: -6119025053480415879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_40
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 12
+        width: 47
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e11eddb11962fe710800000000000000
+      internalID: 1724639586985828638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_41
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 2
+        width: 24
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d607f353330117390800000000000000
+      internalID: -7822453265643114387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_42
+      rect:
+        serializedVersion: 2
+        x: 1123
+        y: 0
+        width: 56
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b71cd40860b091de0800000000000000
+      internalID: -1362045289752575621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Steph_BounceVFx_43
+      rect:
+        serializedVersion: 2
+        x: 1177
+        y: 1
+        width: 16
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60bd549d2581055e0800000000000000
+      internalID: -1923010296775582970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Steph_BounceVFx_0: -5547406057229623378
+      Steph_BounceVFx_1: -6436338864519198675
+      Steph_BounceVFx_10: 2056535524045636520
+      Steph_BounceVFx_11: 5610955873500057975
+      Steph_BounceVFx_12: -4345697498343956974
+      Steph_BounceVFx_13: -8626303126983721464
+      Steph_BounceVFx_14: -3592336013872079649
+      Steph_BounceVFx_15: 8468563926987963173
+      Steph_BounceVFx_16: -4010651750339294089
+      Steph_BounceVFx_17: 1983162615756669131
+      Steph_BounceVFx_18: 1097912501742933189
+      Steph_BounceVFx_19: 7046952208926689266
+      Steph_BounceVFx_2: -1796631517282601531
+      Steph_BounceVFx_20: 5783632462253679472
+      Steph_BounceVFx_21: 1713103192927695606
+      Steph_BounceVFx_22: 9022106566925983955
+      Steph_BounceVFx_23: 6656797269788080776
+      Steph_BounceVFx_24: -1845363666380087083
+      Steph_BounceVFx_25: -12248931565841068
+      Steph_BounceVFx_26: 4965340486513601272
+      Steph_BounceVFx_27: -2547387687748119389
+      Steph_BounceVFx_28: -4620110554842300280
+      Steph_BounceVFx_29: -1968739485991677781
+      Steph_BounceVFx_3: 1449778299727609789
+      Steph_BounceVFx_30: 7522816969618449035
+      Steph_BounceVFx_31: -204631545109812117
+      Steph_BounceVFx_32: -7220286478144066507
+      Steph_BounceVFx_33: 9096587858615163468
+      Steph_BounceVFx_34: -6646881980328108552
+      Steph_BounceVFx_35: 3471064446410093220
+      Steph_BounceVFx_36: -3006325569610937164
+      Steph_BounceVFx_37: 5159867740252690772
+      Steph_BounceVFx_38: 1628865517337137666
+      Steph_BounceVFx_39: -6119025053480415879
+      Steph_BounceVFx_4: 2568048034311653869
+      Steph_BounceVFx_40: 1724639586985828638
+      Steph_BounceVFx_41: -7822453265643114387
+      Steph_BounceVFx_42: -1362045289752575621
+      Steph_BounceVFx_43: -1923010296775582970
+      Steph_BounceVFx_5: -1451488998403613466
+      Steph_BounceVFx_6: 1880596965790378339
+      Steph_BounceVFx_7: 283080479365702965
+      Steph_BounceVFx_8: 7665828577175910013
+      Steph_BounceVFx_9: -7737283808681059510
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

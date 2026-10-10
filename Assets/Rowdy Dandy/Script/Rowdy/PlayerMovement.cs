@@ -52,6 +52,12 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     [SerializeField] private bool isGrounded = false;
     public bool IsGrounded => isGrounded;
+    public const float PlatformTipAfterX = 205f; // the thin-platform tip waits until past the Gnoll Tower
+
+    // Hyper armor (Sword cast): hits still hurt but don't stagger or knock him back (Health.TakeDamage)
+    public const float SwordCastArmor = 1f;
+    private float hyperArmorUntil;
+    public bool HyperArmor => Time.time < hyperArmorUntil;
     public bool IsWatered => isWatered;
     public bool IsSurfing => isSurfing; // keyframed by the surf clips (Wipeout: Rowdy becomes the wave)
     [SerializeField] private float jumpTimeCounter = 0f;
@@ -507,8 +513,9 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsJumping", false);
         }
 
-        // First time standing on a one-way platform: how to drop through (checked a few times a second)
-        if (isGrounded && Time.frameCount % 15 == 0 && !Tutorials.Done(Tutorials.Topic.Platform) && GetOneWayPlatformUnderFeet() != null)
+        // First time standing on a one-way platform past the Gnoll Tower (the island with all the thin platforms):
+        // how to drop through (checked a few times a second)
+        if (isGrounded && Time.frameCount % 15 == 0 && transform.position.x > PlatformTipAfterX && !Tutorials.Done(Tutorials.Topic.Platform) && GetOneWayPlatformUnderFeet() != null)
             Tutorials.Show(Tutorials.Topic.Platform, null, 0.3f);
 
         float moveInput = GameInput.MoveX;
@@ -768,6 +775,8 @@ public class PlayerMovement : MonoBehaviour
                 // Ducking attack animation
                 animator.SetTrigger("DuckingAttack");
                 attackStarted = true;
+                // the Sword's down + attack is a cast (WK_Sword_Duck, 1 s): HYPER ARMOR while it plays
+                if (weaponManager != null && weaponManager.GetActiveWeaponIndex() == 1) hyperArmorUntil = Time.time + SwordCastArmor;
             }
 
             if (attackStarted && weaponManager != null)

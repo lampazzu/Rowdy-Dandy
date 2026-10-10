@@ -23,6 +23,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9059555869103600648}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 92.21, y: 5.83, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -30,7 +31,6 @@ Transform:
   m_Children:
   - {fileID: 9059555870076334265}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9059555870072928489
 GameObject:
@@ -57,13 +57,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9059555870072928489}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.841, y: -0.02129507, z: -0.07139221}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9059555870076334265}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9059555870072928484
 MonoBehaviour:
@@ -81,6 +81,8 @@ MonoBehaviour:
   isFrecha: 1
   frechaExplosionPrefab: {fileID: 5548409073760038995, guid: 787a1526de1ccde4bb7716bf86f3be2e, type: 3}
   anima: {fileID: 0}
+  telegraphContact: 1
+  telegraphTime: 0.3
 --- !u!61 &9059555870072928491
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -89,11 +91,32 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9059555870072928489}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: -1.3765526, y: 0.0029919147}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -104,7 +127,6 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
   m_Size: {x: 0.32294464, y: 0.13622427}
   m_EdgeRadius: 0
 --- !u!1 &9059555870076334264
@@ -140,6 +162,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9059555870076334264}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.8410034, y: 0.02129507, z: 0.07139221}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -148,10 +171,10 @@ Transform:
   - {fileID: 9059555870116178468}
   - {fileID: 9059555870072928490}
   m_Father: {fileID: 9059555869103600649}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9059555870076334257
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -167,6 +190,11 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -188,23 +216,24 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 6
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 225316678, guid: 3c45401313c221a4cb104cc922775b99, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.3125, y: 1}
+  m_Size: {x: 1.765625, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &9059555870076334256
 Animator:
-  serializedVersion: 4
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -218,10 +247,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &9059555870076334263
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -230,27 +261,47 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9059555870076334264}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: -0.41615677, y: -0.04417944}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.765625, y: 1}
-    newSize: {x: 1.3125, y: 1}
+    newSize: {x: 1.765625, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
   m_Size: {x: 0.5854111, y: 0.13040829}
   m_EdgeRadius: 0
 --- !u!50 &9059555870076334262
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -261,10 +312,16 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 50
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_GravityScale: 0.05
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -303,6 +360,7 @@ MonoBehaviour:
       m_Calls: []
   animbleed: {fileID: 0}
   isParryTime: 0
+  isParryDestructive: 0
   isPelican: 1
   isOldMan: 0
   isPillarFlamed: 0
@@ -313,9 +371,25 @@ MonoBehaviour:
   isObject: 0
   pelicanHeartPrefab: {fileID: 436720622329261034, guid: 3c54c05b92c26c046a936a8670cc39d7, type: 3}
   transformWolf: {fileID: 0}
+  oldManBecomesElder: 1
   bloodPrefab: {fileID: 0}
+  parryDamage: 0
+  expGemPrefab: {fileID: 0}
+  expGemAmount: 1
+  giveDirectEXP: 0
+  directEXPValue: 20
+  weaponDropPrefab: {fileID: 0}
+  dropChancePercent: 30
+  damageTextPrefab: {fileID: 0}
+  critFXPrefab: {fileID: 0}
+  showHealthBar: 1
+  enableParryRumble: 1
+  parryLowFrequency: 0.6
+  parryHighFrequency: 1
+  parryRumbleDuration: 0.2
   initialpositionenemy: {x: 0, y: 0, z: 0}
   initialrotationenemy: {x: 0, y: 0, z: 0, w: 0}
+  hitOverrideControllers: []
 --- !u!114 &9059555870076334260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,8 +408,102 @@ MonoBehaviour:
   moveSpeed: 2
   patrolDestination: 0
   playerTransform: {fileID: 0}
+  marchTarget: {fileID: 0}
   isChasing: 0
+  isMarching: 0
   chaseDistance: 0
+  isPatrolGround: 0
+  isDrownable: 0
+  isOnlyAquatic: 0
+  waterLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  shoreMargin: 0.6
+  enableAquaticLeap: 1
+  leapTriggerRange: 4
+  leapShoreReach: 2.5
+  leapShoreOvershoot: 1.5
+  leapMinHeight: 1.2
+  leapMaxHeight: 3
+  leapMaxSpeedX: 7
+  leapCooldown: 2.5
+  leapWhenPlayerAbove: 1
+  hopBackHeight: 1
+  enableLeapTilt: 1
+  maxLeapTilt: 20
+  leapTiltSpeed: 120
+  leapTiltStep: 0
+  wallCheckDistance: 0.8
+  obstacleCheckHeight: 0.5
+  headClearanceDistance: 1.5
+  isJumperMan: 0
+  jumpCapability: 5
+  leapCapability: 5
+  jumpCooldown: 1
+  hasFallAnimation: 0
+  jumpingUpAnimatorParameter: jumpingUp
+  fallingAnimatorParameter: falling
+  isPhasing: 0
+  randomizeSpeed: 0
+  minSpeed: 1
+  maxSpeed: 5
+  groundCheckDistance: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isGrounded: 0
+  groundedAnimatorOverrideController: {fileID: 0}
+  airAnimatorOverrideController: {fileID: 0}
+  usesOverride: 0
+  groundCheckOffset: 0.2
+  enableSmoothMovement: 0
+  acceleration: 25
+  deceleration: 30
+  enableLandingSquash: 0
+  enableJumpTakeoffSquash: 0
+  enableAirborneStretch: 0
+  landingSquashScale: {x: 1.25, y: 0.75, z: 1}
+  jumpTakeoffScale: {x: 0.8, y: 1.25, z: 1}
+  squashDuration: 0.15
+  enablePatrolHesitation: 0
+  patrolWaitTime: 1
+  enableAlertPause: 0
+  alertPauseDuration: 0.4
+  alertAnimatorTrigger: Alert
+  enableSmoothFacing: 0
+  turnCooldown: 0.2
+  enableLandingStun: 0
+  minDropHeightForStun: 3
+  stunDuration: 1.2
+  landingStunAnimatorParameter: isStunned
+  enableWallHop: 1
+  wallHopForceY: 6
+  enableEdgeAvoidance: 0
+  ledgeCheckDistance: 0.5
+  enableStuckDetection: 0
+  stuckCheckTime: 1
+  minStuckDistance: 0.05
+  enableLineOfSightCheck: 0
+  lineOfSightObstacles:
+    serializedVersion: 2
+    m_Bits: 0
+  enableChaseTimeout: 0
+  loseTargetTime: 3
+  enableFloorAwareChase: 1
+  floorHeightTolerance: 1.5
+  giveUpTime: 2.5
+  playerOnOtherFloor: 0
+  keepAttackDistance: 0
+  stopAtReachFraction: 0.75
+  waitingDistance: 2.2
+  turnLength: 5
+  waitingForTurn: 0
+  patrolBlockedTime: 0.6
+  sleepWhenFar: 1
+  sleepDistance: 40
+  enableDustParticles: 0
+  landingDustParticle: {fileID: 0}
+  jumpDustParticle: {fileID: 0}
 --- !u!114 &9059555870076334267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,7 +526,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: f2bc4bc7da8b3e64ea8882aed07d5e7f, type: 3}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: f2bc4bc7da8b3e64ea8882aed07d5e7f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 3
@@ -465,7 +634,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 34e67b12bb9ace44f8b3d6db505a7a16, type: 3}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 34e67b12bb9ace44f8b3d6db505a7a16, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 2.55
@@ -576,13 +746,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9059555870116178475}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.338, y: -0.05, z: 0}
   m_LocalScale: {x: -0.38751644, y: 0.45700216, z: 0.8552087}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9059555870076334265}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &9059555870116178470
 ParticleSystem:
@@ -802,6 +972,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
@@ -831,6 +1002,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
     startSize:
@@ -1152,6 +1324,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 1
+    gravitySource: 0
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -1881,6 +2054,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
@@ -1910,6 +2084,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
   UVModule:
@@ -4130,6 +4305,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
@@ -4159,6 +4335,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
@@ -4536,6 +4713,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 10.35
     textureMode: 1
+    textureScale: {x: 1, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
@@ -4578,6 +4756,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
@@ -4607,6 +4786,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
     widthOverTrail:
@@ -4694,6 +4874,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
@@ -4723,6 +4904,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
   CustomDataModule:
@@ -4761,6 +4943,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
@@ -4790,6 +4973,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
     colorLabel0: Color
@@ -5043,6 +5227,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
@@ -5072,6 +5257,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
     colorLabel1: Color
@@ -5293,7 +5479,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &9059555870116178469
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5309,6 +5495,11 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5330,9 +5521,11 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -5347,13 +5540,15 @@ ParticleSystemRenderer:
   m_RenderAlignment: 1
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
+  m_UseCustomVertexStreams: 0
   m_VertexStreams: 00010304
+  m_UseCustomTrailVertexStreams: 0
+  m_TrailVertexStreams: 00010304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -5362,4 +5557,3 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0

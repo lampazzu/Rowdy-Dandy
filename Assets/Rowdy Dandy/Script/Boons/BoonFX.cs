@@ -139,22 +139,23 @@ public static class BoonFX
     {
         get
         {
-            const string key = "BoonCrescent";
+            // drawn at the size it flies at (it used to be 14 x 22 scaled 1.6x: fat, uneven pixels)
+            const string key = "BoonCrescentHD";
             if (sprites.TryGetValue(key, out Sprite s) && s != null) return s;
-            const int w = 14, h = 22;
+            const int w = 22, h = 35;
             var tex = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, name = key };
             var px = new Color32[w * h];
             for (int y = 0; y < h; y++)
                 for (int x = 0; x < w; x++)
                 {
                     float dy = y - (h - 1) * 0.5f;
-                    float outer = Mathf.Sqrt((x - 2f) * (x - 2f) + dy * dy);
-                    float inner = Mathf.Sqrt((x + 1.5f) * (x + 1.5f) + dy * dy);
+                    float outer = Mathf.Sqrt((x - 3.2f) * (x - 3.2f) + dy * dy);
+                    float inner = Mathf.Sqrt((x + 2.4f) * (x + 2.4f) + dy * dy);
                     Color32 c = new Color32(0, 0, 0, 0);
-                    if (outer <= 11f && inner > 10f)
+                    if (outer <= 17.6f && inner > 16f)
                     {
-                        bool rim = outer > 9.8f;
-                        bool core = outer > 8.6f && outer <= 9.8f;
+                        bool rim = outer > 15.9f;
+                        bool core = outer > 14f && outer <= 15.9f;
                         c = rim ? new Color32(255, 210, 76, 255) : core ? new Color32(255, 240, 250, 255) : new Color32(255, 94, 200, 255);
                     }
                     px[y * w + x] = c;
@@ -359,7 +360,7 @@ public class HairCrescent : MonoBehaviour
     public static void Fire(Vector3 at, float direction, float damage, float scale = 1f)
     {
         SpriteRenderer sr = BoonFX.MakeRenderer("Hair Crescent", BoonFX.Crescent, at, BoonFX.Order + 4);
-        sr.transform.localScale = new Vector3(direction * 1.6f * scale, 1.6f * scale, 1f);
+        sr.transform.localScale = new Vector3(direction * Mathf.Min(1f, scale), Mathf.Min(1f, scale), 1f); // never above its own pixel size
         var c = sr.gameObject.AddComponent<HairCrescent>();
         c.dir = direction; c.damage = damage; c.sr = sr;
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.hairFlip : null, 0.5f, Random.Range(1.3f, 1.5f));
@@ -379,12 +380,8 @@ public class HairCrescent : MonoBehaviour
         age += Time.deltaTime;
         float speed = Mathf.Lerp(13f, 6f, age / 0.55f);
         transform.position += new Vector3(dir * speed * Time.deltaTime, 0f, 0f);
-        if (!steel)
-        {
-            float s = 1f + Mathf.Sin(age * 30f) * 0.06f;
-            transform.localScale = new Vector3(dir * 1.6f * s, 1.6f * s, 1f);
-        }
-        sr.color = new Color(1f, 1f, 1f, 1f - Mathf.Clamp01((age - 0.4f) / 0.15f));
+        float shimmer = steel ? 1f : 0.88f + 0.12f * Mathf.Sin(age * 30f); // shimmers instead of wobbling its scale
+        sr.color = new Color(1f, 1f, 1f, shimmer * (1f - Mathf.Clamp01((age - 0.4f) / 0.15f)));
 
         trailTimer -= Time.deltaTime;
         if (trailTimer <= 0f)
@@ -429,7 +426,6 @@ public class Decoy : MonoBehaviour
         d.outline = SpriteOutline.Add(sr, BoonFX.Pink, 1, -1);
 
         Vector3 c = sr.bounds.center;
-        BoonFX.Popup(c + Vector3.up * 0.7f, "OVER HERE, BABY", BoonFX.Pink, 0.75f, 1.2f);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.charmSfx : null, 0.7f, 1.1f);
         PulseRing.Spawn(c, new Color(1f, 0.5f, 0.85f, 0.9f), 4.5f, 0.45f);
         foreach (EnemyHealth e in BoonFX.EnemiesIn(c, 4.5f)) BoonFX.Charm(e, charmSeconds);
@@ -528,15 +524,18 @@ public class SporeCloud : MonoBehaviour
         c.dps = dps; c.rave = rave;
         c.visual = BoonFX.Sheet(Puff, 10, ground + Vector3.up * 0.05f, 16f, 0.8f, new Color(0.85f, 1f, 0.8f, 0.95f), null, false, BoonFX.Order, new Vector2(0.5f, 0.12f));
 
-        int count = Random.Range(3, 6);
+        // the user's mushrooms (FloraArt, RDR_Flowers_1) at their true size: natural / toxic / violet, glowing
+        int count = Random.Range(2, 4);
         for (int i = 0; i < count; i++)
         {
-            float x = Random.Range(-Radius, Radius) * 0.75f;
+            float x = Random.Range(-Radius, Radius) * 0.7f;
             if (!SolidGround.Ray(ground + new Vector3(x, 0.4f, 0f), Vector2.down, 0.9f, out RaycastHit2D floor)) continue; // no shrooms on thin air
-            SpriteRenderer sr = BoonFX.MakeRenderer("Shroom", Mushroom(Random.value < 0.6f), new Vector3(ground.x + x, floor.point.y, 0f), 9 + i % 2);
+            Sprite mine = FloraArt.RandomMushroom(out Color glow);
+            SpriteRenderer sr = BoonFX.MakeRenderer("Shroom", mine != null ? mine : Mushroom(Random.value < 0.6f), new Vector3(ground.x + x, floor.point.y, 0f), 9 + i % 2, null, ItemArt.Lit);
             sr.flipX = Random.value < 0.5f;
             sr.transform.localScale = new Vector3(1f, 0f, 1f);
-            c.shrooms.Add((sr.transform, i * 0.05f + Random.Range(0f, 0.08f), Random.Range(1.4f, 2.1f)));
+            if (mine != null) FloraArt.Pop(sr, glow, i == 0 ? 0.7f : 0f, 1.1f); // one light per cloud is plenty
+            c.shrooms.Add((sr.transform, i * 0.05f + Random.Range(0f, 0.08f), mine != null ? 1f : Random.Range(1.4f, 2.1f)));
         }
 
         BoonArt art = BoonArt.Get;
@@ -696,7 +695,6 @@ public class GhostCat : MonoBehaviour
         BoonArt art = BoonArt.Get;
         if (art != null) BoonFX.Sheet(art.clawSlash, 6, end, 24f, 1f, new Color(0.9f, 0.75f, 1f));
         BoonFX.Hit(target, damage, with);
-        BoonFX.Popup(end + Vector3.up * 0.6f, "MRRAOW!", BoonFX.Lavender, 0.7f, 0.8f);
         FXParticle.Burst(end, BoonFX.Lavender, 12, 1.5f, 4f, 4f, 0.5f);
         TimeSlowController.HitStop(0.05f, 0.08f);
         ScreenShake.Impulse(0.2f);
@@ -717,7 +715,8 @@ public static class Rings
             BoonFX.Sheet(art.waterSonic, 9, feet + new Vector3(-0.7f, 0.35f, 0f), 24f, 1f, toxic ? new Color(0.6f, 1f, 0.45f) : new Color(0.4f, 0.6f, 1f));
             SheetFX right = BoonFX.Sheet(art.waterSonic, 9, feet + new Vector3(0.7f, 0.35f, 0f), 24f, 1f, toxic ? new Color(0.6f, 1f, 0.45f) : new Color(0.4f, 0.6f, 1f));
             if (right != null) right.transform.localScale = new Vector3(-1f, 1f, 1f);
-            BoonArt.Play(art.splash, 0.6f, Random.Range(1.2f, 1.4f));
+            BoonArt.Play(art.waterBoom, 0.6f, Random.Range(0.85f, 1f));   // the Iara water burst
+            BoonArt.Play(art.waveCrash, 0.35f, Random.Range(1.1f, 1.25f));
         }
         FXParticle.Burst(feet, foam, 20, 2f, 5f, 10f, 0.6f, true);
         ScreenShake.Impulse(0.35f);

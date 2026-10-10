@@ -1,0 +1,1885 @@
+fileFormatVersion: 2
+guid: b84f67aca901dcf4f8d018f4e34b7b7b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6057914857707174385
+    second: BRJ_Bug_Vanish_0
+  - first:
+      213: 6229490000181708425
+    second: BRJ_Bug_Vanish_1
+  - first:
+      213: -9001381745796575945
+    second: BRJ_Bug_Vanish_2
+  - first:
+      213: 7756817398012878898
+    second: BRJ_Bug_Vanish_3
+  - first:
+      213: 5498765027111600540
+    second: BRJ_Bug_Vanish_4
+  - first:
+      213: -332674520072516350
+    second: BRJ_Bug_Vanish_5
+  - first:
+      213: -7144022348823483305
+    second: BRJ_Bug_Vanish_6
+  - first:
+      213: 376164527682206528
+    second: BRJ_Bug_Vanish_7
+  - first:
+      213: 137366972681498338
+    second: BRJ_Bug_Vanish_8
+  - first:
+      213: -7528754001664980217
+    second: BRJ_Bug_Vanish_9
+  - first:
+      213: 5250504488224028814
+    second: BRJ_Bug_Vanish_10
+  - first:
+      213: -7832931023076138793
+    second: BRJ_Bug_Vanish_11
+  - first:
+      213: 4474839921000594891
+    second: BRJ_Bug_Vanish_12
+  - first:
+      213: 3777262600297728780
+    second: BRJ_Bug_Vanish_13
+  - first:
+      213: -7769437175606181866
+    second: BRJ_Bug_Vanish_14
+  - first:
+      213: 3935906218853017438
+    second: BRJ_Bug_Vanish_15
+  - first:
+      213: 6286315288767819301
+    second: BRJ_Bug_Vanish_16
+  - first:
+      213: -3968956650120938404
+    second: BRJ_Bug_Vanish_17
+  - first:
+      213: 3165001631354849644
+    second: BRJ_Bug_Vanish_18
+  - first:
+      213: -2659444509842426068
+    second: BRJ_Bug_Vanish_19
+  - first:
+      213: 8026708550684040946
+    second: BRJ_Bug_Vanish_20
+  - first:
+      213: -3781206975512870207
+    second: BRJ_Bug_Vanish_21
+  - first:
+      213: -7343280943267264746
+    second: BRJ_Bug_Vanish_22
+  - first:
+      213: -6592291679644636294
+    second: BRJ_Bug_Vanish_23
+  - first:
+      213: 5980994936378954492
+    second: BRJ_Bug_Vanish_24
+  - first:
+      213: -4042949600644163950
+    second: BRJ_Bug_Vanish_25
+  - first:
+      213: 3888034988263057567
+    second: BRJ_Bug_Vanish_26
+  - first:
+      213: 2908000343947151229
+    second: BRJ_Bug_Vanish_27
+  - first:
+      213: 2164079203581814505
+    second: BRJ_Bug_Vanish_28
+  - first:
+      213: -4547134389712783442
+    second: BRJ_Bug_Vanish_29
+  - first:
+      213: 4172227419254319703
+    second: BRJ_Bug_Vanish_30
+  - first:
+      213: 183496719635162720
+    second: BRJ_Bug_Vanish_31
+  - first:
+      213: -5080188678917582374
+    second: BRJ_Bug_Vanish_32
+  - first:
+      213: -716395334797062568
+    second: BRJ_Bug_Vanish_33
+  - first:
+      213: 4681539718877624964
+    second: BRJ_Bug_Vanish_34
+  - first:
+      213: -5985138146299644714
+    second: BRJ_Bug_Vanish_35
+  - first:
+      213: -6544114051513162284
+    second: BRJ_Bug_Vanish_36
+  - first:
+      213: -4237351751812262915
+    second: BRJ_Bug_Vanish_37
+  - first:
+      213: 5595822853108071674
+    second: BRJ_Bug_Vanish_38
+  - first:
+      213: -1068539109851944043
+    second: BRJ_Bug_Vanish_39
+  - first:
+      213: -4836606044883765562
+    second: BRJ_Bug_Vanish_40
+  - first:
+      213: 1212090948940057714
+    second: BRJ_Bug_Vanish_41
+  - first:
+      213: -2593505420912308979
+    second: BRJ_Bug_Vanish_42
+  - first:
+      213: 4507941302752228919
+    second: BRJ_Bug_Vanish_43
+  - first:
+      213: -8411802359567063356
+    second: BRJ_Bug_Vanish_44
+  - first:
+      213: -2666024710713355305
+    second: BRJ_Bug_Vanish_45
+  - first:
+      213: 1817142573009924081
+    second: BRJ_Bug_Vanish_46
+  - first:
+      213: -5456965111936374021
+    second: BRJ_Bug_Vanish_47
+  - first:
+      213: -4437981428444526476
+    second: BRJ_Bug_Vanish_48
+  - first:
+      213: -3006135202379536350
+    second: BRJ_Bug_Vanish_49
+  - first:
+      213: 403758037579228046
+    second: BRJ_Bug_Vanish_50
+  - first:
+      213: -8494997206617095645
+    second: BRJ_Bug_Vanish_51
+  - first:
+      213: 4518661631220329662
+    second: BRJ_Bug_Vanish_52
+  - first:
+      213: -5730893083117776573
+    second: BRJ_Bug_Vanish_53
+  - first:
+      213: 962553052959943338
+    second: BRJ_Bug_Vanish_54
+  - first:
+      213: -1080870894081860419
+    second: BRJ_Bug_Vanish_55
+  - first:
+      213: 5182773215254092341
+    second: BRJ_Bug_Vanish_56
+  - first:
+      213: 4734878296560443138
+    second: BRJ_Bug_Vanish_57
+  - first:
+      213: -153245154112815717
+    second: BRJ_Bug_Vanish_58
+  - first:
+      213: -5195461958750457389
+    second: BRJ_Bug_Vanish_59
+  - first:
+      213: 7386170244235444695
+    second: BRJ_Bug_Vanish_60
+  - first:
+      213: -616102608079559330
+    second: BRJ_Bug_Vanish_61
+  - first:
+      213: -6188920444697197146
+    second: BRJ_Bug_Vanish_62
+  - first:
+      213: 4993096350097390485
+    second: BRJ_Bug_Vanish_63
+  - first:
+      213: -8594785518587561075
+    second: BRJ_Bug_Vanish_64
+  - first:
+      213: 8769174585150824876
+    second: BRJ_Bug_Vanish_65
+  - first:
+      213: 5660641781017317536
+    second: BRJ_Bug_Vanish_66
+  - first:
+      213: -6076752108431850221
+    second: BRJ_Bug_Vanish_67
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_0
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 8
+        width: 61
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f972358779021450800000000000000
+      internalID: 6057914857707174385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_1
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 3
+        width: 114
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 986cda06628937650800000000000000
+      internalID: 6229490000181708425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_2
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 5
+        width: 92
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73d0c1a5efaa41380800000000000000
+      internalID: -9001381745796575945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_3
+      rect:
+        serializedVersion: 2
+        x: 494
+        y: 5
+        width: 50
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 230a02c7350c5ab60800000000000000
+      internalID: 7756817398012878898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_4
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 4
+        width: 59
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c91045098a98f4c40800000000000000
+      internalID: 5498765027111600540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_5
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 3
+        width: 73
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20d014d594a126bf0800000000000000
+      internalID: -332674520072516350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_6
+      rect:
+        serializedVersion: 2
+        x: 909
+        y: 3
+        width: 86
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75cacee36855bdc90800000000000000
+      internalID: -7144022348823483305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_7
+      rect:
+        serializedVersion: 2
+        x: 932
+        y: 102
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04bb99915a7683500800000000000000
+      internalID: 376164527682206528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_8
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 76
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ee2d8aa88608e100800000000000000
+      internalID: 137366972681498338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_9
+      rect:
+        serializedVersion: 2
+        x: 1055
+        y: 4
+        width: 88
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70b4571ef1e748790800000000000000
+      internalID: -7528754001664980217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_10
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 73
+        width: 66
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e88ff20830a8dd840800000000000000
+      internalID: 5250504488224028814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_11
+      rect:
+        serializedVersion: 2
+        x: 1194
+        y: 9
+        width: 115
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d0e8633cb6db4390800000000000000
+      internalID: -7832931023076138793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_12
+      rect:
+        serializedVersion: 2
+        x: 1198
+        y: 100
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcd3afd0333d91e30800000000000000
+      internalID: 4474839921000594891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_13
+      rect:
+        serializedVersion: 2
+        x: 1211
+        y: 99
+        width: 23
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0b4d1a72588b6430800000000000000
+      internalID: 3777262600297728780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_14
+      rect:
+        serializedVersion: 2
+        x: 1240
+        y: 98
+        width: 28
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61087439d0a6d2490800000000000000
+      internalID: -7769437175606181866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_15
+      rect:
+        serializedVersion: 2
+        x: 1331
+        y: 93
+        width: 32
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e572cfb4ad52f9630800000000000000
+      internalID: 3935906218853017438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_16
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 99
+        width: 19
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52eec15e27a7d3750800000000000000
+      internalID: 6286315288767819301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_17
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 69
+        width: 33
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5cfd9484fe6be8c0800000000000000
+      internalID: -3968956650120938404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_18
+      rect:
+        serializedVersion: 2
+        x: 1392
+        y: 89
+        width: 20
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c69007ef6385ceb20800000000000000
+      internalID: 3165001631354849644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_19
+      rect:
+        serializedVersion: 2
+        x: 1431
+        y: 74
+        width: 29
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c27baf20f41c71bd0800000000000000
+      internalID: -2659444509842426068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_20
+      rect:
+        serializedVersion: 2
+        x: 1478
+        y: 56
+        width: 27
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fedc1746e8946f60800000000000000
+      internalID: 8026708550684040946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_21
+      rect:
+        serializedVersion: 2
+        x: 686
+        y: 68
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c2835a1a44768bc0800000000000000
+      internalID: -3781206975512870207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_22
+      rect:
+        serializedVersion: 2
+        x: 911
+        y: 59
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 617c8a273ec671a90800000000000000
+      internalID: -7343280943267264746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_23
+      rect:
+        serializedVersion: 2
+        x: 1133
+        y: 65
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7ba40315a97384a0800000000000000
+      internalID: -6592291679644636294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_24
+      rect:
+        serializedVersion: 2
+        x: 1181
+        y: 58
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf2174ab433c00350800000000000000
+      internalID: 5980994936378954492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_25
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 75
+        width: 27
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2961cc832ce84e7c0800000000000000
+      internalID: -4042949600644163950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_26
+      rect:
+        serializedVersion: 2
+        x: 1339
+        y: 70
+        width: 39
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f98a5bdd83315f530800000000000000
+      internalID: 3888034988263057567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_27
+      rect:
+        serializedVersion: 2
+        x: 1341
+        y: 45
+        width: 44
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d770fa3d7ea4b5820800000000000000
+      internalID: 2908000343947151229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_28
+      rect:
+        serializedVersion: 2
+        x: 1357
+        y: 76
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e6ed43e19a580e10800000000000000
+      internalID: 2164079203581814505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_29
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 56
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea7f4334d5555e0c0800000000000000
+      internalID: -4547134389712783442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_30
+      rect:
+        serializedVersion: 2
+        x: 1386
+        y: 62
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75a6cce7bbab6e930800000000000000
+      internalID: 4172227419254319703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_31
+      rect:
+        serializedVersion: 2
+        x: 1396
+        y: 72
+        width: 36
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 066ad475b49eb8200800000000000000
+      internalID: 183496719635162720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_32
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 58
+        width: 28
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad11821005b8f79b0800000000000000
+      internalID: -5080188678917582374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_33
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 69
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85e8ca61d3ade06f0800000000000000
+      internalID: -716395334797062568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_34
+      rect:
+        serializedVersion: 2
+        x: 1411
+        y: 79
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48a3599029b28f040800000000000000
+      internalID: 4681539718877624964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_35
+      rect:
+        serializedVersion: 2
+        x: 1425
+        y: 85
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d47b2a019480fca0800000000000000
+      internalID: -5985138146299644714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_36
+      rect:
+        serializedVersion: 2
+        x: 1429
+        y: 69
+        width: 11
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d56aed31f2ae25a0800000000000000
+      internalID: -6544114051513162284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_37
+      rect:
+        serializedVersion: 2
+        x: 1438
+        y: 63
+        width: 31
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df3d9dc3807e135c0800000000000000
+      internalID: -4237351751812262915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_38
+      rect:
+        serializedVersion: 2
+        x: 1542
+        y: 10
+        width: 66
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afcf489ac3b58ad40800000000000000
+      internalID: 5595822853108071674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_39
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 64
+        width: 39
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59ba9a84759cb21f0800000000000000
+      internalID: -1068539109851944043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_40
+      rect:
+        serializedVersion: 2
+        x: 1592
+        y: 75
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c632387d6ce0ecb0800000000000000
+      internalID: -4836606044883765562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_41
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 47
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27cc90fcb4632d010800000000000000
+      internalID: 1212090948940057714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_42
+      rect:
+        serializedVersion: 2
+        x: 1341
+        y: 31
+        width: 36
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0dc8778f84020cd0800000000000000
+      internalID: -2593505420912308979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_43
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 53
+        width: 23
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 736bbd21bbc6f8e30800000000000000
+      internalID: 4507941302752228919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_44
+      rect:
+        serializedVersion: 2
+        x: 1391
+        y: 48
+        width: 22
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c666355256434b80800000000000000
+      internalID: -8411802359567063356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_45
+      rect:
+        serializedVersion: 2
+        x: 1397
+        y: 26
+        width: 53
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d3548b96a0600bd0800000000000000
+      internalID: -2666024710713355305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_46
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 34
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ffee72ea89c73910800000000000000
+      internalID: 1817142573009924081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_47
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 28
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfa25579427f444b0800000000000000
+      internalID: -5456965111936374021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_48
+      rect:
+        serializedVersion: 2
+        x: 1175
+        y: 14
+        width: 28
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47888cd776f1962c0800000000000000
+      internalID: -4437981428444526476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_49
+      rect:
+        serializedVersion: 2
+        x: 1375
+        y: 34
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 228ee5be5ff0846d0800000000000000
+      internalID: -3006135202379536350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_50
+      rect:
+        serializedVersion: 2
+        x: 1378
+        y: 28
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e836e15cbcf6a9500800000000000000
+      internalID: 403758037579228046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_51
+      rect:
+        serializedVersion: 2
+        x: 1405
+        y: 25
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32207ab8c05bb1a80800000000000000
+      internalID: -8494997206617095645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_52
+      rect:
+        serializedVersion: 2
+        x: 916
+        y: 23
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebc231d00d285be30800000000000000
+      internalID: 4518661631220329662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_53
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 25
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 341950fba17c770b0800000000000000
+      internalID: -5730893083117776573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_54
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 25
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aaa252fd6ecab5d00800000000000000
+      internalID: 962553052959943338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_55
+      rect:
+        serializedVersion: 2
+        x: 1381
+        y: 19
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbc113606a9fff0f0800000000000000
+      internalID: -1080870894081860419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_56
+      rect:
+        serializedVersion: 2
+        x: 1384
+        y: 1
+        width: 30
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53a11ae97c8ece740800000000000000
+      internalID: 5182773215254092341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_57
+      rect:
+        serializedVersion: 2
+        x: 1419
+        y: 18
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20f113969baa5b140800000000000000
+      internalID: 4734878296560443138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_58
+      rect:
+        serializedVersion: 2
+        x: 1209
+        y: 12
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9d3e8128509fddf0800000000000000
+      internalID: -153245154112815717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_59
+      rect:
+        serializedVersion: 2
+        x: 1258
+        y: 12
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d1bf9010e206e7b0800000000000000
+      internalID: -5195461958750457389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_60
+      rect:
+        serializedVersion: 2
+        x: 1346
+        y: 0
+        width: 34
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d1c63a14b2f08660800000000000000
+      internalID: 7386170244235444695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_61
+      rect:
+        serializedVersion: 2
+        x: 1412
+        y: 18
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e55e93431f92377f0800000000000000
+      internalID: -616102608079559330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_62
+      rect:
+        serializedVersion: 2
+        x: 1423
+        y: 11
+        width: 22
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a5cba655a98c1aa0800000000000000
+      internalID: -6188920444697197146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_63
+      rect:
+        serializedVersion: 2
+        x: 1234
+        y: 5
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59bbad40daa0b4540800000000000000
+      internalID: 4993096350097390485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_64
+      rect:
+        serializedVersion: 2
+        x: 1254
+        y: 7
+        width: 15
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8bbae3ab1039b880800000000000000
+      internalID: -8594785518587561075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_65
+      rect:
+        serializedVersion: 2
+        x: 1256
+        y: 0
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca16c49f2dd52b970800000000000000
+      internalID: 8769174585150824876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_66
+      rect:
+        serializedVersion: 2
+        x: 1421
+        y: 0
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a0954e55b3ae8e40800000000000000
+      internalID: 5660641781017317536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Vanish_67
+      rect:
+        serializedVersion: 2
+        x: 1422
+        y: 6
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31540d4472a0baba0800000000000000
+      internalID: -6076752108431850221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BRJ_Bug_Vanish_0: 6057914857707174385
+      BRJ_Bug_Vanish_1: 6229490000181708425
+      BRJ_Bug_Vanish_10: 5250504488224028814
+      BRJ_Bug_Vanish_11: -7832931023076138793
+      BRJ_Bug_Vanish_12: 4474839921000594891
+      BRJ_Bug_Vanish_13: 3777262600297728780
+      BRJ_Bug_Vanish_14: -7769437175606181866
+      BRJ_Bug_Vanish_15: 3935906218853017438
+      BRJ_Bug_Vanish_16: 6286315288767819301
+      BRJ_Bug_Vanish_17: -3968956650120938404
+      BRJ_Bug_Vanish_18: 3165001631354849644
+      BRJ_Bug_Vanish_19: -2659444509842426068
+      BRJ_Bug_Vanish_2: -9001381745796575945
+      BRJ_Bug_Vanish_20: 8026708550684040946
+      BRJ_Bug_Vanish_21: -3781206975512870207
+      BRJ_Bug_Vanish_22: -7343280943267264746
+      BRJ_Bug_Vanish_23: -6592291679644636294
+      BRJ_Bug_Vanish_24: 5980994936378954492
+      BRJ_Bug_Vanish_25: -4042949600644163950
+      BRJ_Bug_Vanish_26: 3888034988263057567
+      BRJ_Bug_Vanish_27: 2908000343947151229
+      BRJ_Bug_Vanish_28: 2164079203581814505
+      BRJ_Bug_Vanish_29: -4547134389712783442
+      BRJ_Bug_Vanish_3: 7756817398012878898
+      BRJ_Bug_Vanish_30: 4172227419254319703
+      BRJ_Bug_Vanish_31: 183496719635162720
+      BRJ_Bug_Vanish_32: -5080188678917582374
+      BRJ_Bug_Vanish_33: -716395334797062568
+      BRJ_Bug_Vanish_34: 4681539718877624964
+      BRJ_Bug_Vanish_35: -5985138146299644714
+      BRJ_Bug_Vanish_36: -6544114051513162284
+      BRJ_Bug_Vanish_37: -4237351751812262915
+      BRJ_Bug_Vanish_38: 5595822853108071674
+      BRJ_Bug_Vanish_39: -1068539109851944043
+      BRJ_Bug_Vanish_4: 5498765027111600540
+      BRJ_Bug_Vanish_40: -4836606044883765562
+      BRJ_Bug_Vanish_41: 1212090948940057714
+      BRJ_Bug_Vanish_42: -2593505420912308979
+      BRJ_Bug_Vanish_43: 4507941302752228919
+      BRJ_Bug_Vanish_44: -8411802359567063356
+      BRJ_Bug_Vanish_45: -2666024710713355305
+      BRJ_Bug_Vanish_46: 1817142573009924081
+      BRJ_Bug_Vanish_47: -5456965111936374021
+      BRJ_Bug_Vanish_48: -4437981428444526476
+      BRJ_Bug_Vanish_49: -3006135202379536350
+      BRJ_Bug_Vanish_5: -332674520072516350
+      BRJ_Bug_Vanish_50: 403758037579228046
+      BRJ_Bug_Vanish_51: -8494997206617095645
+      BRJ_Bug_Vanish_52: 4518661631220329662
+      BRJ_Bug_Vanish_53: -5730893083117776573
+      BRJ_Bug_Vanish_54: 962553052959943338
+      BRJ_Bug_Vanish_55: -1080870894081860419
+      BRJ_Bug_Vanish_56: 5182773215254092341
+      BRJ_Bug_Vanish_57: 4734878296560443138
+      BRJ_Bug_Vanish_58: -153245154112815717
+      BRJ_Bug_Vanish_59: -5195461958750457389
+      BRJ_Bug_Vanish_6: -7144022348823483305
+      BRJ_Bug_Vanish_60: 7386170244235444695
+      BRJ_Bug_Vanish_61: -616102608079559330
+      BRJ_Bug_Vanish_62: -6188920444697197146
+      BRJ_Bug_Vanish_63: 4993096350097390485
+      BRJ_Bug_Vanish_64: -8594785518587561075
+      BRJ_Bug_Vanish_65: 8769174585150824876
+      BRJ_Bug_Vanish_66: 5660641781017317536
+      BRJ_Bug_Vanish_67: -6076752108431850221
+      BRJ_Bug_Vanish_7: 376164527682206528
+      BRJ_Bug_Vanish_8: 137366972681498338
+      BRJ_Bug_Vanish_9: -7528754001664980217
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

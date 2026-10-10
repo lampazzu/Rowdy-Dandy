@@ -49,6 +49,8 @@ public class PauseMenu : MonoBehaviour
     private const int TextScale = 3;          // 5x7 font -> 15x21 px letters
     private const float RowHeight = 48f;
     private const float RowGap = 6f;
+    // row size while building (the Dev Tools page packs its rows tighter so it fits one screen)
+    private float rowH = RowHeight, rowGap = RowGap, headerStep = 44f, headerGap = 10f;
     private const float SettingsRowWidth = 760f;
     private const float ButtonRowWidth = 440f;
     private const float ArrowLeftX = -330f;   // from the row's right edge
@@ -277,6 +279,8 @@ public class PauseMenu : MonoBehaviour
     {
         page = newPage;
         mainPanel.SetActive(page == Page.Main);
+        if (prefsSpark != null) prefsSpark.SetActive(!GameSettings.Seen("Preferences"));
+        if (accessSpark != null) accessSpark.SetActive(!GameSettings.Seen("Accessibility"));
         settingsPanel.SetActive(page == Page.Settings);
         prefsPanel.SetActive(page == Page.Preferences);
         controlsPanel.SetActive(page == Page.Controls);
@@ -506,6 +510,10 @@ public class PauseMenu : MonoBehaviour
             if (row.value != null && row.getValue != null) row.value.SetText(row.getValue());
             if (row.bar != null && row.getBar != null) row.bar.fillAmount = row.getBar();
         }
+        // descriptions can change with the value (Get Specific Boon shows the boon's text)
+        List<Row> current = CurrentRows();
+        PixelText description = CurrentDescription();
+        if (description != null && selected >= 0 && selected < current.Count) description.SetText(current[selected].description ?? "");
     }
 
     // ---------------------------------------------------------------- menu content
@@ -537,8 +545,10 @@ public class PauseMenu : MonoBehaviour
         AddButton(mainRows, mainPanel.transform, "Resume", ref y, Resume);
         AddButton(mainRows, mainPanel.transform, "Cat Party", ref y, () => { pendingAction = () => CatParty.Open(null); Resume(); });
         AddButton(mainRows, mainPanel.transform, "Settings", ref y, () => ShowPage(Page.Settings, 0));
-        AddButton(mainRows, mainPanel.transform, "Preferences", ref y, () => ShowPage(Page.Preferences, 0));
-        AddButton(mainRows, mainPanel.transform, "Accessibility", ref y, OpenAccessibility);
+        AddButton(mainRows, mainPanel.transform, "Preferences", ref y, () => { GameSettings.MarkSeen("Preferences"); ShowPage(Page.Preferences, 0); });
+        prefsSpark = AddSpark(mainRows[mainRows.Count - 1], "Preferences");
+        AddButton(mainRows, mainPanel.transform, "Accessibility", ref y, () => { GameSettings.MarkSeen("Accessibility"); OpenAccessibility(); });
+        accessSpark = AddSpark(mainRows[mainRows.Count - 1], "Accessibility");
         AddButton(mainRows, mainPanel.transform, "Controls", ref y, OpenControls);
         AddButton(mainRows, mainPanel.transform, "Restart Level", ref y, RestartLevel);
         AddButton(mainRows, mainPanel.transform, "Quit Game", ref y, QuitGame);
@@ -599,7 +609,7 @@ public class PauseMenu : MonoBehaviour
     // Taste: what's on the HUD, gameplay conveniences, the style rank panel (Main Character boon)
     private void BuildPreferencesPage()
     {
-        float columnHeight = 2 * 44 + 10 + 6 * (RowHeight + RowGap);
+        float columnHeight = 2 * 44 + 10 + 7 * (RowHeight + RowGap);
         float height = 130 + columnHeight + 190;
         prefsPanel = MakePanel("Preferences", root.transform, 2 * SettingsRowWidth + 140, height);
         float top = height / 2f;
@@ -616,6 +626,8 @@ public class PauseMenu : MonoBehaviour
             "Broken weapon? Switch to the next one. No Rod while you have a weapon");
         AddToggle(prefsRows, panel, "Auto Pick Up Cats", ref y, () => CatRoster.AutoPickup, v => CatRoster.AutoPickup = v,
             "Off: cats only join when you press the interact button on them (also in the Cat Party)");
+        AddToggle(prefsRows, panel, "Auto Use Cat Bait", ref y, () => GameSettings.AutoCatBait, GameSettings.SetAutoCatBait,
+            "Got a rat, a free cat slot and a cat waiting? The rat is used by itself");
         AddToggle(prefsRows, panel, "Tutorial Popups", ref y, () => GameSettings.TutorialPopups, GameSettings.SetTutorialPopups,
             "Short explanation the first time you find something new");
         AddHeader(prefsRows, panel, "Style Rank", ref y);
@@ -641,6 +653,8 @@ public class PauseMenu : MonoBehaviour
             "Notes / Stats / Map buttons, bottom left");
         AddToggle(prefsRows, panel, "Blood", ref y, () => GameSettings.BloodOn, GameSettings.SetBlood,
             "Blood drops and puddles");
+        AddToggle(prefsRows, panel, "Compact Cat HUD", ref y, () => GameSettings.CatHudCollapsed, GameSettings.SetCatHudCollapsed,
+            "All cats in one CAT PARTY row, cooldowns as little squares");
 
         y = Mathf.Min(y, bottom) - 16;
         columnX = 0f;
@@ -698,7 +712,9 @@ public class PauseMenu : MonoBehaviour
     // Testing helpers only - everything a player shouldn't see in the normal settings (Crowd Limit lives here).
     private void BuildDevToolsPage()
     {
-        float columnHeight = 3 * 44 + 10 + 13 * (RowHeight + RowGap);
+        // compact rows: everything (and the description line under it) fits a 1080p screen
+        rowH = 40f; rowGap = 2f; headerStep = 34f; headerGap = 4f;
+        float columnHeight = 3 * headerStep + 3 * headerGap + 16 * (rowH + rowGap);
         float height = 130 + columnHeight + 120;
         devPanel = MakePanel("DevTools", root.transform, 2 * SettingsRowWidth + 140, height);
         float top = height / 2f;
@@ -712,6 +728,7 @@ public class PauseMenu : MonoBehaviour
         AddHeader(devRows, panel, "Progress", ref y);
         AddDevButton(panel, "Reset Game", ref y, DevTools.ResetGame, "Wipes level, weapons, notes, stats, cats, tutorials", false);
         AddDevButton(panel, "Reset Tutorials", ref y, Tutorials.ResetAll, "First-time popups show again", true);
+        AddDevButton(panel, "Default Preferences", ref y, GameSettings.ResetPreferences, "Every Preferences / Accessibility option back to its default", true);
         AddDevButton(panel, "Level Up", ref y, DevTools.LevelUp, "+1 level (full heal + FX)", true);
         AddDevButton(panel, "Level Down", ref y, DevTools.LevelDown, "-1 level", true);
         AddDevButton(panel, "Reset Level", ref y, DevTools.ResetLevel, "Back to level 1", true);
@@ -721,9 +738,27 @@ public class PauseMenu : MonoBehaviour
         AddDevButton(panel, "Last Checkpoint", ref y, DevTools.GoToLastCheckpoint, "Reload at the right-most checkpoint (Pelich)", false);
         AddDevButton(panel, "Saved Checkpoint", ref y, DevTools.GoToSavedCheckpoint, "Reload at the checkpoint you touched last", false);
         AddDevButton(panel, "The Gloomwood", ref y, GloomArena.DevTravel, "Unseal the Gloom Gate and jump into the second colosseum", false);
+        AddDevButton(panel, "The Purple Reign", ref y, GloomArena.DevTravelViolet, "Unseal every gate and jump into the third colosseum", false);
         AddHeader(devRows, panel, "Boons", ref y);
         AddDevButton(panel, "Offer A Boon", ref y, Boons.DevOfferPick, "Opens the boon picker (one extra pick)", false);
         AddDevButton(panel, "Hair Gel +3", ref y, () => Boons.AddRerolls(3), "Three rerolls for the boon cards", true);
+        // pick any boon: left / right scrolls through all of them, confirm takes it (at the rarity below)
+        AddOption(devRows, panel, "Boon Rarity", ref y, () => devBoonRarity.ToString(),
+            d => { devBoonRarity = (Rarity)Wrap((int)devBoonRarity + d, 3); DescribeDevBoon(); }); // Common / Rare / Epic (legendary + duo boons set their own)
+        devRows[devRows.Count - 1].description = "Rarity for Get Specific Boon (Call of the Moon / Stephmoss / duos use their own)";
+        AddOption(devRows, panel, "Get Specific Boon", ref y, () => DevBoon != null ? DevBoon.name : "-",
+            d => { devBoonIndex = Wrap(devBoonIndex + d, BoonCatalog.All.Count); DescribeDevBoon(); });
+        Row boonRow = devRows[devRows.Count - 1];
+        devBoonRow = boonRow;
+        DescribeDevBoon();
+        boonRow.submit = () =>
+        {
+            BoonDef b = DevBoon;
+            if (b == null) return;
+            Boons.DevGive(b, devBoonRarity);
+            boonRow.description = "TAKEN: " + b.name + (Boons.Has(b.id) ? " (" + Boons.RarityOf(b.id) + ")" : "");
+            RefreshValues();
+        };
 
         // Right: spawns + cheats
         y = top - 130;
@@ -733,12 +768,13 @@ public class PauseMenu : MonoBehaviour
         AddDevButton(panel, "Flying Rat", ref y, DevTools.SpawnRat, "Rare drop: bait to call a lost cat back at a checkpoint", false);
         AddDevButton(panel, "Cat Treat Fish", ref y, DevTools.SpawnFish, "Rare drop: feeds every cat", false);
         AddDevButton(panel, "Random Statue", ref y, DevTools.SpawnStatue, "A statue near Rowdy", false);
+        AddDevButton(panel, "Stephmoss (Boss)", ref y, () => { if (BoonRunner.Rowdy != null) StephmossBoss.Spawn(BoonRunner.RowdyFeet + new Vector3(BoonRunner.RowdyFacing * 4f, 0f, 0f), null, 0.4f); }, "The Purple Reign boss, right here (weaker)", false);
         AddDevButton(panel, "Collect All Cats", ref y, DevTools.CollectAllCats, "Every cat in the level joins Rowdy", false);
         AddHeader(devRows, panel, "Cheats", ref y);
         AddToggle(devRows, panel, "God Mode", ref y, () => DevTools.GodMode, v => DevTools.GodMode = v, "Rowdy takes no damage");
         AddDevButton(panel, "Heal +50", ref y, DevTools.Heal, "Heals, and overheals past full", false);
         AddDevButton(panel, "Kill Nearby Enemies", ref y, DevTools.KillNearby, "Everything within 12 units", false);
-        AddDevButton(panel, "Fill Moon Meter", ref y, Werewolf.Fill, "Call of the Moon is ready (needs the boon)", true);
+        AddDevButton(panel, "Fill Special Meter", ref y, () => { Werewolf.Fill(); StephmossForm.Fill(); }, "Call of the Moon / Stephmoss is ready (needs the boon)", true);
         AddDevButton(panel, "Clear Boons", ref y, Boons.ClearAll, "Forget every boon and pick", true);
         AddOption(devRows, panel, "Crowd Limit", ref y,
             () => GameSettings.CrowdLimit <= 0 ? "Off" : GameSettings.CrowdLimit + " at once",
@@ -753,9 +789,27 @@ public class PauseMenu : MonoBehaviour
         columnX = 0f;
         buildColumn = 0;
 
+        rowH = RowHeight; rowGap = RowGap; headerStep = 44f; headerGap = 10f; // back to the normal size
         devDescription = PixelText.Create(panel, "", 2, new Color(1f, 0.85f, 0.4f, 0.85f), 0.5f);
         Anchor(devDescription.Rect, new Vector2(0.5f, 0.5f), new Vector2(0, -top + 76));
         MakeHint(panel, -top + 34);
+    }
+
+    // Dev tools > Get Specific Boon
+    private static int devBoonIndex;
+    private static Rarity devBoonRarity = Rarity.Epic;
+    private Row devBoonRow;
+    private static BoonDef DevBoon => BoonCatalog.All.Count > 0 ? BoonCatalog.All[Mathf.Clamp(devBoonIndex, 0, BoonCatalog.All.Count - 1)] : null;
+
+    private void DescribeDevBoon()
+    {
+        BoonDef b = DevBoon;
+        if (devBoonRow == null || b == null) return;
+        string patron = BoonCatalog.Of(b.patron).name + (b.IsDuo ? " + " + BoonCatalog.Of(b.partner.Value).name : "");
+        string text = (devBoonIndex + 1) + "/" + BoonCatalog.All.Count + "  " + patron + " - " + b.slot.ToString().ToUpperInvariant()
+                      + (Boons.Has(b.id) ? " (OWNED)" : "") + ":  " + GameInput.Format(b.Describe(devBoonRarity));
+        const int MaxChars = 120; // one pixel-text line under the panel
+        devBoonRow.description = text.Length > MaxChars ? text.Substring(0, MaxChars - 3) + "..." : text;
     }
 
     // Dev button: stayOpen = the menu stays up (level up/down...), otherwise the game resumes and it runs
@@ -768,6 +822,21 @@ public class PauseMenu : MonoBehaviour
             Resume();
         }, SettingsRowWidth);
         devRows[devRows.Count - 1].description = description;
+    }
+
+    // A little twinkling spark beside a main-menu row the player never opened (gone after the first visit)
+    private GameObject prefsSpark, accessSpark;
+    private static readonly string[] SparkRows = { "..W..", "..W..", "WWWWW", "..W..", "..W.." };
+
+    private GameObject AddSpark(Row row, string page)
+    {
+        Image img = MakeImage("Spark", row.rect, new Color(1f, 0.85f, 0.35f));
+        img.sprite = OverlayUI.PixelSprite(SparkRows, c => c == 'W' ? new Color32(255, 255, 255, 255) : new Color32(0, 0, 0, 0), "MenuSpark");
+        float w = row.label != null ? row.label.Rect.sizeDelta.x : 200f;
+        Anchor(img.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(w / 2f + 34f, 6f), new Vector2(20f, 20f));
+        img.gameObject.AddComponent<MenuSpark>();
+        img.gameObject.SetActive(!GameSettings.Seen(page));
+        return img.gameObject;
     }
 
     private void AddToggle(List<Row> rows, Transform parent, string text, ref float y, Func<bool> get, Action<bool> set, string description)
@@ -968,7 +1037,7 @@ public class PauseMenu : MonoBehaviour
         Anchor(row.label.Rect, new Vector2(0.5f, 0.5f), Vector2.zero);
         row.labelHome = row.label.Rect.anchoredPosition;
         row.submit = action;
-        y -= RowHeight + RowGap;
+        y -= rowH + rowGap;
     }
 
     // "LABEL ................ <  VALUE  >"
@@ -988,7 +1057,7 @@ public class PauseMenu : MonoBehaviour
         int index = rows.Count - 1;
         MakeArrow(row, "<", ArrowLeftX, () => { Select(index); ChangeValue(index, -1); }, index);
         MakeArrow(row, ">", ArrowRightX, () => { Select(index); ChangeValue(index, +1); }, index);
-        y -= RowHeight + RowGap;
+        y -= rowH + rowGap;
     }
 
     // Like an option, with a bar + percentage between the arrows
@@ -1012,7 +1081,7 @@ public class PauseMenu : MonoBehaviour
     private void AddHeader(List<Row> rows, Transform parent, string text, ref float y)
     {
         // A little breathing room above a header that follows other rows in the same column
-        if (rows.Count > 0 && rows[rows.Count - 1].column == buildColumn) y -= 10;
+        if (rows.Count > 0 && rows[rows.Count - 1].column == buildColumn) y -= headerGap;
         var row = new Row { isHeader = true, column = buildColumn, y = y };
         var holder = new GameObject("Header " + text, typeof(RectTransform));
         holder.transform.SetParent(parent, false);
@@ -1021,14 +1090,14 @@ public class PauseMenu : MonoBehaviour
         row.label = PixelText.Create(row.rect, text, 2, Pink, 0f);
         Anchor(row.label.Rect, new Vector2(0f, 0.5f), new Vector2(8, 0));
         rows.Add(row);
-        y -= 44;
+        y -= headerStep;
     }
 
     private Row MakeRow(List<Row> rows, Transform parent, float y, float width)
     {
         var row = new Row { column = buildColumn, y = y };
         Image plate = MakeImage("Row", parent, PlateColor);
-        Anchor(plate.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(columnX, y - RowHeight / 2f), new Vector2(width, RowHeight));
+        Anchor(plate.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(columnX, y - rowH / 2f), new Vector2(width, rowH));
         MakeWipe(plate);
         row.rect = plate.rectTransform;
         row.plate = plate;
@@ -1090,7 +1159,7 @@ public class PauseMenu : MonoBehaviour
         else { row.arrowRight = arrow; row.arrowRightHome = arrow.Rect.anchoredPosition; }
         // generous click area around the small glyph
         Image hit = MakeImage("ArrowHit", arrow.Rect, new Color(0, 0, 0, 0));
-        Anchor(hit.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(48, RowHeight));
+        Anchor(hit.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(48, rowH));
         hit.raycastTarget = true;
         var pointer = hit.gameObject.AddComponent<MenuPointer>();
         pointer.onEnter = () => Select(index);
@@ -1206,5 +1275,19 @@ public class PauseMenu : MonoBehaviour
         public Action onClick;
         public void OnPointerEnter(PointerEventData eventData) => onEnter?.Invoke();
         public void OnPointerClick(PointerEventData eventData) => onClick?.Invoke();
+    }
+}
+
+// Twinkle for the "never opened" spark in the pause menu (unscaled: the game is paused)
+public class MenuSpark : MonoBehaviour
+{
+    private Image img;
+    private void Awake() => img = GetComponent<Image>();
+    private void Update()
+    {
+        float k = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 5f);
+        transform.localScale = Vector3.one * (0.75f + 0.35f * k);
+        transform.localRotation = Quaternion.Euler(0f, 0f, 45f * Mathf.Round(k * 2f) / 2f);
+        if (img != null) img.color = new Color(1f, 0.8f + 0.2f * k, 0.35f + 0.5f * k, 0.6f + 0.4f * k);
     }
 }

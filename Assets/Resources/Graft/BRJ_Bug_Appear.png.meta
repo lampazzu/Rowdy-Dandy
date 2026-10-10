@@ -1,0 +1,1781 @@
+fileFormatVersion: 2
+guid: 08d1425ae5c442647bc41f1a74e70712
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7063761676669571507
+    second: BRJ_Bug_Appear_0
+  - first:
+      213: 4943854761048269383
+    second: BRJ_Bug_Appear_1
+  - first:
+      213: 3916955120510842876
+    second: BRJ_Bug_Appear_2
+  - first:
+      213: -7500744760533585064
+    second: BRJ_Bug_Appear_3
+  - first:
+      213: 7544018567437606310
+    second: BRJ_Bug_Appear_4
+  - first:
+      213: 8935594446776031581
+    second: BRJ_Bug_Appear_5
+  - first:
+      213: -9150194648012184266
+    second: BRJ_Bug_Appear_6
+  - first:
+      213: 2708907175810375602
+    second: BRJ_Bug_Appear_7
+  - first:
+      213: 5000856808396802009
+    second: BRJ_Bug_Appear_8
+  - first:
+      213: -9040516594164071605
+    second: BRJ_Bug_Appear_9
+  - first:
+      213: -750012396111541256
+    second: BRJ_Bug_Appear_10
+  - first:
+      213: 2109662764515570212
+    second: BRJ_Bug_Appear_11
+  - first:
+      213: 1517974089075228574
+    second: BRJ_Bug_Appear_12
+  - first:
+      213: 7615208454833424669
+    second: BRJ_Bug_Appear_13
+  - first:
+      213: 5163589435919445067
+    second: BRJ_Bug_Appear_14
+  - first:
+      213: -4567925502761003228
+    second: BRJ_Bug_Appear_15
+  - first:
+      213: 2613623778601721464
+    second: BRJ_Bug_Appear_16
+  - first:
+      213: 1786697037730713204
+    second: BRJ_Bug_Appear_17
+  - first:
+      213: -6910595996993822481
+    second: BRJ_Bug_Appear_18
+  - first:
+      213: 1257346645678242566
+    second: BRJ_Bug_Appear_19
+  - first:
+      213: 3381911335738629823
+    second: BRJ_Bug_Appear_20
+  - first:
+      213: 6196906543089679175
+    second: BRJ_Bug_Appear_21
+  - first:
+      213: -2564545458010036616
+    second: BRJ_Bug_Appear_22
+  - first:
+      213: -5982181524361846234
+    second: BRJ_Bug_Appear_23
+  - first:
+      213: 8919309803995642308
+    second: BRJ_Bug_Appear_24
+  - first:
+      213: -208614049900919612
+    second: BRJ_Bug_Appear_25
+  - first:
+      213: -2113901140067566153
+    second: BRJ_Bug_Appear_26
+  - first:
+      213: 1550456894495824262
+    second: BRJ_Bug_Appear_27
+  - first:
+      213: 6978099703913341861
+    second: BRJ_Bug_Appear_28
+  - first:
+      213: 7297816275639587550
+    second: BRJ_Bug_Appear_29
+  - first:
+      213: -3105772537653993676
+    second: BRJ_Bug_Appear_30
+  - first:
+      213: -2272646294337707151
+    second: BRJ_Bug_Appear_31
+  - first:
+      213: 2077395519829871414
+    second: BRJ_Bug_Appear_32
+  - first:
+      213: 4344587790813470313
+    second: BRJ_Bug_Appear_33
+  - first:
+      213: -2069658304870077147
+    second: BRJ_Bug_Appear_34
+  - first:
+      213: 8797651789821231470
+    second: BRJ_Bug_Appear_35
+  - first:
+      213: 2814094859767438727
+    second: BRJ_Bug_Appear_36
+  - first:
+      213: -7446842364460904867
+    second: BRJ_Bug_Appear_37
+  - first:
+      213: 1310857232482920815
+    second: BRJ_Bug_Appear_38
+  - first:
+      213: 3434434784665877789
+    second: BRJ_Bug_Appear_39
+  - first:
+      213: 5565727173588128406
+    second: BRJ_Bug_Appear_40
+  - first:
+      213: 6849777866308878363
+    second: BRJ_Bug_Appear_41
+  - first:
+      213: 6851698980151795089
+    second: BRJ_Bug_Appear_42
+  - first:
+      213: -7241986920850603955
+    second: BRJ_Bug_Appear_43
+  - first:
+      213: -2946434486646205383
+    second: BRJ_Bug_Appear_44
+  - first:
+      213: 8335349302520592082
+    second: BRJ_Bug_Appear_45
+  - first:
+      213: -6100089451954914496
+    second: BRJ_Bug_Appear_46
+  - first:
+      213: -8874879977329420391
+    second: BRJ_Bug_Appear_47
+  - first:
+      213: -7781984695151435308
+    second: BRJ_Bug_Appear_48
+  - first:
+      213: 406407294000562663
+    second: BRJ_Bug_Appear_49
+  - first:
+      213: -5221622247312811805
+    second: BRJ_Bug_Appear_50
+  - first:
+      213: 6428510020307033286
+    second: BRJ_Bug_Appear_51
+  - first:
+      213: -3010810945367000109
+    second: BRJ_Bug_Appear_52
+  - first:
+      213: 5235467269956600978
+    second: BRJ_Bug_Appear_53
+  - first:
+      213: -6958694446466158714
+    second: BRJ_Bug_Appear_54
+  - first:
+      213: 6415540256009105285
+    second: BRJ_Bug_Appear_55
+  - first:
+      213: 6361934286429808812
+    second: BRJ_Bug_Appear_56
+  - first:
+      213: -2777536595972742826
+    second: BRJ_Bug_Appear_57
+  - first:
+      213: -2633675800936189168
+    second: BRJ_Bug_Appear_58
+  - first:
+      213: -1888103303322674851
+    second: BRJ_Bug_Appear_59
+  - first:
+      213: 3990928451566562639
+    second: BRJ_Bug_Appear_60
+  - first:
+      213: -4624013184159408450
+    second: BRJ_Bug_Appear_61
+  - first:
+      213: 7427570899728229022
+    second: BRJ_Bug_Appear_62
+  - first:
+      213: -8265695143741689066
+    second: BRJ_Bug_Appear_63
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 56
+        width: 27
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4ea7143e2a78fd90800000000000000
+      internalID: -7063761676669571507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_1
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 85
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 742e76526b91c9440800000000000000
+      internalID: 4943854761048269383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_2
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 61
+        width: 38
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf7323fdde1db5630800000000000000
+      internalID: 3916955120510842876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_3
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 96
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 853f585816008e790800000000000000
+      internalID: -7500744760533585064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_4
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 89
+        width: 20
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6add11bcaecb1b860800000000000000
+      internalID: 7544018567437606310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_5
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 79
+        width: 33
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d59d9097ecb910c70800000000000000
+      internalID: 8935594446776031581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_6
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 90
+        width: 20
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 635ad8b827af30180800000000000000
+      internalID: -9150194648012184266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_7
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 95
+        width: 29
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bf1fa759b8f79520800000000000000
+      internalID: 2708907175810375602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_8
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 76
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d7c51585cc966540800000000000000
+      internalID: 5000856808396802009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_9
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 4
+        width: 88
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4383da6e02a98280800000000000000
+      internalID: -9040516594164071605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_10
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 3
+        width: 86
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fbc1a013bb6795f0800000000000000
+      internalID: -750012396111541256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_11
+      rect:
+        serializedVersion: 2
+        x: 638
+        y: 102
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 422b1da5b17074d10800000000000000
+      internalID: 2109662764515570212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_12
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 3
+        width: 73
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9f7395346de01510800000000000000
+      internalID: 1517974089075228574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_13
+      rect:
+        serializedVersion: 2
+        x: 930
+        y: 4
+        width: 59
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d19c5e81eb7aea960800000000000000
+      internalID: 7615208454833424669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_14
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 5
+        width: 50
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4c20fdeb31c8a740800000000000000
+      internalID: 5163589435919445067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_15
+      rect:
+        serializedVersion: 2
+        x: 1211
+        y: 5
+        width: 92
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4279b7705f77b90c0800000000000000
+      internalID: -4567925502761003228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_16
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 3
+        width: 114
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87ed114aaf4754420800000000000000
+      internalID: 2613623778601721464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_17
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 64
+        width: 39
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47e8e2f4d7f9bc810800000000000000
+      internalID: 1786697037730713204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_18
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 75
+        width: 26
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe062fcfd81a810a0800000000000000
+      internalID: -6910595996993822481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_19
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 70
+        width: 36
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60b3e2fcc1ef27110800000000000000
+      internalID: 1257346645678242566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_20
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 85
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbe51941176feee20800000000000000
+      internalID: 3381911335738629823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_21
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 82
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74b77271ba5dff550800000000000000
+      internalID: 6196906543089679175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_22
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 74
+        width: 19
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87668f45e77e86cd0800000000000000
+      internalID: -2564545458010036616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_23
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 73
+        width: 31
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 622e18a39950bfca0800000000000000
+      internalID: -5982181524361846234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_24
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 80
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c9b1dc9201c7cb70800000000000000
+      internalID: 8919309803995642308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_25
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 72
+        width: 17
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c4008c70aada1df0800000000000000
+      internalID: -208614049900919612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_26
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 87
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bdbaffec1ae9a2e0800000000000000
+      internalID: -2113901140067566153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_27
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 69
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6899af3b454548510800000000000000
+      internalID: 1550456894495824262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_28
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 79
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a3630b85b037d060800000000000000
+      internalID: 6978099703913341861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_29
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 77
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed2df89bc3d074560800000000000000
+      internalID: 7297816275639587550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_30
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 55
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43f58f3055416e4d0800000000000000
+      internalID: -3105772537653993676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_31
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 77
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 173a4ed7c30f570e0800000000000000
+      internalID: -2272646294337707151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_32
+      rect:
+        serializedVersion: 2
+        x: 1494
+        y: 0
+        width: 114
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63b8271083464dc10800000000000000
+      internalID: 2077395519829871414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_33
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 10
+        width: 66
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96e9feeb3931b4c30800000000000000
+      internalID: 4344587790813470313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_34
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 42
+        width: 20
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52d28cbbcb81743e0800000000000000
+      internalID: -2069658304870077147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_35
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 52
+        width: 22
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e61cfddd0b9871a70800000000000000
+      internalID: 8797651789821231470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_36
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 65
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78dd0b08d5cad0720800000000000000
+      internalID: 2814094859767438727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_37
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 68
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5e4af7135087a890800000000000000
+      internalID: -7446842364460904867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_38
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 41
+        width: 25
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f69656d25b9113210800000000000000
+      internalID: 1310857232482920815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_39
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 56
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1d31408d3099af20800000000000000
+      internalID: 3434434784665877789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_40
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 38
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 692957a306f6d3d40800000000000000
+      internalID: 5565727173588128406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_41
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 40
+        width: 36
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b108caf7dac4f0f50800000000000000
+      internalID: 6849777866308878363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_42
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 55
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19d9adbabef161f50800000000000000
+      internalID: 6851698980151795089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_43
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 59
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d40cca2e34b4f7b90800000000000000
+      internalID: -7241986920850603955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_44
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 28
+        width: 27
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9341e7df1792c17d0800000000000000
+      internalID: -2946434486646205383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_45
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 25
+        width: 22
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d63a8f270c1da370800000000000000
+      internalID: 8335349302520592082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_46
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 34
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04bbe1e86f0285ba0800000000000000
+      internalID: -6100089451954914496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_47
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 47
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9979d078ea716d480800000000000000
+      internalID: -8874879977329420391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_48
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 40
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d1e8f58626d00490800000000000000
+      internalID: -7781984695151435308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_49
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 33
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e10809d749d3a500800000000000000
+      internalID: 406407294000562663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_50
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 32
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e894ad3b321987b0800000000000000
+      internalID: -5221622247312811805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_51
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 34
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cc9073cdc7a63950800000000000000
+      internalID: 6428510020307033286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_52
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 19
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3dbba8ba5637736d0800000000000000
+      internalID: -3010810945367000109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_53
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 9
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29482fa4ebd18a840800000000000000
+      internalID: 5235467269956600978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_54
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 20
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68fa6e90540cd6f90800000000000000
+      internalID: -6958694446466158714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_55
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 12
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58f24a13fd3980950800000000000000
+      internalID: 6415540256009105285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_56
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 7
+        width: 33
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca8e60bc6812a4850800000000000000
+      internalID: 6361934286429808812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_57
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 23
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 651a5669e253479d0800000000000000
+      internalID: -2777536595972742826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_58
+      rect:
+        serializedVersion: 2
+        x: 626
+        y: 25
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 013f7a710dd437bd0800000000000000
+      internalID: -2633675800936189168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_59
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 28
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d59d53a9c0c1cc5e0800000000000000
+      internalID: -1888103303322674851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_60
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 0
+        width: 29
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4def972840a26730800000000000000
+      internalID: 3990928451566562639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_61
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 1
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebe9471128434dfb0800000000000000
+      internalID: -4624013184159408450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_62
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 17
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e92645e5168041760800000000000000
+      internalID: 7427570899728229022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BRJ_Bug_Appear_63
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 9
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 613fa9f6f0a5a4d80800000000000000
+      internalID: -8265695143741689066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BRJ_Bug_Appear_0: -7063761676669571507
+      BRJ_Bug_Appear_1: 4943854761048269383
+      BRJ_Bug_Appear_10: -750012396111541256
+      BRJ_Bug_Appear_11: 2109662764515570212
+      BRJ_Bug_Appear_12: 1517974089075228574
+      BRJ_Bug_Appear_13: 7615208454833424669
+      BRJ_Bug_Appear_14: 5163589435919445067
+      BRJ_Bug_Appear_15: -4567925502761003228
+      BRJ_Bug_Appear_16: 2613623778601721464
+      BRJ_Bug_Appear_17: 1786697037730713204
+      BRJ_Bug_Appear_18: -6910595996993822481
+      BRJ_Bug_Appear_19: 1257346645678242566
+      BRJ_Bug_Appear_2: 3916955120510842876
+      BRJ_Bug_Appear_20: 3381911335738629823
+      BRJ_Bug_Appear_21: 6196906543089679175
+      BRJ_Bug_Appear_22: -2564545458010036616
+      BRJ_Bug_Appear_23: -5982181524361846234
+      BRJ_Bug_Appear_24: 8919309803995642308
+      BRJ_Bug_Appear_25: -208614049900919612
+      BRJ_Bug_Appear_26: -2113901140067566153
+      BRJ_Bug_Appear_27: 1550456894495824262
+      BRJ_Bug_Appear_28: 6978099703913341861
+      BRJ_Bug_Appear_29: 7297816275639587550
+      BRJ_Bug_Appear_3: -7500744760533585064
+      BRJ_Bug_Appear_30: -3105772537653993676
+      BRJ_Bug_Appear_31: -2272646294337707151
+      BRJ_Bug_Appear_32: 2077395519829871414
+      BRJ_Bug_Appear_33: 4344587790813470313
+      BRJ_Bug_Appear_34: -2069658304870077147
+      BRJ_Bug_Appear_35: 8797651789821231470
+      BRJ_Bug_Appear_36: 2814094859767438727
+      BRJ_Bug_Appear_37: -7446842364460904867
+      BRJ_Bug_Appear_38: 1310857232482920815
+      BRJ_Bug_Appear_39: 3434434784665877789
+      BRJ_Bug_Appear_4: 7544018567437606310
+      BRJ_Bug_Appear_40: 5565727173588128406
+      BRJ_Bug_Appear_41: 6849777866308878363
+      BRJ_Bug_Appear_42: 6851698980151795089
+      BRJ_Bug_Appear_43: -7241986920850603955
+      BRJ_Bug_Appear_44: -2946434486646205383
+      BRJ_Bug_Appear_45: 8335349302520592082
+      BRJ_Bug_Appear_46: -6100089451954914496
+      BRJ_Bug_Appear_47: -8874879977329420391
+      BRJ_Bug_Appear_48: -7781984695151435308
+      BRJ_Bug_Appear_49: 406407294000562663
+      BRJ_Bug_Appear_5: 8935594446776031581
+      BRJ_Bug_Appear_50: -5221622247312811805
+      BRJ_Bug_Appear_51: 6428510020307033286
+      BRJ_Bug_Appear_52: -3010810945367000109
+      BRJ_Bug_Appear_53: 5235467269956600978
+      BRJ_Bug_Appear_54: -6958694446466158714
+      BRJ_Bug_Appear_55: 6415540256009105285
+      BRJ_Bug_Appear_56: 6361934286429808812
+      BRJ_Bug_Appear_57: -2777536595972742826
+      BRJ_Bug_Appear_58: -2633675800936189168
+      BRJ_Bug_Appear_59: -1888103303322674851
+      BRJ_Bug_Appear_6: -9150194648012184266
+      BRJ_Bug_Appear_60: 3990928451566562639
+      BRJ_Bug_Appear_61: -4624013184159408450
+      BRJ_Bug_Appear_62: 7427570899728229022
+      BRJ_Bug_Appear_63: -8265695143741689066
+      BRJ_Bug_Appear_7: 2708907175810375602
+      BRJ_Bug_Appear_8: 5000856808396802009
+      BRJ_Bug_Appear_9: -9040516594164071605
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

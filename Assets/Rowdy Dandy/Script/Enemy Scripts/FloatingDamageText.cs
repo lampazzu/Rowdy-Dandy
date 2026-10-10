@@ -74,7 +74,7 @@ public class FloatingDamageText : MonoBehaviour
 
         if (damageText == null) damageText = GetComponent<TMP_Text>();
 
-        string formattedDamage = damageAmount % 1 == 0 ? damageAmount.ToString("F0") : damageAmount.ToString("F1");
+        string formattedDamage = WholeNumber(damageAmount);
         damageText.text = formattedDamage;
 
         float calculatedBaseScale = baseScale;
@@ -115,7 +115,7 @@ public class FloatingDamageText : MonoBehaviour
     {
         if (damageText == null) damageText = GetComponent<TMP_Text>();
 
-        string formattedDamage = damageAmount % 1 == 0 ? damageAmount.ToString("F0") : damageAmount.ToString("F1");
+        string formattedDamage = WholeNumber(damageAmount);
 
         // Displays "CRITICAL!" followed by damage
         damageText.text = $"CRITICAL!\n{formattedDamage}";
@@ -218,4 +218,7 @@ public class FloatingDamageText : MonoBehaviour
         if (pixelSprite != null) Destroy(pixelSprite);
         if (pixelTexture != null) Destroy(pixelTexture);
     }
+
+    // Whole numbers only: 25.7 shows as 25 (a scratch under 1 still shows 1)
+    private static string WholeNumber(float damage) => (damage > 0f ? Mathf.Max(1, Mathf.FloorToInt(damage)) : 0).ToString();
 }

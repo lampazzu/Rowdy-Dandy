@@ -73,6 +73,8 @@ public class BoonPicker : MonoBehaviour
         if (IsOpen) { Tick(); return; }
         if (Boons.PendingPicks <= 0 || Time.unscaledTime < Boons.OpenNotBefore) { totalThisRun = 0; return; }
         if (PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || Tutorials.IsOpen || CatParty.IsOpen || CheckpointRest.Resting || FirstDrop.Running) return;
+        if (ArenaRun.HoldBoons) return; // mid colosseum trial: the picks wait for the next seal
+        if (StephmossForm.Transforming) return;
         Health rowdy = FindFirstObjectByType<Health>();
         if (rowdy == null || rowdy.IsDead || Werewolf.Transforming) return;
         Open();
@@ -100,7 +102,7 @@ public class BoonPicker : MonoBehaviour
         mouseIdleUntil = Time.unscaledTime + 0.5f;
 
         root.gameObject.SetActive(true);
-        header.SetText("LEVEL UP!");
+        header.SetText(ArenaRun.InTrial ? "BOON TIME!" : "LEVEL UP!"); // colosseum boons come from the gong / every 5 waves, not levels
         counter.SetText(totalThisRun > 1 ? "BOON " + indexThisRun + " OF " + totalThisRun : "");
         Deal(offer, 0.35f);
         RefreshHints();

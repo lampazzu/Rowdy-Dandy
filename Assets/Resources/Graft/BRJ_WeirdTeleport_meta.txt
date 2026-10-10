@@ -1,0 +1,9 @@
+frames=8
+w=52
+h=34
+scale=1
+canvasW=120
+canvasH=148
+centerX=23
+centerY=-40
+delays=60,60,60,60,60,60,60,60
