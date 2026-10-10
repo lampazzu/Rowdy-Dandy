@@ -5,6 +5,9 @@ using UnityEngine;
 // sends waves travelling out to both sides (water) instead of one point bouncing on a spring (rubber).
 // Gentle idle waves roll on top. All distances are world units, so the object's scale doesn't change the feel.
 // Pair with the Custom/Water2D_Advanced shader: it turns the surface into a pixel-stepped edge.
+// Runs in edit mode too, only to build a still preview of the mesh so the water shader shows in the Scene view
+// (the preview mesh is never saved; the waves only move in Play mode).
+[ExecuteAlways]
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider2D))]
 public class DynamicWater2D : MonoBehaviour
 {
@@ -98,6 +101,7 @@ public class DynamicWater2D : MonoBehaviour
 
     private void Awake()
     {
+        if (!Application.isPlaying) return; // edit mode: OnEnable builds the preview
         meshFilter = GetComponent<MeshFilter>();
         boxCollider = GetComponent<BoxCollider2D>();
 
@@ -112,8 +116,40 @@ public class DynamicWater2D : MonoBehaviour
         SetupWater();
     }
 
-    private void OnEnable() => active.Add(this);
-    private void OnDisable() => active.Remove(this);
+    private void OnEnable()
+    {
+        if (!Application.isPlaying) { BuildPreview(); return; }
+        active.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        active.Remove(this);
+        if (!Application.isPlaying && waterMesh != null)
+        {
+            if (meshFilter != null && meshFilter.sharedMesh == waterMesh) meshFilter.sharedMesh = null;
+            DestroyImmediate(waterMesh);
+            waterMesh = null;
+        }
+    }
+
+    // ---------------------------------------------------------------- edit mode preview
+    private Vector3 previewKey;
+
+    private void BuildPreview()
+    {
+        boxCollider = GetComponent<BoxCollider2D>();
+        meshFilter = GetComponent<MeshFilter>();
+        if (boxCollider == null || meshFilter == null) return;
+        if (waterMesh != null) DestroyImmediate(waterMesh);
+        // same sorting as in Play (Awake sets it), so the preview stacks like the real thing
+        MeshRenderer mr = GetComponent<MeshRenderer>();
+        if (mr != null && (mr.sortingLayerName != sortingLayerName || mr.sortingOrder != orderInLayer)) { mr.sortingLayerName = sortingLayerName; mr.sortingOrder = orderInLayer; }
+        SetupWater();
+        previewKey = PreviewKey();
+    }
+
+    private Vector3 PreviewKey() => new Vector3(boxCollider.size.x * 1000f + boxCollider.offset.x, boxCollider.size.y * 1000f + boxCollider.offset.y, transform.lossyScale.x * 1000f + transform.lossyScale.y);
 
     public void SetupWater()
     {
@@ -151,7 +187,12 @@ public class DynamicWater2D : MonoBehaviour
         }
         waterMesh.triangles = triangles;
 
-        meshFilter.mesh = waterMesh;
+        if (Application.isPlaying) meshFilter.mesh = waterMesh;
+        else
+        {
+            waterMesh.hideFlags = HideFlags.DontSave; // a preview: never written into the scene
+            meshFilter.sharedMesh = waterMesh;
+        }
     }
 
     private void UpdateMeshGeometry()
@@ -241,6 +282,12 @@ public class DynamicWater2D : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!Application.isPlaying)
+        {
+            // edit mode: rebuild the preview when the box is resized / moved
+            if (boxCollider != null && waterMesh != null && PreviewKey() != previewKey) BuildPreview();
+            return;
+        }
         if (!EnsureSetup()) return;
         UpdateMeshGeometry();
     }
@@ -251,6 +298,37 @@ public class DynamicWater2D : MonoBehaviour
         float leftX = boxCollider.offset.x - boxCollider.size.x / 2f;
         float u = Mathf.Clamp01((localX - leftX) / boxCollider.size.x);
         return u * (nodeCount - 1);
+    }
+
+    // Scene view: the water mesh only exists in Play mode, so the water's box is drawn here (see-through fill,
+    // outer border, a brighter surface line on top). Editor only; selected water gets a stronger outline.
+    private void OnDrawGizmos() => DrawOutline(false);
+    private void OnDrawGizmosSelected() => DrawOutline(true);
+
+    private void DrawOutline(bool selected)
+    {
+        BoxCollider2D box = boxCollider != null ? boxCollider : GetComponent<BoxCollider2D>();
+        if (box == null) return;
+        Vector2 min = box.offset - box.size * 0.5f, max = box.offset + box.size * 0.5f;
+        Vector3 bl = transform.TransformPoint(new Vector3(min.x, min.y, 0f));
+        Vector3 br = transform.TransformPoint(new Vector3(max.x, min.y, 0f));
+        Vector3 tl = transform.TransformPoint(new Vector3(min.x, max.y, 0f));
+        Vector3 tr = transform.TransformPoint(new Vector3(max.x, max.y, 0f));
+        Matrix4x4 old = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.identity;
+        if (!Application.isPlaying)
+        {
+            Gizmos.color = new Color(0.2f, 0.6f, 1f, selected ? 0.22f : 0.12f);
+            Gizmos.DrawCube((bl + tr) * 0.5f, new Vector3(Mathf.Abs(tr.x - bl.x), Mathf.Abs(tr.y - bl.y), 0.01f));
+        }
+        Gizmos.color = new Color(0.35f, 0.75f, 1f, selected ? 1f : 0.7f);
+        Gizmos.DrawLine(bl, br);
+        Gizmos.DrawLine(bl, tl);
+        Gizmos.DrawLine(br, tr);
+        Gizmos.color = new Color(0.75f, 0.95f, 1f, 1f); // the surface
+        Gizmos.DrawLine(tl, tr);
+        Gizmos.DrawLine(tl + Vector3.down * 0.03f, tr + Vector3.down * 0.03f);
+        Gizmos.matrix = old;
     }
 
     // force: world units per step pushed into the surface (negative = down). radius: world units.

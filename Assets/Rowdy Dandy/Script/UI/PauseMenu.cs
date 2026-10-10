@@ -609,7 +609,7 @@ public class PauseMenu : MonoBehaviour
     // Taste: what's on the HUD, gameplay conveniences, the style rank panel (Main Character boon)
     private void BuildPreferencesPage()
     {
-        float columnHeight = 2 * 44 + 10 + 7 * (RowHeight + RowGap);
+        float columnHeight = 2 * 44 + 10 + 8 * (RowHeight + RowGap);
         float height = 130 + columnHeight + 190;
         prefsPanel = MakePanel("Preferences", root.transform, 2 * SettingsRowWidth + 140, height);
         float top = height / 2f;
@@ -628,6 +628,8 @@ public class PauseMenu : MonoBehaviour
             "Off: cats only join when you press the interact button on them (also in the Cat Party)");
         AddToggle(prefsRows, panel, "Auto Use Cat Bait", ref y, () => GameSettings.AutoCatBait, GameSettings.SetAutoCatBait,
             "Got a rat, a free cat slot and a cat waiting? The rat is used by itself");
+        AddToggle(prefsRows, panel, "Auto Pick Up Rats", ref y, () => GameSettings.AutoPickupRats, GameSettings.SetAutoPickupRats,
+            "Legendary rats fly to you and get grabbed by themselves, no button");
         AddToggle(prefsRows, panel, "Tutorial Popups", ref y, () => GameSettings.TutorialPopups, GameSettings.SetTutorialPopups,
             "Short explanation the first time you find something new");
         AddHeader(prefsRows, panel, "Style Rank", ref y);

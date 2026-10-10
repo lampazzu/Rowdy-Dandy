@@ -54,7 +54,6 @@ public class FloatingDamageText : MonoBehaviour
     private Color textColor;
     private float timer = 0f;
     private SpriteRenderer pixelRenderer;
-    private Texture2D pixelTexture;
     private Sprite pixelSprite;
 
     // Standard Setup for Numeric Damage
@@ -182,12 +181,21 @@ public class FloatingDamageText : MonoBehaviour
     }
 
     // Renders damageText's text with the pixel font onto a child sprite and hides the TMP mesh
+    // The same numbers / words come up again and again (poison ticks, every hit): rendered once, shared (tinted per use)
+    private static readonly System.Collections.Generic.Dictionary<string, Sprite> cache = new System.Collections.Generic.Dictionary<string, Sprite>();
+
     private void BuildPixelSprite()
     {
-        pixelTexture = PixelFont.Render(damageText.text, PixelFont.Edge.Outline, pixelTexture);
-        if (pixelSprite != null) Destroy(pixelSprite);
-        pixelSprite = Sprite.Create(pixelTexture, new Rect(0, 0, pixelTexture.width, pixelTexture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
-        pixelSprite.name = "FloatingPixelText";
+        string key = damageText.text + "@" + pixelsPerUnit;
+        if (!cache.TryGetValue(key, out Sprite shared) || shared == null)
+        {
+            Texture2D tex = PixelFont.Render(damageText.text, PixelFont.Edge.Outline);
+            shared = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+            shared.name = "FloatingPixelText";
+            if (cache.Count < 500) cache[key] = shared;
+            else ownedTexture = tex; // a rare one past the cache: this text cleans it up
+        }
+        pixelSprite = shared;
 
         var tmpRenderer = damageText.GetComponent<Renderer>();
         if (pixelRenderer == null)
@@ -213,11 +221,15 @@ public class FloatingDamageText : MonoBehaviour
         if (tmpRenderer != null) tmpRenderer.enabled = false;
     }
 
+    private Texture2D ownedTexture;
+
     private void OnDestroy()
     {
-        if (pixelSprite != null) Destroy(pixelSprite);
-        if (pixelTexture != null) Destroy(pixelTexture);
+        if (ownedTexture == null) return;
+        Destroy(pixelSprite);
+        Destroy(ownedTexture);
     }
+
 
     // Whole numbers only: 25.7 shows as 25 (a scratch under 1 still shows 1)
     private static string WholeNumber(float damage) => (damage > 0f ? Mathf.Max(1, Mathf.FloorToInt(damage)) : 0).ToString();

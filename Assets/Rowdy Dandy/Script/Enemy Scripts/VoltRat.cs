@@ -69,6 +69,7 @@ public class VoltRat : MonoBehaviour
     }
 
     private void Start() => lastHealth = health.currentenemyHealth;
+    private float lastHurtSound = -10f;
 
     private static Transform Rowdy => BoonRunner.Rowdy;
 
@@ -191,6 +192,14 @@ public class VoltRat : MonoBehaviour
             lastHealth = health.currentenemyHealth;
             Vector2 away = Rowdy != null ? ((Vector2)(transform.position - BoonRunner.RowdyCenter)).normalized : Vector2.up;
             HitFlash.Flash(this, 0.1f); // every hit flashes it white
+            // it had no hurt sound (no hurt events on the prefab): a wet jelly slap + a little zap, throttled for poison ticks
+            if (Time.time - lastHurtSound > 0.08f)
+            {
+                lastHurtSound = Time.time;
+                FXSound.Play("Jelly", 0.45f, Random.Range(1.05f, 1.3f));
+                BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.3f, Random.Range(1.3f, 1.6f));
+                if (Random.value < 0.5f) BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.zap : null, 0.15f, Random.Range(1.8f, 2.1f));
+            }
             if (health.ArmorHolds)
             {
                 knock += away * 4f; // knocked back, but keeps doing what it was doing

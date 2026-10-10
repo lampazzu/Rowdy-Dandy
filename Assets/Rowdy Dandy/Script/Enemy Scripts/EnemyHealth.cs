@@ -109,12 +109,19 @@ public class EnemyHealth : MonoBehaviour
     private void Start()
     {
         WereKnightWalk.TryAttach(this); // the knights walk with the shadow-wolf run cycle
+        EnemyTeleport.TryAttach(this);  // archers / bombers blink to a better spot
         if (!OldManEnabled && isOldMan && name.IndexOf("OldMan", System.StringComparison.OrdinalIgnoreCase) >= 0)
             gameObject.SetActive(false);
     }
 
+    // Every enemy that has woken up and isn't destroyed (instead of FindObjectsByType, which was run on every death).
+    // Inactive ones stay in it: check activeInHierarchy.
+    public static readonly List<EnemyHealth> All = new List<EnemyHealth>();
+    private void OnDestroy() => All.Remove(this);
+
     private void Awake()
     {
+        All.Add(this);
         HasAwoken = true;
         AwakeFrame = Time.frameCount;
         // enemies built from code (Stephmoss) have no serialized events
@@ -183,6 +190,27 @@ public class EnemyHealth : MonoBehaviour
         }
 
         UpdateHitRecovery();
+        UpdateDeathRecovery();
+    }
+
+    // Killed while stunned / mid-hit, some enemies stayed frozen on their GetHit pose instead of dying (the death
+    // trigger got eaten by the hit restart, or a stun had the animator paused). For a moment after death: if it's
+    // still sitting in GetHit (or paused), the animator is unpaused and the death trigger fires again.
+    private float diedAt = -1f;
+    private int deathRetries;
+
+    private void UpdateDeathRecovery()
+    {
+        if (!enemydead) { diedAt = -1f; deathRetries = 0; return; }
+        if (diedAt < 0f) diedAt = Time.time;
+        if (anima == null || isObject || deathRetries >= 4 || !anima.isActiveAndEnabled || anima.runtimeAnimatorController == null) return;
+        if (Time.time - diedAt < 0.3f + 0.35f * deathRetries) return;
+        if (anima.speed <= 0.01f) anima.speed = 1f;
+        AnimatorStateInfo state = anima.GetCurrentAnimatorStateInfo(0);
+        if (state.shortNameHash != GetHitState || anima.IsInTransition(0)) { deathRetries = 4; return; } // it got there
+        deathRetries++;
+        if (AnimatorHasParameter("IsBeingHit")) anima.SetBool("IsBeingHit", false);
+        SetAnimatorTrigger("destroyed");
     }
 
     // GetHit only leaves through 'back to idle' (when not moving) or 'moving'. If neither comes (the hit cut off an

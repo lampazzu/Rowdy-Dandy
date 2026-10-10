@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // Heart dropped by pelicans: heals Rowdy on touch. At full health the extra becomes OVERHEAL (up to +100, decays fast).
@@ -39,28 +40,59 @@ public class Collectible : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
     }
 
+    // Hearts on screen at once. A busy fight with pelicans used to pile up dozens (each one a physics body with a
+    // beam and sparkles): past the cap a new heart melts into the nearest one instead, which then heals for both.
+    private const int MaxHearts = 6;
+    private static readonly List<Collectible> live = new List<Collectible>();
+    private float searchTimer;
+
+    private void OnDestroy() => live.Remove(this);
+
     private void Start()
     {
+        live.RemoveAll(c => c == null);
+        if (live.Count >= MaxHearts && MergeIntoNearest()) return;
+        live.Add(this);
         // A little hop out of the bird, so the drop reads as a reward
         if (body != null && body.bodyType == RigidbodyType2D.Dynamic)
             body.linearVelocity = new Vector2(Random.Range(-0.6f, 0.6f), 2.2f);
         BuildBeam();
     }
 
+    private bool MergeIntoNearest()
+    {
+        Collectible best = null;
+        float bestD = float.MaxValue;
+        foreach (Collectible c in live)
+        {
+            float d = (c.transform.position - transform.position).sqrMagnitude;
+            if (d < bestD) { bestD = d; best = c; }
+        }
+        if (best == null) return false;
+        best.healAmount += healAmount;
+        best.age = 0.25f; // pops again: it got bigger
+        FXParticle.Burst(transform.position, pickupColor, 6, 1f, 2.5f, 3f, 0.4f);
+        Destroy(gameObject);
+        return true;
+    }
+
     private void Update()
     {
         age += Time.deltaTime;
 
-        if (player == null)
+        if (player == null && (searchTimer -= Time.deltaTime) <= 0f)
         {
+            searchTimer = 0.5f;
             GameObject p = GameObject.FindGameObjectWithTag("Player");
             if (p != null) { player = p.transform; playerHealth = p.GetComponent<Health>(); }
         }
 
         if (playerHealth != null)
         {
-            // Ignore collision if player health is full
-            gameObject.layer = playerHealth.CanTakeOverheal ? originalLayer : ignorePlayerLayer; // full health still takes it (overheal) until the overheal is maxed
+            // Ignore collision if player health is full (full health still takes it as overheal until that's maxed).
+            // Only when it changes: setting the layer makes the physics re-filter the body, every frame that added up.
+            int want = playerHealth.CanTakeOverheal ? originalLayer : ignorePlayerLayer;
+            if (gameObject.layer != want) gameObject.layer = want;
         }
 
         Animate();

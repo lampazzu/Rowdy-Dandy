@@ -606,6 +606,23 @@ public class BoonRunner : MonoBehaviour
         if (d != null) WeaponBoons.OnTaken(d.id); // a weapon boon comes with the weapon
         if (instance == null || d == null) return;
         instance.StartCoroutine(instance.Celebrate(d));
+        if (d.id == "cometothelight") instance.StartCoroutine(instance.ComeToTheLight());
+    }
+
+    // The Sun God's legendary: the night boons are traded for his own, one by one (a popup for each that arrives)
+    private IEnumerator ComeToTheLight()
+    {
+        List<BoonDef> got = Boons.TradeNightForSun();
+        if (DayNight.IsNight) DayNight.ResetToMorningNow();
+        yield return new WaitForSeconds(1.2f);
+        foreach (BoonDef g in got)
+        {
+            while (PauseMenu.IsPaused) yield return null;
+            Color sun = BoonCatalog.Of(Patron.Sun).color;
+            IconPopup.Show(HeadTop + Vector3.up * 0.45f, BoonIcons.Get(g), "+ " + g.name, sun, 0.9f, 1.8f);
+            SunFX.BlindingFlash(Center, 0.6f);
+            yield return new WaitForSeconds(0.7f);
+        }
     }
 
     private IEnumerator Celebrate(BoonDef d)
@@ -633,7 +650,7 @@ public class BoonRunner : MonoBehaviour
             StephmossForm.Fill(); // the first swarm is on the house
             Tutorials.Show(Tutorials.Topic.Boons, BoonIcons.Get(d), 0.9f);
         }
-        else if (d.id == "sandwichrain" || d.id == "armory")
+        else if (d.id == "sandwichrain" || d.id == "senbonzakura")
         {
             SpecialBoons.Fill(); // the first one is on the house
             Tutorials.Show(Tutorials.Topic.Boons, BoonIcons.Get(d), 0.9f);

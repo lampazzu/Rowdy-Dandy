@@ -39,7 +39,8 @@ public class HitStop : MonoBehaviour
                 }
 
                 isAttackingBeforeHitStop = IsInAttackAnimation(playerAnimator);
-                originalSpeed = playerAnimator.speed;
+                // a pose held on purpose (Grand Slash charging) has the animator at 0: never "restore" a freeze
+                originalSpeed = playerAnimator.speed > 0.05f ? playerAnimator.speed : 1f;
                 playerAnimator.speed = 0f;
 
                 float startTime = Time.realtimeSinceStartup;

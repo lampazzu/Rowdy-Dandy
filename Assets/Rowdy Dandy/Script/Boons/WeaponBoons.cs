@@ -2,29 +2,38 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// The Blacksmith's weapon boons (Split Edge = Sword, Skewer = Naginata, Butcher Block = Cleaver) come with the weapon:
+// The Blacksmith's weapon boons come with their weapon:
+//   Sword    - Split Edge, Dizzy Fighter, Grand Slash
+//   Naginata - Skewer, Sky Spear, Onrush, Ground Breaker
+//   Cleaver  - Butcher Block, Meat Shield, Five Slice
 //   - taking the boon puts a fresh one in Rowdy's hands right away
 //   - every respawn / load he has it again (a fresh one if it broke), in his hands
-//   - enemies drop it more often: an extra roll on every kill (EnemyHealth -> ExtraDrop)
-// (Hook Line And Sinker is the Rod: he always has that one.)
+//   - enemies drop it more often: an extra roll on every kill (EnemyHealth -> ExtraDrop), one roll per weapon
+// (Hook Line And Sinker / Just The Rod are the Rod: he always has that one.)
 public static class WeaponBoons
 {
-    private static readonly (string boon, WeaponType type, string drop)[] Map =
+    private static readonly (WeaponType type, string drop, string[] boons)[] Map =
     {
-        ("splitedge", WeaponType.Sword, "Systems/WeaponDropSword"),
-        ("skewer", WeaponType.Naginata, "Systems/WeaponDropNaginata"),
-        ("butcher", WeaponType.Cleaver, "Systems/WeaponDropCleaver"),
+        (WeaponType.Sword, "Systems/WeaponDropSword", new[] { "splitedge", "dizzy", "swordcharge" }),
+        (WeaponType.Naginata, "Systems/WeaponDropNaginata", new[] { "skewer", "skybeam", "onrush", "quake" }),
+        (WeaponType.Cleaver, "Systems/WeaponDropCleaver", new[] { "butcher", "apron", "slices" }),
     };
 
     public const float FreshDurability = 50f;
     public const float ExtraDropPercent = 10f; // per kill, x drop luck
 
+    private static bool Wants(string[] boons)
+    {
+        foreach (string b in boons) if (Boons.Has(b)) return true;
+        return false;
+    }
+
     public static void OnTaken(string id)
     {
         if (id == "justrod" && WeaponManager.Instance != null) { WeaponManager.Instance.SetWeaponToAxe(); return; }
-        if (Boons.Has("justrod")) return;
+        if (Boons.Has("justrod") || WeaponManager.Instance == null) return;
         foreach (var m in Map)
-            if (m.boon == id && WeaponManager.Instance != null) WeaponManager.Instance.PickupWeapon(m.type, FreshDurability);
+            if (System.Array.IndexOf(m.boons, id) >= 0) WeaponManager.Instance.PickupWeapon(m.type, FreshDurability);
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -54,7 +63,7 @@ public static class WeaponBoons
                 int equip = -1;
                 foreach (var m in Map)
                 {
-                    if (!Boons.Has(m.boon)) continue;
+                    if (!Wants(m.boons)) continue;
                     if (!wm.IsUnlocked(m.type)) wm.PickupWeapon(m.type, FreshDurability);
                     equip = (int)m.type;
                 }
@@ -70,7 +79,7 @@ public static class WeaponBoons
         if (Boons.Has("justrod")) return;
         foreach (var m in Map)
         {
-            if (!Boons.Has(m.boon) || Random.Range(0f, 100f) > ExtraDropPercent * DropLuck.Multiplier) continue;
+            if (!Wants(m.boons) || Random.Range(0f, 100f) > ExtraDropPercent * DropLuck.Multiplier) continue;
             GameObject prefab = Resources.Load<GameObject>(m.drop);
             if (prefab != null) Object.Instantiate(prefab, at + new Vector3(Random.Range(-0.3f, 0.3f), 0.2f, 0f), Quaternion.identity);
             return; // one extra weapon per kill at most

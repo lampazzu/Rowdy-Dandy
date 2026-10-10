@@ -28,29 +28,42 @@ public static class BoonFX
 
     public static Color Rainbow(float t, float offset = 0f) => Color.HSVToRGB(Mathf.Repeat(t * 0.9f + offset, 1f), 0.65f, 1f);
 
-    public static List<EnemyHealth> EnemiesIn(Vector2 center, float radius, EnemyHealth except = null)
+    // The enemy queries run many times a frame with a few boons on: one shared collider buffer, no allocations there
+    private static readonly Collider2D[] overlapBuffer = new Collider2D[256];
+    private static ContactFilter2D enemyFilter;
+    private static bool enemyFilterReady;
+
+    private static ContactFilter2D EnemyFilter
+    {
+        get
+        {
+            if (!enemyFilterReady)
+            {
+                enemyFilter = new ContactFilter2D { useTriggers = true };
+                enemyFilter.SetLayerMask(LayerMask.GetMask("Enemy"));
+                enemyFilterReady = true;
+            }
+            return enemyFilter;
+        }
+    }
+
+    private static List<EnemyHealth> Collect(int n, EnemyHealth except)
     {
         var list = new List<EnemyHealth>();
-        foreach (Collider2D c in Physics2D.OverlapCircleAll(center, radius, LayerMask.GetMask("Enemy")))
+        for (int i = 0; i < n; i++)
         {
-            EnemyHealth e = c.GetComponentInParent<EnemyHealth>();
+            EnemyHealth e = overlapBuffer[i].GetComponentInParent<EnemyHealth>();
             if (e == null || e == except || e.enemydead || e.IsObject || !e.CompareTag("Enemy") || list.Contains(e)) continue;
             list.Add(e);
         }
         return list;
     }
 
+    public static List<EnemyHealth> EnemiesIn(Vector2 center, float radius, EnemyHealth except = null)
+        => Collect(Physics2D.OverlapCircle(center, radius, EnemyFilter, overlapBuffer), except);
+
     public static List<EnemyHealth> EnemiesInBox(Vector2 center, Vector2 size)
-    {
-        var list = new List<EnemyHealth>();
-        foreach (Collider2D c in Physics2D.OverlapBoxAll(center, size, 0f, LayerMask.GetMask("Enemy")))
-        {
-            EnemyHealth e = c.GetComponentInParent<EnemyHealth>();
-            if (e == null || e.enemydead || e.IsObject || !e.CompareTag("Enemy") || list.Contains(e)) continue;
-            list.Add(e);
-        }
-        return list;
-    }
+        => Collect(Physics2D.OverlapBox(center, size, 0f, EnemyFilter, overlapBuffer), null);
 
     public static EnemyHealth Nearest(Vector2 from, float radius, ICollection<EnemyHealth> skip = null)
     {
@@ -281,7 +294,10 @@ public static class BoonFX
     public static void Fear(EnemyHealth e, float seconds) { if (e != null && !e.enemydead) StatusEffects.Of(e).Fear(seconds); }
     public static void Stun(EnemyHealth e, float seconds) { if (e != null && !e.enemydead) StatusEffects.Of(e).Stun(seconds); }
     public static void Slow(EnemyHealth e, float seconds, float factor) { if (e != null && !e.enemydead) StatusEffects.Of(e).Slow(seconds, factor); }
-    public static void Poison(EnemyHealth e, float seconds, float dps) { if (e != null && !e.enemydead) StatusEffects.Of(e).Poison(seconds, dps, null); }
+    // Each calling line is its own poison stack (different poison boons add up, see StatusEffects.PoisonKeyed)
+    public static void Poison(EnemyHealth e, float seconds, float dps,
+                              [System.Runtime.CompilerServices.CallerFilePath] string file = "", [System.Runtime.CompilerServices.CallerLineNumber] int line = 0)
+    { if (e != null && !e.enemydead) StatusEffects.Of(e).PoisonKeyed(file.GetHashCode() * 31 + line, seconds, dps, null); }
 }
 
 // Sparkle that pops, twinkles and fades

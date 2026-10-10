@@ -48,8 +48,13 @@ public class DayNight : MonoBehaviour
     // Checkpoint rest: the next load starts in the morning
     public static void ResetToMorningOnNextLoad() => restPending = true;
 
+    // Right now, no reload (Come To The Light)
+    private static DayNight current;
+    public static void ResetToMorningNow() { if (current != null && current.animator != null) current.JumpTo(MorningTime); }
+
     private void Start()
     {
+        current = this;
         foreach (Animator a in FindObjectsByType<Animator>(FindObjectsSortMode.None))
         {
             if (a.runtimeAnimatorController != null && a.runtimeAnimatorController.name == "Night Cycle") { animator = a; break; }
@@ -57,25 +62,40 @@ public class DayNight : MonoBehaviour
         if (animator == null) { enabled = false; return; }
 
         if (restPending) { clipTime = MorningTime; restPending = false; }
-        if (clipTime >= 0f) { jumpTo = clipTime; jumpTries = 5; }
+        if (clipTime >= 0f) JumpTo(clipTime);
     }
 
-    // Jumping the clip to the saved time: applied (and checked) over the first frames, since the animator
-    // only reports the new time after it has evaluated once
-    private float jumpTo = -1f;
-    private int jumpTries;
+    // Jumping the clip to a time: applied (and checked) for up to 2 real seconds, since the animator only reports the
+    // new time after it has evaluated once - and the first load of a session can stall (sky drop, tutorial pause),
+    // which used to run out the old 5 tries and leave a rest at night
+    private float jumpTo = -1f, jumpUntil = -1f;
+
+    private void JumpTo(float t)
+    {
+        jumpTo = t;
+        jumpUntil = Time.unscaledTime + 2f;
+        clipTime = t;
+        NightAmount = t >= NightStart && t < 38.3f ? 1f : 0f;
+        animator.Play("NightCycleAnim", 0, t / ClipLength);
+        animator.Update(0f);
+    }
+
+    // The Sun God's COME TO THE LIGHT: the night never comes (dusk skips straight to the morning)
+    public static bool NightBanned => Boons.Has("cometothelight");
 
     private void Update()
     {
         if (animator == null) return;
-        if (jumpTries > 0)
+        if (jumpUntil > 0f)
         {
             float now = Mathf.Repeat(animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f) * ClipLength;
-            if (Mathf.Abs(now - jumpTo) < 1f) jumpTries = 0;
-            else { jumpTries--; animator.Play("NightCycleAnim", 0, jumpTo / ClipLength); animator.Update(0f); return; }
+            if (Mathf.Abs(now - jumpTo) < 1f) jumpUntil = -1f;
+            else if (Time.unscaledTime < jumpUntil) { animator.Play("NightCycleAnim", 0, jumpTo / ClipLength); animator.Update(0f); return; }
+            else jumpUntil = -1f;
         }
         AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
         float t = Mathf.Repeat(state.normalizedTime, 1f) * ClipLength;
+        if (NightBanned && t >= 5.4f && t < 38.3f) { JumpTo(38.3f); return; }
         clipTime = t;
 
         bool night = t >= NightStart && t < NightEnd;
@@ -100,7 +120,7 @@ public class DayNight : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (animator == null || NightAmount <= 0f) return;
+        if (animator == null || NightAmount <= 0f || jumpUntil > 0f) return;
         if (!lightSearched)
         {
             lightSearched = true;

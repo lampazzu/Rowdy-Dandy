@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: -4191895454658444062
     second: BoonIcon_armory_0
+  - first:
+      213: -4987050055286587763
+    second: BoonIcon_armory_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -104,9 +107,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 16
-        height: 14
+        y: 1
+        width: 7
+        height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -117,6 +120,28 @@ TextureImporter:
       bones: []
       spriteID: 2e442892b4563d5c0800000000000000
       internalID: -4191895454658444062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BoonIcon_armory_1
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 1
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8efc81b5607acab0800000000000000
+      internalID: -4987050055286587763
       vertices: []
       indices: 
       edges: []

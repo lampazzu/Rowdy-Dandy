@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -97,7 +97,7 @@ public class Health : MonoBehaviour
         if (Time.time - lastDamageTime > damageCooldown)
         {
             // The Peak's armor eats the hit (still counts as a hit for the cooldown, so one attack = one charge)
-            if (_damage > 0f && !dead && (WeaponTricks.TryApron() || RowdyBuffs.TryBlock(this))) // Iron Apron first, then The Peak
+            if (_damage > 0f && !dead && (WeaponTricks.TryApron() || RowdyBuffs.TryBlock(this))) // Meat Shield first, then The Peak
             {
                 lastDamageTime = Time.time;
                 return;

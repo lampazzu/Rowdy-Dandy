@@ -2235,9 +2235,9 @@ public class FallingAnvil : MonoBehaviour
 // ================================================================================================ The Sun God
 public static class SunFX
 {
+    // The flash happens in the world only (it used to white out the whole screen, which blinded the player too)
     public static void BlindingFlash(Vector3 center, float seconds)
     {
-        ScreenFlash.Play(new Color(1f, 0.98f, 0.85f, 0.55f), 0.35f);
         PulseRing.Spawn(center, new Color(1f, 0.95f, 0.7f, 1f), 3.5f, 0.35f);
         PulseRing.Spawn(center, new Color(1f, 1f, 1f, 0.9f), 2f, 0.25f);
         FXParticle.Burst(center, BoonFX.Sunny, 20, 2f, 6f, 0f, 0.45f);

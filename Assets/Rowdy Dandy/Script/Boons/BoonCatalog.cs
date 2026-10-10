@@ -326,7 +326,7 @@ public static class BoonCatalog
         Add("satisfied", "SATISFIED", Patron.Chef, BoonSlot.Passive,
             "YOU CAN OVERHEAL TWICE AS MUCH: A NEW BAR GROWS OVER THE GOLDEN ONE. ALL YOUR HEALING IS {0}% STRONGER.", "draw:sauce", V(5, 10, 15)).iconTint = new Color(1f, 0.6f, 0.9f);
         BoonDef rain = Add("sandwichrain", "INGREDIENT RAIN", Patron.Chef, BoonSlot.Special,
-            "PRESS {WOLF} WHEN THE KITCHEN IS READY: EVERY SANDWICH INGREDIENT RAINS FROM THE SKY ON YOUR ENEMIES. HUGE AREA DAMAGE. LONG COOLDOWN.", "draw:sandwich", F(1));
+            "PRESS {WOLF} WHEN THE KITCHEN IS READY: FOR 6S EVERY SANDWICH INGREDIENT POURS FROM THE SKY. FOOD THAT HITS AN ENEMY DEALS DAMAGE, FOOD YOU CATCH HEALS YOU. LONG COOLDOWN.", "draw:sandwich", F(1));
         rain.legendaryOnly = true;
         rain.iconTint = new Color(1f, 0.85f, 0.5f);
 
@@ -356,19 +356,22 @@ public static class BoonCatalog
         Add("swordcharge", "GRAND SLASH", Patron.Smith, BoonSlot.Passive,
             "SWORD: AFTER DOWN + ATTACK, KEEP HOLDING {ATTACK} TO CHARGE UP TO 3 TICKS. EVERY TICK MAKES THE SLASH BIGGER: UP TO {0} DAMAGE.", "draw:steelwave", V(40, 60, 80));
         Add("skybeam", "SKY SPEAR", Patron.Smith, BoonSlot.Passive,
-            "NAGINATA: DOWN + ATTACK THROWS A MAGIC BEAM UP AND FORWARD. IT GOES THROUGH ENEMIES, BURNING THEM FOR {0} DAMAGE PER SECOND.", "draw:spear", V(30, 45, 60));
+            "NAGINATA: DOWN + ATTACK SUMMONS 5 MAGIC SPEARS THAT BURST UP OUT OF THE GROUND ONE AFTER ANOTHER, BEHIND YOU, UNDER YOU AND IN FRONT OF YOU: {0} DAMAGE EACH, AND THEY LAUNCH ENEMIES UP.", "draw:spear", V(14, 20, 28));
         Add("onrush", "ONRUSH", Patron.Smith, BoonSlot.Passive,
-            "NAGINATA: HOLD {ATTACK} ON THE GROUND TO DRILL NONSTOP, NO COOLDOWN: A HIT EVERY 0.08S FOR {0}% DAMAGE. IT DOES NOT PIERCE.", "draw:spear", V(40, 50, 60)).excludes = new[] { "skewer" };
+            "NAGINATA: HOLD {ATTACK} ON THE GROUND TO DRILL NONSTOP: A HIT EVERY 0.08S FOR {0}% DAMAGE. IT DOES NOT PIERCE. DRILLING WEARS THE NAGINATA DOWN: 2 DURABILITY PER SECOND WHILE YOU HOLD IT.", "draw:spear", V(40, 50, 60)).excludes = new[] { "skewer" };
         Add("quake", "GROUND BREAKER", Patron.Smith, BoonSlot.Passive,
             "NAGINATA: A JUMP ATTACK THAT HITS THE GROUND CAUSES AN EARTHQUAKE: {0} DAMAGE, AND ENEMIES NEARBY ARE STUNNED 1.5S.", "draw:pressure", V(20, 30, 40));
-        Add("apron", "IRON APRON", Patron.Smith, BoonSlot.Passive,
-            "CLEAVER: DOWN + ATTACK RAISES A SHIELD THAT BLOCKS THE NEXT HIT YOU TAKE. READY AGAIN AFTER {0}S.", "draw:anvil", V(8, 6, 4));
+        Add("apron", "MEAT SHIELD", Patron.Smith, BoonSlot.Passive,
+            "CLEAVER: DOWN + ATTACK RAISES A SHIELD THAT BLOCKS THE NEXT HIT YOU TAKE. WHILE IT IS UP, ARROWS AND BOMBS THAT HIT IT BOUNCE BACK AT THE ENEMIES FOR 500% DAMAGE (THAT DOES NOT BREAK IT). READY AGAIN AFTER {0}S.", "draw:ricochet", V(8, 6, 4));
         Add("slices", "FIVE SLICE", Patron.Smith, BoonSlot.Passive,
             "CLEAVER: LAND A JUMP ATTACK AND 1S LATER THE ENEMY IS SLICED 5 TIMES FOR {0}% DAMAGE EACH. THE SLICES COUNT AS ATTACKS.", "draw:cleaver", V(40, 55, 70));
-        BoonDef armory = Add("armory", "THE ARMORY", Patron.Smith, BoonSlot.Special,
-            "PRESS {WOLF} WHEN THE FORGE IS HOT: FOR {0}S ALL FOUR WEAPONS FLOAT AROUND YOU AND STRIKE THE NEAREST ENEMIES BY THEMSELVES. LONG COOLDOWN.", "draw:anvil", F(10));
-        armory.legendaryOnly = true;
-        armory.iconTint = new Color(1f, 0.7f, 0.4f);
+        Add("armory", "THE ARMORY", Patron.Smith, BoonSlot.Passive,
+            "{0} ENCHANTED SWORDS FLOAT AROUND YOU AND SLASH THE NEAREST ENEMIES BY THEMSELVES, EVERY 1.4S EACH.", "draw:swords",
+            new float[] { 1, 1, 2, 2, 3 }).iconTint = new Color(1f, 0.8f, 0.55f);
+        BoonDef bankai = Add("senbonzakura", "SENBONZAKURA KAGEYOSHI", Patron.Smith, BoonSlot.Special,
+            "PRESS {WOLF} WHEN THE PETALS ARE READY. BANKAI: YOUR BLADE SCATTERS INTO A THOUSAND TINY BLADES LIKE CHERRY PETALS. FOR {0}S THEY STREAM THROUGH YOUR ENEMIES, CUTTING EVERYTHING THEY TOUCH, THEN CLOSE IN ON THE BIGGEST CROWD AND CRUSH IT. LONG COOLDOWN.", "draw:sakura", F(9));
+        bankai.legendaryOnly = true;
+        bankai.iconTint = new Color(1f, 0.75f, 0.9f);
 
         // ---------------------------------------------------------------- THE SUN GOD
         Add("solarflare", "SOLAR FLARE", Patron.Sun, BoonSlot.Attack,
@@ -383,6 +386,11 @@ public static class BoonCatalog
             "SURF DASH FLASHES LIKE HIGH NOON: ENEMIES NEAR YOU ARE BLINDED (STUNNED) FOR {0}S.", "draw:flash", V(1f, 1.4f, 1.8f));
         Add("sunspot", "SUNSPOT", Patron.Sun, BoonSlot.Jump,
             "LANDING LEAVES A POOL OF SUNLIGHT FOR 3S: ENEMIES IN IT BURN FOR {0} PER SECOND, YOU HEAL 2 PER SECOND.", "draw:sunspot", V(6, 9, 12));
+        BoonDef light = Add("cometothelight", "COME TO THE LIGHT", Patron.Sun, BoonSlot.Passive,
+            "THE NIGHT NEVER COMES AGAIN. YOU GIVE UP EVERY NIGHT BOON YOU HAVE, AND FOR EACH ONE THE SUN GOD HANDS YOU ONE OF HIS OWN, AT THE SAME RARITY. NO MORE NIGHT ELITES EITHER.", "draw:sun", F(1));
+        light.legendaryOnly = true;
+        light.iconTint = new Color(1f, 0.95f, 0.6f);
+        light.condition = () => Boons.NightBoonCount >= 2;
 
         // ---------------------------------------------------------------- DUOS
         string[] abyss = IdsOf(list, Patron.Abyss);

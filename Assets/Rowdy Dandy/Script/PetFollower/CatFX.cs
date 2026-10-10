@@ -46,17 +46,7 @@ public static class CatFX
     public static void Afterimage(SpriteRenderer source, Color color, float life = 0.28f)
     {
         if (source == null || source.sprite == null) return;
-        var go = new GameObject("Ninja Afterimage");
-        go.transform.SetPositionAndRotation(source.transform.position, source.transform.rotation);
-        go.transform.localScale = source.transform.lossyScale;
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = source.sprite;
-        sr.flipX = source.flipX;
-        sr.sortingLayerID = source.sortingLayerID;
-        sr.sortingOrder = source.sortingOrder - 1;
-        if (Silhouette != null) sr.sharedMaterial = Silhouette;
-        sr.color = color;
-        go.AddComponent<FadeAndDie>().Begin(life, color.a, 1f);
+        FXPool.Afterimage(source, color, life); // pooled
     }
 
     // Thin additive-looking trail behind the dashing cat (removed with StopTrail)

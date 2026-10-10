@@ -145,7 +145,7 @@ public class CatVisibility : MonoBehaviour
     }
 
     private static Sprite arrow;
-    private static Sprite Arrow()
+    public static Sprite Arrow() // also the arena's enemy markers (ArenaRadar)
     {
         if (arrow != null) return arrow;
         arrow = BoonFX.FromRows("CatMarkerArrow", new[] {

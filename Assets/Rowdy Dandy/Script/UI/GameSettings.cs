@@ -47,6 +47,7 @@ public static class GameSettings
     public static bool ButtonHints { get; private set; } = true;          // [SELECT] NOTES  [L2] STATS  [R2] MAP, bottom left
 
     public static bool AutoCatBait { get; private set; } = false;         // a rat + a free cat slot + a cat waiting for one = the rat is used by itself
+    public static bool AutoPickupRats { get; private set; } = true;       // legendary rats fly to Rowdy and are grabbed without the button
     public static bool CatHudCollapsed { get; private set; } = false;     // the cat HUD folded into one CAT PARTY row
 
     public static event Action Changed;
@@ -146,6 +147,7 @@ public static class GameSettings
         KillFeedOn = PlayerPrefs.GetInt(Prefix + "KillFeed", 1) == 1;
         ButtonHints = PlayerPrefs.GetInt(Prefix + "ButtonHints", 1) == 1;
         AutoCatBait = PlayerPrefs.GetInt(Prefix + "AutoCatBait", 0) == 1;
+        AutoPickupRats = PlayerPrefs.GetInt(Prefix + "AutoPickupRats", 1) == 1;
         CatHudCollapsed = PlayerPrefs.GetInt(Prefix + "CatHudCollapsed", 0) == 1;
     }
 
@@ -180,6 +182,7 @@ public static class GameSettings
         PlayerPrefs.SetInt(Prefix + "KillFeed", KillFeedOn ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "ButtonHints", ButtonHints ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "AutoCatBait", AutoCatBait ? 1 : 0);
+        PlayerPrefs.SetInt(Prefix + "AutoPickupRats", AutoPickupRats ? 1 : 0);
         PlayerPrefs.SetInt(Prefix + "CatHudCollapsed", CatHudCollapsed ? 1 : 0);
         PlayerPrefs.Save();
     }
@@ -232,12 +235,13 @@ public static class GameSettings
     public static void SetKillFeed(bool on) { KillFeedOn = on; Commit(); }
     public static void SetButtonHints(bool on) { ButtonHints = on; Commit(); }
     public static void SetAutoCatBait(bool on) { AutoCatBait = on; Commit(); }
+    public static void SetAutoPickupRats(bool on) { AutoPickupRats = on; Commit(); }
     public static void SetCatHudCollapsed(bool on) { CatHudCollapsed = on; Commit(); }
 
     // Dev Tools: every Preferences / Accessibility choice back to its default (display and audio are kept)
     private static readonly string[] GameplayKeys = { "Shake", "Vibration", "DamageNumbers", "NumberSize", "MessageSize", "ShowFps", "CrowdLimit",
         "RankSize", "RankPosition2", "EnemyAlerts", "AimLines", "AutoPickup", "AutoEquip", "RowdyOutline", "BossWeakness", "Tutorials", "Blood",
-        "KillFeed", "ButtonHints", "AutoCatBait", "CatHudCollapsed", "SeenPreferences", "SeenAccessibility" };
+        "KillFeed", "ButtonHints", "AutoCatBait", "AutoPickupRats", "CatHudCollapsed", "SeenPreferences", "SeenAccessibility" };
 
     public static void ResetPreferences()
     {

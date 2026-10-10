@@ -24,6 +24,8 @@ public class PelichBoss : MonoBehaviour
     private static readonly int IdleState = Animator.StringToHash("Idle");
     private static readonly int WalkState = Animator.StringToHash("Walk");
 
+    [HideInInspector] public bool arenaCopy; // a colosseum wave boss (FrontierArena.SpawnPelich): no tutorial end, no Encore
+
     private EnemyHealth health;
     private Animator animator;
     private Transform rowdy;
@@ -69,7 +71,7 @@ public class PelichBoss : MonoBehaviour
 
         if (health.enemydead)
         {
-            if (!deathHandled) { OnDeath(); Encore.Unlock(); } // endgame (Jarvis balance)
+            if (!deathHandled) { OnDeath(); if (!arenaCopy) Encore.Unlock(); } // endgame (Jarvis balance)
             return;
         }
 
@@ -395,6 +397,18 @@ public class MetalSlugDeath : MonoBehaviour
         PulseRing.Spawn(b.center, new Color(1f, 0.85f, 0.4f, 1f), 6f, 0.8f);
         FXParticle.Burst(b.center, new Color(1f, 0.75f, 0.3f), 60, 3f, 9f, 6f, 1.2f);
         yield return new WaitForSecondsRealtime(0.9f);
+
+        if (boss != null && boss.arenaCopy)
+        {
+            // a colosseum copy: just the fade, no tutorial banner
+            for (float f = 0f; f < 1f && body != null; f += Time.deltaTime / 1.2f)
+            {
+                body.color = new Color(0.25f, 0.2f, 0.22f, (1f - f) * baseColor.a);
+                yield return null;
+            }
+            Destroy(gameObject);
+            yield break;
+        }
 
         Banner.Show("TUTORIAL COMPLETE", "PELICH ANUS IS NO MORE.  THE FRONTIER LIES EAST, ACROSS THE SEA", new Color(1f, 0.82f, 0.3f), 4f);
         BoonArt art = BoonArt.Get;

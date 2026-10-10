@@ -25,6 +25,8 @@ public class FrontierArena : MonoBehaviour
     [Tooltip("Where the island starts: the random wave spawner leaves everything right of this alone")]
     public float islandStartX = 256f;
     public Transform gong;
+    [Tooltip("At load, push the gates out to where the arena floor really ends (a wall or the drop into the sea), up to 30 units. Off = the gates stay exactly at Left X / Right X.")]
+    public bool fitGatesToFloor = true;
     [Tooltip("Built at runtime (GloomArena): the Gloomwood or the Purple Reign")]
     public bool gloom;
     [Tooltip("0 The Frontier, 1 The Gloomwood, 2 The Purple Reign")]
@@ -40,15 +42,74 @@ public class FrontierArena : MonoBehaviour
     public static bool IsQuiet(Vector2 p) { foreach (FrontierArena a in arenas) if (a != null && !a.gloom && p.x >= a.islandStartX) return true; return false; }
     public static bool InGloom(Vector2 p) => p.x >= GloomArena.MinX;
     public static FrontierArena Frontier { get { foreach (FrontierArena a in arenas) if (a != null && !a.gloom) return a; return null; } }
+    // the colosseum mid-trial that this point is inside (null = none): arena-only behaviour (Wereknights walk, radar)
+    public static FrontierArena ArenaAt(Vector2 p)
+    {
+        foreach (FrontierArena a in arenas)
+            if (a != null && a.running && p.x >= a.leftX - 1.5f && p.x <= a.rightX + 1.5f && p.y > a.floorY - 6f && p.y < a.floorY + 20f) return a;
+        return null;
+    }
+    public static FrontierArena Current { get { foreach (FrontierArena a in arenas) if (a != null && a.running) return a; return null; } }
+    public IReadOnlyList<EnemyHealth> Alive => alive;
 
     private static readonly string[] Keys = { "RD_Frontier", "RD_Gloom", "RD_Violet" };
     private static readonly string[] Titles = { "THE FRONTIER", "THE GLOOMWOOD", "THE PURPLE REIGN" };
     private string Key => Keys[Mathf.Clamp(tier, 0, 2)];
     private int ClearsHere => PlayerPrefs.GetInt(Key + "Clears", 0);
-    private int Seal => PlayerPrefs.GetInt(Key + "Seal", 0);
+    // A seal only counts for the trial it was made in (it's tagged with the clear count). Seals from older saves or
+    // test runs had no tag: one of those in the Gloomwood made the first trial there skip the fresh start (no reset,
+    // no 3 opening boons). Those are thrown away now.
+    private int Seal
+    {
+        get
+        {
+            int wave = PlayerPrefs.GetInt(Key + "Seal", 0);
+            if (wave <= 0) return 0;
+            if (PlayerPrefs.GetInt(Key + "SealTrial", -1) != ClearsHere) { DropSeal(); return 0; }
+            return wave;
+        }
+    }
+    private void DropSeal()
+    {
+        PlayerPrefs.SetInt(Key + "Seal", 0);
+        PlayerPrefs.DeleteKey(Key + "SealTrial");
+        ArenaRun.ClearSeal(Key);
+        PlayerPrefs.Save();
+    }
+    // Beaten = done: the Frontier and the Gloomwood can't be fought again, on to the next one. The Purple Reign (the
+    // last) stays open and gets tougher every clear.
+    // Only a win of the current 30-wave trial locks it (Key+"Won"): the old clear counts came from the 5-round
+    // version and dev travel, and locked arenas nobody had beaten.
+    private bool Locked => tier < 2 && PlayerPrefs.GetInt(Key + "Won", 0) == 1;
+
+    // Dev reset: every colosseum back to never fought (clears, bests, seals, wins, the dev-opened gates)
+    public static void ResetAllProgress()
+    {
+        foreach (string k in Keys)
+            foreach (string part in new[] { "Clears", "Best", "Seal", "SealTrial", "SealBuild", "Won" })
+                PlayerPrefs.DeleteKey(k + part);
+        PlayerPrefs.DeleteKey("RD_GloomGateOpen");
+        PlayerPrefs.DeleteKey("RD_VioletGateOpen");
+        PlayerPrefs.Save();
+    }
     private string Title => Titles[Mathf.Clamp(tier, 0, 2)];
     private Color Theme => tier == 2 ? new Color(0.9f, 0.45f, 1f) : tier == 1 ? new Color(0.72f, 0.55f, 1f) : new Color(1f, 0.65f, 0.3f);
-    private ArenaWaves.Round[] Waves => tier == 2 ? ArenaWaves.Violet : tier == 1 ? ArenaWaves.Gloom : ArenaWaves.Frontier;
+
+    // this trial's 30 waves, drawn from the templates (ArenaWaves.ForRun) when the gong is rung
+    private ArenaWaves.Round[] runWaves;
+    public int CurrentWave { get; private set; }     // 1-based, 0 = not fighting yet
+    public int WaveCount => runWaves != null ? runWaves.Length : ArenaRun.Waves;
+    private int pendingSpawns;
+    public bool IsRunning => running;
+    public int EnemiesLeft
+    {
+        get
+        {
+            int n = pendingSpawns;
+            foreach (EnemyHealth e in alive) if (e != null && !e.enemydead && e.gameObject.activeInHierarchy) n++;
+            return n;
+        }
+    }
     [HideInInspector] public bool hasPool;          // The Purple Reign: water in the middle (set by its builder)
     [HideInInspector] public float poolX0, poolX1, poolSurface;
 
@@ -68,10 +129,14 @@ public class FrontierArena : MonoBehaviour
         if (!gloom) OpenSeaRoute();
         // stand everything on the real floor
         if (SolidGround.Ray(new Vector2((leftX + rightX) / 2f, floorY + 4f), Vector2.down, 10f, out RaycastHit2D hit)) floorY = hit.point.y;
+        if (!gloom) FitToFloor(); // the gates go where the arena floor really ends (the island was rebuilt wider)
         if (gong != null && SolidGround.Ray(gong.position + Vector3.up * 3f, Vector2.down, 8f, out RaycastHit2D g)) gong.position = g.point;
+        if (!gloom) MakePelichTemplate();
         if (gong != null) gongHome = gong.position;
         leftGate = MakeGate("Left Gate", leftX - 0.4f, out leftBars);
         rightGate = MakeGate("Right Gate", rightX + 0.4f, out rightBars);
+        leftStack = leftBars.GetComponentsInChildren<SpriteRenderer>(true);
+        rightStack = rightBars.GetComponentsInChildren<SpriteRenderer>(true);
         SetGates(false, true);
         if (gong != null)
         {
@@ -143,6 +208,43 @@ public class FrontierArena : MonoBehaviour
         }
     }
 
+    // The arena floor runs from wall to wall (or to the drop into the sea): walk out from the middle along the floor and
+    // put leftX / rightX where it really ends, so the gates close the WHOLE arena. Never narrower than the Inspector
+    // values, at most 30 units out, never left of the island's start.
+    private void FitToFloor()
+    {
+        if (!fitGatesToFloor) return;
+        float mid = (leftX + rightX) / 2f;
+        float l = FloorEnd(mid, -1f), r = FloorEnd(mid, 1f);
+        float wasL = leftX, wasR = rightX;
+        leftX = Mathf.Max(Mathf.Min(leftX, l), islandStartX + 1f);
+        rightX = Mathf.Max(rightX, r);
+        if (leftX != wasL || rightX != wasR)
+            Debug.Log("Frontier: gates fitted to the floor, x " + leftX.ToString("0.0") + " to " + rightX.ToString("0.0") + " (Inspector " + wasL + " to " + wasR + ")");
+    }
+
+    private float FloorEnd(float from, float dir)
+    {
+        const float step = 0.25f;
+        float last = from, lastY = floorY, gap = 0f;
+        for (float d = step; d <= 30f; d += step)
+        {
+            float x = from + dir * d;
+            // a wall at body height = the end
+            if (SolidGround.Ray(new Vector2(x - dir * step, lastY + 1.2f), new Vector2(dir, 0f), step, out _)) return last;
+            if (SolidGround.Ray(new Vector2(x, lastY + 2.5f), Vector2.down, 5f, out RaycastHit2D h) && Mathf.Abs(h.point.y - floorY) < 2.5f)
+            {
+                last = x;
+                lastY = h.point.y;
+                gap = 0f;
+            }
+            else if ((gap += step) > 1.5f) return last; // the floor drops away (the sea)
+        }
+        return last;
+    }
+
+    private const float GateHeight = 40f; // nothing jumps, dashes or flies over it
+
     private BoxCollider2D MakeGate(string name, float x, out SpriteRenderer bars)
     {
         var go = new GameObject(name);
@@ -151,8 +253,8 @@ public class FrontierArena : MonoBehaviour
         go.layer = LayerMask.NameToLayer("groundLayer") >= 0 ? LayerMask.NameToLayer("groundLayer") : 0;
         go.tag = "Ground";
         var col = go.AddComponent<BoxCollider2D>();
-        col.size = new Vector2(0.6f, 9f);
-        col.offset = new Vector2(0f, 4.5f);
+        col.size = new Vector2(0.6f, GateHeight);
+        col.offset = new Vector2(0f, GateHeight / 2f - 2f); // from just under the floor all the way up
         var barsGo = new GameObject("Bars");
         barsGo.transform.SetParent(go.transform, false);
         bars = barsGo.AddComponent<SpriteRenderer>();
@@ -160,8 +262,31 @@ public class FrontierArena : MonoBehaviour
         bars.sortingOrder = 30;
         if (ItemArt.Lit != null) bars.sharedMaterial = ItemArt.Lit;
         if (gloom) bars.color = new Color(0.7f, 0.6f, 0.9f);
+        // more bars stacked on top (they all drop together) + a shimmering barrier up past the top of the screen
+        float segment = bars.sprite != null ? bars.sprite.bounds.size.y : 2.1875f;
+        for (int k = 1; k <= 3; k++)
+        {
+            var up = new GameObject("Bars " + k);
+            up.transform.SetParent(barsGo.transform, false);
+            up.transform.localPosition = new Vector3(0f, segment * k, 0f);
+            SpriteRenderer s = up.AddComponent<SpriteRenderer>();
+            s.sprite = bars.sprite;
+            s.sortingOrder = bars.sortingOrder;
+            s.sharedMaterial = bars.sharedMaterial;
+            s.color = bars.color;
+        }
+        SpriteRenderer barrier = PixelShape.Make("Barrier", PixelShape.Kind.Shaft, go.transform.position, 29, go.transform);
+        if (barrier != null)
+        {
+            PixelShape.Size(barrier, 0.5f, 18f);
+            barrier.color = Color.clear;
+            if (name.StartsWith("Left")) leftBarrier = barrier; else rightBarrier = barrier;
+        }
         return col;
     }
+
+    private SpriteRenderer leftBarrier, rightBarrier;
+    private SpriteRenderer[] leftStack = new SpriteRenderer[0], rightStack = new SpriteRenderer[0];
 
     // ---------------------------------------------------------------- every frame
     private bool announced;
@@ -181,6 +306,15 @@ public class FrontierArena : MonoBehaviour
         bool close = rowdy != null && Vector2.Distance(BoonRunner.RowdyCenter, gong.position + Vector3.up * 0.5f) < 1.6f && !PauseMenu.IsPaused;
         // before a trial the gong starts it; during one it takes a legendary rat (bait: a cat waiting outside comes back)
         bool canBait = running && CatRoster.Rats > 0 && CatRoster.Lurable() != null && !baitBusy;
+        if (close && !running && Locked)
+        {
+            // beaten: the gong stays quiet
+            if (prompt != null) prompt.enabled = false;
+            if (Time.frameCount % 240 == 0)
+                IconPopup.Show(gong.position + Vector3.up * 2.6f, null, tier == 0 ? "CLEARED: ON TO THE GLOOMWOOD" : "CLEARED: ON TO THE PURPLE REIGN", Theme, 0.7f, 1.6f);
+            gong.position = gongHome;
+            return;
+        }
         bool near = close && (!running || canBait);
         if (prompt != null)
         {
@@ -240,14 +374,17 @@ public class FrontierArena : MonoBehaviour
         Boons.Unlock(); // ringing the gong is where boons begin
         RingGong();
         int trial = ClearsHere + 1;
-        ArenaWaves.Round[] waves = Waves;
+        ArenaWaves.Round[] waves = runWaves = ArenaWaves.ForRun(tier); // a fresh draw of the templates every trial
         int start = Mathf.Clamp(Seal, 0, waves.Length - 1);
+        CurrentWave = 0;
+        ArenaHUD.Show(this, Theme);
         yield return new WaitForSeconds(0.6f);
         SetGates(true, false);
 
         // a fresh run: level 1, no boons, the cats wait outside (a seal brings back the build it saved)
         bool fromSeal = start > 0 && ArenaRun.RestoreSeal(Key);
-        if (!fromSeal) { start = 0; ArenaRun.FreshStart(); ArenaRun.ClearSeal(Key); }
+        if (fromSeal && Boons.OwnedIds.Count == 0) fromSeal = false; // a seal with no build in it is no use
+        if (!fromSeal) { start = 0; DropSeal(); ArenaRun.FreshStart(); }
         Banner.Show(fromSeal ? "WAVE " + (start + 1) : "TRIAL " + trial, null, Theme, 2f);
         yield return new WaitForSeconds(2.2f);
 
@@ -263,6 +400,7 @@ public class FrontierArena : MonoBehaviour
         for (int w = start; w < waves.Length; w++)
         {
             int n = w + 1;
+            CurrentWave = n;
             bool boss = n % 10 == 0;
             ArenaRun.LevelCap = ArenaRun.CapDuring(n);
             if (boss)
@@ -331,6 +469,7 @@ public class FrontierArena : MonoBehaviour
         if (seal)
         {
             PlayerPrefs.SetInt(Key + "Seal", n);
+            PlayerPrefs.SetInt(Key + "SealTrial", ClearsHere); // only good for this trial
             ArenaRun.SaveSeal(Key); // the build as it is now: dying from here, the next trial starts at wave n+1 with it
         }
         Banner.Show("WAVE START!", null, Theme, 1f);
@@ -364,23 +503,28 @@ public class FrontierArena : MonoBehaviour
         float start = Time.time;
         foreach (ArenaWaves.Spawn s in round.spawns)
         {
-            int count = s.prefab == ArenaWaves.Elder || s.prefab == ArenaWaves.Steph ? s.count : Mathf.CeilToInt(s.count * CountScale);
+            int count = s.prefab == ArenaWaves.Elder || s.prefab == ArenaWaves.Steph || s.prefab == ArenaWaves.Pelich ? s.count : Mathf.CeilToInt(s.count * CountScale);
             float every = s.every > 0f ? s.every : (count > s.count ? 0.35f : 0f);
             for (int n = 0; n < count; n++) pending.Add((s, start + s.delay + n * every, n));
         }
         int side = Random.value < 0.5f ? -1 : 1;
+        // the HUD counts what's still to come (sea creatures only count where there's a pool)
+        pendingSpawns = 0;
+        foreach (var p in pending) if (!p.s.Has('w') || hasPool) pendingSpawns++;
         while (pending.Count > 0)
         {
             for (int i = pending.Count - 1; i >= 0; i--)
             {
                 if (Time.time < pending[i].at) continue;
+                if (!pending[i].s.Has('w') || hasPool) pendingSpawns = Mathf.Max(0, pendingSpawns - 1);
                 SpawnOne(pending[i].s, hp, side, wave, pending[i].n == 0);
                 side = -side;
                 pending.RemoveAt(i);
             }
-            if (BoonRunner.Rowdy == null) yield break;
+            if (BoonRunner.Rowdy == null) { pendingSpawns = 0; yield break; }
             yield return null;
         }
+        pendingSpawns = 0;
     }
     private void SpawnOne(ArenaWaves.Spawn s, float hp, int side, int wave, bool firstOfGroup)
     {
@@ -393,6 +537,7 @@ public class FrontierArena : MonoBehaviour
         // walkers never spawn over the pool
         if (hasPool && !flying && !water && x > poolX0 - 0.5f && x < poolX1 + 0.5f) x = side < 0 ? poolX0 - 1.5f : poolX1 + 1.5f;
         float y = flying ? floorY + Random.Range(2.5f, 4f) : floorY + 0.3f;
+        if (s.prefab == "Neutral_MantaRay") y = floorY + Random.Range(0.8f, 1.4f); // skims at Rowdy's height: touching hurts
         if (water) { x = Random.Range(poolX0 + 0.8f, poolX1 - 0.8f); y = poolSurface - 0.3f; }
 
         GameObject enemy;
@@ -411,6 +556,17 @@ public class FrontierArena : MonoBehaviour
             if (elder != null) elder.healthScale = hp * 0.8f;
             Banner.Show("THE MOONBOUND ELDER", null, new Color(0.7f, 0.6f, 1f), 1.4f);
         }
+        else if (s.prefab == ArenaWaves.Pelich)
+        {
+            // he's big: comes in on the side away from Rowdy
+            float mid = (leftX + rightX) / 2f;
+            float px = BoonRunner.Rowdy != null && BoonRunner.RowdyCenter.x > mid ? leftX + 3.5f : rightX - 3.5f;
+            if (hasPool && px > poolX0 - 2f && px < poolX1 + 2f) px = px < mid ? poolX0 - 3f : poolX1 + 3f;
+            x = px;
+            enemy = SpawnPelich(new Vector3(x, floorY + 0.3f, 0f));
+            if (enemy == null) return;
+            Banner.Show("PELICH ANUS", null, new Color(1f, 0.82f, 0.3f), 1.4f);
+        }
         else
         {
             GameObject prefab = Resources.Load<GameObject>("Enemies Prefab/" + s.prefab);
@@ -424,7 +580,8 @@ public class FrontierArena : MonoBehaviour
         EnemyHealth h = enemy.GetComponentInChildren<EnemyHealth>(true);
         if (h != null)
         {
-            if (s.prefab != ArenaWaves.Elder) h.SetMaxHealth(h.startingenemyHealth * hp);
+            // Pelich's own health is the beach boss's (2000): a wave boss gets about a third of it
+            if (s.prefab != ArenaWaves.Elder) h.SetMaxHealth(h.startingenemyHealth * hp * (s.prefab == ArenaWaves.Pelich ? 0.3f : 1f));
             if (!alive.Contains(h)) alive.Add(h);
         }
         foreach (EnemyMovement m in enemy.GetComponentsInChildren<EnemyMovement>(true)) m.ArenaAggro();
@@ -463,6 +620,45 @@ public class FrontierArena : MonoBehaviour
         FXParticle.Burst(at, Color.Lerp(Theme, Color.gray, 0.4f), 12, 1f, 3f, 6f, 0.5f, true);
     }
 
+    // ---------------------------------------------------------------- Pelich Anus as a wave boss
+    // There's no Pelich prefab: at load (before anyone has hit him) the beach's Pelich is copied into a switched-off
+    // holder, and arena waves spawn copies of that. His song stays on the beach; his death has no tutorial banner.
+    private static GameObject pelichTemplate;
+    private static Vector3 pelichScale = Vector3.one;
+
+    private void MakePelichTemplate()
+    {
+        if (pelichTemplate != null) return;
+        GameObject src = GameObject.Find("PelichAnus");
+        if (src == null)
+            foreach (EnemyHealth e in FindObjectsByType<EnemyHealth>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                EnemyCatalog.Entry kind = EnemyCatalog.Identify(e);
+                if (kind != null && kind.id == "pelich" && e.GetComponent<PelichBoss>() is var pb && (pb == null || !pb.arenaCopy)) { src = e.gameObject; break; }
+            }
+        if (src == null) return;
+        var holder = new GameObject("Arena Templates (off)");
+        holder.SetActive(false);
+        holder.transform.SetParent(transform, false);
+        pelichScale = src.transform.lossyScale;
+        pelichTemplate = Instantiate(src, holder.transform);
+        pelichTemplate.name = "Pelich Anus (Arena)";
+        foreach (AudioSource a in pelichTemplate.GetComponentsInChildren<AudioSource>(true)) if (a.loop || a.playOnAwake) a.enabled = false;
+    }
+
+    private static GameObject SpawnPelich(Vector3 at)
+    {
+        if (pelichTemplate == null) { Debug.LogWarning("Arena: no Pelich to copy"); return null; }
+        GameObject p = Instantiate(pelichTemplate, at, Quaternion.identity);
+        p.name = pelichTemplate.name;
+        p.transform.localScale = pelichScale;
+        p.SetActive(true);
+        PelichBoss boss = p.GetComponent<PelichBoss>();
+        if (boss == null) boss = p.AddComponent<PelichBoss>();
+        boss.arenaCopy = true;
+        return p;
+    }
+
     // Enemies of a long wave that are far from Rowdy (stuck on a ledge, in a wall, hiding at an edge) blink next to him
     private void PullStragglers()
     {
@@ -485,9 +681,10 @@ public class FrontierArena : MonoBehaviour
     // Anything hostile inside the arena that isn't counted yet (Elder's howl summons, strays that walked in)
     private void AdoptStrays()
     {
-        foreach (EnemyHealth e in FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None))
+        for (int i = EnemyHealth.All.Count - 1; i >= 0; i--)
         {
-            if (e == null || e.enemydead || e.IsObject || alive.Contains(e)) continue;
+            EnemyHealth e = EnemyHealth.All[i];
+            if (e == null || !e.gameObject.activeInHierarchy || e.enemydead || e.IsObject || alive.Contains(e)) continue;
             Vector3 p = e.transform.position;
             if (p.x < leftX - 1f || p.x > rightX + 1f || p.y < floorY - 3f || p.y > floorY + 14f) continue;
             // only real fighters: bombs and arrows carry an EnemyHealth too (and a spent bomb that only gets switched
@@ -506,13 +703,16 @@ public class FrontierArena : MonoBehaviour
     private void Victory(int trial)
     {
         running = false;
+        CurrentWave = 0;
         ArenaRun.LevelCap = 0;
         ArenaRun.HoldBoons = false; // everything banked + the prize picks open now
         ArenaRun.ClearSeal(Key);
         SetGates(false, false);
         PlayerPrefs.SetInt(Key + "Clears", ClearsHere + 1);
+        PlayerPrefs.SetInt(Key + "Won", 1);
         PlayerPrefs.SetInt(Key + "Best", Mathf.Max(PlayerPrefs.GetInt(Key + "Best", 0), trial));
         PlayerPrefs.SetInt(Key + "Seal", 0); // next trial: from wave 1 again, tougher
+        PlayerPrefs.DeleteKey(Key + "SealTrial");
         PlayerPrefs.Save();
         Banner.Show(Champions[Mathf.Clamp(tier, 0, 2)], null, Theme, 3f);
         BoonArt art = BoonArt.Get;
@@ -567,6 +767,14 @@ public class FrontierArena : MonoBehaviour
             if (gate == null) continue;
             gate.transform.localPosition = new Vector3(0f, Mathf.Round(Mathf.Lerp(7f, 0f, down) * 64f) / 64f, 0f);
             gate.enabled = down > 0.02f;
+            foreach (SpriteRenderer s in gate == leftBars ? leftStack : rightStack) if (s != null) s.enabled = gate.enabled;
+        }
+        foreach (SpriteRenderer b in new[] { leftBarrier, rightBarrier })
+        {
+            if (b == null) continue;
+            float a = down * (0.22f + 0.08f * Mathf.Sin(Time.time * 5f + b.transform.position.x));
+            b.color = new Color(Theme.r, Theme.g, Theme.b, a);
+            b.enabled = a > 0.01f;
         }
         if (gatesClosed && k >= 1f && Time.time - gateMoveAt < 0.3f)
         {
@@ -649,6 +857,57 @@ public class FrontierArena : MonoBehaviour
             }, new Vector2(0.5f, 0f));
             return gongArt;
         }
+    }
+}
+
+// The colosseum's little tracker, top middle: WAVE 3/30 and how many enemies are left in it (the ones still on their
+// way count too). Shown while a trial runs, gone with it (victory, death, leaving the scene).
+public class ArenaHUD : MonoBehaviour
+{
+    private static ArenaHUD instance;
+    private FrontierArena arena;
+    private PixelText wave, left;
+    private Image panel;
+    private CanvasGroup group;
+    private int shownWave = -1, shownLeft = -1;
+    private float bump;
+
+    public static void Show(FrontierArena arena, Color theme)
+    {
+        if (instance == null)
+        {
+            RectTransform root = OverlayUI.MakeRect("Arena HUD", OverlayUI.Root);
+            OverlayUI.Place(root, new Vector2(0.5f, 1f), new Vector2(0f, -22f), new Vector2(380f, 104f));
+            instance = root.gameObject.AddComponent<ArenaHUD>();
+            instance.group = root.gameObject.AddComponent<CanvasGroup>();
+            instance.panel = OverlayUI.MakePanel("Panel", root);
+            RectTransform p = instance.panel.rectTransform;
+            p.anchorMin = Vector2.zero; p.anchorMax = Vector2.one; p.offsetMin = p.offsetMax = Vector2.zero;
+            instance.wave = PixelText.Create(root, "", 5, theme, 0.5f);
+            instance.wave.Rect.anchorMin = instance.wave.Rect.anchorMax = new Vector2(0.5f, 0.5f);
+            instance.wave.Rect.anchoredPosition = new Vector2(0f, 16f);
+            instance.left = PixelText.Create(root, "", 3, new Color(1f, 0.9f, 0.95f), 0.5f);
+            instance.left.Rect.anchorMin = instance.left.Rect.anchorMax = new Vector2(0.5f, 0.5f);
+            instance.left.Rect.anchoredPosition = new Vector2(0f, -24f);
+        }
+        instance.arena = arena;
+        instance.wave.Color = theme;
+        instance.shownWave = instance.shownLeft = -1;
+        instance.gameObject.SetActive(true);
+    }
+
+    private void OnDestroy() { if (instance == this) instance = null; }
+
+    private void LateUpdate()
+    {
+        if (arena == null || !arena.IsRunning) { gameObject.SetActive(false); return; }
+        bool hide = PauseMenu.IsPaused || BoonPicker.IsOpen || arena.CurrentWave <= 0;
+        group.alpha = Mathf.MoveTowards(group.alpha, hide ? 0f : 1f, Time.unscaledDeltaTime * 6f);
+        int w = arena.CurrentWave, n = arena.EnemiesLeft;
+        if (w != shownWave) { shownWave = w; wave.SetText("WAVE " + Mathf.Max(1, w) + "/" + arena.WaveCount); bump = 1f; }
+        if (n != shownLeft) { shownLeft = n; left.SetText(n == 0 ? "WAVE CLEAR" : n == 1 ? "1 ENEMY LEFT" : n + " ENEMIES LEFT"); }
+        bump = Mathf.MoveTowards(bump, 0f, Time.unscaledDeltaTime * 4f);
+        wave.Rect.localScale = Vector3.one * (1f + 0.25f * bump * bump);
     }
 }
 

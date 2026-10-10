@@ -147,14 +147,15 @@ public class RowdyBuffs : MonoBehaviour
     {
         if (!PoisonActive || enemy == null || enemy.enemydead || enemy.IsObject) return;
         StatusEffects.Of(enemy).Poison(4f, 6f + enemy.startingenemyHealth * 0.02f, instance.poisonOwner);
-        // Paprika's poison shows on every hit: a green venom slash (Graft cut) and drips, a puddle under the enemy
+        // Paprika's poison shows on every hit: a green venom slash (Graft cut) and drips, a puddle under the enemy.
+        // The cut swirls BEHIND the enemy (it used to cover it).
         Vector3 c = EnemyFairness.BodyCenter(enemy);
-        SheetFX cut = GraftFX.Play("spr_bug_special_whirlwindCut", c, PoisonGreen, 96, null, false, Random.value < 0.5f, 1.4f);
+        SheetFX cut = GraftFX.Play("spr_bug_special_whirlwindCut", c, PoisonGreen, StatusEffects.BehindOrder(enemy), null, false, Random.value < 0.5f, 1.4f);
         FXParticle.Burst(c, PoisonGreen, 8, 1f, 3f, 7f, 0.5f, true);
         if (Time.time - instance.lastPuddle > 0.4f && SolidGround.Ray(c, Vector2.down, 3f, out RaycastHit2D hit))
         {
             instance.lastPuddle = Time.time;
-            GraftFX.Play("StephPoolt", hit.point + Vector2.up * 2f / 64f, new Color(0.55f, 1f, 0.3f, 0.85f), 70, null, false, false, 0.7f, new Vector2(0.5f, 0f));
+            GraftFX.Play("StephPoolt", hit.point + Vector2.up * 2f / 64f, new Color(0.55f, 1f, 0.3f, 0.85f), Mathf.Min(70, StatusEffects.BehindOrder(enemy) - 1), null, false, false, 0.7f, new Vector2(0.5f, 0f));
         }
     }
 
@@ -272,10 +273,30 @@ public class StatusEffects : MonoBehaviour
     private Color baseColor = Color.white;
     private bool tinting;
 
-    // poison
-    private float poisonUntil, poisonDps, nextTick;
-    private PetFollower poisonSource;
+    // poison: every ability that poisons adds its OWN stack (they add up); the same ability again refreshes its stack
+    private struct PoisonStack { public float until, dps; public PetFollower source; }
+    private readonly Dictionary<int, PoisonStack> poisonStacks = new Dictionary<int, PoisonStack>();
+    private float poisonUntil, nextTick;
     private float bubbleTimer;
+    private int shownStacks;
+    private SpriteRenderer poisonOverlay;
+
+    public int PoisonStacks
+    {
+        get
+        {
+            int n = 0;
+            foreach (PoisonStack s in poisonStacks.Values) if (Time.time < s.until) n++;
+            return n;
+        }
+    }
+
+    // Sorting order just behind this enemy's body (effects that should swirl around it, not cover it)
+    public static int BehindOrder(EnemyHealth e)
+    {
+        SpriteRenderer sr = e != null ? e.GetComponentInChildren<SpriteRenderer>() : null;
+        return sr != null ? sr.sortingOrder - 1 : 40;
+    }
 
     // stun
     private float stunUntil;
@@ -313,21 +334,58 @@ public class StatusEffects : MonoBehaviour
     private Vector3 HeadTop => transform.position + Vector3.up * EnemyFairness.HeadHeight(this);
 
     // ---------------------------------------------------------------- poison
-    public void Poison(float seconds, float dps, PetFollower source)
+    // The stack is keyed by where the poison comes from (the calling line: Rotten Edge, Spore Step, Paprika... each
+    // its own), so two different poison boons stack while one boon hitting again just refreshes its own.
+    public void Poison(float seconds, float dps, PetFollower source,
+                       [System.Runtime.CompilerServices.CallerFilePath] string file = "", [System.Runtime.CompilerServices.CallerLineNumber] int line = 0)
+        => PoisonKeyed(file.GetHashCode() * 31 + line, seconds, dps, source);
+
+    public void PoisonKeyed(int key, float seconds, float dps, PetFollower source)
     {
+        if (health != null && health.enemydead) return;
         bool fresh = Time.time >= poisonUntil;
-        poisonUntil = Mathf.Max(poisonUntil, Time.time + seconds);
-        poisonDps = Mathf.Max(fresh ? 0f : poisonDps, dps);
-        poisonSource = source;
+        float until = Time.time + seconds;
+        if (poisonStacks.TryGetValue(key, out PoisonStack s) && Time.time < s.until)
+        {
+            s.until = Mathf.Max(s.until, until);
+            s.dps = Mathf.Max(s.dps, dps);
+            if (source != null) s.source = source;
+        }
+        else s = new PoisonStack { until = until, dps = dps, source = source };
+        poisonStacks[key] = s;
+        poisonUntil = Mathf.Max(poisonUntil, until);
+        int stacks = PoisonStacks;
         if (fresh)
         {
             nextTick = Time.time + 0.5f;
             RunStats.EnemiesPoisoned++;
             ItemArt art = ItemArt.Get;
-            if (art != null) SheetFX.Play(art.vfxPoison, 10, Center, 22f, 64f, body != null ? body.sortingOrder + 2 : 80, transform, false, null, 0.5f);
+            // the green puff swirls behind the enemy (it used to cover the sprite)
+            if (art != null) SheetFX.Play(art.vfxPoison, 10, Center, 22f, 64f, body != null ? body.sortingOrder - 1 : 40, transform, false, null, 0.5f);
             FXSound.Play("Poison", 0.35f, Random.Range(1.2f, 1.4f));
             FXParticle.Burst(Center, new Color(0.45f, 1f, 0.3f), 8, 0.8f, 2f, 2f, 0.5f);
         }
+        else if (stacks > shownStacks && stacks > 1)
+        {
+            // a new kind of poison joined in: say how many are eating it now
+            IconPopup.Show(HeadTop + Vector3.up * 0.2f, null, "POISON X" + stacks, new Color(0.55f, 1f, 0.35f), 0.6f, 0.8f);
+            FXSound.Play("Poison", 0.25f, 1.5f + 0.1f * stacks);
+        }
+        shownStacks = Mathf.Max(shownStacks, stacks);
+    }
+
+    // Total poison damage per second right now (all the stacks), and whose stack is the strongest (kill credit)
+    private float PoisonDps(out PetFollower source)
+    {
+        float total = 0f, best = -1f;
+        source = null;
+        foreach (PoisonStack s in poisonStacks.Values)
+        {
+            if (Time.time >= s.until) continue;
+            total += s.dps;
+            if (s.dps > best) { best = s.dps; source = s.source; }
+        }
+        return total;
     }
 
     // ---------------------------------------------------------------- stun
@@ -540,12 +598,15 @@ public class StatusEffects : MonoBehaviour
         if (poisoned && Time.time >= nextTick)
         {
             nextTick = Time.time + 0.5f;
-            float dmg = Mathf.Max(1f, Mathf.Round(poisonDps * 0.5f));
+            float dps = PoisonDps(out PetFollower poisonSource); // every stack adds up: one tick, one number
+            float dmg = Mathf.Max(1f, Mathf.Round(dps * 0.5f));
             if (poisonSource != null) EnemyHealth.CreditNextHit(KillCredit.Cat(poisonSource));
             else EnemyHealth.CreditNextHit(KillCredit.Rowdy());
             health.TakeDamageEnemy(dmg, false, true);
             FXParticle.Burst(Center + Vector3.up * 0.1f, new Color(0.45f, 1f, 0.3f), 3, 0.4f, 1.2f, -1f, 0.5f);
         }
+        if (!poisoned && poisonStacks.Count > 0) { poisonStacks.Clear(); shownStacks = 0; }
+        UpdatePoisonOverlay(poisoned);
         if (poisoned)
         {
             bubbleTimer -= Time.deltaTime;
@@ -607,17 +668,16 @@ public class StatusEffects : MonoBehaviour
         // Tint: green while poisoned, white flash when stunned, pink charmed, violet feared, blue slowed
         if (DecayInfected) return; // the fuse owns the colour
         bool holdTint = isStunned && (holdKind == HoldKind.Charm || holdKind == HoldKind.Fear);
-        if (body != null && (poisoned || stunFlash > 0f || tinting || holdTint || slowed))
+        if (body != null && (stunFlash > 0f || tinting || holdTint || slowed))
         {
             stunFlash = Mathf.Max(0f, stunFlash - Time.deltaTime);
             Color c = baseColor;
             if (slowed) c = Color.Lerp(c, new Color(0.55f, 0.8f, 1f), 0.35f);
-            if (poisoned) c = Color.Lerp(c, new Color(0.55f, 1f, 0.45f), 0.45f + 0.15f * Mathf.Sin(Time.time * 10f));
             if (holdTint && holdKind == HoldKind.Charm) c = Color.Lerp(c, new Color(1f, 0.55f, 0.85f), 0.4f + 0.15f * Mathf.Sin(Time.time * 8f));
             if (holdTint && holdKind == HoldKind.Fear) c = Color.Lerp(c, new Color(0.6f, 0.4f, 0.9f), 0.45f);
             if (stunFlash > 0f) c = Color.Lerp(c, new Color(1f, 0.95f, 0.5f), stunFlash / 0.15f);
             body.color = c;
-            tinting = poisoned || stunFlash > 0f || holdTint || slowed;
+            tinting = stunFlash > 0f || holdTint || slowed;
             if (!tinting) body.color = baseColor;
         }
     }
@@ -630,8 +690,36 @@ public class StatusEffects : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x * slowFactor, rb.linearVelocity.y);
     }
 
+    // Poisoned = a green glaze over the whole sprite (a flat-colour copy on top, see-through), stronger with more stacks
+    private void UpdatePoisonOverlay(bool poisoned)
+    {
+        if (body == null) return;
+        if (!poisoned || !body.enabled || body.sprite == null)
+        {
+            if (poisonOverlay != null) poisonOverlay.enabled = false;
+            return;
+        }
+        if (poisonOverlay == null)
+        {
+            var go = new GameObject("Poison Overlay");
+            go.transform.SetParent(body.transform, false);
+            poisonOverlay = go.AddComponent<SpriteRenderer>();
+            if (CatFX.Silhouette != null) poisonOverlay.sharedMaterial = CatFX.Silhouette;
+        }
+        int stacks = Mathf.Max(1, PoisonStacks);
+        poisonOverlay.enabled = true;
+        poisonOverlay.sprite = body.sprite;
+        poisonOverlay.flipX = body.flipX;
+        poisonOverlay.flipY = body.flipY;
+        poisonOverlay.sortingLayerID = body.sortingLayerID;
+        poisonOverlay.sortingOrder = body.sortingOrder + 1;
+        float a = Mathf.Min(0.6f, 0.26f + 0.08f * stacks) + 0.08f * Mathf.Sin(Time.time * 8f);
+        poisonOverlay.color = new Color(0.4f, 1f, 0.25f, a);
+    }
+
     private void OnDestroyBoonBits()
     {
+        if (poisonOverlay != null) Destroy(poisonOverlay.gameObject);
         if (slowIcon != null) Destroy(slowIcon.gameObject);
         if (stunIcon != null) Destroy(stunIcon.gameObject);
         foreach (SpriteRenderer v in rootVines) if (v != null) Destroy(v.gameObject);
@@ -738,45 +826,9 @@ public static class CatPowers
     }
 }
 
-// Tiny square pixels: sparks, drips, dust (no physics, optional ground stop)
-public class FXParticle : MonoBehaviour
+// Tiny square pixels: sparks, drips, dust (no physics). Pooled and moved in one loop by FXPool.
+public static class FXParticle
 {
-    private Vector2 velocity;
-    private float gravity, life, age;
-    private SpriteRenderer sr;
-    private Color color;
-
     public static void Burst(Vector3 at, Color color, int count, float speedMin, float speedMax, float gravity, float life, bool upwards = false)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            var go = new GameObject("FX Pixel");
-            go.transform.position = at;
-            var p = go.AddComponent<FXParticle>();
-            Vector2 dir = Random.insideUnitCircle.normalized;
-            if (upwards) dir = new Vector2(dir.x, Mathf.Abs(dir.y) * 0.8f + 0.2f).normalized;
-            p.velocity = dir * Random.Range(speedMin, speedMax);
-            p.gravity = gravity;
-            p.life = life * Random.Range(0.7f, 1.2f);
-            p.color = Color.Lerp(color, Color.white, Random.Range(0f, 0.3f));
-            p.sr = go.AddComponent<SpriteRenderer>();
-            p.sr.sprite = Blood.DropSprite;
-            p.sr.sortingLayerName = "Default";
-            p.sr.sortingOrder = 96;
-            if (CatFX.Unlit != null) p.sr.sharedMaterial = CatFX.Unlit;
-            p.sr.color = p.color;
-            if (Random.value < 0.35f) go.transform.localScale = Vector3.one * 1.5f;
-        }
-    }
-
-    private void Update()
-    {
-        float dt = Time.deltaTime;
-        age += dt;
-        if (age >= life) { Destroy(gameObject); return; }
-        velocity.y -= gravity * dt;
-        velocity *= 1f - 1.5f * dt;
-        transform.position += (Vector3)(velocity * dt);
-        sr.color = new Color(color.r, color.g, color.b, color.a * (1f - age / life));
-    }
+        => FXPool.Pixels(at, color, count, speedMin, speedMax, gravity, life, upwards);
 }

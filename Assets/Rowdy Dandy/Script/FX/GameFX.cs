@@ -22,17 +22,30 @@ public static class SolidGround
         return true;
     }
 
+    // No allocations (it runs for every blood drop and FX every frame): a shared buffer, hits in distance order
+    private static readonly RaycastHit2D[] buffer = new RaycastHit2D[32];
+    private static ContactFilter2D filter;
+    private static bool filterReady;
+
     public static bool Ray(Vector2 from, Vector2 direction, float distance, out RaycastHit2D hit)
     {
-        foreach (RaycastHit2D h in Physics2D.RaycastAll(from, direction, distance))
+        if (!filterReady)
         {
+            filter = new ContactFilter2D { useTriggers = Physics2D.queriesHitTriggers };
+            filter.SetLayerMask(Physics2D.DefaultRaycastLayers);
+            filterReady = true;
+        }
+        int n = Physics2D.Raycast(from, direction, filter, buffer, distance);
+        hit = default;
+        bool found = false;
+        for (int i = 0; i < n; i++)
+        {
+            RaycastHit2D h = buffer[i];
             if (!IsGround(h.collider)) continue;
             if (h.distance <= 0.0001f && h.collider.usedByEffector) continue; // inside a one-way platform
-            hit = h;
-            return true;
+            if (!found || h.distance < hit.distance) { hit = h; found = true; }
         }
-        hit = default;
-        return false;
+        return found;
     }
 
     public static bool Line(Vector2 a, Vector2 b, out RaycastHit2D hit)
@@ -404,11 +417,9 @@ public static class Blood
         }
         for (int i = 0; i < amount; i++)
         {
-            var go = new GameObject("Blood Drop");
-            go.transform.position = at + (Vector3)Random.insideUnitCircle * 0.08f;
-            var d = go.AddComponent<BloodDrop>();
             float side = Mathf.Abs(dirX) > 0.01f ? Mathf.Sign(dirX) : (Random.value < 0.5f ? -1f : 1f);
-            d.Begin(new Vector2(side * Random.Range(0.4f, 2.6f) + Random.Range(-0.6f, 0.6f), Random.Range(0.6f, 3.2f)));
+            FXPool.BloodDrop(at + (Vector3)Random.insideUnitCircle * 0.08f,
+                             new Vector2(side * Random.Range(0.4f, 2.6f) + Random.Range(-0.6f, 0.6f), Random.Range(0.6f, 3.2f)));
         }
     }
 
@@ -433,42 +444,6 @@ public static class Blood
             drop = Sprite.Create(tex, new Rect(0, 0, 2, 2), new Vector2(0.5f, 0.5f), 64f);
             return drop;
         }
-    }
-}
-
-public class BloodDrop : MonoBehaviour
-{
-    private Vector2 velocity;
-    private float age;
-    private SpriteRenderer sr;
-
-    public void Begin(Vector2 v)
-    {
-        velocity = v;
-        sr = gameObject.AddComponent<SpriteRenderer>();
-        sr.sprite = Blood.DropSprite;
-        sr.sortingLayerName = "Default";
-        sr.sortingOrder = 74;
-        sr.color = Random.value < 0.5f ? Blood.Bright : Blood.Dark;
-        if (ItemArt.Lit != null) sr.sharedMaterial = ItemArt.Lit;
-        if (Random.value < 0.4f) transform.localScale = Vector3.one * 1.5f;
-    }
-
-    private void Update()
-    {
-        float dt = Time.deltaTime;
-        age += dt;
-        if (age > 2.5f) { Destroy(gameObject); return; }
-        velocity.y -= 14f * dt;
-        Vector2 from = transform.position;
-        Vector2 step = velocity * dt;
-        if (velocity.y < 0f && SolidGround.Ray(from, step.normalized, step.magnitude + 0.01f, out RaycastHit2D hit) && hit.normal.y > 0.5f)
-        {
-            BloodPool.Spawn(hit.point, hit.collider, sr.color, hit.normal);
-            Destroy(gameObject);
-            return;
-        }
-        transform.position = from + step;
     }
 }
 

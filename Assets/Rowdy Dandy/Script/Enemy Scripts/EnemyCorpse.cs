@@ -109,9 +109,10 @@ public class EnemyCorpse : MonoBehaviour
         ignored.Clear();
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null) ignored.AddRange(player.transform.root.GetComponentsInChildren<Collider2D>(true));
-        foreach (EnemyHealth other in FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None))
+        foreach (EnemyHealth other in EnemyHealth.All)
         {
-            if (other != health) ignored.AddRange(other.GetComponentsInChildren<Collider2D>(true));
+            if (other != null && other != health && other.gameObject.activeInHierarchy && !other.enemydead)
+                ignored.AddRange(other.GetComponentsInChildren<Collider2D>(true));
         }
         foreach (Collider2D col in ignored) SetIgnore(solidColliders, col, true);
         DeadSolids.AddRange(solidColliders);

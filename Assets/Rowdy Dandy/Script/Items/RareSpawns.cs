@@ -104,9 +104,17 @@ public class FlyingRat : Pickup
         AnimateAura(visible);
 
         // Grab it
+        // Preferences > Auto Pick Up Rats: once Rowdy is near, it flutters straight to him and is grabbed by itself
+        bool auto = GameSettings.AutoPickupRats && rowdy != null && t > 0.6f && !PauseMenu.IsPaused;
+        if (auto && Vector2.Distance(transform.position, rowdy.position + Vector3.up * 0.4f) < 4.5f)
+        {
+            home = Vector3.MoveTowards(home, rowdy.position + Vector3.up * 0.5f, Time.deltaTime * 9f);
+            transform.position = Vector3.MoveTowards(transform.position, rowdy.position + Vector3.up * 0.5f, Time.deltaTime * 6f);
+        }
         bool close = rowdy != null && Vector2.Distance(transform.position, rowdy.position + Vector3.up * 0.4f) < GrabRadius;
-        if (close && !grabbed) GrabbableFrame = Time.frameCount; // cats in reach wait: the rat wins the button
-        promptAlpha = Mathf.MoveTowards(promptAlpha, close && !PauseMenu.IsPaused ? 1f : 0f, Time.deltaTime * 6f);
+        if (close && !grabbed && !auto) GrabbableFrame = Time.frameCount; // cats in reach wait: the rat wins the button
+        promptAlpha = Mathf.MoveTowards(promptAlpha, close && !auto && !PauseMenu.IsPaused ? 1f : 0f, Time.deltaTime * 6f);
+        if (close && auto) { Grab(); return; }
         if (close && t > 0.6f && !PauseMenu.IsPaused && GameInput.Down(GameInput.Act.Interact)) Grab();
     }
 

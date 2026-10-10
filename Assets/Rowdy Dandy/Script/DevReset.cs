@@ -44,10 +44,12 @@ public class DevReset : MonoBehaviour
         ShamanAltars.ResetSaved();
         Boons.ClearAll();
         Encore.ResetAll();
+        FrontierArena.ResetAllProgress(); // colosseum clears / seals / wins / gates were never wiped before
         PlayerPrefs.Save();
 
         RunStats.ResetAll();
         CatRoster.ClearAll();
+        DayNight.ResetToMorningOnNextLoad(); // a fresh start is a sunny one
 
         Debug.Log("<color=orange>[DevReset]</color> All progress wiped (level, EXP, weapons, notes, stats, cats). Reloading.");
         Scene scene = SceneManager.GetActiveScene();

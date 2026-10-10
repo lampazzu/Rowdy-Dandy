@@ -46,7 +46,14 @@ public static class BoonArtSetup
         changed |= Fill(ref art.sparkBurst, NewStuff + "FX_DeckFix_Upgrade.png");
         changed |= Fill(ref art.groundPound, NewStuff + "FX_GroundPound.png");
         changed |= Fill(ref art.pinkWave, "Assets/Misc/Test/testWave.png");
-        changed |= Fill(ref art.flora, "Assets/Scenery/Assets/RDR_Flowers.png");
+        // found by name: the Scenery folders get reorganized (Level Editing > Organize Scenery Folders)
+        string flowers = "Assets/Scenery/Assets/RDR_Flowers.png";
+        foreach (string g in AssetDatabase.FindAssets("RDR_Flowers t:Texture2D", new[] { "Assets/Scenery" }))
+        {
+            string path = AssetDatabase.GUIDToAssetPath(g);
+            if (System.IO.Path.GetFileName(path) == "RDR_Flowers.png") { flowers = path; break; }
+        }
+        changed |= Fill(ref art.flora, flowers);
 
         // the Crazy Chef's food (.aseprite files: the sprite inside each)
         string[] foods = { "ovo", "pao", "tomate", "guejo", "armondega", "arface" };

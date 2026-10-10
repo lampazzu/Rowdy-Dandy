@@ -280,10 +280,68 @@ public static class Boons
         OpenNotBefore = Mathf.Max(OpenNotBefore, Time.unscaledTime + 1.35f);
     }
 
+    // ---------------------------------------------------------------- the Sun God's COME TO THE LIGHT
+    // The boons that only work (or work better) at night
+    public static readonly string[] NightIds = { "moonrage", "silverfur", "wolfpack", "eclipse" };
+
+    public static int NightBoonCount
+    {
+        get
+        {
+            int n = 0;
+            foreach (string id in NightIds) if (Has(id)) n++;
+            return n;
+        }
+    }
+
+    // Every night boon goes; for each one a Sun boon arrives at its rarity (a new one where possible - passives or
+    // empty slots first - else an upgrade of one he has). Returns what came in, for the popups.
+    public static List<BoonDef> TradeNightForSun()
+    {
+        if (owned == null) Load();
+        var got = new List<BoonDef>();
+        foreach (string id in NightIds)
+        {
+            if (!owned.TryGetValue(id, out Rarity r)) continue;
+            owned.Remove(id);
+            order.Remove(id);
+            if (r == Rarity.Duo) r = Rarity.Epic;
+
+            BoonDef pick = null;
+            var fresh = new List<BoonDef>();
+            var anySlot = new List<BoonDef>();
+            foreach (BoonDef d in BoonCatalog.All)
+            {
+                if (d.IsDuo || d.patron != Patron.Sun || d.legendaryOnly || Has(d.id)) continue;
+                anySlot.Add(d);
+                if (d.slot == BoonSlot.Passive || InSlot(d.slot) == null) fresh.Add(d);
+            }
+            if (fresh.Count > 0) pick = fresh[Random.Range(0, fresh.Count)];
+            else if (anySlot.Count > 0) pick = anySlot[Random.Range(0, anySlot.Count)];
+            if (pick != null)
+            {
+                BoonDef current = InSlot(pick.slot);
+                if (current != null && current != pick) { owned.Remove(current.id); order.Remove(current.id); }
+                owned[pick.id] = r;
+                order.Add(pick.id);
+                got.Add(pick);
+                continue;
+            }
+            // every Sun boon owned already: the weakest one goes up a rarity
+            BoonDef low = null;
+            foreach (BoonDef d in BoonCatalog.All)
+                if (!d.IsDuo && d.patron == Patron.Sun && !d.legendaryOnly && Has(d.id) && owned[d.id] < Rarity.Legendary && (low == null || owned[d.id] < owned[low.id])) low = d;
+            if (low != null) { owned[low.id] = (Rarity)Mathf.Min((int)Rarity.Legendary, (int)owned[low.id] + 1); got.Add(low); }
+        }
+        Save();
+        return got;
+    }
+
     // ---------------------------------------------------------------- offers
     private static bool Eligible(BoonDef d)
     {
         if (d.condition != null && !d.condition()) return false;
+        if (Has("cometothelight") && System.Array.IndexOf(NightIds, d.id) >= 0) return false; // the night is gone for good
         if (d.IsDuo)
         {
             if (Has(d.id)) return false;
@@ -427,8 +485,8 @@ public static class Boons
     }
 
     // Day / night boons (Eclipse: both, all the time)
-    public static bool NightBoons => DayNight.IsNight || Has("eclipse");
-    public static bool DayBoons => !DayNight.IsNight || Has("eclipse");
+    public static bool NightBoons => !Has("cometothelight") && (DayNight.IsNight || Has("eclipse"));
+    public static bool DayBoons => !DayNight.IsNight || Has("eclipse") || Has("cometothelight");
 
     // Everything that scales Rowdy's own hits (not cats)
     public static float OutgoingMultiplier
@@ -572,6 +630,20 @@ public static class Boons
             if (Has("forgefire")) cost *= 0.75f;
             if (Has("rustededge")) cost *= 0.9f;
             return cost;
+        }
+    }
+
+    // The same modifiers as a steady factor, for held moves that wear the weapon over time (Onrush, Dizzy Fighter)
+    public static float DurabilityRate
+    {
+        get
+        {
+            if (Werewolf.Active || StephmossForm.Active || Has("gearedup")) return 0f;
+            float rate = Has("weaponsnob") ? 2f : 1f;
+            if (Has("tempered")) rate *= 1f - V("tempered", 0) / 100f;
+            if (Has("forgefire")) rate *= 0.75f;
+            if (Has("rustededge")) rate *= 0.9f;
+            return rate;
         }
     }
 

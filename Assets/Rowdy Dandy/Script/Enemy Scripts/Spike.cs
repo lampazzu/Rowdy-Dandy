@@ -39,6 +39,11 @@ public class Spike : MonoBehaviour
 
     // The hit's damage under the current balance (Jarvis: per enemy + per zone; Lamp: the Inspector value)
     private float Damage => Balance.EnemyDamage(this, owner, damage);
+    public float ShotDamage => Damage;
+
+    // Arrows and bombs (flying shots, not a fighter's own hitbox): the Meat Shield can bounce these back
+    private bool bounced;
+    private bool IsShot => isFrecha || (GetComponent<ConstantForce2D>() != null && GetComponentInParent<EnemyMovement>() == null);
 
     // Contact box on an enemy that kicks off its attack animation (not arrows / bombs / attack hitboxes)
     private bool IsAttackStarter => telegraphContact && bornWithOwner && anima != null && !isFrecha && owner != null;
@@ -51,9 +56,11 @@ public class Spike : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (bounced) return;
         // Check if the object colliding has the "Player" tag
         if (collision.CompareTag("Player"))
         {
+            if (IsShot && WeaponTricks.TryRicochet(this)) { bounced = true; return; } // Meat Shield up: it flies back
             if (IsAttackStarter)
             {
                 if (!pending) TryTelegraphedAttack(collision);
