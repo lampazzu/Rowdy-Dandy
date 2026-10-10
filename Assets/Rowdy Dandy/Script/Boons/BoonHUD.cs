@@ -162,13 +162,15 @@ public class BoonHUD : MonoBehaviour
     private void UpdateMoon()
     {
         // the Special slot's meter: Call of the Moon (werewolf) or Stephmoss (the poison patron's form)
+        // ...or the Chef's Ingredient Rain / the Blacksmith's Armory (SpecialBoons)
         bool steph = Boons.Has("stephmoss");
-        bool has = Boons.Has("moon") || steph;
-        bool active = steph ? StephmossForm.Active : Werewolf.Active;
-        bool readyNow = steph ? StephmossForm.Ready : Werewolf.Ready;
-        float charge = steph ? StephmossForm.Charge01 : Werewolf.Charge01;
-        float left = steph ? StephmossForm.TimeLeft01 : Werewolf.TimeLeft01;
-        Color tone = steph ? new Color(0.75f, 1f, 0.25f) : new Color(1f, 0.2f, 0.3f);
+        bool other = SpecialBoons.Owned;
+        bool has = Boons.Has("moon") || steph || other;
+        bool active = other ? SpecialBoons.Active : steph ? StephmossForm.Active : Werewolf.Active;
+        bool readyNow = other ? SpecialBoons.Ready : steph ? StephmossForm.Ready : Werewolf.Ready;
+        float charge = other ? SpecialBoons.Charge01 : steph ? StephmossForm.Charge01 : Werewolf.Charge01;
+        float left = other ? SpecialBoons.TimeLeft01 : steph ? StephmossForm.TimeLeft01 : Werewolf.TimeLeft01;
+        Color tone = other ? SpecialBoons.Tone : steph ? new Color(0.75f, 1f, 0.25f) : new Color(1f, 0.2f, 0.3f);
         moonFill.enabled = has;
         moonGlow.enabled = has;
         moonText.gameObject.SetActive(has);
@@ -199,7 +201,7 @@ public class BoonHUD : MonoBehaviour
             moonButton.sprite = ButtonIcons.Get(GameInput.IconId(GameInput.Act.Werewolf));
             moonButton.rectTransform.sizeDelta = ButtonIcons.UISize(moonButton.sprite, 2);
         }
-        moonText.SetText(active ? (steph ? "BUG!" : "WOLF!") : ready ? "FULL!" : Mathf.FloorToInt(charge * 100f) + "%");
+        moonText.SetText(active ? (other ? SpecialBoons.ActiveLabel : steph ? "BUG!" : "WOLF!") : ready ? "FULL!" : Mathf.FloorToInt(charge * 100f) + "%");
         moonText.Color = active || ready ? new Color(tone.r, Mathf.Min(1f, tone.g * 0.6f + 0.3f * pulse + 0.2f), tone.b + 0.2f) : new Color(0.85f, 0.8f, 0.95f);
     }
     // ---------------------------------------------------------------- the BUILD panel (with the stats screen)

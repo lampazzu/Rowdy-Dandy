@@ -182,11 +182,13 @@ public class WeaponManager : MonoBehaviour
         if (GameInput.KeyDown(KeyCode.Alpha9) && unlockedWeapons[2]) SetWeaponToNaginata();
         // (0 used to pick the Cleaver; it's the dev "reset everything" key now, see DevReset)
 
-        // Q on keyboard (was Left Ctrl), L1 / LB on gamepad
-        if (GameInput.Down(GameInput.Act.SwitchWeapon))
+        // Q on keyboard (was Left Ctrl), L1 / LB on gamepad (not as a werewolf: claws only; not with Just The Rod)
+        if (GameInput.Down(GameInput.Act.SwitchWeapon) && !Werewolf.Active && !StephmossForm.Active && !Boons.Has("justrod"))
         {
             CycleWeapon();
         }
+        if (Boons.Has("justrod") && GetActiveWeaponIndex() != 0) SetWeaponToAxe(); // Just The Rod, Please.
+        UpdateSharpBar();
 
         // attack clip speeds per weapon, x Whetstone (the Blacksmith's attack speed boon)
         float haste = Boons.AttackSpeedMultiplier;
@@ -310,6 +312,9 @@ public class WeaponManager : MonoBehaviour
     public void PickupWeapon(WeaponType type, float durabilityMax, AudioClip equipSound = null, float equipVolume = 1f)
     {
         int index = GetIndexFromType(type);
+        // Sharp Weapons: what would go past full durability becomes sharpening (more damage, wears off fast)
+        if (index > 0 && Boons.Has("sharp") && unlockedWeapons[index] && currentDurability[index] > 0f && maxDurability[index] > 0f)
+            WeaponSharpness.Add(index, currentDurability[index] / maxDurability[index]);
         unlockedWeapons[index] = true;
         RowdyNotes.MarkWeaponFound(index); // unlocks its Weapon Notes page
         durabilityMax *= Boons.PickupDurabilityMultiplier; // Tempered Steel
@@ -332,6 +337,45 @@ public class WeaponManager : MonoBehaviour
     }
 
     public bool IsUnlocked(WeaponType type) => unlockedWeapons[GetIndexFromType(type)];
+
+    // Claw Sharpener: a cat attack puts a little durability back on the weapon in his hands (never past full)
+    public void RepairActive(float amount)
+    {
+        int i = GetActiveWeaponIndex();
+        if (i == 0 || maxDurability[i] <= 0f) return;
+        currentDurability[i] = Mathf.Min(maxDurability[i], currentDurability[i] + amount);
+        UpdateDurabilityUI();
+    }
+
+    // Sharp Weapons: a white-hot copy of the durability bar on top of it shows the sharpening
+    private Image sharpBar;
+    private void UpdateSharpBar()
+    {
+        if (durabilityBarImage == null) return;
+        float s = WeaponSharpness.Fraction(GetActiveWeaponIndex());
+        if (sharpBar == null)
+        {
+            if (s <= 0f) return;
+            var go = new GameObject("Sharpening", typeof(RectTransform), typeof(Image));
+            RectTransform r = (RectTransform)go.transform, src = durabilityBarImage.rectTransform;
+            r.SetParent(src.parent, false);
+            r.SetSiblingIndex(src.GetSiblingIndex() + 1);
+            r.anchorMin = src.anchorMin; r.anchorMax = src.anchorMax; r.pivot = src.pivot;
+            r.anchoredPosition = src.anchoredPosition; r.sizeDelta = src.sizeDelta; r.localScale = src.localScale;
+            sharpBar = go.GetComponent<Image>();
+            sharpBar.sprite = durabilityBarImage.sprite;
+            sharpBar.type = Image.Type.Filled;
+            sharpBar.fillMethod = durabilityBarImage.fillMethod;
+            sharpBar.fillOrigin = durabilityBarImage.fillOrigin;
+            sharpBar.raycastTarget = false;
+        }
+        bool show = s > 0.001f && durabilityBarImage.gameObject.activeInHierarchy;
+        sharpBar.enabled = show;
+        if (!show) return;
+        sharpBar.fillAmount = s;
+        float shimmer = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 10f);
+        sharpBar.color = new Color(0.75f + 0.25f * shimmer, 0.95f, 1f, 0.9f);
+    }
 
     // In his hands now (WeaponBoons: a respawn with the boon weapon)
     public void Equip(WeaponType type)

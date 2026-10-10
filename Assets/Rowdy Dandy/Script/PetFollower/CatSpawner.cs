@@ -78,6 +78,9 @@ public static class CatSpawner
         for (int i = 0; i < free.Count; i++) Make(bag[i], free[i]);
     }
 
+    // Cat Loyalty: a brand new cat of a random type (when no cat is left out in the level to call)
+    public static PetFollower MakeRandom(Vector3 at) => Make(Cats[Random.Range(0, Cats.Length)].type, at);
+
     private static PetFollower Make(PetFollower.CatType type, Vector3 home)
     {
         foreach (var c in Cats)

@@ -55,7 +55,7 @@ public static class Balance
         { "sharkwolf",      new EnemyStats(90f,   0.6f) },  // Lamp 50 HP, 30 per bite from out of the water
         { "pelich",         new EnemyStats(2000f, 1.3f) },  // Lamp 5000 (scene override; PelichBoss code says 600) - ~55 hits at level 8 here
         { "moonboundelder", new EnemyStats(900f,  1f)   },  // Lamp 450
-        { "voltrat",        new EnemyStats(30f,   1f)   },  // The Frontier's electric rats (new)
+        { "voltrat",        new EnemyStats(30f,   0.45f) }, // the Red Jelly (2026-10-10: x1 hit way too hard for something you can't parry)
     };
 
     // Deeper = tougher. Pelich's zone is his arena, bosses skip this.

@@ -17,7 +17,7 @@ public static class Boons
     private const string RerollKey = "RD_BoonRerolls";
     private const string FirstOfferKey = "RD_BoonFirstOffer";
     private const string GrantsKey = "RD_BoonGrants";
-    private const string UnlockKey = "RD_BoonsUnlocked";
+    private const string UnlockKey = "RD_BoonsUnlocked2"; // (v1 was set just by walking near the arena: ignored now)
 
     public struct Offer
     {
@@ -61,10 +61,11 @@ public static class Boons
             return PlayerPrefs.GetInt(GrantsKey, 0);
         }
     }
-    public static int PendingPicks => Mathf.Max(0, Grants - Picks);
+    public static int PendingPicks => Unlocked || ArenaRun.InTrial ? Mathf.Max(0, Grants - Picks) : 0; // locked: old picks wait
 
-    // Boons are locked in the tutorial area: they unlock the first time Rowdy reaches a colosseum
-    public static bool Unlocked => PlayerPrefs.GetInt(UnlockKey, 0) == 1 || PlayerPrefs.GetInt("RD_FrontierClears", 0) > 0;
+    // Boons are locked until Rowdy rings a colosseum gong for the first time (walking near one is not enough).
+    // The dev reset / Clear Boons lock them again.
+    public static bool Unlocked => PlayerPrefs.GetInt(UnlockKey, 0) == 1;
     public static void Unlock()
     {
         if (PlayerPrefs.GetInt(UnlockKey, 0) == 1) return;
@@ -115,8 +116,7 @@ public static class Boons
                 if (BoonCatalog.Retired.Contains(parts[0])) refunds++; // a boon that left the game: the pick comes back
                 continue;
             }
-            int r = parts.Length > 1 && int.TryParse(parts[1], out int v) ? v : 0;
-            owned[parts[0]] = (Rarity)Mathf.Clamp(r, 0, 4);
+            owned[parts[0]] = ParseRarity(parts.Length > 1 ? parts[1] : "");
             if (!order.Contains(parts[0])) order.Add(parts[0]);
         }
         if (refunds > 0)
@@ -126,10 +126,28 @@ public static class Boons
         }
     }
 
+    // Saved as a letter (C U R E L D). Older saves wrote numbers from the 4-tier days: 0 common, 1 rare, 2 epic, 3 legendary, 4 duo.
+    private const string RarityLetters = "CUREL D";
+    private static Rarity ParseRarity(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return Rarity.Common;
+        if (int.TryParse(s, out int old)) return old <= 0 ? Rarity.Common : old == 1 ? Rarity.Rare : old == 2 ? Rarity.Epic : old == 3 ? Rarity.Legendary : Rarity.Duo;
+        switch (s[0])
+        {
+            case 'U': return Rarity.Uncommon;
+            case 'R': return Rarity.Rare;
+            case 'E': return Rarity.Epic;
+            case 'L': return Rarity.Legendary;
+            case 'D': return Rarity.Duo;
+            default: return Rarity.Common;
+        }
+    }
+    private static char RarityLetter(Rarity r) => r == Rarity.Duo ? 'D' : RarityLetters[Mathf.Clamp((int)r, 0, 4)];
+
     private static void Save()
     {
         var sb = new System.Text.StringBuilder();
-        foreach (string id in order) sb.Append(id).Append(':').Append((int)owned[id]).Append(';');
+        foreach (string id in order) sb.Append(id).Append(':').Append(RarityLetter(owned[id])).Append(';');
         PlayerPrefs.SetString(OwnedKey, sb.ToString());
         PlayerPrefs.Save();
     }
@@ -144,6 +162,9 @@ public static class Boons
             owned.Remove(o.replaces.id);
             order.Remove(o.replaces.id);
         }
+        // boons that can't be owned together with this one leave (Geared Up / Weapon Snob / Just The Rod, Onrush / Skewer)
+        if (o.def.excludes != null)
+            foreach (string x in o.def.excludes) { owned.Remove(x); order.Remove(x); }
         owned[o.def.id] = o.rarity;
         if (!order.Contains(o.def.id)) order.Add(o.def.id);
         PlayerPrefs.SetInt(PicksKey, Picks + 1);
@@ -182,6 +203,7 @@ public static class Boons
         PlayerPrefs.DeleteKey(RerollKey);
         PlayerPrefs.DeleteKey(FirstOfferKey);
         PlayerPrefs.DeleteKey(GrantsKey);
+        PlayerPrefs.DeleteKey(UnlockKey);
         PlayerPrefs.Save();
         Werewolf.ResetCharge();
     }
@@ -197,6 +219,7 @@ public static class Boons
         PlayerPrefs.Save();
         Werewolf.ResetCharge();
         StephmossForm.ResetCharge();
+        SpecialBoons.ResetCharge();
     }
 
     // The build as one string (colosseum seals save it) and back
@@ -217,7 +240,7 @@ public static class Boons
     }
 
     // Dev tools: offer one more pick right now
-    public static void DevOfferPick() => Grant(1);
+    public static void DevOfferPick() { Unlock(); Grant(1); }
 
     // Dev tools > Get Specific Boon: takes this boon right now (replacing whatever is in its slot, like a real pick).
     // Granted and taken together, so it doesn't eat a pick you're owed.
@@ -280,8 +303,10 @@ public static class Boons
         if (d.IsDuo) return Rarity.Duo;
         float luck = DropLuck.Bonus; // ore gems nudge rarities up a little
         float r = Random.value;
-        if (r < 0.1f + luck * 0.06f) return Rarity.Epic;
-        if (r < 0.38f + luck * 0.1f) return Rarity.Rare;
+        if (r < 0.03f + luck * 0.02f) return Rarity.Legendary;
+        if (r < 0.11f + luck * 0.05f) return Rarity.Epic;
+        if (r < 0.28f + luck * 0.08f) return Rarity.Rare;
+        if (r < 0.55f + luck * 0.1f) return Rarity.Uncommon;
         return Rarity.Common;
     }
 
@@ -298,7 +323,7 @@ public static class Boons
             foreach (BoonDef d in BoonCatalog.All)
             {
                 if (d.IsDuo || d.patron != p || usedBoons.Contains(d.id) || !Eligible(d)) continue;
-                if (Has(d.id) && (d.legendaryOnly || RarityOf(d.id) >= Rarity.Epic)) continue;
+                if (Has(d.id) && (d.legendaryOnly || RarityOf(d.id) >= Rarity.Legendary)) continue;
                 c.Add(d);
             }
             return c;
@@ -357,7 +382,7 @@ public static class Boons
             foreach (BoonDef d in BoonCatalog.All)
             {
                 if (d.IsDuo || d.slot != BoonSlot.Passive || !Eligible(d) || result.Exists(o => o.def == d)) continue;
-                if (Has(d.id) && (d.legendaryOnly || RarityOf(d.id) >= Rarity.Epic)) continue;
+                if (Has(d.id) && (d.legendaryOnly || RarityOf(d.id) >= Rarity.Legendary)) continue;
                 passives.Add(d);
             }
             if (passives.Count > 0)
@@ -378,11 +403,13 @@ public static class Boons
         {
             o.upgrade = true;
             o.oldRarity = RarityOf(d.id);
-            if (o.rarity <= o.oldRarity) o.rarity = (Rarity)Mathf.Min((int)o.oldRarity + 1, (int)Rarity.Epic);
+            if (o.rarity <= o.oldRarity) o.rarity = (Rarity)Mathf.Min((int)o.oldRarity + 1, (int)Rarity.Legendary);
         }
         else
         {
             BoonDef current = InSlot(d.slot);
+            if (current == null && d.excludes != null) // a passive that can't live next to one you own: that one goes
+                foreach (string x in d.excludes) if (Has(x)) { current = BoonCatalog.Get(x); break; }
             if (current != null) { o.replaces = current; o.replacesRarity = RarityOf(current.id); }
         }
         return o;
@@ -435,6 +462,23 @@ public static class Boons
         return m;
     }
 
+    // Rowdy's weapon hits only (not boon effects): Hook Line And Sinker x2 rod, Just The Rod x5, Geared Up, Sharp Weapons
+    public static float WeaponMultiplier
+    {
+        get
+        {
+            if (Werewolf.Active || StephmossForm.Active) return 1f;
+            float m = 1f;
+            int w = ActiveWeapon;
+            if (w == 0 && Has("hookline")) m *= 2f;
+            if (w == 0 && Has("justrod")) m *= V("justrod", 0);
+            if (w > 0 && Has("gearedup")) m *= 1f + V("gearedup", 0) / 100f;
+            if (w > 0) m *= 1f + WeaponSharpness.Bonus01(w); // Sharp Weapons: +1% per 1% of sharpening
+            if (BoonRunner.InCriticSpotlight) m *= 1.3f;     // Food Critic
+            return m;
+        }
+    }
+
     // 0 Rod, 1 Sword, 2 Naginata, 3 Cleaver
     public static int ActiveWeapon => WeaponManager.Instance != null ? WeaponManager.Instance.GetActiveWeaponIndex() : 0;
 
@@ -461,6 +505,7 @@ public static class Boons
             if (Has("packleader")) m *= 1f + V("packleader", 0) / 100f;
             if (Has("catfood")) m *= 1.4f;
             if (CatsFeral) m *= 2f;
+            if (Has("catloyalty")) m *= 1f + V("catloyalty", 0) / 100f;
             return m;
         }
     }
@@ -480,6 +525,7 @@ public static class Boons
             float m = 1f;
             if (Has("catnip")) m *= 1f - V("catnip", 0) / 100f;
             if (CatsFeral) m *= 0.5f;
+            if (Has("sunbathing") && DayBoons) m *= 0.8f;
             return m;
         }
     }
@@ -520,10 +566,11 @@ public static class Boons
     {
         get
         {
-            if (Werewolf.Active || StephmossForm.Active) return 0f;
+            if (Werewolf.Active || StephmossForm.Active || Has("gearedup")) return 0f;
             if (Has("tempered") && Random.value < V("tempered", 0) / 100f) { BoonRunner.OnDurabilitySaved(); return 0f; }
             float cost = Has("weaponsnob") ? 2f : 1f;
             if (Has("forgefire")) cost *= 0.75f;
+            if (Has("rustededge")) cost *= 0.9f;
             return cost;
         }
     }
@@ -532,7 +579,7 @@ public static class Boons
     public static float PickupDurabilityMultiplier => Has("tempered") ? 1.25f : 1f;
 
     // Secret Sauce: every heal is bigger
-    public static float HealMultiplier => Has("secretsauce") ? 1f + V("secretsauce", 0) / 100f : 1f;
+    public static float HealMultiplier => (Has("secretsauce") ? 1f + V("secretsauce", 0) / 100f : 1f) * (Has("satisfied") ? 1f + V("satisfied", 0) / 100f : 1f);
 
     // Moon Feast: the moon meter fills faster. Eclipse: always at the night rate
     public static float MoonChargeMultiplier => (Has("feast") ? 1f + V("feast", 0) / 100f : 1f) * (Has("eclipse") || DayNight.IsNight ? 2f : 1f);

@@ -299,8 +299,8 @@ public class CatParty : MonoBehaviour
         else if (c != null && c.candidate) s = "{MOVE} SELECT     {OK} " + (CatRoster.HasRoom ? "TAKE" : "TAKE (SWAP)") + "     {BACK} CLOSE";
         else if (c != null && c.pet != null)
         {
-            string rank = CatRoster.IsLeader(c.pet) ? "UNCROWN" : CatRoster.IsSubLeader(c.pet) ? "MAKE LEADER"
-                : CatRoster.SubLeaderUnlocked && CatRoster.Leader != null ? "SUB-LEADER" : "LEADER";
+            string rank = CatRoster.IsLeader(c.pet) || CatRoster.IsSubLeader(c.pet) ? "UNCROWN"
+                : CatRoster.SubLeaderUnlocked && CatRoster.Leader != null && CatRoster.SubLeader == null ? "SUB-LEADER" : "LEADER";
             s = "{MOVE} SELECT     {OK} MOVE     {INTERACT} " + rank + "     {ATTACK} KICK     {BACK} CLOSE";
         }
         else s = "{MOVE} SELECT     {BACK} CLOSE";
@@ -476,9 +476,9 @@ public class CatParty : MonoBehaviour
         UISound.Play(UISound.Cue.Move);
     }
 
-    // {INTERACT} cycles the rank. Before level 10: none -> LEADER -> none.
-    // From level 10 (sub-leader unlocked), with a leader already picked: none -> SUB-LEADER -> LEADER (the old leader
-    // steps down to sub) -> none. Ranked cats jump to the front of the line (1st leader, 2nd sub-leader).
+    // {INTERACT} on a ranked cat UNCROWNS it (leader or sub-leader). On another cat: LEADER if there's none, else
+    // SUB-LEADER if that place is free (level 10+), else it becomes the LEADER and the old leader steps down to sub.
+    // Ranked cats jump to the front of the line (1st leader, 2nd sub-leader).
     private void Crown(Card c)
     {
         PetFollower pet = c.pet;
@@ -490,14 +490,19 @@ public class CatParty : MonoBehaviour
         }
         else if (CatRoster.IsSubLeader(pet))
         {
-            PetFollower old = CatRoster.Leader;
-            CatRoster.SetLeader(pet);
-            if (old != null) CatRoster.SetSubLeader(old);
+            CatRoster.SetSubLeader(null); // uncrowned: the sub-leader slot stays empty until you crown someone
+            promoted = false;
+        }
+        else if (CatRoster.SubLeaderUnlocked && CatRoster.Leader != null && CatRoster.SubLeader == null)
+        {
+            CatRoster.SetSubLeader(pet);
             promoted = true;
         }
         else if (CatRoster.SubLeaderUnlocked && CatRoster.Leader != null)
         {
-            CatRoster.SetSubLeader(pet);
+            PetFollower old = CatRoster.Leader; // both taken: this one is the new leader, the old leader steps down to sub
+            CatRoster.SetLeader(pet);
+            CatRoster.SetSubLeader(old);
             promoted = true;
         }
         else

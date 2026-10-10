@@ -46,8 +46,12 @@ public class PlayerDamage : MonoBehaviour
 
     private bool isKillZone, isRowdys;
 
+    // Wig's scratch: +2 at level 1, +2.5 for every level after (level 10: +24.5 per scratch)
+    public static float WigLevelBonus => 2f + 2.5f * Mathf.Max(0, PlayerStats.Level - 1);
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (isRowdys && (Werewolf.Active || StephmossForm.Active)) return; // transformed: the form's own attacks do the hitting
         if (collision.CompareTag("Enemy") && !alreadyDamagedEnemies.Contains(collision))
         {
             EnemyHealth enemy = collision.GetComponent<EnemyHealth>();
@@ -57,7 +61,14 @@ public class PlayerDamage : MonoBehaviour
                 float finalDamage = CalculateTotalDamage(out bool isCrit);
                 bool rowdyHit = isRowdys;
                 if (rowdyHit) finalDamage = BoonRunner.ModifyRowdyHit(enemy, finalDamage, ref isCrit); // boons: damage multipliers, Admire Yourself
-                else if (owningCat != null) finalDamage *= Boons.CatDamageFor(owningCat);           // Pack Leader, Wolf Pack, Top Cat
+                else if (owningCat != null)
+                {
+                    if (owningCat.Type == PetFollower.CatType.Wig) finalDamage += WigLevelBonus; // Wig grows with Rowdy (best buddy)
+                    finalDamage *= Boons.CatDamageFor(owningCat);                                // Pack Leader, Wolf Pack, Top Cat
+                    if (Boons.Has("fishingcats") && BoonFX.InWater(enemy)) finalDamage *= 2f;   // Fishing Cats
+                    // Claw Sharpener: Wig's scratches can crit (15%, x1.75)
+                    if (owningCat.Type == PetFollower.CatType.Wig && Boons.Has("clawsharpener") && Random.value < 0.15f) { finalDamage *= 1.75f; isCrit = true; }
+                }
                 EnemyHealth.CreditNextHit(owningCat != null ? KillCredit.Cat(owningCat) : isKillZone ? KillCredit.Drowning() : KillCredit.Rowdy());
                 enemy.TakeDamageEnemy(finalDamage, isCrit);
                 if (owningCat == null && !isKillZone) RowdyBuffs.OnRowdyHit(enemy); // Paprika's poison imbue

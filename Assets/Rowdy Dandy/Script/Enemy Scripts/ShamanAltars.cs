@@ -150,7 +150,6 @@ public class ShamanAltars : MonoBehaviour
         if (s.enemydead) { Fall(a); return; }
         if (a.awake || Vector2.Distance(rowdy, s.transform.position) > 7f) return;
         a.awake = true;
-        Banner.Show(a.label, null, Spirit, 1.6f);
         FXSound.Play("SmokePoof", 0.6f, 0.7f);
         Altar other = altars[0] == a ? altars[1] : altars[0];
         if (other != null && !other.dead && other.shaman != null)
@@ -173,7 +172,7 @@ public class ShamanAltars : MonoBehaviour
             PulseRing.Spawn(a.pillar.position + Vector3.up * 1f, new Color(1f, 0.6f, 0.3f, 1f), 2.2f, 0.5f);
         }
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sunBeam : null, 0.5f, 0.9f);
-        Banner.Show(down == 2 ? "THE PILLAR OF DANDY OPENS" : "ALTAR " + down + " / 2 BROKEN", null, new Color(1f, 0.7f, 0.35f), 2f);
+        if (down < 2) Banner.Show("ALTAR " + down + " / 2 BROKEN", null, new Color(1f, 0.7f, 0.35f), 2f); // both down: no words, the gate just opens
         if (down == 2) StartCoroutine(OpenGate());
     }
 

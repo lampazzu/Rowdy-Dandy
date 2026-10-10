@@ -90,9 +90,8 @@ public class RowdyNotes : MonoBehaviour
         if (entry.fallbackPortrait == null && entry.Portrait == null) entry.fallbackPortrait = KillFeed.HeadCropOf(enemy);
         MarkSeen(entry);
 
-        bool wasRevealed = CounterRevealed(entry);
         PlayerPrefs.SetInt(KillsKey(entry.id), Kills(entry) + 1);
-        if (!wasRevealed && CounterRevealed(entry)) Toast("COUNTER REVEALED", entry.name, entry.Portrait);
+        // (the counter just shows up on its page with NEW: toasts are only for discovering something new)
     }
 
     public static void MarkSeen(EnemyCatalog.Entry entry)

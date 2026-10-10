@@ -233,6 +233,7 @@ public class WeaponDrop : MonoBehaviour
         AnimateVisuals();
 
         // Same weapon as the one in Rowdy's hands: just walking over it repairs it
+        if (Boons.Has("justrod")) return; // Just The Rod, Please.: other weapons stay on the floor
         if (playerIsClose && autoRepairSameWeapon && !pickedUp && !PauseMenu.IsPaused)
         {
             WeaponManager hands = WeaponManager.Instance;
@@ -315,7 +316,7 @@ public class WeaponDrop : MonoBehaviour
         {
             promptRenderer.sprite = GetInteractPrompt();
 
-            promptAlpha = Mathf.MoveTowards(promptAlpha, playerIsClose && !PauseMenu.IsPaused ? 1f : 0f, Time.deltaTime * 6f);
+            promptAlpha = Mathf.MoveTowards(promptAlpha, playerIsClose && !PauseMenu.IsPaused && !Boons.Has("justrod") ? 1f : 0f, Time.deltaTime * 6f);
             promptRenderer.color = new Color(1f, 1f, 1f, promptAlpha);
             promptRenderer.enabled = promptAlpha > 0f;
 

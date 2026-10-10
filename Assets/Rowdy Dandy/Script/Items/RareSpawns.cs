@@ -10,6 +10,9 @@ public class FlyingRat : Pickup
     private const float PixelsPerUnit = 64f;
     private const float Lifetime = 32f;
     private const float GrabRadius = 1.4f;
+    // A legendary rat is in Rowdy's reach (this frame or the last): the interact button picks the rat up, not a cat
+    private static int GrabbableFrame = -10;
+    public static bool InReach => Time.frameCount - GrabbableFrame <= 1;
     private static readonly Color Gold = new Color(1f, 0.82f, 0.25f, 1f);
     private static Sprite beamSprite;
 
@@ -102,6 +105,7 @@ public class FlyingRat : Pickup
 
         // Grab it
         bool close = rowdy != null && Vector2.Distance(transform.position, rowdy.position + Vector3.up * 0.4f) < GrabRadius;
+        if (close && !grabbed) GrabbableFrame = Time.frameCount; // cats in reach wait: the rat wins the button
         promptAlpha = Mathf.MoveTowards(promptAlpha, close && !PauseMenu.IsPaused ? 1f : 0f, Time.deltaTime * 6f);
         if (close && t > 0.6f && !PauseMenu.IsPaused && GameInput.Down(GameInput.Act.Interact)) Grab();
     }

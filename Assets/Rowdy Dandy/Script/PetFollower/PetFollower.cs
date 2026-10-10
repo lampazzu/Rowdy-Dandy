@@ -187,6 +187,14 @@ public class PetFollower : MonoBehaviour
         if (!isExecuting) { canAttack = true; cooldownEnd = Time.time; }
     }
 
+    // Cat Call on a cat that isn't leader / sub-leader: a fraction of its full cooldown comes off what is left
+    public void CutCooldown(float fraction)
+    {
+        if (isExecuting || cooldownEnd <= Time.time || cooldownEnd == float.MaxValue) return;
+        cooldownEnd = Mathf.Max(Time.time, cooldownEnd - Cooldown * fraction);
+        BoonFX.Sparkles(transform.position, BoonFX.Lavender, 1, 0.15f, 0.4f);
+    }
+
     private bool abilityRunning;
 
     // For CatVisibility (glow while it acts, off-screen markers) and the Cat Party menu
@@ -203,7 +211,7 @@ public class PetFollower : MonoBehaviour
         {
             // ability cats show what their buff has left while it's on
             if (catType == CatType.Lallo && RowdyBuffs.DecayArmedBy == this) return 1f;
-            if (catType == CatType.Peak && RowdyBuffs.ShieldOwner == this) return RowdyBuffs.ShieldCharges / (float)RowdyBuffs.ArmorHits;
+            if (catType == CatType.Peak && RowdyBuffs.ShieldOwner == this) return RowdyBuffs.ShieldCharges / (float)RowdyBuffs.MaxCharges;
             if (catType == CatType.Paprika && RowdyBuffs.PoisonOwner == this) return RowdyBuffs.PoisonLeftFraction;
             if (IsAbilityCat && abilityRunning && Time.time >= cooldownEnd) return 0f;
             if (IsAbilityCat && abilityRunning) return 1f - Mathf.Clamp01((cooldownEnd - Time.time) / Mathf.Max(0.01f, Cooldown));
@@ -379,7 +387,7 @@ public class PetFollower : MonoBehaviour
 
     private void UpdateSwapPrompt()
     {
-        bool show = player == null && rowdyNearby && (!CatRoster.HasRoom || !CatRoster.AutoPickup || kickHold) && !PauseMenu.IsPaused;
+        bool show = player == null && rowdyNearby && (!CatRoster.HasRoom || !CatRoster.AutoPickup || kickHold) && !PauseMenu.IsPaused && !FlyingRat.InReach;
         if (show && swapPrompt == null)
         {
             var go = new GameObject("Swap Prompt");
@@ -1257,9 +1265,12 @@ public static class CatRoster
         if (LeaderKey != null && LeaderKey == SubLeaderKey) SubLeaderKey = null;
         SortRanks();
     }
+    // Uncrowned by hand in the Cat Party: the sub-leader place isn't refilled by itself
+    private static bool subUncrowned;
     public static void SetSubLeader(PetFollower p)
     {
         SubLeaderKey = p != null && p.IsCollected && SubLeaderUnlocked ? p.RosterKey : null;
+        subUncrowned = SubLeaderKey == null;
         if (SubLeaderKey != null && SubLeaderKey == LeaderKey) LeaderKey = null;
         SortRanks();
     }
@@ -1273,7 +1284,7 @@ public static class CatRoster
     public static void AutoRanks()
     {
         if (LeaderKey == null && collected.Count > 0) LeaderKey = collected[0];
-        if (SubLeaderUnlocked && SubLeaderKey == null)
+        if (SubLeaderUnlocked && SubLeaderKey == null && !subUncrowned)
             foreach (string k in collected) if (k != LeaderKey) { SubLeaderKey = k; break; }
     }
 
@@ -1384,7 +1395,7 @@ public static class CatRoster
         }
 
         // the sub-leader slot unlocks at level 10: filled right away
-        if (SubLeaderUnlocked && SubLeaderKey == null && collected.Count > 1) { AutoRanks(); SortRanks(); }
+        if (SubLeaderUnlocked && SubLeaderKey == null && !subUncrowned && collected.Count > 1) { AutoRanks(); SortRanks(); }
     }
 
     private static bool FindRowdy()
@@ -1411,7 +1422,7 @@ public static class CatRoster
         // The leader and sub-leader never get lost: they stand first in line, so they're the ones kept.
         var lostKeys = new List<string>();
         int keep = Mathf.Min(collected.Count, Capacity);
-        if (diedBeforeReload) keep = Mathf.Min(keep, RankedCount);
+        if (diedBeforeReload && !Boons.Has("catloyalty")) keep = Mathf.Min(keep, RankedCount); // Cat Loyalty: nobody leaves
         while (collected.Count > keep)
         {
             lostKeys.Insert(0, collected[collected.Count - 1]);

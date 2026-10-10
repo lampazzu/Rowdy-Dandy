@@ -31,7 +31,9 @@ public class Health : MonoBehaviour
 
     // Extra life above the maximum: soaks damage first, drains quickly. Drawn on the health bar (HealthBar) and as a gold aura (RowdyAura).
     public float Overheal { get; private set; }
-    public float MaxOverheal => maxOverheal;
+    // Satisfied (Crazy Chef): twice as much overheal - a second layer over the gold one on the health bar
+    public float BaseOverheal => maxOverheal;
+    public float MaxOverheal => Boons.Has("satisfied") ? maxOverheal * 2f : maxOverheal;
     public bool IsDead => dead;
     private float overhealHoldUntil;
 
@@ -57,7 +59,7 @@ public class Health : MonoBehaviour
 
         float room = startingHealth - currentHealth;
         float healed = Mathf.Min(room, _value);
-        float extra = overheal ? Mathf.Min(_value - healed, maxOverheal - Overheal) : 0f;
+        float extra = overheal ? Mathf.Max(0f, Mathf.Min(_value - healed, MaxOverheal - Overheal)) : 0f;
 
         if (healed > 0f || extra > 0f)
         {
@@ -75,7 +77,7 @@ public class Health : MonoBehaviour
         }
     }
 
-    public bool CanTakeOverheal => !dead && (currentHealth < startingHealth || Overheal < maxOverheal - 0.5f);
+    public bool CanTakeOverheal => !dead && (currentHealth < startingHealth || Overheal < MaxOverheal - 0.5f);
 
     public void Respawn()
     {
@@ -95,7 +97,7 @@ public class Health : MonoBehaviour
         if (Time.time - lastDamageTime > damageCooldown)
         {
             // The Peak's armor eats the hit (still counts as a hit for the cooldown, so one attack = one charge)
-            if (_damage > 0f && !dead && RowdyBuffs.TryBlock(this))
+            if (_damage > 0f && !dead && (WeaponTricks.TryApron() || RowdyBuffs.TryBlock(this))) // Iron Apron first, then The Peak
             {
                 lastDamageTime = Time.time;
                 return;

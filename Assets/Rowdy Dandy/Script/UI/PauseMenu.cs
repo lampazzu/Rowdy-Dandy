@@ -744,7 +744,7 @@ public class PauseMenu : MonoBehaviour
         AddDevButton(panel, "Hair Gel +3", ref y, () => Boons.AddRerolls(3), "Three rerolls for the boon cards", true);
         // pick any boon: left / right scrolls through all of them, confirm takes it (at the rarity below)
         AddOption(devRows, panel, "Boon Rarity", ref y, () => devBoonRarity.ToString(),
-            d => { devBoonRarity = (Rarity)Wrap((int)devBoonRarity + d, 3); DescribeDevBoon(); }); // Common / Rare / Epic (legendary + duo boons set their own)
+            d => { devBoonRarity = (Rarity)Wrap((int)devBoonRarity + d, 5); DescribeDevBoon(); }); // Common .. Legendary (signature + duo boons set their own)
         devRows[devRows.Count - 1].description = "Rarity for Get Specific Boon (Call of the Moon / Stephmoss / duos use their own)";
         AddOption(devRows, panel, "Get Specific Boon", ref y, () => DevBoon != null ? DevBoon.name : "-",
             d => { devBoonIndex = Wrap(devBoonIndex + d, BoonCatalog.All.Count); DescribeDevBoon(); });

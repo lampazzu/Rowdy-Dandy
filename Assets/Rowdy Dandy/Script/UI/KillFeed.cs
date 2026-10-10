@@ -17,6 +17,9 @@ public class KillCredit
 
     public static KillCredit Rowdy()
     {
+        // transformed: the kill is the werewolf's / Stephmoss's own, with its own face in the log
+        if (Werewolf.Active) return new KillCredit { kind = Kind.Rowdy, name = "Werewolf", icon = Werewolf.Portrait, with = "Werewolf" };
+        if (StephmossForm.Active) return new KillCredit { kind = Kind.Rowdy, name = "Stephmoss", icon = BoonIcons.Get(BoonCatalog.Get("stephmoss")), with = "Stephmoss" };
         WeaponManager weapons = WeaponManager.Instance;
         return new KillCredit
         {

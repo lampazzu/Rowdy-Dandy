@@ -86,7 +86,8 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT HE DOES", "Swats everything around him: hurts enemies and knocks arrows out of the air. Ignores plants and statues."),
-                (Quip, "A menace, don't let him fool ya."),
+                ("GROWS WITH YOU", "Wig is your best buddy: his scratches get stronger every time you level up."),
+                (Quip, "A menace. Don't let him fool ya."),
             },
         },
         new Topic
@@ -100,7 +101,7 @@ public static class NotesData
         },
         new Topic
         {
-            id = "Paprika", name = "Paprika", glyph = "P", icon = () => CatIcon("Interactables/Paprika"),
+            id = "Paprika", name = "Paprika", glyph = "P", icon = () => CatIcon("Interactables/Paprika", "Paprika"), animatedPortrait = "cat_Paprika",
             sections = new[]
             {
                 ("WHAT HE DOES", "When enemies are close he spices up Rowdy's weapon: for a few seconds every hit poisons."),
@@ -109,16 +110,16 @@ public static class NotesData
         },
         new Topic
         {
-            id = "Mushidon", name = "Mushidon", glyph = "M", icon = () => CatIcon("Interactables/Mushidon"),
+            id = "Mushidon", name = "Mushidon", glyph = "M", icon = () => CatIcon("Interactables/Mushidon", "Mushidon"), animatedPortrait = "cat_Mushidon",
             sections = new[]
             {
-                ("WHAT HE DOES", "Jumps sky high and slams the ground. Every enemy standing on the ground nearby is stunned for a second."),
-                (Quip, "Big Old Fat Mushidon. Lovely guy."),
+                ("WHAT HE DOES", "Jumps sky high and slams the ground. Every enemy standing on the ground nearby takes at least 10 damage and is stunned for a second."),
+                (Quip, "Big old fat Mushidon. Lovely guy."),
             },
         },
         new Topic
         {
-            id = "Peak", name = "The Peak", glyph = "K", icon = () => CatIcon("Interactables/ThePeak"),
+            id = "Peak", name = "The Peak", glyph = "K", icon = () => CatIcon("Interactables/ThePeak", "ThePeak"), animatedPortrait = "cat_ThePeak",
             sections = new[]
             {
                 ("WHAT HE DOES", "Gives Rowdy armor that blocks the next 3 hits. A new one once the armor breaks."),
@@ -127,7 +128,7 @@ public static class NotesData
         },
         new Topic
         {
-            id = "Lallo", name = "Lallo", glyph = "L", icon = () => CatIcon("Interactables/Lallo"),
+            id = "Lallo", name = "Lallo", glyph = "L", icon = () => CatIcon("Interactables/Lallo", "Lallo"), animatedPortrait = "cat_Lallo",
             sections = new[]
             {
                 ("WHAT HE DOES", "While his bar is full, the next enemy Rowdy kills bursts in decay. Anything caught in it bursts too - chain reaction."),
@@ -136,11 +137,11 @@ public static class NotesData
         },
         new Topic
         {
-            id = "Tchogon", name = "Tchogon", glyph = "T", icon = () => CatIcon("Interactables/Tchogon"),
+            id = "Tchogon", name = "Tchogon", glyph = "T", icon = () => CatIcon("Interactables/Tchogon", "Tchogon"), animatedPortrait = "cat_Tchogon",
             sections = new[]
             {
                 ("WHAT HE DOES", "When enemies get close, he flies over Rowdy and spins into a vortex that drags everything around Rowdy in toward him."),
-                (Quip, "One of my personal favorites (don't tell the others)"),
+                (Quip, "One of my personal favorites. Don't tell the others."),
             },
         },
     };
@@ -210,10 +211,11 @@ public static class NotesData
             id = "boons", name = "Boons And Patrons", glyph = "B", icon = () => BoonIcons.Get(BoonCatalog.Get("hairflip")),
             sections = new[]
             {
-                ("LEVEL UP = BOON", "Every level up, three patrons each offer you a boon. Take one. They stay with you, even when you die."),
+                ("WHERE THEY COME FROM", "Boons start once you ring a colosseum gong. Every trial hands out three at the start and one every five waves; after your first trial, level ups give boons too. Three patrons each offer one: take one."),
                 ("THE PATRONS", "Narcissism (gorgeous, and the Style Rank), Sea Abyss (the deep, waves), Lycanthropy (the moon), Stephmoss (poison, and the swarm form), the Stinky Bois Guild (cats), the Crazy Chef (food, sandwiches), the Blacksmith (weapons) and the Sun God (daylight, fire)."),
                 ("SLOTS", "Attack, Dash, Jump, Cats and Special hold one boon each - a new one replaces the old. Passives stack."),
-                ("RARITY AND DUOS", "Common, Rare, Epic: same boon, bigger numbers. A boon you own can come back as an UPGRADE. Mix two patrons and a DUO boon may show up."),
+                ("RARITY AND DUOS", "Common, Uncommon, Rare, Epic, Legendary: same boon, bigger numbers. A boon you own can come back as an UPGRADE. Mix two patrons and a DUO boon may show up."),
+                ("SPECIAL MOVES", "Some patrons have a signature move for the Special slot, all on {WOLF}: the Werewolf, Stephmoss, the Chef's Ingredient Rain and the Blacksmith's Armory. Only one at a time."),
                 ("YOUR BUILD", "{STATS} shows every boon you have. The HUD shows your slots at the bottom left."),
                 (Quip, "Eight strangers offering me free power. One of them is a sandwich guy. Very normal beach."),
             },
@@ -225,8 +227,20 @@ public static class NotesData
             {
                 ("THE MOON METER", "With Lycanthropy's boon, the moon in your Special slot fills up as you fight. At night it fills twice as fast."),
                 ("TRANSFORM", "When it's full, press {WOLF}. Rowdy howls, every enemy near him panics, and he's a werewolf for a while."),
-                ("AS A WOLF", "More damage, more speed, less damage taken, claw swipes on every attack, every hit heals a little, and weapons don't wear out. Kills keep the night going longer."),
+                ("AS A WOLF", "More damage, more speed, less damage taken, and every hit heals a little. Kills keep the night going longer. Your weapons stay put away."),
+                ("WOLF MOVES", "{ATTACK} claws. {SURF} dashes straight through enemies, raking them all. Down + {ATTACK} roars: everyone near is terrified. {ATTACK} in the air dives down fast and slams the ground."),
                 (Quip, "I'm not hairy. I'm voluminous."),
+            },
+        },
+        new Topic
+        {
+            id = "nightfall", name = "Nightfall", glyph = "N",
+            sections = new[]
+            {
+                ("THE CLOCK", "Day turns to night as you play. At night more monsters come out, and the glowing ones are ELITES: tougher, and worth more."),
+                ("SKIP IT", "Rest at a checkpoint ({INTERACT} on a spawner) to sleep until morning."),
+                ("NIGHT BOONS", "Some boons only work at night (Moonrage, Silver Fur), some only in daylight (Daybreak). The moon meter fills twice as fast at night."),
+                (Quip, "The night is young. So am I. Mostly."),
             },
         },
         new Topic
@@ -258,7 +272,7 @@ public static class NotesData
             {
                 ("HOW", "Touch a spawner to set it as your respawn point."),
                 ("RESTING", "While you stand on a spawner no new enemy waves arrive. Catch your breath. The start of the beach is quiet too."),
-                ("DYING", "You come back at the last spawner you touched. Level, weapons and notes are kept - but ALL your cats get lost. Legendary rats dropped at a checkpoint lure them back, one cat per rat."),
+                ("DYING", "You come back at the last spawner you touched. Level, weapons and notes are kept, but every cat except your leader and sub-leader gets lost. Legendary rats dropped at a checkpoint lure them back, one cat per rat."),
                 (Quip, "Nap spot. Officially. I'm putting it on my resume."),
             },
         },
@@ -359,7 +373,7 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT THEY DO", "Some pelicans carry a heart. Knock it loose and grab it to heal 10 HP."),
-                ("NOTE", "You can't pick one up at full health - it waits in its pink beam for later."),
+                ("FULL HEALTH", "At full health it still counts: the extra becomes OVERHEAL, a golden bar on top of your health that drains fast."),
                 (Quip, "Taking a heart from a pelican. Romantic, if you don't think about it."),
             },
         },
@@ -412,8 +426,8 @@ public static class NotesData
             sections = new[]
             {
                 ("WHAT THEY ARE", "Cats hiding around the map, glowing so you can spot them. Touch one and it joins the party. See the Cats tab."),
-                ("MAGICAL CAT CAPACITY", "You can have as many cats as your level (level 1 = 1 cat, up to 10). Party full? Press {INTERACT} on a new cat to swap: the cat that's been with you longest waits there."),
-                ("GETTING LOST", "Die and every cat gets lost again somewhere you've been - except one per registered flying rat."),
+                ("MAGICAL CAT CAPACITY", "You can have as many cats as your level (level 1 = 1 cat, up to 9). Level 10 adds a sub-leader. Party full? Press {INTERACT} on a new cat to choose who leaves."),
+                ("GETTING LOST", "Die and every cat except your leader and sub-leader gets lost somewhere you've been. A legendary rat dropped at a checkpoint calls one back."),
                 (Quip, "If you love something, let it go. Then go find it. It's glowing. Easy."),
             },
         },
@@ -448,6 +462,13 @@ public static class NotesData
         if (prefab == null) return null;
         SpriteRenderer sr = prefab.GetComponentInChildren<SpriteRenderer>(true);
         return sr != null ? sr.sprite : null;
+    }
+
+    // the cat's own face (CatSkins/CatPortrait_<skin>) when it has its own art, else the prefab's portrait
+    private static Sprite CatIcon(string resourcePath, string skin)
+    {
+        Sprite own = CatSkin.Portrait(skin);
+        return own != null ? own : CatIcon(resourcePath);
     }
 
     private static Sprite CatIcon(string resourcePath)

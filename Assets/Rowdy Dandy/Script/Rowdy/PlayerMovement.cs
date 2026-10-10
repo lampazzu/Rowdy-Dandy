@@ -58,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
     public const float SwordCastArmor = 1f;
     private float hyperArmorUntil;
     public bool HyperArmor => Time.time < hyperArmorUntil;
+    public void ExtendHyperArmor(float seconds) => hyperArmorUntil = Mathf.Max(hyperArmorUntil, Time.time + seconds); // Grand Slash charging
     public bool IsWatered => isWatered;
     public bool IsSurfing => isSurfing; // keyframed by the surf clips (Wipeout: Rowdy becomes the wave)
     [SerializeField] private float jumpTimeCounter = 0f;
@@ -479,7 +480,8 @@ public class PlayerMovement : MonoBehaviour
             playerCollider.enabled = true;
         }
 
-        if (isWatered && isSurfing && !isWounded)
+        EndlessSurf(GameInput.MoveX);
+        if ((isWatered || (endlessRiding && isGrounded)) && isSurfing && !isWounded)
         {
             // Play the audio clip
             if (!audioSource.isPlaying) // Check if audio is not already playing
@@ -730,9 +732,15 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Implement attack animations
-        if (GameInput.Down(GameInput.Act.Attack))
+        // (as a werewolf the wolf has its own moves: claws, down + attack = roar, in the air = a heavy dive)
+        if (Werewolf.Active)
+        {
+            if (GameInput.Down(GameInput.Act.Attack)) Werewolf.Attack(isGrounded || isWatered, GameInput.HoldingDown);
+        }
+        else if (GameInput.Down(GameInput.Act.Attack))
         {
             bool attackStarted = false; // weapon durability: 1 per swing, no matter how many enemies it hits
+            int attackKind = -1;        // the weapon boons want to know which one (WeaponTricks)
 
             if (isGrounded && !isJumping && !isDucking && !isAttacking && !isWatered)
             {
@@ -740,6 +748,7 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetTrigger("NeutralAttack");
                 animator.SetBool("IsRunning", false);
                 attackStarted = true;
+                attackKind = 0;
             }
             if (!isGrounded && !isDucking && !hasAttackedInAir && !isWatered && !isAttackChecked)
             {
@@ -747,6 +756,7 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetTrigger("JumpAttack");
                 hasAttackedInAir = true;
                 attackStarted = true;
+                attackKind = 1;
 
                 if (!isAttackingAir)
                 {
@@ -764,6 +774,7 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(DelayedJumpAttack()); // Delay the attack trigger
                 hasAttackedInAir = true;
                 attackStarted = true;
+                attackKind = 1;
 
                 if (!isAttackingAir)
                 {
@@ -775,6 +786,7 @@ public class PlayerMovement : MonoBehaviour
                 // Ducking attack animation
                 animator.SetTrigger("DuckingAttack");
                 attackStarted = true;
+                attackKind = 2;
                 // the Sword's down + attack is a cast (WK_Sword_Duck, 1 s): HYPER ARMOR while it plays
                 if (weaponManager != null && weaponManager.GetActiveWeaponIndex() == 1) hyperArmorUntil = Time.time + SwordCastArmor;
             }
@@ -783,7 +795,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(SpendWeaponDurability());
             }
-            if (attackStarted) BoonRunner.OnAttackStarted(); // Hair Flip, werewolf claws
+            if (attackStarted) BoonRunner.OnAttackStarted(); // Hair Flip, Spore Lob, Meatball Mortar...
+            if (attackKind >= 0) BoonRunner.OnAttackKind(attackKind); // the Blacksmith's weapon boons
         }
 
         if (isJumpAttackReset)
@@ -800,7 +813,13 @@ public class PlayerMovement : MonoBehaviour
 
         //Implement surfing
         // (as before: the keyboard keys skip the checks below, the gamepad's RB needs them)
-        if (GameInput.KeyDown(UnityEngine.InputSystem.Key.LeftShift) || GameInput.KeyDown(UnityEngine.InputSystem.Key.L) || (GameInput.PadDown(GameInput.Act.SurfDash))
+        // As a werewolf the surf button is a DASH straight through enemies (Werewolf.Dash)
+        if (Werewolf.Active)
+        {
+            if (GameInput.KeyDown(UnityEngine.InputSystem.Key.LeftShift) || GameInput.KeyDown(UnityEngine.InputSystem.Key.L) || GameInput.PadDown(GameInput.Act.SurfDash))
+                Werewolf.Dash(moveInput);
+        }
+        else if (GameInput.KeyDown(UnityEngine.InputSystem.Key.LeftShift) || GameInput.KeyDown(UnityEngine.InputSystem.Key.L) || (GameInput.PadDown(GameInput.Act.SurfDash))
      && Mathf.Abs(moveInput) > 0
      && !isDucking
      && !isSurfing
@@ -838,6 +857,43 @@ public class PlayerMovement : MonoBehaviour
         if (isNeutralAttacking && !isGrounded && isCanCancelGroundedAttack)
         {
             animator.SetTrigger("DuckToAir");
+        }
+    }
+
+    // ENDLESS SWELL (Sea Abyss): while the surf button is held the ride never ends - the surf state keeps looping, on land
+    // too, with the board's own water spray and sound, and anything he rides into gets hit.
+    private bool endlessRiding;
+    private float endlessHitTimer;
+    public bool EndlessRiding => endlessRiding;
+
+    private void EndlessSurf(float moveInput)
+    {
+        bool held = Boons.Has("endlesssurf") && !Werewolf.Active
+                    && (GameInput.Held(GameInput.Act.SurfDash) || GameInput.KeyHeld(UnityEngine.InputSystem.Key.LeftShift) || GameInput.KeyHeld(UnityEngine.InputSystem.Key.L));
+        if (!held || isWounded || isDead || isAttacking) { endlessRiding = false; return; }
+        AnimatorStateInfo st = animator.GetCurrentAnimatorStateInfo(0);
+        bool inSurf = st.IsName("Surf") || st.IsName("SurfManouver");
+        if (inSurf && isSurfing)
+        {
+            endlessRiding = true;
+            // loop the middle of the ride before the clip switches surfing back off
+            if (st.normalizedTime >= 0.75f && !animator.IsInTransition(0)) animator.Play(st.fullPathHash, 0, 0.3f);
+        }
+        else if (endlessRiding && !isSurfing && Mathf.Abs(moveInput) > 0 && (isGrounded || isWatered))
+            animator.SetTrigger("SurfDash"); // back on the board (no dash boons: those only go off on a fresh press)
+        if (!endlessRiding || !isSurfing) return;
+
+        endlessHitTimer -= Time.deltaTime;
+        if (endlessHitTimer > 0f) return;
+        endlessHitTimer = 0.3f;
+        float facing = transform.localScale.x >= 0f ? 1f : -1f;
+        Bounds b = bodyBox.bounds;
+        float dmg = Boons.V("endlesssurf", 0);
+        foreach (EnemyHealth e in BoonFX.EnemiesInBox(new Vector2(b.center.x + facing * 0.35f, b.center.y), new Vector2(b.size.x + 0.7f, b.size.y + 0.2f)))
+        {
+            BoonFX.Hit(e, dmg, "Endless Swell");
+            BoonFX.Push(e, new Vector2(facing * 3.5f, 2.5f));
+            FXParticle.Burst(BoonFX.Center(e), BoonFX.Foam, 6, 1f, 3f, 6f, 0.4f, true);
         }
     }
 

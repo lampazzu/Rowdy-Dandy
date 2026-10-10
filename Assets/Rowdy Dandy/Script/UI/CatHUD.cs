@@ -127,7 +127,7 @@ public class CatHUD : MonoBehaviour
             // the leader's cooldown bar is gold, the sub-leader's silver
             if (e.fill != null && !e.lost)
             {
-                e.fill.sprite = ranked ? OverlayUI.WhiteSprite : barFillSprite;
+                e.fill.sprite = ranked ? WhiteFill(barFillSprite) : barFillSprite; // same shape as the pink fill: stays inside the frame
                 e.fill.color = lead ? LeaderColor : sub ? SubColor : Color.white;
             }
         }
@@ -418,6 +418,50 @@ public class CatHUD : MonoBehaviour
         Stretch(AddImage(CreateUI("Frame", bar), barFrameSprite).rectTransform);
 
         return entry;
+    }
+
+    // The pink fill art turned white (keeping its shading and its exact shape), so gold / silver tints stay inside the
+    // bar's frame like every other bar. A plain white square filled the whole bar rect and spilled over the frame.
+    private static Sprite whiteFill;
+    private static Sprite whiteFillSource;
+    private static Sprite WhiteFill(Sprite src)
+    {
+        if (src == null) return OverlayUI.WhiteSprite;
+        if (whiteFill != null && whiteFillSource == src) return whiteFill;
+        Texture2D tex = src.texture;
+        Rect r = src.textureRect;
+        int w = Mathf.RoundToInt(r.width), h = Mathf.RoundToInt(r.height);
+        Color32[] px;
+        try
+        {
+            RenderTexture rt = RenderTexture.GetTemporary(tex.width, tex.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            RenderTexture prev = RenderTexture.active;
+            Graphics.Blit(tex, rt);
+            RenderTexture.active = rt;
+            var copy = new Texture2D(w, h, TextureFormat.RGBA32, false);
+            copy.ReadPixels(new Rect(r.x, r.y, w, h), 0, 0); // (lower-left origin, like the sprite rect)
+            copy.Apply();
+            RenderTexture.active = prev;
+            RenderTexture.ReleaseTemporary(rt);
+            px = copy.GetPixels32();
+            Destroy(copy);
+        }
+        catch { return OverlayUI.WhiteSprite; }
+        float maxV = 0.01f;
+        foreach (Color32 c in px) if (c.a > 0) maxV = Mathf.Max(maxV, Mathf.Max(c.r, Mathf.Max(c.g, c.b)) / 255f);
+        for (int i = 0; i < px.Length; i++)
+        {
+            if (px[i].a == 0) continue;
+            float v = Mathf.Max(px[i].r, Mathf.Max(px[i].g, px[i].b)) / 255f / maxV; // brightest pixel = white
+            byte b = (byte)Mathf.RoundToInt(Mathf.Lerp(0.55f, 1f, v) * 255f);
+            px[i] = new Color32(b, b, b, px[i].a);
+        }
+        var outTex = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, name = "CatBarFill_White" };
+        outTex.SetPixels32(px);
+        outTex.Apply(false, true);
+        whiteFill = Sprite.Create(outTex, new Rect(0, 0, w, h), new Vector2(src.pivot.x / w, src.pivot.y / h), src.pixelsPerUnit, 0, SpriteMeshType.FullRect, src.border);
+        whiteFillSource = src;
+        return whiteFill;
     }
 
     // ---------------------------------------------------------------- compact view (Preferences / Cat Party)

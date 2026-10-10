@@ -25,8 +25,7 @@ public class Tutorials : MonoBehaviour
             case Topic.Checkpoint: return ("CHECKPOINT", "PRESS {I} HERE TO |REST|.", "^FULL HEALTH^, FRESH ENEMIES, MORNING SUN.", "");
             case Topic.LevelUp: return ("LEVEL UP!", "MORE ^DAMAGE^, ^CRIT CHANCE^, ^CRIT DAMAGE^", "AND ^+1^ |CAT SLOT|.", "");
             case Topic.Night: return ("NIGHTFALL", "MORE MONSTERS. GLOWING ONES ARE |ELITES|.", "|REST| AT A CHECKPOINT TO SKIP TO MORNING.", "");
-            case Topic.Controls: return ("WELCOME, DANDY!", "{MOVE} MOVE, {JUMP} JUMP (HOLD IT), {ATTACK} ATTACK.", "{SURF} WHILE MOVING: |SURF DASH| ON YOUR BOARD.",
-                                         "|COLORED WORDS| ARE THE ^IMPORTANT^ ONES. REMEMBER THEM, BABY.");
+            case Topic.Controls: return ("WELCOME, DANDY!", "{MOVE} MOVE, {JUMP} JUMP (HOLD IT), {ATTACK} ATTACK.", "{SURF} WHILE MOVING: |SURF DASH| ON YOUR BOARD.", "");
             case Topic.Hurt: return ("OUCH!", "HIT ENEMIES RIGHT AS THEY ATTACK", "FOR A |COUNTER|: ^HUGE DAMAGE^.", "");
             case Topic.Notes: return ("ROWDY NOTES", "EVERY ENEMY, CAT AND WEAPON YOU MEET GETS A PAGE.", "", "");
             case Topic.Water: return ("SURFS UP!", "ROWDY RIDES THE WATER. {JUMP} TO HOP OUT.", "{ATTACK} IN THE WATER LAUNCHES A |JUMP ATTACK|.", "");
@@ -39,7 +38,7 @@ public class Tutorials : MonoBehaviour
     }
 
     // Topics that never show any more (merged into another card / always-on-screen HUD stuff)
-    private static bool Retired(Topic t) => t == Topic.WeaponBroke || t == Topic.Notes;
+    private static bool Retired(Topic t) => t == Topic.WeaponBroke || t == Topic.Notes || t == Topic.Night; // nightfall lives in Rowdy Notes > Mechanics
 
     // No tips until Rowdy has landed and the player has tried to walk (per play session)
     private static bool ready;

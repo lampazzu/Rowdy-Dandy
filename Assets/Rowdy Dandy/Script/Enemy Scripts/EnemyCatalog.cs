@@ -52,7 +52,53 @@ public static class AnimatedPortraits
                 }
             }
         }
+        if (clip == null && id.StartsWith("cat_")) clip = FromCatSkin(id.Substring(4)); // the newer cats: their own sheets
         cache[id] = clip;
+        return clip;
+    }
+
+    // An animated head portrait from a cat's skin sheet (Resources/CatSkins/RDR_<skin>.png, 12 frames like RDR_Wig):
+    // a 19 x 19 window around the head (found in frame 0) over frames 0-7, at the art's own pixel size like Wig's.
+    private static Clip FromCatSkin(string skin)
+    {
+        Texture2D tex = Resources.Load<Texture2D>("CatSkins/RDR_" + skin);
+        if (tex == null) return null;
+        const int frames = 12, size = 19, shown = 8;
+        int fw = tex.width / frames, h = tex.height;
+        Color32[] px;
+        try
+        {
+            RenderTexture rt = RenderTexture.GetTemporary(tex.width, h, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            RenderTexture prev = RenderTexture.active;
+            Graphics.Blit(tex, rt);
+            RenderTexture.active = rt;
+            var copy = new Texture2D(tex.width, h, TextureFormat.RGBA32, false);
+            copy.ReadPixels(new Rect(0, 0, tex.width, h), 0, 0);
+            copy.Apply();
+            RenderTexture.active = prev;
+            RenderTexture.ReleaseTemporary(rt);
+            px = copy.GetPixels32();
+            Object.Destroy(copy);
+        }
+        catch { return null; }
+        // the head = the top of the drawing in frame 0 (rows counted from the bottom)
+        int top = -1;
+        for (int y = h - 1; y >= 0 && top < 0; y--)
+            for (int x = 0; x < fw; x++) if (px[y * tex.width + x].a > 40) { top = y; break; }
+        if (top < 0) return null;
+        int minX = fw, maxX = 0;
+        for (int y = top; y > top - 9 && y >= 0; y--)
+            for (int x = 0; x < fw; x++) if (px[y * tex.width + x].a > 40) { minX = Mathf.Min(minX, x); maxX = Mathf.Max(maxX, x); }
+        int cx = (minX + maxX) / 2;
+        int rx = Mathf.Clamp(cx - size / 2, 0, fw - size), ry = Mathf.Clamp(top + 2 - size, 0, h - size);
+        tex.filterMode = FilterMode.Point;
+        var clip = new Clip { frames = new Sprite[shown], durations = new float[shown] };
+        for (int i = 0; i < shown; i++)
+        {
+            clip.frames[i] = Sprite.Create(tex, new Rect(i * fw + rx, ry, size, size), new Vector2(0.5f, 0.5f), 64f);
+            clip.durations[i] = 0.083f;
+            clip.length += 0.083f;
+        }
         return clip;
     }
 }
@@ -100,14 +146,14 @@ public static class EnemyCatalog
         new Entry
         {
             id = "crabby", name = "Crabby", keys = new[] { "crabby" }, killsToReveal = 5,
-            about = "Kinda disgusting i don't know man.. them lil legs creeps me out.",
+            about = "Kinda disgusting, I don't know, man... those lil legs creep me out.",
             weakness = "Paper thin once it's out of the shell - one clean hit. Strike as it walks, not when it's tucked in.",
             counter = "Nothing to counter: it never swings. Wait for the shell to open and tap it.",
         },
         new Entry
         {
             id = "gnollwarrior", name = "Gnoll Warrior", keys = new[] { "gnollwarrior" }, killsToReveal = 8,
-            about = "Wish he would stop moving for once",
+            about = "Wish he would stop moving for once.",
             dropIds = "exp,cleaver:50%",
             weakness = "It can be kicked. Knock it into deep water and it sinks like a rock.",
             counter = "Hit it while the blade is going up - the moment the swing starts, before it comes down. Counters stagger it and hurt a lot.",
@@ -116,14 +162,14 @@ public static class EnemyCatalog
         new Entry
         {
             id = "gnollarcher", name = "Gnoll Archer", keys = new[] { "gnollarcher" }, killsToReveal = 6,
-            about = "I mean they can summon magic arrows, how cool is that?",
+            about = "I mean, they can summon magic arrows. How cool is that?",
             weakness = "Only 10 HP. Close the distance between shots, or jump the arrows. Wig can swat arrows out of the air.",
             counter = "No counter window. Get inside its range and it's done.",
         },
         new Entry
         {
             id = "gnollbomber", name = "Gnoll Bomber", keys = new[] { "gnollbomber" }, killsToReveal = 6,
-            about = "Why do this to the precious jellyfish? Nah man.. this just cruel",
+            about = "Why do this to the precious jellyfish? Nah, man... this is just cruel.",
             weakness = "Only 10 HP and slow to reload. Keep moving so the bombs land behind you, then rush it.",
             counter = "No counter window. Punish it right after a throw.",
         },
@@ -139,14 +185,14 @@ public static class EnemyCatalog
         new Entry
         {
             id = "transformwolf", name = "Transform Wolf", keys = new[] { "transformwolf" }, killsToReveal = 8,
-            about = "Puberty hits differnt for some people",
+            about = "Puberty hits different for some people.",
             weakness = "Only 25 HP. Trade hits early before it builds up speed.",
             counter = "Tight timing: hit it just as each claw comes down. Both of its swipes have a split-second window.",
         },
         new Entry
         {
             id = "sharkwolf", name = "Sharkwolf", keys = new[] { "sharkwolf", "wolfshark" }, killsToReveal = 6,
-            about = "I want that shark man.",
+            about = "I want that shark, man.",
             dropIds = "exp,sword:50%",
             drops = "SWORD half the time - it floats on the water where it died.",
             weakness = "It can't leave the water. Stay back from the shoreline and hit it when it lands from a leap. Kickable.",
@@ -164,7 +210,7 @@ public static class EnemyCatalog
         new Entry
         {
             id = "watervivarider", name = "Waterviva Rider", keys = new[] { "watervivarider" }, killsToReveal = 6,
-            about = "jellyfish again? what's wrong with these people?",
+            about = "Jellyfish again? What's wrong with these people?",
             dropIds = "exp,naginata:50%",
             weakness = "Kickable. Bounce off the blue jellies to get above it and strike from the air.",
             counter = "Each of its three attacks has a window in the middle of the swing. Its flinch can also be countered.",
@@ -173,7 +219,7 @@ public static class EnemyCatalog
         new Entry
         {
             id = "wereknight", name = "Wereknight", keys = new[] { "wereknight" }, killsToReveal = 6,
-            about = "Skips leg day",
+            about = "Skips leg day.",
             dropIds = "exp,sword:50%",
             weakness = "Fragile under the armor (10 HP). Get past the tip of the weapon.",
             counter = "Hit it halfway through the thrust, when the weapon is fully raised.",
@@ -182,21 +228,21 @@ public static class EnemyCatalog
         new Entry
         {
             id = "werefast", name = "Werefast", keys = new[] { "werefast" }, killsToReveal = 10,
-            about = "Clingy guy.. I need some space, seriously, it's not you, it's me.",
+            about = "Clingy guy... I need some space, seriously. It's not you, it's me.",
             weakness = "Only 20 HP. A single crit usually drops it.",
             counter = "Its quick jab has two tiny windows. The long lunge stays counterable for most of the leap - swing into it.",
         },
         new Entry
         {
             id = "bigwolf", name = "Big Wolf", keys = new[] { "bigwerewolf", "bigwolf", "werewolf", "wwolf", "wolfprefab" }, killsToReveal = 8,
-            about = "Good boy",
+            about = "Good boy.",
             weakness = "Slow to recover after a big leap. Punish the landing.",
             counter = "Strike as it rears back, right before the claws come down. Its double swipe has a second window on the follow-up.",
         },
         new Entry
         {
             id = "megacreature", name = "Mega Creature", keys = new[] { "megacreature", "dashcreature" }, killsToReveal = 5,
-            about = "Kinda scary but I can manage it",
+            about = "Kinda scary, but I can manage it.",
             weakness = "Its attack takes ages to start. Get behind it while it charges up.",
             counter = "The easiest counter in the jungle: hit it any time during the first second of its attack wind-up.",
         },
@@ -212,7 +258,7 @@ public static class EnemyCatalog
         new Entry
         {
             id = "mantaray", name = "Manta Ray", keys = new[] { "mantaray" }, killsToReveal = 3,
-            about = "I don't know... They seem cute but if you look closely it's kinda disgusting too... You know, they smell weird like fish, also they're gooey and slimey and, you know what? They don't even seem cute. Doesn't go with tomato sauce.",
+            about = "I don't know... They seem cute, but if you look closely they're kinda disgusting too... You know, they smell weird, like fish. Also, they're gooey and slimy and, you know what? They don't even seem cute. Doesn't go with tomato sauce.",
             dropIds = "",
             weakness = "One hit. Kickable.",
             counter = "Nothing to counter.",
@@ -220,7 +266,7 @@ public static class EnemyCatalog
         new Entry
         {
             id = "voltrat", name = "Red Jelly", keys = new[] { "voltrat", "redjelly" }, killsToReveal = 5,
-            about = "You know what they say about jellyfish wounds.. Let's be careful... Don't anybody doing.. you know...",
+            about = "You know what they say about jellyfish wounds... Let's be careful... Don't anybody go doing... you know...",
             weakness = "Paper thin. One or two hits each.",
             counter = "Watch for the fast pulsing and the white flash, then jump or dash out of the line.",
             drops = "A couple of EXP gems.",
@@ -228,7 +274,7 @@ public static class EnemyCatalog
         new Entry
         {
             id = "pelich", name = "Pelich Anus", keys = new[] { "pelichanus", "pelich" }, killsToReveal = 1,
-            about = "I don't even know his real name, I know he is a pelichan and he has a big fat ass but so...",
+            about = "I don't even know his real name. I know he's a pelican and he has a big fat ass, but so...",
             dropIds = "exp:X40",
             weakness = "It barely moves. Stay out of its stomp range and hit it while it's turning around.",
             counter = "No known counter. Patience and good spacing.",
@@ -237,7 +283,7 @@ public static class EnemyCatalog
         new Entry
         {
             id = "moonboundelder", name = "Moonbound Elder", keys = new[] { "moonboundelder" }, killsToReveal = 1,
-            about = "Nah, I'd win",
+            about = "Nah, I'd win.",
             dropIds = "exp",
             weakness = "When he crouches and glows, the nova is coming - jump or run out of the ring. At half health he howls, turns red, calls two Werefasts and gets faster.",
             counter = "Same windows as a Big Wolf: strike as he rears back before the claws come down. His size makes the swipes reach further, so stay close.",

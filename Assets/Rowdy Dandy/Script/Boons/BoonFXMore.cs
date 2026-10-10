@@ -779,7 +779,7 @@ public class TideRider : MonoBehaviour
         if (water != null)
         {
             water.transform.position = feet + new Vector3(facing * 0.3f, 0.5f, 0f);
-            water.transform.localScale = new Vector3(facing, 1f, 1f);
+            water.transform.localScale = new Vector3(-facing, 1f, 1f); // the waterSonic art curls to the LEFT (see Rings.FoamRing)
         }
         if (pinkWave != null)
         {
@@ -1710,6 +1710,7 @@ public class BloomFlower : MonoBehaviour
         b.sr = sr; b.heal = heal; b.glow = mine != null ? glow : BoonFX.Pink;
         FXParticle.Burst(ground + Vector3.up * 0.2f, BoonFX.Pink, 10, 1f, 2.5f, 2f, 0.5f, true);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.sporePop : null, 0.35f, 1.8f);
+        if (Boons.Has("photosynthesis")) SunFX.Sunspot(ground, Boons.Has("sunspot") ? Boons.V("sunspot", 0) : 6f); // Photosynthesis
     }
 
     private void Update()
@@ -1751,6 +1752,7 @@ public static class GuildFX
         foreach (EnemyHealth e in BoonFX.EnemiesIn(cat.transform.position, 1.5f))
         {
             BoonFX.Hit(e, damage * Boons.CatDamageFor(cat), "Stench", cat, true);
+            if (Boons.Has("moldcats")) StatusEffects.Of(e).Poison(2f, 4f + 0.4f * PlayerStats.Level, cat); // Mold Cats
             BoonFX.Slow(e, 1f, 0.25f);
             if (Random.value < 0.3f) FXParticle.Burst(BoonFX.Center(e), Stink, 3, 0.3f, 1f, -1f, 0.6f);
         }
@@ -1844,6 +1846,7 @@ public class FishTreat : MonoBehaviour
 
         if (age < 0.3f || BoonRunner.Rowdy == null || Vector2.Distance(BoonRunner.RowdyCenter, transform.position + Vector3.up * 0.15f) > 0.7f) return;
         if (BoonRunner.Rowdy.TryGetComponent(out Health h)) h.AddHealth(8f, false);
+        BoonRunner.OnFoodEaten(0.5f); // Food Critic, Midnight Snack
         foreach (PetFollower p in PetFollower.Pets)
         {
             if (p == null || !p.IsCollected) continue;
@@ -1892,6 +1895,21 @@ public static class Lobbed
         {
             ChefFX.EggSplat(at, e, damage, fermented);
         }).radius = 0.25f;
+    }
+
+    // Egg Toss: an egg lobbed to land right on this enemy (a little delay so a volley streams out)
+    public static void EggAt(Vector3 from, EnemyHealth target, float delay, float damage, bool fermented)
+    {
+        if (target == null) return;
+        BoonRunner.Delay(delay, () =>
+        {
+            if (target == null || target.enemydead) return;
+            Vector3 to = BoonFX.Center(target) + (Vector3)(Random.insideUnitCircle * 0.1f);
+            float t = Mathf.Clamp(Vector2.Distance(from, to) / 9f, 0.25f, 0.7f);
+            Lob l = Lob.Throw(MoreSprites.Egg, from, Lob.Aim(from, to, t), Random.Range(-720f, 720f), (at, e) => ChefFX.EggSplat(at, e, damage, fermented));
+            l.radius = 0.25f;
+            l.trail = new Color(1f, 0.95f, 0.8f, 0.6f);
+        });
     }
 
     public static void Hairball(Vector3 from, EnemyHealth target, float damage)
@@ -1958,23 +1976,25 @@ public static class ChefFX
         else if (fried != null) StuckFood.Lie(fried, at, 1.2f);
     }
 
-    public static void TomatoSplat(Vector3 feet, float damage, bool fermented)
+    public static void TomatoSplat(Vector3 feet, float damage, bool fermented, int stock = 1)
     {
         Sprite tomato = BoonArt.FoodSprite(BoonArt.Food.Tomato);
-        for (int i = 0; i < 3; i++)
+        int count = 3 * Mathf.Max(1, stock); // Food Stock: 9
+        for (int i = 0; i < count; i++)
         {
-            float side = i - 1;
+            float side = count == 3 ? i - 1 : Mathf.Lerp(-1.6f, 1.6f, i / (count - 1f)) + Random.Range(-0.1f, 0.1f);
             if (tomato == null) break;
-            Lob.Throw(tomato, feet + Vector3.up * 0.3f, new Vector2(side * 3f, 3.5f + Mathf.Abs(side)), side * -400f, (at, e) =>
+            Lob.Throw(tomato, feet + Vector3.up * 0.3f, new Vector2(side * 3f, 3.5f + Mathf.Abs(side) + Random.Range(0f, 1f)), side * -400f, (at, e) =>
             {
                 FXParticle.Burst(at, new Color(0.9f, 0.15f, 0.1f), 10, 1f, 3f, 7f, 0.45f, true);
                 BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.2f, Random.Range(1.2f, 1.5f));
             }).radius = 0.01f; // they just splat; the damage happens on landing
         }
-        GroundShock.Spawn(feet, 2f, new Color(1f, 0.3f, 0.2f), new Color(0.6f, 0.1f, 0.08f), 0.35f);
+        float reach = stock > 1 ? 3f : 2f;
+        GroundShock.Spawn(feet, reach, new Color(1f, 0.3f, 0.2f), new Color(0.6f, 0.1f, 0.08f), 0.35f);
         FXParticle.Burst(feet + Vector3.up * 0.1f, new Color(0.9f, 0.15f, 0.1f), 18, 1.5f, 4f, 9f, 0.5f, true);
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.45f, 0.75f);
-        foreach (EnemyHealth e in BoonFX.EnemiesIn(feet + Vector3.up * 0.4f, 2f))
+        foreach (EnemyHealth e in BoonFX.EnemiesIn(feet + Vector3.up * 0.4f, reach))
         {
             BoonFX.Hit(e, damage, "Tomato Splat");
             BoonFX.Slow(e, 2f, 0.4f);
@@ -2081,6 +2101,7 @@ public class GiantSandwich : MonoBehaviour
         if (rowdy == null || land < 1f || Vector2.Distance(BoonRunner.RowdyCenter, transform.position + Vector3.up * 0.18f) > 0.8f) return;
         if (rowdy.TryGetComponent(out Health h)) h.AddHealth(25f, false);
         BoonRunner.Feed(8f);
+        BoonRunner.OnFoodEaten(1f); // Food Critic, Midnight Snack
         if (Boons.Has("catfood"))
             foreach (PetFollower p in PetFollower.Pets) if (p != null && p.IsCollected) p.WakeUp();
         BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.chomp : null, 0.6f, 1f);

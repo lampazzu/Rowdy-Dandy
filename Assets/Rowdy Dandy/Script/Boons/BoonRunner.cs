@@ -56,6 +56,8 @@ public class BoonRunner : MonoBehaviour
         bodyCollider = GetComponent<Collider2D>();
         if (GetComponent<Werewolf>() == null) gameObject.AddComponent<Werewolf>();
         if (GetComponent<StephmossForm>() == null) gameObject.AddComponent<StephmossForm>();
+        if (GetComponent<WeaponTricks>() == null) gameObject.AddComponent<WeaponTricks>();
+        if (GetComponent<SpecialBoons>() == null) gameObject.AddComponent<SpecialBoons>();
     }
 
     private void OnDestroy() { if (instance == this) instance = null; }
@@ -100,10 +102,36 @@ public class BoonRunner : MonoBehaviour
             BoonFX.Sparkles(r.HeadTop, BoonFX.Pink, 4, 0.25f, 0.4f);
         }
         if (Boons.Has("sporelob") && r.swings % 3 == 0) Lobbed.SporePod(front + Vector3.up * 0.2f, r.Facing, Boons.V("sporelob", 0));
-        if (Boons.Has("meatball") && r.swings % 3 == 0) Lobbed.Meatball(front + Vector3.up * 0.2f, r.Facing, Boons.V("meatball", 0), Boons.Has("fermented"));
+        if (Boons.Has("meatball") && r.swings % 3 == 0)
+            for (int i = 0; i < FoodStock; i++) Lobbed.Meatball(front + Vector3.up * (0.2f + 0.1f * i), r.Facing * (1f - 0.18f * i), Boons.V("meatball", 0) * FoodDamage, Boons.Has("fermented"));
         if (Boons.Has("splitedge") && Boons.ActiveWeapon == 1) HairCrescent.FireSteel(front, r.Facing, Boons.V("splitedge", 0));
         Werewolf.OnSwing();
         StephmossForm.OnSwing();
+    }
+
+    // Which attack it was (PlayerMovement): 0 = ground, 1 = jump attack, 2 = down + attack. The weapon boons (WeaponTricks).
+    public static void OnAttackKind(int kind)
+    {
+        if (!Ok) return;
+        WeaponTricks.OnAttack(instance, kind);
+    }
+
+    // Food Critic (Narcissism + Crazy Chef): 5 s in the spotlight after eating
+    private float criticUntil = -1f;
+    public static bool InCriticSpotlight => instance != null && Time.time < instance.criticUntil;
+
+    // A sandwich / fish treat was eaten: Food Critic, Midnight Snack
+    public static void OnFoodEaten(float size)
+    {
+        if (!Ok) return;
+        BoonRunner r = instance;
+        if (Boons.Has("foodcritic"))
+        {
+            r.criticUntil = Time.time + 5f;
+            SpotlightFX.Begin(r.transform, 5f);
+            foreach (EnemyHealth e in BoonFX.EnemiesIn(r.Center, 4.5f)) BoonFX.Charm(e, 5f);
+        }
+        Werewolf.OnFoodEaten(size);
     }
 
     // Surf dash boons have no cooldown (user rule): every surf dash sets them all off
@@ -122,16 +150,6 @@ public class BoonRunner : MonoBehaviour
             r.wipeoutReadyAt = now + Balance.WipeoutCooldown;
             TideRider.Begin(r, Boons.V("wipeout", 0), Boons.Has("beachbod"), Boons.Has("redtide"));
         }
-        if (Boons.Has("runway") && r.Grounded)
-        {
-            r.runwayReadyAt = now + 2.5f;
-            RunwayCarpet.Spawn(r.Feet, r.Facing, Boons.V("runway", 0));
-        }
-        if (Boons.Has("ink"))
-        {
-            r.inkReadyAt = now + 3f;
-            InkCloud.Spawn(r.Center, r.Facing, Boons.V("ink", 0));
-        }
         if (Boons.Has("rootsnare") && r.Grounded)
         {
             r.snareReadyAt = now + 3f;
@@ -145,7 +163,14 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("eggs"))
         {
             r.eggsReadyAt = now + 1.5f;
-            for (int i = 0; i < 3; i++) Lobbed.Egg(r.Center + new Vector3(r.Facing * 0.3f, 0.2f, 0f), r.Facing, i, Boons.V("eggs", 0), Boons.Has("fermented"));
+            // one egg at every enemy on screen (Food Stock: three each), aimed so they land on them
+            var targets = BoonFX.EnemiesOnScreen();
+            int each = FoodStock;
+            int n = 0;
+            foreach (EnemyHealth e in targets)
+                for (int k = 0; k < each; k++, n++)
+                    Lobbed.EggAt(r.Center + new Vector3(r.Facing * 0.3f, 0.2f, 0f), e, n * 0.03f, Boons.V("eggs", 0) * FoodDamage, Boons.Has("fermented"));
+            if (targets.Count == 0) for (int i = 0; i < each; i++) Lobbed.Egg(r.Center + new Vector3(r.Facing * 0.3f, 0.2f, 0f), r.Facing, i, Boons.V("eggs", 0) * FoodDamage, Boons.Has("fermented"));
             BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.hairFlip : null, 0.3f, 1.6f);
         }
         if (Boons.Has("blinding"))
@@ -155,10 +180,12 @@ public class BoonRunner : MonoBehaviour
         }
         if (Boons.Has("catcall") && Boons.CatsWithRowdy > 0)
         {
-            r.catCallReadyAt = now + Boons.V("catcall", 0);
+            // only the leader and the sub-leader are ready at once; the others get a slice of their cooldown cut
+            float cut = Boons.V("catcall", 0) / 100f;
             foreach (PetFollower p in PetFollower.Pets)
             {
                 if (p == null || !p.IsCollected) continue;
+                if (!CatRoster.IsLeader(p) && !CatRoster.IsSubLeader(p)) { p.CutCooldown(cut); continue; }
                 p.WakeUp();
                 PulseRing.Spawn(p.transform.position, new Color(BoonFX.Lavender.r, BoonFX.Lavender.g, BoonFX.Lavender.b, 0.9f), 0.7f, 0.3f);
                 BoonFX.Sparkles(p.transform.position, BoonFX.Lavender, 3, 0.2f, 0.5f);
@@ -234,6 +261,10 @@ public class BoonRunner : MonoBehaviour
         }
     }
 
+    // Food Stock (Crazy Chef): every food boon makes three of everything
+    public static int FoodStock => Boons.Has("foodstock") ? 3 : 1;
+    public static float FoodDamage => Boons.Has("foodstock") ? 1f + Boons.V("foodstock", 0) / 100f : 1f;
+
     private static PetFollower RandomCat()
     {
         var mine = new List<PetFollower>();
@@ -246,7 +277,7 @@ public class BoonRunner : MonoBehaviour
     {
         if (!Ok || e == null) return damage;
         BoonRunner r = instance;
-        damage *= Boons.OutgoingMultiplier * Boons.TargetMultiplier(e);
+        damage *= Boons.OutgoingMultiplier * Boons.TargetMultiplier(e) * Boons.WeaponMultiplier;
         if (Boons.Has("butcher") && Boons.ActiveWeapon == 3 && !e.IsObject && e.currentenemyHealth <= e.startingenemyHealth * 0.4f)
         {
             BoonFX.Popup(BoonFX.Center(e) + Vector3.up * 0.6f, "CHOP!", new Color(1f, 0.6f, 0.5f), 0.7f, 0.7f);
@@ -272,13 +303,14 @@ public class BoonRunner : MonoBehaviour
         Vector3 c = BoonFX.Center(e);
         Werewolf.AddCharge(2.5f);
         StephmossForm.AddCharge(2.5f);
+        SpecialBoons.AddCharge(0.6f);
         if (Werewolf.Active) BankHeal(1f, true); // lifesteal
         r.hits++;
 
         if (Boons.Has("undertow") && !e.enemydead)
         {
             float toward = Mathf.Sign(r.Center.x - c.x);
-            UndertowPull.Begin(e, r.transform, 1.1f, 0.22f); // after the hit's own knockback would have pushed it away
+            UndertowPull.Begin(e, r.transform, 1.3f, 0.22f, 0.45f); // owns the speed through the hit's own knockback
             BoonFX.Slow(e, 2f, Boons.V("undertow", 0) / 100f);
             FXParticle.Burst(c, BoonFX.Cyan, 6, 1f, 2.5f, 2f, 0.4f);
             // a streak of dark water pulling back toward Rowdy, so the drag reads
@@ -297,7 +329,8 @@ public class BoonRunner : MonoBehaviour
         }
         if (Boons.Has("pressure") && r.hits % 5 == 0) AbyssFX.Crush(c, Boons.V("pressure", 0));
         if (Boons.Has("openwounds") && crit && !e.enemydead) BoonDot.Bleed(e, Boons.V("openwounds", 0), 4f);
-        if (Boons.Has("sparks")) SmithFX.SparkShower(c, e, Boons.V("sparks", 0), r.Facing);
+        if (Boons.Has("rustededge") && !e.enemydead) BoonFX.Poison(e, 4f, 5f + 0.5f * PlayerStats.Level);
+        WeaponTricks.AfterHit(e, damage);
         if (Boons.Has("solarflare") && r.hits % 4 == 0) SunFX.SunPillar(c, Boons.V("solarflare", 0));
         if (Boons.Has("sunburn") && !e.enemydead) BoonDot.Burn(e, Boons.V("sunburn", 0), 3f);
         if (Boons.Has("forgefire") && !e.enemydead) BoonDot.Burn(e, 6f, 3f);
@@ -312,7 +345,7 @@ public class BoonRunner : MonoBehaviour
     // Hook Line And Sinker: reel them in, every 3rd rod hit on the same enemy lands the big one
     private void HookLine(EnemyHealth e, Vector3 c)
     {
-        UndertowPull.Begin(e, transform, 0.8f, 0.18f);
+        UndertowPull.Begin(e, transform, 0.8f, 0.18f, 0.35f);
         rodHits.TryGetValue(e, out int n);
         n++;
         if (n >= 3)
@@ -342,6 +375,7 @@ public class BoonRunner : MonoBehaviour
             BoonArt.Play(art.claw, 0.25f, Random.Range(1.2f, 1.4f));
         }
         BoonFX.Hit(e, damage, "Feral Swipe");
+        if (Boons.Has("rabid")) BoonFX.Poison(e, 4f, 6f + 0.6f * PlayerStats.Level);
     }
 
     private static Sprite RandomCatSprite()
@@ -359,12 +393,14 @@ public class BoonRunner : MonoBehaviour
     public static void OnCatHit(PetFollower cat, EnemyHealth e)
     {
         if (!Ok || cat == null || e == null || e.IsObject) return;
+        if (Boons.Has("moldcats") && !e.enemydead) StatusEffects.Of(e).Poison(4f, 5f + 0.5f * PlayerStats.Level, cat); // Mold Cats
     }
 
     public static void OnCatPower(PetFollower cat)
     {
         if (!Ok || cat == null) return;
         BoonRunner r = instance;
+        if (Boons.Has("clawsharpener") && WeaponManager.Instance != null) WeaponManager.Instance.RepairActive(1f); // Claw Sharpener
         if (Boons.Has("compost") && r.health != null)
         {
             BankHeal(Boons.V("compost", 0), false);
@@ -373,7 +409,8 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("foodfight"))
         {
             EnemyHealth target = BoonFX.Nearest(cat.transform.position, 5f);
-            if (target != null) Lobbed.FoodFight(cat.transform.position + Vector3.up * 0.2f, target, Boons.V("foodfight", 0) * Boons.CatDamageFor(cat), cat);
+            if (target != null)
+                for (int i = 0; i < FoodStock; i++) Lobbed.FoodFight(cat.transform.position + Vector3.up * (0.2f + 0.08f * i), target, Boons.V("foodfight", 0) * FoodDamage * Boons.CatDamageFor(cat), cat);
         }
     }
 
@@ -430,6 +467,7 @@ public class BoonRunner : MonoBehaviour
         Werewolf.OnKill();
         StephmossForm.AddCharge(8f);
         StephmossForm.OnKill(c);
+        SpecialBoons.AddCharge(2.5f);
         bool poisoned = e.TryGetComponent(out StatusEffects s) && s.IsPoisoned;
 
         if (Boons.Has("bloodthirst") && r.health != null)
@@ -438,9 +476,14 @@ public class BoonRunner : MonoBehaviour
             r.StartCoroutine(r.BloodStream(c));
         }
         if (Boons.Has("feast") && Werewolf.Active) BankHeal(3f, true);
+        if (Boons.Has("rabid") && poisoned) Werewolf.AddChargeRaw(5f); // Rabid: poisoned kills feed the moon
+        if (Boons.Has("scavenger") && !Boons.Has("justrod") && Random.value < 0.05f * DropLuck.Multiplier) WeaponTricks.DropEveryWeapon(c);
+        if (Boons.Has("fishingcats") && credit != null && credit.kind == KillCredit.Kind.Cat && BoonFX.InWater(e)) FishTreat.Drop(c);
         if (Boons.Has("overgrowth") && poisoned) EarthErupt.Spawn(e, c, Boons.V("overgrowth", 0));
         if (Boons.Has("plague") && poisoned) RotFX.Plague(c, e, Mathf.RoundToInt(Boons.V("plague", 0)));
-        if (Boons.Has("bloom") && poisoned && ++r.bloomKills % 5 == 0) BloomFlower.Spawn(c, Boons.V("bloom", 0));
+        // Photosynthesis: in daylight flowers grow twice as fast (every 3rd poison kill instead of every 5th)
+        int bloomEvery = Boons.Has("photosynthesis") && Boons.DayBoons ? 3 : 5;
+        if (Boons.Has("bloom") && poisoned && ++r.bloomKills % bloomEvery == 0) BloomFlower.Spawn(c, Boons.V("bloom", 0));
         if (Boons.Has("huntmark") && HuntersMark.Target == e)
         {
             r.health.AddHealth(10f, false);
@@ -450,7 +493,7 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("sandwich") && ++r.sandwichKills >= Mathf.RoundToInt(Boons.V("sandwich", 0)))
         {
             r.sandwichKills = 0;
-            GiantSandwich.Drop(r.Center + new Vector3(r.Facing * 1.2f, 0f, 0f));
+            for (int i = 0; i < FoodStock; i++) GiantSandwich.Drop(r.Center + new Vector3(r.Facing * (1.2f + 0.9f * i), 0f, 0f));
         }
     }
 
@@ -499,12 +542,6 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("thornskin") && Spike.LastAttackFrame >= Time.frameCount - 1 && Spike.LastAttacker != null && !Spike.LastAttacker.enemydead)
             RotFX.Thorns(Spike.LastAttacker, Boons.V("thornskin", 0));
 
-        // Leviathan: low health wakes the deep
-        if (Boons.Has("leviathan") && r.health != null && Time.time >= r.leviathanReadyAt && r.health.currentHealth <= r.health.startingHealth * 0.4f && !r.health.IsDead)
-        {
-            r.leviathanReadyAt = Time.time + 15f;
-            AbyssFX.Tentacles(r.Feet, Boons.V("leviathan", 0));
-        }
     }
 
     // True = the hit that would have killed Rowdy was survived (Nine Lives)
@@ -548,7 +585,9 @@ public class BoonRunner : MonoBehaviour
     // ================================================================ hooks: weapons
     public static void OnWeaponBroken(Vector3 at)
     {
-        if (!Ok || !Boons.Has("weaponsnob")) return;
+        if (!Ok) return;
+        if (Boons.Has("rustededge")) SporeCloud.Spawn(instance.Feet + new Vector3(instance.Facing * 0.5f, 0f, 0f), 8f + 0.8f * PlayerStats.Level, false); // Rusted Edge
+        if (!Boons.Has("weaponsnob")) return;
         BoonRunner r = instance;
         Vector3 c = r.Center + new Vector3(r.Facing * 0.6f, 0f, 0f);
         ExplosionChain.Boom(c, 1.4f, 0.6f, 0.7f);
@@ -592,6 +631,11 @@ public class BoonRunner : MonoBehaviour
         else if (d.id == "stephmoss")
         {
             StephmossForm.Fill(); // the first swarm is on the house
+            Tutorials.Show(Tutorials.Topic.Boons, BoonIcons.Get(d), 0.9f);
+        }
+        else if (d.id == "sandwichrain" || d.id == "armory")
+        {
+            SpecialBoons.Fill(); // the first one is on the house
             Tutorials.Show(Tutorials.Topic.Boons, BoonIcons.Get(d), 0.9f);
         }
         else if (d.id == "mainchar") StyleRank.Announce();
@@ -742,6 +786,11 @@ public class BoonRunner : MonoBehaviour
         AnglerLure.Keep(Boons.Has("angler"), transform);
         SunHalo.Keep(Boons.Has("halo"), transform);
         HuntersMark.Keep(Boons.Has("huntmark"), Center);
+        // Leviathan: below 30% health the tentacles are out, smashing, for as long as it lasts
+        LeviathanArms.Keep(Boons.Has("leviathan") && health.currentHealth <= health.startingHealth * 0.3f, this, Boons.V("leviathan", 0));
+        AllyJelly.Keep(Boons.Has("jellypals") ? Boons.CatsWithRowdy : 0, transform);
+        CatLoyalty.Tick(Boons.Has("catloyalty"), transform);
+        WeaponSharpness.Tick(dt);
 
         UpdateCats(dt);
     }
@@ -754,7 +803,7 @@ public class BoonRunner : MonoBehaviour
         if (air <= 0.25f) return;
         if (Boons.Has("sporestep") && now >= sporeReadyAt)
         {
-            sporeReadyAt = now + 0.5f;
+            sporeReadyAt = now + (Boons.Has("photosynthesis") && Boons.DayBoons ? 0.25f : 0.5f);
             SporeCloud.Spawn(Feet, Boons.V("sporestep", 0), false);
         }
         if (Boons.Has("ripcurrent") && now >= ripReadyAt)
@@ -777,12 +826,7 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("tomato") && now >= tomatoReadyAt)
         {
             tomatoReadyAt = now + 0.5f;
-            ChefFX.TomatoSplat(Feet, Boons.V("tomato", 0), Boons.Has("fermented"));
-        }
-        if (Boons.Has("anvil") && fall >= 1f && now >= anvilReadyAt)
-        {
-            anvilReadyAt = now + 1f;
-            SmithFX.AnvilDrop(Feet + new Vector3(Facing * 1.1f, 0f, 0f), Boons.V("anvil", 0));
+            ChefFX.TomatoSplat(Feet, Boons.V("tomato", 0) * FoodDamage, Boons.Has("fermented"), FoodStock);
         }
         if (Boons.Has("sunspot") && now >= sunspotReadyAt)
         {
@@ -837,7 +881,25 @@ public class BoonRunner : MonoBehaviour
             if (stenchTick) GuildFX.StenchTick(p, Boons.V("stench", 0) * 0.5f);
         }
         CatCrown.Keep(Boons.Has("topcat") ? CatRoster.Leader : null);
+
+        // Sunbathing (Guild + Sun God): in daylight, cats with their power ready glow and heal Rowdy 1 HP every 3 s each
+        if (Boons.Has("sunbathing") && Boons.DayBoons)
+        {
+            sunbathTimer -= dt;
+            bool tick = sunbathTimer <= 0f;
+            if (tick) sunbathTimer = 3f;
+            int ready = 0;
+            foreach (PetFollower p in PetFollower.Pets)
+            {
+                if (p == null || !p.IsCollected || p.CooldownFraction < 1f) continue;
+                ready++;
+                if (emit && Random.value < 0.35f) BoonFX.Sparkles(p.transform.position + (Vector3)Random.insideUnitCircle * 0.15f, BoonFX.Sunny, 1, 0.05f, 0.5f);
+                if (tick) { FXParticle.Burst(p.transform.position, BoonFX.Sunny, 4, 0.5f, 1.5f, -1f, 0.5f); StartCoroutine(HealStream(p.transform.position)); }
+            }
+            if (tick && ready > 0) BankHeal(ready, false);
+        }
     }
+    private float sunbathTimer = 3f;
 
     private void LateUpdate()
     {

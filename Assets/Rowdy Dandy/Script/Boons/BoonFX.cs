@@ -67,12 +67,34 @@ public static class BoonFX
 
     public static Vector3 Center(EnemyHealth e) => EnemyFairness.BodyCenter(e);
 
+    // Every enemy the camera can see (Egg Toss: one egg each)
+    public static List<EnemyHealth> EnemiesOnScreen()
+    {
+        var list = new List<EnemyHealth>();
+        Camera cam = Camera.main;
+        if (cam == null) return list;
+        float h = cam.orthographicSize, w = h * cam.aspect;
+        foreach (EnemyHealth e in EnemiesInBox(cam.transform.position, new Vector2(w * 2f, h * 2f)))
+            if (EnemyFairness.OnScreen(Center(e), 0.02f)) list.Add(e);
+        return list;
+    }
+
+    // Standing in / on the water (the Watermap is solid: its surface is right under the feet)
+    public static bool InWater(EnemyHealth e)
+    {
+        if (e == null) return false;
+        Collider2D c = e.GetComponent<Collider2D>();
+        Vector2 feet = c != null ? new Vector2(c.bounds.center.x, c.bounds.min.y + 0.05f) : (Vector2)e.transform.position;
+        return Physics2D.Raycast(feet, Vector2.down, 0.4f, 1 << 6).collider != null; // layer 6 = water
+    }
+
     // Boon damage, credited to Rowdy with the boon's name (or a cat)
     public static void Hit(EnemyHealth e, float damage, string with, PetFollower cat = null, bool quiet = false)
     {
         if (e == null || e.enemydead || damage <= 0f) return;
         KillCredit credit = cat != null ? KillCredit.Cat(cat) : KillCredit.Rowdy();
-        if (cat == null) credit.with = with;
+        if (cat == null && !Werewolf.Active && !StephmossForm.Active) credit.with = with; // transformed: the form's own line in the stats
+        if (cat != null && Boons.Has("fishingcats") && InWater(e)) damage *= 2f; // Fishing Cats: dragged under
         EnemyHealth.CreditNextHit(credit);
         RunStats.BoonDamage += damage;
         e.TakeDamageEnemy(Mathf.Round(damage), false, quiet);
@@ -464,9 +486,11 @@ public class UndertowPull : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Transform toward;
-    private float speed, until, stopDistance;
+    private float speed, until, stopDistance, holdUntil;
 
-    public static void Begin(EnemyHealth e, Transform toward, float distance, float seconds)
+    // hold: after the pull, it keeps the enemy from sliding away for this long (the hit's own knockback is keyframed
+    // on its GetHit clip and outlasts a short pull - Undertow used to end up knocking enemies back anyway)
+    public static void Begin(EnemyHealth e, Transform toward, float distance, float seconds, float hold = 0f)
     {
         if (e == null || e.enemydead || toward == null || !e.TryGetComponent(out Rigidbody2D body)) return;
         UndertowPull p = e.GetComponent<UndertowPull>();
@@ -475,26 +499,28 @@ public class UndertowPull : MonoBehaviour
         p.toward = toward;
         p.speed = distance / Mathf.Max(0.05f, seconds);
         p.until = Time.time + seconds;
+        p.holdUntil = Mathf.Max(p.holdUntil > Time.time ? p.holdUntil : 0f, p.until + hold);
         p.stopDistance = 0.85f; // never pulled into Rowdy
         p.enabled = true;
     }
 
     private void FixedUpdate()
     {
-        if (rb == null || toward == null || Time.time > until || (TryGetComponent(out EnemyHealth h) && h.enemydead)) { enabled = false; return; }
+        if (rb == null || toward == null || (TryGetComponent(out EnemyHealth h) && h.enemydead)) { enabled = false; return; }
         float dx = toward.position.x - rb.position.x;
-        if (Mathf.Abs(dx) <= stopDistance) { Stop(); return; }
+        bool pulling = Time.time <= until && Mathf.Abs(dx) > stopDistance;
+        if (!pulling)
+        {
+            // pulled in (or close enough): held there, no knockback sliding it away, until the hold runs out
+            if (Time.time > holdUntil) { enabled = false; return; }
+            if (rb.bodyType == RigidbodyType2D.Dynamic) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            return;
+        }
         float dir = Mathf.Sign(dx);
         float step = speed * Time.fixedDeltaTime;
-        if (SolidGround.Blocked(rb.position + new Vector2(dir * (0.35f + step), 0.3f), new Vector2(0.15f, 0.3f))) { Stop(); return; }
+        if (SolidGround.Blocked(rb.position + new Vector2(dir * (0.35f + step), 0.3f), new Vector2(0.15f, 0.3f))) { until = 0f; return; } // a wall: just hold
         if (rb.bodyType == RigidbodyType2D.Dynamic) rb.linearVelocity = new Vector2(dir * speed, rb.linearVelocity.y);
         else rb.MovePosition(rb.position + new Vector2(dir * step, 0f));
-    }
-
-    private void Stop()
-    {
-        if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-        enabled = false;
     }
 }
 
@@ -624,7 +650,7 @@ public class SporeCloud : MonoBehaviour
         foreach (var (t, delay, size) in shrooms)
         {
             if (t == null) continue;
-            float k = Mathf.Clamp01((age - delay) / 0.16f);
+            float k = Mathf.Clamp01((age - delay) / (Boons.Has("photosynthesis") && Boons.DayBoons ? 0.08f : 0.16f)); // Photosynthesis: twice as fast
             float grow = k < 1f ? Mathf.Sin(k * Mathf.PI * 0.5f) * (1f + 0.25f * Mathf.Sin(k * Mathf.PI)) : 1f;
             float sink = Mathf.Clamp01((age - life) / 0.3f);
             float breathe = 1f + 0.06f * Mathf.Sin(age * 7f + delay * 20f);

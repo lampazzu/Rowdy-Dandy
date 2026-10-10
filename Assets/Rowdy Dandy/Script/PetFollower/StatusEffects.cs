@@ -69,10 +69,12 @@ public class RowdyBuffs : MonoBehaviour
     private Vector3 HeadTop => bodyCollider != null ? new Vector3(bodyCollider.bounds.center.x, bodyCollider.bounds.max.y, 0f) : transform.position + Vector3.up * 0.9f;
 
     // ================================================================ armor (The Peak)
+    public static int MaxCharges => Boons.Has("peakplate") ? ArmorHits * 3 : ArmorHits; // Triple Plated: 3 armors at once
     public static void GiveArmor(PetFollower owner, int hits = ArmorHits)
     {
         RowdyBuffs b = Get();
         if (b == null) return;
+        if (hits == ArmorHits) hits = MaxCharges;
         b.charges = hits;
         b.armorOwner = owner;
         b.shieldPop = 0.35f;
@@ -331,6 +333,12 @@ public class StatusEffects : MonoBehaviour
     // ---------------------------------------------------------------- stun
     public void Charm(float seconds)
     {
+        // Toxic Beauty (Narcissism + Stephmoss): charmed = poisoned, poisoned = charmed longer
+        if (Boons.Has("toxicbeauty") && health != null && !health.enemydead)
+        {
+            if (IsPoisoned) seconds *= 1.5f;
+            Poison(4f, 6f + 0.6f * PlayerStats.Level, null);
+        }
         bool fresh = holdKind != HoldKind.Charm || !IsStunned(gameObject);
         Stun(seconds);
         holdKind = HoldKind.Charm;
@@ -635,6 +643,7 @@ public static class CatPowers
 {
     public const float StompRadius = 9f;
     public const float StunTime = 1f;
+    public static float StompDamage => 10f + 2f * Mathf.Max(0, PlayerStats.Level - 1); // Mushidon: 10 at level 1
     public const float DecayRadius = 2.2f;
     public const int MaxDecayBursts = 16;
 
@@ -658,6 +667,9 @@ public static class CatPowers
             // on the ground layer = feet touching ground
             if (!SolidGround.Under(hit)) continue; // on the ground = feet touching ground
             StatusEffects.Of(e).Stun(StunTime);
+            // the landing hurts too: at least 10 (x cat damage boons, x Rowdy's level like Wig)
+            EnemyHealth.CreditNextHit(cat != null ? KillCredit.Cat(cat) : KillCredit.Rowdy());
+            e.TakeDamageEnemy(Mathf.Round(StompDamage * Boons.CatDamageFor(cat)), false, true);
             stunnedCount++;
             RunStats.EnemiesStunned++;
         }

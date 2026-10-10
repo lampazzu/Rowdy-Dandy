@@ -3,12 +3,12 @@ using UnityEngine;
 
 // Every patron and every boon: names, slots, numbers per rarity, icons and what the patrons say.
 // Texts use the pixel font: A-Z 0-9 . , : ! ? % / - + < > ( ) only (no apostrophes).
-//   {0} {1} in a description = the boon's values for the rarity shown (Common / Rare / Epic / Legendary)
+//   {0} {1} in a description = the boon's values for the rarity shown (Common / Uncommon / Rare / Epic / Legendary)
 //   Slots: one boon per Attack / Dash / Jump / Cats / Special slot (a new one replaces the old), Passives stack.
 // Patron portraits: Resources/BoonPortraits/<enum name>.png (e.g. Narcissism.png, Chef.png, Sun.png).
 public enum Patron { Narcissism, Abyss, Lycanthropy, Rot, Guild, Chef, Smith, Sun }
 public enum BoonSlot { Attack, Dash, Jump, Cats, Special, Passive }
-public enum Rarity { Common, Rare, Epic, Legendary, Duo }
+public enum Rarity { Common, Uncommon, Rare, Epic, Legendary, Duo } // saved as letters C U R E L D (Boons.Load reads the old numbers too)
 
 public class PatronInfo
 {
@@ -26,12 +26,13 @@ public class BoonDef
     public Patron? partner;          // duo boons: the second patron
     public BoonSlot slot;
     public string desc;
-    public float[][] values;         // values[i] = { common, rare, epic, legendary }
+    public float[][] values;         // values[i] = { common, rare, epic } or { common, rare, epic, legendary } or all five
     public string icon;              // BoonIcons key
     public Color iconTint = Color.white;
     public string duoLine;           // what the two patrons say together
     public bool legendaryOnly;
     public string[] requires;        // duo: one of each list... see Boons.Eligible (ids of boons, any one per patron)
+    public string[] excludes;        // can't be owned together: taking this one replaces those (and the other way round)
     public System.Func<bool> condition;
 
     public bool IsDuo => partner.HasValue;
@@ -42,9 +43,17 @@ public class BoonDef
         float[] v = values[index];
         // tuned numbers for this boon (Balance.BoonValues) win over the ones below
         if (Balance.BoonValues.TryGetValue(id, out float[][] tuned) && index < tuned.Length) v = tuned[index];
-        int i = r == Rarity.Duo ? 0 : Mathf.Min((int)r, v.Length - 1);
-        if ((int)r == 3 && v.Length < 4) return v[v.Length - 1] * 1.25f; // legendary of a 3-value boon
-        return v[i];
+        if (r == Rarity.Duo || v.Length == 1) return v[0];
+        if (v.Length >= 5) return v[Mathf.Min((int)r, v.Length - 1)];
+        // 3 or 4 numbers = common / rare / epic (/ legendary): uncommon sits halfway, legendary = epic x1.25
+        switch (r)
+        {
+            case Rarity.Common: return v[0];
+            case Rarity.Uncommon: return Mathf.Lerp(v[0], v[1], 0.5f);
+            case Rarity.Rare: return v[1];
+            case Rarity.Epic: return v[Mathf.Min(2, v.Length - 1)];
+            default: return v.Length >= 4 ? v[3] : v[v.Length - 1] * 1.25f;
+        }
     }
 
     public string Describe(Rarity r)
@@ -64,18 +73,20 @@ public static class BoonCatalog
     public static readonly Color[] RarityColors =
     {
         new Color(0.88f, 0.86f, 0.92f),   // common
+        new Color(0.45f, 0.95f, 0.4f),    // uncommon
         new Color(0.35f, 0.7f, 1f),       // rare
         new Color(0.78f, 0.4f, 1f),       // epic
         new Color(1f, 0.6f, 0.15f),       // legendary
-        new Color(0.6f, 1f, 0.45f),       // duo
+        new Color(0.4f, 1f, 0.88f),       // duo
     };
-    public static readonly string[] RarityNames = { "COMMON", "RARE", "EPIC", "LEGENDARY", "DUO" };
+    public static readonly string[] RarityNames = { "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "DUO" };
     public static readonly string[] SlotNames = { "ATTACK", "DASH", "JUMP", "CATS", "SPECIAL", "PASSIVE" };
 
     // Boons that were taken out of the game (DJ Fever, The Hammock, a few duos). A save that owned one gets the pick back.
     public static readonly HashSet<string> Retired = new HashSet<string>
     {
         "chainslap", "nightfever", "mirrorball", "funkyfeet", "naptime", "glassjaw", "thriller", "ravemold", "catscratch",
+        "runway", "ink", "anvil", "sparks", // mega fix 10
     };
 
     public static readonly Dictionary<Patron, PatronInfo> Patrons = BuildPatrons();
@@ -188,8 +199,6 @@ public static class BoonCatalog
             "STAND STILL 1.5S TO STRIKE A POSE. YOUR NEXT HIT DEALS X{0} DAMAGE.", "draw:mirror", V(2.5f, 3f, 3.5f));
         Add("mainchar", "MAIN CHARACTER", Patron.Narcissism, BoonSlot.Passive,
             "THE STYLE RANK FOLLOWS YOU NOW (D TO SSS). +{0}% DAMAGE FOR EVERY RANK. AT SSS YOU SHINE LIKE THE SUN.", "draw:crown", V(6, 8, 10));
-        Add("runway", "RUNWAY WALK", Patron.Narcissism, BoonSlot.Dash,
-            "SURF DASH ROLLS OUT A PINK CARPET. ENEMIES ON IT ARE CHARMED {0}S AND TAKE 12 DAMAGE.", "draw:carpet", V(1.2f, 1.6f, 2f));
         Add("kiss", "BLOW A KISS", Patron.Narcissism, BoonSlot.Jump,
             "EVERY JUMP BLOWS A KISS: A HEART FLIES TO THE NEAREST ENEMY. {0} DAMAGE AND CHARMED 1S.", "draw:kiss", V(8, 12, 16));
         Add("spotlight", "SPOTLIGHT", Patron.Narcissism, BoonSlot.Passive,
@@ -214,12 +223,12 @@ public static class BoonCatalog
             "EVERY 5TH HIT, THE WEIGHT OF THE DEEP CRUSHES THE TARGET AND EVERYONE NEAR IT FOR {0}.", "draw:pressure", V(20, 30, 42));
         Add("angler", "ANGLER LURE", Patron.Abyss, BoonSlot.Passive,
             "A GLOWING LURE DANGLES OVER YOUR HEAD. EVERY 2.5S IT ZAPS THE NEAREST ENEMY FOR {0}.", "draw:lure", V(6, 9, 13));
-        Add("ink", "INK CLOUD", Patron.Abyss, BoonSlot.Dash,
-            "SURF DASH SPILLS INK. ENEMIES CAUGHT IN IT PANIC FOR {0}S.", "draw:ink", V(1.5f, 2f, 2.6f));
+        Add("endlesssurf", "ENDLESS SWELL", Patron.Abyss, BoonSlot.Dash,
+            "HOLD {SURF} AND THE WAVE NEVER ENDS: YOU SURF FOR AS LONG AS YOU HOLD IT, ON LAND OR SEA. ENEMIES YOU RIDE INTO TAKE {0}.", "sheet:waterSonic:9:4", V(6, 9, 12));
         Add("ripcurrent", "RIP CURRENT", Patron.Abyss, BoonSlot.Jump,
             "EVERY LANDING PULLS ENEMIES WITHIN 3 TOWARD YOU AND SLOWS THEM {0}% FOR 2S.", "draw:whirl", V(30, 40, 50));
         Add("leviathan", "LEVIATHAN", Patron.Abyss, BoonSlot.Passive,
-            "BELOW 40% HEALTH, TENTACLES BURST OUT OF THE GROUND AROUND YOU: {0} DAMAGE EACH. ONCE EVERY 15S.", "draw:tentacle", V(30, 45, 60));
+            "BELOW 30% HEALTH, TENTACLES BURST OUT OF YOUR BODY AND SMASH EVERYTHING AROUND YOU: {0} DAMAGE PER SMASH. NO COOLDOWN: THEY STAY OUT UNTIL YOU HEAL.", "draw:tentacle", V(12, 18, 25));
 
         // ---------------------------------------------------------------- LYCANTHROPY
         Add("feral", "FERAL SWIPE", Patron.Lycanthropy, BoonSlot.Attack,
@@ -282,7 +291,7 @@ public static class BoonCatalog
         Add("felinefury", "FELINE FURY", Patron.Guild, BoonSlot.Attack,
             "EVERY 4TH HIT, A GHOST CAT POUNCES ON THE ENEMY FOR {0} DAMAGE.", "draw:catface", V(22, 32, 44));
         Add("catcall", "CAT CALL", Patron.Guild, BoonSlot.Dash,
-            "SURF DASH WAKES YOUR CATS: ALL THEIR POWERS ARE READY AGAIN.", "draw:bell", V(9, 7, 5));
+            "SURF DASH WAKES YOUR LEADER AND SUB-LEADER: THEIR POWERS ARE READY AGAIN. EVERY OTHER CAT GETS {0}% OF ITS COOLDOWN CUT.", "draw:bell", V(10, 12, 15));
         Add("straytax", "STRAY TAX", Patron.Guild, BoonSlot.Passive,
             "KILLS HAVE A {0}% CHANCE TO DROP A FISH TREAT. GRAB IT: HEAL 8 AND YOUR CATS COOL DOWN.", "draw:fish", V(8, 12, 16));
         Add("hairball", "HAIRBALL", Patron.Guild, BoonSlot.Jump,
@@ -293,6 +302,8 @@ public static class BoonCatalog
             "YOUR CATS REEK. ENEMIES NEAR THEM TAKE {0} DAMAGE PER SECOND AND MOVE 25% SLOWER.", "draw:stench", V(3, 5, 7));
         Add("topcat", "TOP CAT", Patron.Guild, BoonSlot.Cats,
             "YOUR PARTY LEADER DEALS +{0}% DAMAGE AND WEARS A TINY CROWN. (PICK THE LEADER IN THE CAT PARTY.)", "draw:topcat", V(50, 75, 100));
+        Add("catloyalty", "CAT LOYALTY", Patron.Guild, BoonSlot.Passive,
+            "YOUR CAT PARTY IS ALWAYS FULL: EVERY FREE SLOT CALLS A CAT TO YOU, NEW SLOTS TOO. YOU NEVER LOSE A CAT, NOT EVEN WHEN YOU DIE. CATS DEAL +{0}% DAMAGE.", "draw:ninelives", V(5, 10, 15));
 
         // ---------------------------------------------------------------- CRAZY CHEF
         Add("sandwich", "SANDWICH TIME", Patron.Chef, BoonSlot.Passive,
@@ -300,7 +311,7 @@ public static class BoonCatalog
         Add("meatball", "MEATBALL MORTAR", Patron.Chef, BoonSlot.Attack,
             "EVERY 3RD SWING LOBS A MEATBALL THAT EXPLODES IN SAUCE: {0} DAMAGE AROUND IT.", "food:armondega", V(17, 24, 33));
         Add("eggs", "EGG TOSS", Patron.Chef, BoonSlot.Dash,
-            "SURF DASH THROWS 3 EGGS. THEY CRACK ON ENEMIES: {0} DAMAGE AND YOLK IN THE EYES (STUNNED 0.8S).", "food:ovo", V(8, 12, 16));
+            "SURF DASH THROWS AN EGG AT EVERY ENEMY ON SCREEN. THEY CRACK: {0} DAMAGE AND YOLK IN THE EYES (STUNNED 0.8S).", "food:ovo", V(8, 12, 16));
         Add("tomato", "TOMATO SPLAT", Patron.Chef, BoonSlot.Jump,
             "LANDING SQUASHES A BAG OF TOMATOES: {0} DAMAGE AROUND YOU, AND ENEMIES SLIP (SLOWED 40%).", "food:tomate", V(10, 15, 21));
         Add("cheese", "GRATE EXPECTATIONS", Patron.Chef, BoonSlot.Passive,
@@ -309,26 +320,55 @@ public static class BoonCatalog
             "ALL YOUR HEALING IS {0}% STRONGER, AND EVERY BIG HEAL SPLASHES HOT SAUCE ON ENEMIES NEAR YOU FOR 10.", "draw:sauce", V(25, 40, 55));
         Add("foodfight", "FOOD FIGHT", Patron.Chef, BoonSlot.Cats,
             "WHEN A CAT ATTACKS, IT ALSO THROWS FOOD AT A NEARBY ENEMY: {0} DAMAGE.", "food:pao", V(9, 13, 18));
+        Add("foodstock", "FOOD STOCK", Patron.Chef, BoonSlot.Passive,
+            "EVERY FOOD YOUR BOONS MAKE COMES X3: THREE SANDWICHES, THREE EGGS PER ENEMY, NINE TOMATOES, THREE MEATBALLS... FOOD DEALS +{0}% DAMAGE.", "food:pao", V(5, 10, 15))
+            .condition = () => Boons.Has("sandwich") || Boons.Has("eggs") || Boons.Has("tomato") || Boons.Has("meatball") || Boons.Has("foodfight") || Boons.Has("sandwichrain");
+        Add("satisfied", "SATISFIED", Patron.Chef, BoonSlot.Passive,
+            "YOU CAN OVERHEAL TWICE AS MUCH: A NEW BAR GROWS OVER THE GOLDEN ONE. ALL YOUR HEALING IS {0}% STRONGER.", "draw:sauce", V(5, 10, 15)).iconTint = new Color(1f, 0.6f, 0.9f);
+        BoonDef rain = Add("sandwichrain", "INGREDIENT RAIN", Patron.Chef, BoonSlot.Special,
+            "PRESS {WOLF} WHEN THE KITCHEN IS READY: EVERY SANDWICH INGREDIENT RAINS FROM THE SKY ON YOUR ENEMIES. HUGE AREA DAMAGE. LONG COOLDOWN.", "draw:sandwich", F(1));
+        rain.legendaryOnly = true;
+        rain.iconTint = new Color(1f, 0.85f, 0.5f);
 
         // ---------------------------------------------------------------- THE BLACKSMITH
         Add("weaponsnob", "WEAPON SNOB", Patron.Smith, BoonSlot.Passive,
-            "WEAPONS WEAR OUT TWICE AS FAST. WHEN ONE BREAKS IT EXPLODES FOR {0}.", "draw:brokensword", V(40, 60, 80));
+            "WEAPONS WEAR OUT TWICE AS FAST. WHEN ONE BREAKS IT EXPLODES FOR {0}.", "draw:brokensword", V(40, 60, 80)).excludes = new[] { "gearedup" };
         Add("whetstone", "WHETSTONE", Patron.Smith, BoonSlot.Passive,
             "YOU ATTACK {0}% FASTER.", "draw:whetstone", V(12, 18, 25));
         Add("tempered", "TEMPERED STEEL", Patron.Smith, BoonSlot.Passive,
             "SWINGS HAVE A {0}% CHANCE TO COST NO DURABILITY. WEAPONS YOU PICK UP GET +25% DURABILITY.", "draw:ingot", V(25, 35, 50));
         Add("hookline", "HOOK LINE AND SINKER", Patron.Smith, BoonSlot.Passive,
-            "ROD: HITS REEL ENEMIES IN, AND EVERY 3RD ROD HIT ON THE SAME ENEMY STUNS IT AND DEALS {0} MORE.", "draw:hook", V(15, 22, 30));
+            "ROD: YOUR ROD DEALS DOUBLE DAMAGE. HITS REEL ENEMIES IN, AND EVERY 3RD ROD HIT ON THE SAME ENEMY STUNS IT AND DEALS {0} MORE.", "draw:hook", V(15, 22, 30));
         Add("splitedge", "SPLIT EDGE", Patron.Smith, BoonSlot.Passive,
             "SWORD: EVERY SWING ALSO FIRES A STEEL WAVE THAT CUTS THROUGH ENEMIES FOR {0} DAMAGE.", "draw:steelwave", V(8, 12, 16));
         Add("skewer", "SKEWER", Patron.Smith, BoonSlot.Passive,
-            "NAGINATA: HITS PIERCE THROUGH, STRIKING UP TO 3 ENEMIES BEHIND THE TARGET FOR {0}% DAMAGE.", "draw:spear", V(60, 80, 100));
+            "NAGINATA: HITS PIERCE THROUGH, STRIKING UP TO 3 ENEMIES BEHIND THE TARGET FOR {0}% DAMAGE.", "draw:spear", V(60, 80, 100)).excludes = new[] { "onrush" };
         Add("butcher", "BUTCHER BLOCK", Patron.Smith, BoonSlot.Passive,
-            "CLEAVER: HITS ON ENEMIES BELOW 40% HEALTH DEAL X{0} DAMAGE. CHOP CHOP.", "draw:cleaver", V(1.6f, 2f, 2.5f));
-        Add("anvil", "ANVIL DROP", Patron.Smith, BoonSlot.Jump,
-            "LANDING FROM A BIG JUMP DROPS AN ANVIL IN FRONT OF YOU: {0} DAMAGE AND A 1S STUN.", "draw:anvil", V(18, 26, 36));
-        Add("sparks", "SPARK SHOWER", Patron.Smith, BoonSlot.Attack,
-            "HITS SHOWER FORGE SPARKS: ENEMIES AROUND THE TARGET TAKE {0} DAMAGE.", "draw:sparks", V(5, 8, 11));
+            "CLEAVER: EVERY ATTACK CHOPS 5 TIMES INSTEAD OF 3, AND HITS ON ENEMIES BELOW 40% HEALTH DEAL X{0} DAMAGE.", "draw:cleaver", V(1.6f, 2f, 2.5f));
+        Add("gearedup", "GEARED UP", Patron.Smith, BoonSlot.Passive,
+            "YOUR WEAPONS NEVER LOSE DURABILITY, AND THEY HIT {0}% HARDER.", "draw:ingot", V(5, 10, 15)).excludes = new[] { "weaponsnob", "justrod" };
+        Add("justrod", "JUST THE ROD, PLEASE.", Patron.Smith, BoonSlot.Passive,
+            "THE ROD DEALS X{0} DAMAGE. BUT YOU CAN NOT PICK UP ANY OTHER WEAPON.", "draw:hook", V(5, 5, 5, 5)).excludes = new[] { "gearedup" };
+        Add("sharp", "SHARP WEAPONS", Patron.Smith, BoonSlot.Passive,
+            "A WEAPON PICKED UP PAST FULL DURABILITY GETS SHARPENED: +1% DAMAGE FOR EVERY 1% OF SHARPENING, UP TO +{0}%. IT WEARS OFF FAST, LIKE OVERHEAL.", "draw:whetstone", V(50, 75, 100));
+        Add("dizzy", "DIZZY FIGHTER", Patron.Smith, BoonSlot.Passive,
+            "SWORD: HOLD {ATTACK} IN THE AIR AND YOU NEVER STOP SPINNING, SLASHING {0} TIMES A SECOND.", "draw:steelwave", V(6, 8, 10));
+        Add("swordcharge", "GRAND SLASH", Patron.Smith, BoonSlot.Passive,
+            "SWORD: AFTER DOWN + ATTACK, KEEP HOLDING {ATTACK} TO CHARGE UP TO 3 TICKS. EVERY TICK MAKES THE SLASH BIGGER: UP TO {0} DAMAGE.", "draw:steelwave", V(40, 60, 80));
+        Add("skybeam", "SKY SPEAR", Patron.Smith, BoonSlot.Passive,
+            "NAGINATA: DOWN + ATTACK THROWS A MAGIC BEAM UP AND FORWARD. IT GOES THROUGH ENEMIES, BURNING THEM FOR {0} DAMAGE PER SECOND.", "draw:spear", V(30, 45, 60));
+        Add("onrush", "ONRUSH", Patron.Smith, BoonSlot.Passive,
+            "NAGINATA: HOLD {ATTACK} ON THE GROUND TO DRILL NONSTOP, NO COOLDOWN: A HIT EVERY 0.08S FOR {0}% DAMAGE. IT DOES NOT PIERCE.", "draw:spear", V(40, 50, 60)).excludes = new[] { "skewer" };
+        Add("quake", "GROUND BREAKER", Patron.Smith, BoonSlot.Passive,
+            "NAGINATA: A JUMP ATTACK THAT HITS THE GROUND CAUSES AN EARTHQUAKE: {0} DAMAGE, AND ENEMIES NEARBY ARE STUNNED 1.5S.", "draw:pressure", V(20, 30, 40));
+        Add("apron", "IRON APRON", Patron.Smith, BoonSlot.Passive,
+            "CLEAVER: DOWN + ATTACK RAISES A SHIELD THAT BLOCKS THE NEXT HIT YOU TAKE. READY AGAIN AFTER {0}S.", "draw:anvil", V(8, 6, 4));
+        Add("slices", "FIVE SLICE", Patron.Smith, BoonSlot.Passive,
+            "CLEAVER: LAND A JUMP ATTACK AND 1S LATER THE ENEMY IS SLICED 5 TIMES FOR {0}% DAMAGE EACH. THE SLICES COUNT AS ATTACKS.", "draw:cleaver", V(40, 55, 70));
+        BoonDef armory = Add("armory", "THE ARMORY", Patron.Smith, BoonSlot.Special,
+            "PRESS {WOLF} WHEN THE FORGE IS HOT: FOR {0}S ALL FOUR WEAPONS FLOAT AROUND YOU AND STRIKE THE NEAREST ENEMIES BY THEMSELVES. LONG COOLDOWN.", "draw:anvil", F(10));
+        armory.legendaryOnly = true;
+        armory.iconTint = new Color(1f, 0.7f, 0.4f);
 
         // ---------------------------------------------------------------- THE SUN GOD
         Add("solarflare", "SOLAR FLARE", Patron.Sun, BoonSlot.Attack,
@@ -345,6 +385,7 @@ public static class BoonCatalog
             "LANDING LEAVES A POOL OF SUNLIGHT FOR 3S: ENEMIES IN IT BURN FOR {0} PER SECOND, YOU HEAL 2 PER SECOND.", "draw:sunspot", V(6, 9, 12));
 
         // ---------------------------------------------------------------- DUOS
+        string[] abyss = IdsOf(list, Patron.Abyss);
         string[] narc = IdsOf(list, Patron.Narcissism), lyc = IdsOf(list, Patron.Lycanthropy), rot = IdsOf(list, Patron.Rot),
                  guild = IdsOf(list, Patron.Guild), chef = IdsOf(list, Patron.Chef), smith = IdsOf(list, Patron.Smith), sun = IdsOf(list, Patron.Sun);
 
@@ -381,6 +422,48 @@ public static class BoonCatalog
         Duo("silverclaws", "SILVER CLAWS", Patron.Smith, Patron.Lycanthropy,
             "THE BLACKSMITH FORGES YOUR CLAWS: FERAL SWIPE, POUNCE AND WEREWOLF CLAWS DEAL DOUBLE DAMAGE.", "sheet:clawSlash:6:3",
             "THE BLACKSMITH: SILVER. ON A WEREWOLF. I KNOW. LYCANTHROPY: IT TICKLES.", smith, new[] { "feral", "pounce", "moon" }).iconTint = new Color(0.85f, 0.9f, 1f);
+
+        // ---- mega fix 10
+        string[] rotPoison = { "rottenedge", "sporestep", "sporelob", "thornskin", "rootsnare" };
+        Duo("jellypals", "JELLY BUDDIES", Patron.Guild, Patron.Abyss,
+            "FOR EVERY CAT YOU HAVE, A LITTLE BLUE JELLYFISH FIGHTS BY YOUR SIDE: IT CIRCLES YOU, CHARGES UP AND JETS THROUGH ENEMIES.", "draw:tentacle",
+            "THE GUILD: THEY ARE WET CATS. WE ALLOW IT. SEA ABYSS: ...THEY ARE NOT CATS.", guild, abyss).iconTint = new Color(0.5f, 0.8f, 1f);
+        Duo("peakplate", "TRIPLE PLATED", Patron.Smith, Patron.Guild,
+            "THE PEAK GIVES YOU 3 ARMORS AT ONCE: 9 BLOCKED HITS INSTEAD OF 3.", "draw:ingot",
+            "THE BLACKSMITH: I MADE IT A LITTLE HELMET. AND TWO SPARES. THE GUILD: HE WEARS THEM ALL AT ONCE.", smith, guild).iconTint = new Color(0.7f, 0.9f, 1f);
+        Duo("scavenger", "SCAVENGER", Patron.Smith, Patron.Guild,
+            "THE CATS GO THROUGH THE POCKETS: EVERY KILL HAS A 5% CHANCE TO DROP EVERY WEAPON AT ONCE.", "draw:brokensword",
+            "THE GUILD: FINDERS KEEPERS. THE BLACKSMITH: ...AT LEAST CLEAN THEM FIRST.", smith, guild);
+        Duo("clawsharpener", "CLAW SHARPENER", Patron.Guild, Patron.Smith,
+            "CATS SHARPEN YOUR WEAPON: EVERY CAT ATTACK RESTORES 1 DURABILITY, AND WIG SCRATCHES CAN CRIT.", "draw:whetstone",
+            "THE BLACKSMITH: WHO TAUGHT THE CATS TO SHARPEN? THE GUILD: YOU DID. WE WATCHED.", guild, smith);
+        Duo("toxicbeauty", "TOXIC BEAUTY", Patron.Narcissism, Patron.Rot,
+            "CHARMED ENEMIES ARE POISONED TOO, AND POISONED ENEMIES STAY CHARMED 50% LONGER.", "sheet:charm:9:3",
+            "NARCISSISM: GORGEOUS AND DEADLY. STEPHMOSS: MOSTLY DEADLY.", narc, rotPoison).iconTint = new Color(0.7f, 1f, 0.5f);
+        Duo("foodcritic", "FOOD CRITIC", Patron.Narcissism, Patron.Chef,
+            "EATING A SANDWICH OR A FISH TREAT PUTS YOU IN THE SPOTLIGHT FOR 5S: +30% DAMAGE, AND ENEMIES NEARBY ARE CHARMED WHILE THEY WATCH YOU EAT.", "draw:spotlight",
+            "CRAZY CHEF: MANGIA, BELLO! NARCISSISM: EVERYONE, WATCH HIM CHEW.", narc, chef);
+        Duo("fishingcats", "FISHING CATS", Patron.Abyss, Patron.Guild,
+            "CATS THAT ATTACK ENEMIES STANDING IN WATER DRAG THEM UNDER: DOUBLE CAT DAMAGE, AND EVERY WATER KILL DROPS A FISH TREAT.", "draw:fish",
+            "THE GUILD: FISH. FISH! SEA ABYSS: ...I REGRET THIS.", abyss, guild).iconTint = new Color(0.55f, 0.85f, 1f);
+        Duo("rabid", "RABID", Patron.Lycanthropy, Patron.Rot,
+            "YOUR CLAW HITS POISON, AND EVERY POISONED ENEMY THAT DIES FILLS THE MOON METER BY 5%.", "sheet:clawSlash:6:1",
+            "LYCANTHROPY: FOAM AT THE MOUTH, BABY. STEPHMOSS: DISGUSTING. APPROVED.", new[] { "feral", "pounce" }, rotPoison).iconTint = new Color(0.75f, 1f, 0.45f);
+        Duo("moldcats", "MOLD CATS", Patron.Rot, Patron.Guild,
+            "CAT ATTACKS POISON, AND STENCH SPREADS POISON TOO.", "draw:stench",
+            "THE GUILD: WE WERE ALWAYS THIS STINKY. STEPHMOSS: NOW IT IS MEDICAL.", rot, guild).iconTint = new Color(0.7f, 1f, 0.45f);
+        Duo("rustededge", "RUSTED EDGE", Patron.Rot, Patron.Smith,
+            "YOUR WEAPON IS RUSTY: -10% DURABILITY COST, EVERY HIT POISONS, AND BROKEN WEAPONS LEAVE A POISON CLOUD.", "draw:brokensword",
+            "THE BLACKSMITH: IT IS NOT RUST, IT IS PATINA. STEPHMOSS: IT IS ROT. AND IT IS BEAUTIFUL.", rot, smith).iconTint = new Color(0.8f, 0.9f, 0.45f);
+        Duo("photosynthesis", "PHOTOSYNTHESIS", Patron.Rot, Patron.Sun,
+            "IN DAYLIGHT YOUR MUSHROOMS AND FLOWERS GROW TWICE AS FAST, AND YOUR BLOOM FLOWERS ALSO LEAVE A SUNSPOT.", "flora:2",
+            "SUN GOD: GROW, LITTLE MUSHROOMS. STEPHMOSS: THEY DO NOT NEED THE SUN. ...THEY DO LIKE IT.", new[] { "bloom", "sporestep" }, new[] { "daybreak", "halo", "sunspot" });
+        Duo("sunbathing", "SUNBATHING", Patron.Guild, Patron.Sun,
+            "IN DAYLIGHT, CATS WITH THEIR POWER READY GLOW AND HEAL YOU 1 HP EVERY 3S, AND CAT COOLDOWNS ARE 20% SHORTER.", "draw:sun",
+            "THE GUILD: FIVE MORE MINUTES IN THE SUN. SUN GOD: TAKE TEN.", guild, sun).iconTint = new Color(1f, 0.85f, 0.5f);
+        Duo("midnightsnack", "MIDNIGHT SNACK", Patron.Lycanthropy, Patron.Chef,
+            "FOOD EATEN AS A WEREWOLF MAKES THE WEREWOLF LAST LONGER. FOOD EATEN AS ROWDY FILLS THE MOON METER.", "draw:moonbite",
+            "LYCANTHROPY: MEAT. MORE MEAT. CRAZY CHEF: FINALLY, SOMEBODY WHO FINISHES THE PLATE!", new[] { "moon", "feast" }, chef);
 
         return list;
     }

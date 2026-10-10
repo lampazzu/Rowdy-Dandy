@@ -174,7 +174,6 @@ public class FrontierArena : MonoBehaviour
             && Mathf.Abs(BoonRunner.RowdyCenter.y - floorY) < 12f)
         {
             announced = true;
-            Boons.Unlock(); // the colosseum is where boons begin
             Banner.Show(Title, null, Theme);
         }
         if (gong == null) return;
@@ -238,6 +237,7 @@ public class FrontierArena : MonoBehaviour
     {
         running = true;
         ArenaRun.InTrial = true;
+        Boons.Unlock(); // ringing the gong is where boons begin
         RingGong();
         int trial = ClearsHere + 1;
         ArenaWaves.Round[] waves = Waves;

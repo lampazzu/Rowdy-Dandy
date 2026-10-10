@@ -80,6 +80,7 @@ public class VoltRat : MonoBehaviour
     }
 
     [SerializeField] private Texture2D jellySheet;
+    public Texture2D Sheet => jellySheet; // the blue WaterViva jelly (Jelly Buddies use it as it is)
     private static Sprite[] frames;
     private string drawn;
     private float drawnAt;

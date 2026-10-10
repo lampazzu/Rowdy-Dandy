@@ -21,6 +21,8 @@ public static class WeaponBoons
 
     public static void OnTaken(string id)
     {
+        if (id == "justrod" && WeaponManager.Instance != null) { WeaponManager.Instance.SetWeaponToAxe(); return; }
+        if (Boons.Has("justrod")) return;
         foreach (var m in Map)
             if (m.boon == id && WeaponManager.Instance != null) WeaponManager.Instance.PickupWeapon(m.type, FreshDurability);
     }
@@ -47,7 +49,7 @@ public static class WeaponBoons
             yield return null;
             yield return null;
             WeaponManager wm = WeaponManager.Instance;
-            if (wm != null)
+            if (wm != null && !Boons.Has("justrod"))
             {
                 int equip = -1;
                 foreach (var m in Map)
@@ -65,6 +67,7 @@ public static class WeaponBoons
     // One more roll on every kill for each boon weapon: drops it next to the usual loot
     public static void ExtraDrop(Vector3 at)
     {
+        if (Boons.Has("justrod")) return;
         foreach (var m in Map)
         {
             if (!Boons.Has(m.boon) || Random.Range(0f, 100f) > ExtraDropPercent * DropLuck.Multiplier) continue;

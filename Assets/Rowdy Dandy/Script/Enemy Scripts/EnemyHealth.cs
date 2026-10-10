@@ -108,6 +108,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void Start()
     {
+        WereKnightWalk.TryAttach(this); // the knights walk with the shadow-wolf run cycle
         if (!OldManEnabled && isOldMan && name.IndexOf("OldMan", System.StringComparison.OrdinalIgnoreCase) >= 0)
             gameObject.SetActive(false);
     }

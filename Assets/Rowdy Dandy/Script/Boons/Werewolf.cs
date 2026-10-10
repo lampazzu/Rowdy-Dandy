@@ -6,8 +6,11 @@ using UnityEngine.UI;
 // CALL OF THE MOON (Lycanthropy's special boon): press B / Circle (K on the keyboard) when the moon meter is full and Rowdy
 // turns into a werewolf for a while - the TDF shadow werewolf art (ItemArt.werewolf, same sheet as the Moonbound Elder).
 //   - the meter fills over time, faster with hits and kills, and twice as fast at night
-//   - as a wolf: x1.6 damage, x1.35 speed, 40% less damage taken, claw swipes on every attack, lifesteal,
-//     weapons don't wear out, kills make the night last longer (+0.6s)
+//   - as a wolf: x1.6 damage, x1.35 speed, 40% less damage taken, lifesteal, kills make the night last longer (+0.6s)
+//   - ITS OWN MOVES (Rowdy's weapon hitboxes are off, no weapon switching):
+//       ATTACK = claw swipes (fast, heavy hit-stop)      SURF = a dash straight THROUGH enemies, raking each one
+//       DOWN + ATTACK = a ROAR that terrifies everyone    ATTACK IN THE AIR = a dive straight down, slams the ground
+//   - its kills have their own line in the kill log ("WEREWOLF" + its face)
 //   - transforming: slow motion, flames, flicker between Rowdy and the wolf, then a HOWL that terrifies everyone near
 // Rowdy's own animator keeps running underneath (hitboxes, states): only his sprite is swapped for the wolf frames.
 public class Werewolf : MonoBehaviour
@@ -41,13 +44,48 @@ public class Werewolf : MonoBehaviour
     private Image vignette;
     private float vignetteFlash;
 
-    private static readonly string[] BackLines = { "WHO PUT FUR ON MY JACKET?", "...NEED A HAIRCUT, BABY.", "DID I EAT SOMEBODY?", "WHAT A NIGHT." };
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSession() { charge = 0f; active = transforming = false; timeLeft = duration = 0f; }
 
     public static void ResetCharge() { charge = 0f; }
     public static void Fill() { charge = 100f; }
+
+    // Rabid: a straight 5% of the meter (no night / feast multipliers)
+    public static void AddChargeRaw(float amount)
+    {
+        if (!Boons.Has("moon") || active || transforming) return;
+        bool wasReady = Ready;
+        charge = Mathf.Min(100f, charge + amount);
+        if (!wasReady && Ready && instance != null) instance.OnFull();
+    }
+
+    // Midnight Snack (Lycanthropy + Crazy Chef): food as a wolf = a longer night, food as Rowdy = a fuller moon
+    public static void OnFoodEaten(float size)
+    {
+        if (!Boons.Has("midnightsnack") || instance == null) return;
+        if (active)
+        {
+            timeLeft = Mathf.Min(duration + 6f, timeLeft + 3f * size);
+            duration = Mathf.Max(duration, timeLeft);
+            BoonFX.Sparkles(instance.HeadTop, BoonFX.Blood, 6, 0.3f, 0.6f);
+        }
+        else AddChargeRaw(15f * size);
+    }
+
+    // The kill log's face for the wolf (a prowl frame)
+    private static Sprite portrait;
+    public static Sprite Portrait
+    {
+        get
+        {
+            if (portrait != null) return portrait;
+            ItemArt art = ItemArt.Get;
+            if (art == null || art.werewolf == null) return null;
+            portrait = Sprite.Create(art.werewolf, new Rect(4 * 156 + 32, 0, 92, 92), new Vector2(0.5f, 0.5f), 64f);
+            return portrait;
+        }
+    }
 
     public static void AddCharge(float amount)
     {
@@ -99,6 +137,8 @@ public class Werewolf : MonoBehaviour
         {
             timeLeft -= Time.deltaTime;
             Embers();
+            UpdateDash();
+            UpdateDive();
             if (timeLeft <= 0f) EndNow(true);
         }
     }
@@ -157,7 +197,6 @@ public class Werewolf : MonoBehaviour
         ScreenShake.Impulse(1.1f);
         GamepadRumble.Pulse(0.9f, 1f, 0.45f);
         vignetteFlash = 1f;
-        BoonFX.Popup(HeadTop + Vector3.up * 0.5f, "AWOOOOOO!", BoonFX.Blood, 1.4f, 1.6f);
         PulseRing.Spawn(Center, new Color(1f, 0.25f, 0.35f, 1f), FearRadius, 0.5f);
         PulseRing.Spawn(Center, new Color(0.9f, 0.9f, 1f, 0.8f), FearRadius * 0.6f, 0.35f);
         GroundShock.Spawn(Feet, FearRadius, new Color(1f, 0.35f, 0.4f), new Color(0.3f, 0.1f, 0.15f), 0.5f);
@@ -185,6 +224,10 @@ public class Werewolf : MonoBehaviour
     {
         active = transforming = false;
         timeLeft = 0f;
+        diving = false;
+        foreach (var (a, b) in dashIgnored) if (a != null && b != null) Physics2D.IgnoreCollision(a, b, false);
+        dashIgnored.Clear();
+        dashUntil = -1f;
         if (wolf != null) wolf.enabled = false;
         if (eyeLight != null) eyeLight.enabled = false;
         if (body != null) body.enabled = true;
@@ -194,16 +237,159 @@ public class Werewolf : MonoBehaviour
         if (art != null) BoonFX.Sheet(art.ail, 10, Center, 18f, 0.8f, new Color(0.75f, 0.65f, 0.85f, 0.9f));
         FXParticle.Burst(Center, new Color(0.5f, 0.45f, 0.6f), 22, 1f, 3.5f, -1f, 0.9f);
         if (body != null) CatFX.Afterimage(body, new Color(1f, 1f, 1f, 0.9f), 0.25f);
-        BoonFX.Popup(HeadTop + Vector3.up * 0.3f, BackLines[Random.Range(0, BackLines.Length)], new Color(0.9f, 0.85f, 1f), 0.7f, 1.6f);
         BoonArt.Play(art != null ? art.cancel : null, 0.4f, 0.8f);
     }
 
-    // ---------------------------------------------------------------- claws
-    // BoonRunner calls this when Rowdy starts a swing while transformed
-    public static void OnSwing()
+    // ---------------------------------------------------------------- the wolf's own moves
+    // (BoonRunner.OnAttackStarted still calls this; the claws now come from Attack below)
+    public static void OnSwing() { }
+
+    private float clawReadyAt, roarReadyAt, dashReadyAt, dashUntil = -1f, diveStartedAt = -1f;
+    private bool diving;
+    private readonly System.Collections.Generic.HashSet<EnemyHealth> dashHit = new System.Collections.Generic.HashSet<EnemyHealth>();
+    private readonly System.Collections.Generic.List<(Collider2D a, Collider2D b)> dashIgnored = new System.Collections.Generic.List<(Collider2D, Collider2D)>();
+    private float dashDir;
+    public static bool Diving => Active && instance.diving;
+    public static bool Dashing => Active && Time.time < instance.dashUntil;
+
+    // PlayerMovement: the attack button as a wolf
+    public static void Attack(bool grounded, bool holdingDown)
     {
-        if (!Active) return;
+        if (!Active || instance.diving || Dashing) return;
+        if (grounded && holdingDown) { instance.Roar(); return; }
+        if (!grounded) { instance.Dive(); return; }
+        if (Time.time < instance.clawReadyAt) return;
+        instance.clawReadyAt = Time.time + 0.26f;
         instance.Claw();
+        BoonRunner.OnAttackStarted(); // swing-count boons (Hair Flip, Spore Lob...) still count claws
+    }
+
+    // PlayerMovement: the surf button as a wolf - a lunge straight through everything in the way
+    public static void Dash(float moveX)
+    {
+        if (!Active || instance.diving || Time.time < instance.dashReadyAt) return;
+        instance.StartDash(moveX != 0f ? Mathf.Sign(moveX) : instance.Facing);
+    }
+
+    private void StartDash(float dir)
+    {
+        dashReadyAt = Time.time + 0.55f;
+        dashUntil = Time.time + 0.2f;
+        dashDir = dir;
+        dashHit.Clear();
+        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * dir, transform.localScale.y, transform.localScale.z);
+        if (health != null) health.GrantInvulnerability(0.3f);
+        // pass through bodies: ignore every enemy collider along the way for the dash
+        Collider2D[] mine = GetComponents<Collider2D>();
+        foreach (Collider2D c in Physics2D.OverlapBoxAll(Center + new Vector3(dir * 2.4f, 0f, 0f), new Vector2(5.2f, 1.6f), 0f, LayerMask.GetMask("Enemy")))
+            foreach (Collider2D m in mine)
+                if (m != null && !m.isTrigger && !c.isTrigger) { Physics2D.IgnoreCollision(m, c, true); dashIgnored.Add((m, c)); }
+        if (movement != null) movement.ApplyKnockback(new Vector2(dir * 21f, 0.6f), 0.2f);
+        BoonArt art = BoonArt.Get;
+        if (art != null) { BoonArt.Play(art.whoosh, 0.55f, 0.8f); BoonArt.Play(art.claw, 0.4f, 0.75f); }
+        GroundShock.Spawn(Feet, 1.2f, new Color(1f, 0.35f, 0.4f), new Color(0.3f, 0.1f, 0.15f), 0.25f);
+        FXParticle.Burst(Feet + Vector3.up * 0.2f, new Color(0.35f, 0.15f, 0.2f), 14, 1.5f, 4f, 6f, 0.4f, true);
+        ScreenShake.Impulse(0.3f);
+        GamepadRumble.Pulse(0.35f, 0.6f, 0.15f);
+    }
+
+    private void UpdateDash()
+    {
+        if (dashUntil < 0f) return;
+        if (Time.time >= dashUntil + 0.15f)
+        {
+            foreach (var (a, b) in dashIgnored) if (a != null && b != null) Physics2D.IgnoreCollision(a, b, false);
+            dashIgnored.Clear();
+            dashUntil = -1f;
+            return;
+        }
+        if (Time.time >= dashUntil) return;
+        if (wolf != null && Time.frameCount % 2 == 0) CatFX.Afterimage(wolf, new Color(1f, 0.2f, 0.3f, 0.55f), 0.2f);
+        float damage = (14f + 4f * PlayerStats.Level) * Boons.OutgoingMultiplier * (Boons.Has("silverclaws") ? 2f : 1f);
+        foreach (EnemyHealth e in BoonFX.EnemiesInBox(Center, new Vector2(1.5f, 1.4f)))
+        {
+            if (!dashHit.Add(e)) continue;
+            BoonFX.Hit(e, damage, "Werewolf");
+            if (Boons.Has("rabid")) BoonFX.Poison(e, 4f, 6f + 0.6f * PlayerStats.Level);
+            BoonFX.Push(e, new Vector2(-dashDir * 2f, 4f));
+            BoonArt art = BoonArt.Get;
+            if (art != null)
+            {
+                SheetFX fx = BoonFX.Sheet(art.clawSlash, 6, BoonFX.Center(e), 30f, 1f, new Color(1f, 0.7f, 0.75f));
+                if (fx != null) fx.transform.localScale = new Vector3(-dashDir, 1f, 1f);
+            }
+            Blood.Spill(BoonFX.Center(e), dashDir, 5);
+            BoonRunner.BankHeal(2f, true);
+            TimeSlowController.HitStop(0.04f, 0.06f);
+        }
+    }
+
+    // Down + attack: the roar. Everything near is terrified and shoved away. Long-ish cooldown.
+    private void Roar()
+    {
+        if (Time.time < roarReadyAt) { BoonHUD.ShakeMoon(); return; }
+        roarReadyAt = Time.time + 4f;
+        swingAt = Time.time;
+        BoonArt art = BoonArt.Get;
+        if (art != null) { BoonArt.Play(art.wolfHowl, 0.8f, 0.85f); BoonArt.Play(art.fearSfx, 0.6f, 0.8f); }
+        SoundManager.PlaySfx(Resources.Load<AudioClip>("Sounds/Howl"), 0.5f);
+        PulseRing.Spawn(Center, new Color(1f, 0.2f, 0.3f, 1f), 4.5f, 0.45f);
+        PulseRing.Spawn(Center, new Color(0.9f, 0.9f, 1f, 0.8f), 3f, 0.3f);
+        GroundShock.Spawn(Feet, 4.5f, new Color(1f, 0.35f, 0.4f), new Color(0.3f, 0.1f, 0.15f), 0.45f);
+        ScreenShake.Impulse(0.8f);
+        GamepadRumble.Pulse(0.7f, 0.9f, 0.35f);
+        TimeSlowController.HitStop(0.08f, 0.05f);
+        vignetteFlash = 0.7f;
+        foreach (EnemyHealth e in BoonFX.EnemiesIn(Center, 4.5f))
+        {
+            BoonFX.Fear(e, 2.2f);
+            BoonFX.Push(e, new Vector2(Mathf.Sign(BoonFX.Center(e).x - Center.x) * 7f, 3f));
+        }
+    }
+
+    // In the air: drops like a stone, claws first, and slams the ground
+    private void Dive()
+    {
+        if (diving) return;
+        diving = true;
+        diveStartedAt = Time.time;
+        if (movement != null) movement.ApplyKnockback(new Vector2(Facing * 1.5f, -24f), 0.6f);
+        BoonArt art = BoonArt.Get;
+        if (art != null) BoonArt.Play(art.whoosh, 0.5f, 0.6f);
+    }
+
+    private void UpdateDive()
+    {
+        if (!diving) return;
+        if (wolf != null && Time.frameCount % 2 == 0) CatFX.Afterimage(wolf, new Color(1f, 0.25f, 0.35f, 0.5f), 0.18f);
+        Rigidbody2D rb = movement != null ? movement.GetComponent<Rigidbody2D>() : null;
+        if (rb != null && Time.time - diveStartedAt < 0.6f) rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Min(rb.linearVelocity.y, -24f));
+        bool landed = movement == null || movement.IsGrounded || movement.IsWatered;
+        if (!landed && Time.time - diveStartedAt < 1.5f) return;
+        diving = false;
+        float air = Time.time - diveStartedAt;
+        float damage = (20f + 6f * PlayerStats.Level) * Boons.OutgoingMultiplier * Mathf.Lerp(1f, 1.6f, Mathf.Clamp01(air / 0.6f)) * (Boons.Has("silverclaws") ? 2f : 1f);
+        BoonArt art = BoonArt.Get;
+        if (art != null)
+        {
+            BoonArt.Play(art.bigBoom, 0.5f, 0.75f);
+            BoonArt.Play(art.claw, 0.6f, 0.6f);
+            if (art.groundPound != null) BoonFX.Sheet(art.groundPound, 12, Feet, 24f, 1f, new Color(1f, 0.5f, 0.55f), null, false, BoonFX.Order + 1, new Vector2(0.5f, 0.2f));
+        }
+        GroundShock.Spawn(Feet, 2.6f, new Color(1f, 0.35f, 0.4f), new Color(0.35f, 0.15f, 0.2f), 0.4f);
+        FXParticle.Burst(Feet + Vector3.up * 0.1f, new Color(0.5f, 0.3f, 0.3f), 22, 2f, 5f, 10f, 0.6f, true);
+        ScreenShake.Impulse(1f);
+        GamepadRumble.Pulse(0.9f, 0.8f, 0.25f);
+        TimeSlowController.HitStop(0.1f, 0.05f);
+        swingAt = Time.time - 0.1f;
+        foreach (EnemyHealth e in BoonFX.EnemiesIn(Feet + Vector3.up * 0.4f, 2.6f))
+        {
+            BoonFX.Hit(e, damage, "Werewolf");
+            BoonFX.Stun(e, 0.6f);
+            BoonFX.Push(e, new Vector2(Mathf.Sign(BoonFX.Center(e).x - Feet.x) * 5f, 5f));
+            if (Boons.Has("rabid")) BoonFX.Poison(e, 4f, 6f + 0.6f * PlayerStats.Level);
+            BoonRunner.BankHeal(2f, true);
+        }
     }
 
     private void Claw()
@@ -222,14 +408,18 @@ public class Werewolf : MonoBehaviour
         int hits = 0;
         foreach (EnemyHealth e in BoonFX.EnemiesInBox(at, new Vector2(1.9f, 1.3f)))
         {
-            BoonFX.Hit(e, damage, "Werewolf Claws");
+            BoonFX.Hit(e, damage, "Werewolf");
+            if (Boons.Has("rabid")) BoonFX.Poison(e, 4f, 6f + 0.6f * PlayerStats.Level); // Rabid: claws poison
+            BoonFX.Push(e, new Vector2(f * 3.5f, 2f));
             FXParticle.Burst(BoonFX.Center(e), BoonFX.Blood, 6, 1.5f, 4f, 6f, 0.4f);
+            Blood.Spill(BoonFX.Center(e), f, 3);
             hits++;
         }
         if (hits > 0)
         {
             BoonRunner.BankHeal(2f * hits, true); // lifesteal
-            TimeSlowController.HitStop(0.04f, 0.08f);
+            TimeSlowController.HitStop(0.06f, 0.06f); // heavy
+            ScreenShake.Impulse(0.25f);
         }
     }
 
@@ -285,7 +475,8 @@ public class Werewolf : MonoBehaviour
         float speed = rb != null ? Mathf.Abs(rb.linearVelocity.x) : 0f;
         bool grounded = movement == null || movement.IsGrounded || movement.IsWatered;
         int frame;
-        if (sinceSwing < 0.3f) frame = sinceSwing < 0.1f ? 12 : sinceSwing < 0.2f ? 13 : 14;
+        if (Time.time < dashUntil || diving) frame = 13;               // the lunge
+        else if (sinceSwing < 0.3f) frame = sinceSwing < 0.1f ? 12 : sinceSwing < 0.2f ? 13 : 14;
         else if (health != null && now - health.lastDamageTime < 0.25f) frame = 14;
         else if (!grounded) frame = 13;
         else if (speed > 0.3f) frame = (int)(now * 16f) % 4;
