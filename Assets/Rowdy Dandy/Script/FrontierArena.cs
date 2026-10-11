@@ -129,7 +129,7 @@ public class FrontierArena : MonoBehaviour
         if (!gloom) OpenSeaRoute();
         // stand everything on the real floor
         if (SolidGround.Ray(new Vector2((leftX + rightX) / 2f, floorY + 4f), Vector2.down, 10f, out RaycastHit2D hit)) floorY = hit.point.y;
-        if (!gloom) FitToFloor(); // the gates go where the arena floor really ends (the island was rebuilt wider)
+        FitToFloor(); // the gates go where the arena floor really ends (the island was rebuilt wider; baked islands too)
         if (gong != null && SolidGround.Ray(gong.position + Vector3.up * 3f, Vector2.down, 8f, out RaycastHit2D g)) gong.position = g.point;
         if (!gloom) MakePelichTemplate();
         if (gong != null) gongHome = gong.position;
@@ -214,13 +214,21 @@ public class FrontierArena : MonoBehaviour
     private void FitToFloor()
     {
         if (!fitGatesToFloor) return;
+        float wasL = leftX, wasR = rightX;
+        Vector2 fitted = FittedBounds();
+        leftX = fitted.x;
+        rightX = fitted.y;
+        if (leftX != wasL || rightX != wasR)
+            Debug.Log(name + ": gates fitted to the floor, x " + leftX.ToString("0.0") + " to " + rightX.ToString("0.0") + " (set " + wasL + " to " + wasR + ")");
+    }
+
+    // Where the gates go (x left, x right) without changing anything: also used by the colosseum bake in the editor
+    public Vector2 FittedBounds()
+    {
+        if (!fitGatesToFloor) return new Vector2(leftX, rightX);
         float mid = (leftX + rightX) / 2f;
         float l = FloorEnd(mid, -1f), r = FloorEnd(mid, 1f);
-        float wasL = leftX, wasR = rightX;
-        leftX = Mathf.Max(Mathf.Min(leftX, l), islandStartX + 1f);
-        rightX = Mathf.Max(rightX, r);
-        if (leftX != wasL || rightX != wasR)
-            Debug.Log("Frontier: gates fitted to the floor, x " + leftX.ToString("0.0") + " to " + rightX.ToString("0.0") + " (Inspector " + wasL + " to " + wasR + ")");
+        return new Vector2(Mathf.Max(Mathf.Min(leftX, l), islandStartX + 1f), Mathf.Max(rightX, r));
     }
 
     private float FloorEnd(float from, float dir)

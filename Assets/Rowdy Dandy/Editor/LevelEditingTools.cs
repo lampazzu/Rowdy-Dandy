@@ -384,9 +384,17 @@ public static class LevelEditingTools
         int total = kept.Count + clumps.Count;
         if (total == 0) { EditorUtility.DisplayDialog("Decoration Clusters", "No islands or plant clumps found in the open scene.", "OK"); return; }
         if (!EditorUtility.DisplayDialog("Decoration Clusters", kept.Count + " islands and " + clumps.Count + " plant clumps found.\n\nSaved as prefabs in " + ClusterRoot
-            + " (Islands / Plant Clumps). Old clusters there are replaced. The scene is not changed.", "Make them", "Cancel")) return;
+            + " (Islands / Plant Clumps). Clusters with the same name are updated in place (copies already placed in the scene stay linked and update too). The scene is not changed.", "Make them", "Cancel")) return;
 
-        if (AssetDatabase.IsValidFolder(ClusterRoot)) AssetDatabase.DeleteAsset(ClusterRoot);
+        // NEVER delete the folder: a deleted prefab breaks every copy placed in the scene (red "missing prefab").
+        // A cluster with a name that already exists is saved over that same file, wherever it is, keeping its GUID.
+        existingClusters.Clear();
+        if (AssetDatabase.IsValidFolder(ClusterRoot))
+            foreach (string g in AssetDatabase.FindAssets("t:Prefab", new[] { ClusterRoot }))
+            {
+                string p = AssetDatabase.GUIDToAssetPath(g);
+                existingClusters[Path.GetFileNameWithoutExtension(p)] = p;
+            }
         foreach (string f in new[] { "Islands/Small", "Islands/Medium", "Islands/Large", "Plant Clumps" }) EnsureFolder(ClusterRoot + "/" + f);
         var used = new HashSet<string>();
         int made = 0;
@@ -406,7 +414,7 @@ public static class LevelEditingTools
                 if (an.tilemap != null) CopyTiles(an, root.transform);
                 if (an.platform != null) CopyMember(an.platform, root.transform);
                 foreach (GameObject m in an.members) if (m != an.platform) CopyMember(m, root.transform);
-                PrefabUtility.SaveAsPrefabAsset(root, ClusterRoot + "/Islands/" + size + "/" + name + ".prefab");
+                PrefabUtility.SaveAsPrefabAsset(root, ClusterPath(name, ClusterRoot + "/Islands/" + size + "/" + name + ".prefab"));
                 Object.DestroyImmediate(root);
                 made++;
             }
@@ -421,7 +429,7 @@ public static class LevelEditingTools
                 var root = new GameObject(name);
                 root.transform.position = Snap(new Vector3(all.center.x, all.min.y, 0f)); // pivot: on the floor
                 foreach (GameObject m in members) CopyMember(m, root.transform);
-                PrefabUtility.SaveAsPrefabAsset(root, ClusterRoot + "/Plant Clumps/" + name + ".prefab");
+                PrefabUtility.SaveAsPrefabAsset(root, ClusterPath(name, ClusterRoot + "/Plant Clumps/" + name + ".prefab"));
                 Object.DestroyImmediate(root);
                 made++;
             }
@@ -430,6 +438,68 @@ public static class LevelEditingTools
         AssetDatabase.Refresh();
         Debug.Log("<color=cyan>[Level Editing]</color> " + made + " clusters saved in " + ClusterRoot + ".");
     }
+
+    private static readonly Dictionary<string, string> existingClusters = new Dictionary<string, string>();
+    private static string ClusterPath(string name, string fresh) => existingClusters.TryGetValue(name, out string p) ? p : fresh;
+
+    // ================================================================ repair red "missing prefab" clusters
+    // Copies placed from clusters that were deleted (the old tool wiped the folder on every rerun). Swap = replace each
+    // with the cluster prefab of the same name (fresh, linked, picks up tool fixes; edits made to the copy are lost).
+    // Unpack = keep each exactly as it is, as plain objects (no link).
+    [MenuItem("Tools/Rowdy Dandy/Level Editing/Fix Missing Cluster Prefabs")]
+    private static void FixMissing()
+    {
+        var broken = new List<GameObject>();
+        foreach (Transform t in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            GameObject go = t.gameObject;
+            if (PrefabUtility.IsPrefabAssetMissing(go) && PrefabUtility.GetOutermostPrefabInstanceRoot(go) == go) broken.Add(go);
+        }
+        if (broken.Count == 0) { EditorUtility.DisplayDialog("Missing Prefabs", "No missing prefabs in the open scene.", "OK"); return; }
+
+        var byName = new Dictionary<string, GameObject>();
+        if (AssetDatabase.IsValidFolder(ClusterRoot))
+            foreach (string g in AssetDatabase.FindAssets("t:Prefab", new[] { ClusterRoot }))
+            {
+                string p = AssetDatabase.GUIDToAssetPath(g);
+                byName[Path.GetFileNameWithoutExtension(p)] = AssetDatabase.LoadAssetAtPath<GameObject>(p);
+            }
+        int matches = broken.Count(b => byName.ContainsKey(BaseName(b.name)));
+        int choice = EditorUtility.DisplayDialogComplex("Missing Prefabs",
+            broken.Count + " missing prefab copies in the scene (" + matches + " have a cluster with the same name).\n\n"
+            + "SWAP: replace them with that cluster (linked again, gets the latest tool fixes; changes you made to the copy are lost).\n"
+            + "UNPACK: keep them exactly as they are, as plain objects (no prefab link).",
+            "Swap", "Cancel", "Unpack");
+        if (choice == 1) return;
+
+        int swapped = 0, unpacked = 0, failed = 0;
+        foreach (GameObject b in broken)
+        {
+            if (b == null) continue;
+            if (choice == 0 && byName.TryGetValue(BaseName(b.name), out GameObject asset) && asset != null)
+            {
+                var fresh = (GameObject)PrefabUtility.InstantiatePrefab(asset, b.scene);
+                Undo.RegisterCreatedObjectUndo(fresh, "Swap Cluster");
+                fresh.transform.SetParent(b.transform.parent, false);
+                fresh.transform.SetPositionAndRotation(b.transform.position, b.transform.rotation);
+                fresh.transform.localScale = b.transform.localScale;
+                fresh.transform.SetSiblingIndex(b.transform.GetSiblingIndex());
+                fresh.name = b.name;
+                Undo.DestroyObjectImmediate(b);
+                swapped++;
+                continue;
+            }
+            try { PrefabUtility.UnpackPrefabInstance(b, PrefabUnpackMode.Completely, InteractionMode.UserAction); unpacked++; }
+            catch (System.Exception e) { failed++; Debug.LogWarning("Couldn't unpack " + b.name + ": " + e.Message, b); }
+        }
+        UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
+        string msg = (swapped > 0 ? swapped + " swapped. " : "") + (unpacked > 0 ? unpacked + " unpacked. " : "") + (failed > 0 ? failed + " couldn't be fixed (see Console)." : "");
+        Debug.Log("<color=cyan>[Level Editing]</color> Missing prefabs: " + msg);
+        EditorUtility.DisplayDialog("Missing Prefabs", msg + "\nSave the scene to keep it.", "OK");
+    }
+
+    // "Beach Island - EarthWall 3 (1)" -> "Beach Island - EarthWall 3"
+    private static string BaseName(string n) => System.Text.RegularExpressions.Regex.Replace(n, @"\s*\(\d+\)$", "");
 
     private static float Overlap(Bounds a, Bounds b)
     {
@@ -479,11 +549,15 @@ public static class LevelEditingTools
         if (srcGrid != null) { grid.cellSize = srcGrid.cellSize; grid.cellGap = srcGrid.cellGap; grid.cellLayout = srcGrid.cellLayout; grid.cellSwizzle = srcGrid.cellSwizzle; }
         var tmGo = new GameObject(src.name);
         tmGo.transform.SetParent(gridGo.transform, false);
-        tmGo.transform.localPosition = src.transform.localPosition;
+        tmGo.transform.localPosition = src.transform.localPosition; // the Tilemap's own nudge (0.02, 0.05)
+        tmGo.transform.localRotation = src.transform.localRotation;
+        tmGo.transform.localScale = src.transform.localScale;
         tmGo.layer = src.gameObject.layer;
         tmGo.tag = src.gameObject.tag;
         var tm = tmGo.AddComponent<Tilemap>();
         tm.tileAnchor = src.tileAnchor;
+        tm.orientation = src.orientation;
+        tm.orientationMatrix = src.orientationMatrix;
         tm.color = src.color;
         TilemapRenderer sr = src.GetComponent<TilemapRenderer>(), r = tmGo.AddComponent<TilemapRenderer>();
         if (sr != null) { r.sharedMaterial = sr.sharedMaterial; r.sortingLayerID = sr.sortingLayerID; r.sortingOrder = sr.sortingOrder; r.mode = sr.mode; }
@@ -500,6 +574,8 @@ public static class LevelEditingTools
             var tc = tmGo.AddComponent<TilemapCollider2D>();
             tc.isTrigger = stc.isTrigger;
             tc.sharedMaterial = stc.sharedMaterial;
+            tc.offset = stc.offset;
+            tc.usedByEffector = stc.usedByEffector;
             CompositeCollider2D scomp = src.GetComponent<CompositeCollider2D>();
             PlatformEffector2D seff = src.GetComponent<PlatformEffector2D>();
             if (scomp != null)
@@ -509,7 +585,14 @@ public static class LevelEditingTools
                 var comp = tmGo.AddComponent<CompositeCollider2D>();
                 comp.geometryType = scomp.geometryType;
                 comp.usedByEffector = scomp.usedByEffector;
+                comp.isTrigger = scomp.isTrigger;
+                comp.sharedMaterial = scomp.sharedMaterial;
+                comp.offset = scomp.offset;               // the one-way Tilemap's collider sits 0.09 lower than its tiles
+                comp.edgeRadius = scomp.edgeRadius;
+                comp.vertexDistance = scomp.vertexDistance;
+                comp.offsetDistance = scomp.offsetDistance;
                 tc.compositeOperation = Collider2D.CompositeOperation.Merge;
+                comp.GenerateGeometry();
             }
             if (seff != null)
             {
@@ -520,6 +603,8 @@ public static class LevelEditingTools
                 eff.useSideBounce = seff.useSideBounce;
                 eff.colliderMask = seff.colliderMask;
                 eff.useColliderMask = seff.useColliderMask;
+                eff.rotationalOffset = seff.rotationalOffset;
+                eff.sideArc = seff.sideArc;
                 if (scomp == null) tc.usedByEffector = true;
             }
         }
@@ -623,7 +708,15 @@ public static class LevelKitLibrary
     public static void Build(bool ask)
     {
         if (ask && !EditorUtility.DisplayDialog("Level Kit", "Rebuild the kit pieces (Assets/Scenery/00 Kit Pieces) from the open scene and the Scenery art?\nThe scene is not changed.", "Rebuild", "Cancel")) return;
-        if (AssetDatabase.IsValidFolder(PiecesRoot)) AssetDatabase.DeleteAsset(PiecesRoot);
+        // never delete the folder (placed pieces would turn into red "missing prefabs"): same name = saved over the same file
+        var existing = new Dictionary<string, string>();
+        if (AssetDatabase.IsValidFolder(PiecesRoot))
+            foreach (string g in AssetDatabase.FindAssets("t:Prefab", new[] { PiecesRoot }))
+            {
+                string ep = AssetDatabase.GUIDToAssetPath(g);
+                existing[Path.GetFileNameWithoutExtension(ep)] = ep;
+            }
+        string PieceAt(string n, string fresh) => existing.TryGetValue(n, out string ep) ? ep : fresh;
         foreach (string c in Categories) if (c != "Clusters") LevelEditingTools.MakeFolder(PiecesRoot + "/" + c);
 
         var done = new HashSet<string>();          // texture paths already in the kit
@@ -650,7 +743,7 @@ public static class LevelKitLibrary
                 copy.transform.rotation = Quaternion.identity;
                 Vector3 ls = unit.transform.lossyScale;
                 copy.transform.localScale = new Vector3(Mathf.Abs(ls.x), Mathf.Abs(ls.y), 1f);
-                PrefabUtility.SaveAsPrefabAsset(copy, PiecesRoot + "/" + cat + "/" + name + ".prefab");
+                PrefabUtility.SaveAsPrefabAsset(copy, PieceAt(name, PiecesRoot + "/" + cat + "/" + name + ".prefab"));
                 Object.DestroyImmediate(copy);
                 done.Add(tex);
                 made++;
@@ -672,7 +765,7 @@ public static class LevelKitLibrary
                 if (lit != null) r.sharedMaterial = lit;
                 if (clipsByTexture.TryGetValue(g, out RuntimeAnimatorController ctrl) && ctrl != null)
                     go.AddComponent<Animator>().runtimeAnimatorController = ctrl;
-                PrefabUtility.SaveAsPrefabAsset(go, PiecesRoot + "/" + Classify(tex, go.name) + "/" + go.name + ".prefab");
+                PrefabUtility.SaveAsPrefabAsset(go, PieceAt(go.name, PiecesRoot + "/" + Classify(tex, go.name) + "/" + go.name + ".prefab"));
                 Object.DestroyImmediate(go);
                 made++;
             }

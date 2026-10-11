@@ -355,7 +355,11 @@ public class EnemyMovement : MonoBehaviour
         transform.localScale = GetFlippedScale(d);
     }
 
-    private void OnDisable() => LeaveTurnQueue();
+    private void OnDisable()
+    {
+        LeaveTurnQueue();
+        if (pausedAnimator) { pausedAnimator = false; if (animator != null) animator.enabled = true; } // never leave it frozen
+    }
     private void OnDestroy() => LeaveTurnQueue();
 
     private void LeaveTurnQueue()
@@ -628,13 +632,25 @@ public class EnemyMovement : MonoBehaviour
                 if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic) ApplyHorizontalVelocity(0f);
                 SetAnimatorBool("moving", false);
                 isMoving = false;
+                sleepSince = Time.time;
+            }
+            // asleep a moment (back in idle) and alive: its Animator pauses too (it's far off screen)
+            if (!pausedAnimator && animator != null && animator.enabled && Time.time - sleepSince > 0.5f && (health == null || !health.enemydead))
+            {
+                animator.keepAnimatorStateOnDisable = true;
+                animator.enabled = false;
+                pausedAnimator = true;
             }
             return true;
         }
 
         isSleeping = false;
+        if (pausedAnimator) { pausedAnimator = false; if (animator != null) animator.enabled = true; }
         return false;
     }
+
+    private float sleepSince;
+    private bool pausedAnimator;
 
     private static Collider2D FindSolidCollider(GameObject target)
     {

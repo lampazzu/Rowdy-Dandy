@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
-// The colosseums past the Frontier, built at runtime (no scene edits), far east:
+// The colosseums past the Frontier, far east. Each island is either BAKED into the scene (Tools > Rowdy Dandy >
+// Level Editing > Bake Colosseums Into Scene: a GloomArenaBaked root you edit by hand) or, if not, built here at
+// runtime from the Frontier island:
 //   THE GLOOMWOOD (Shift 640)       - the Frontier island's ground copied into its own tilemap, dyed dark, dressed with
 //                                     the Gloomy Forest art (Resources/GloomArt), one-way platforms for height, its sky
 //   THE PURPLE REIGN (VioletShift)  - the same island again, dyed violet, a POOL dug in the middle of the arena (lake
@@ -31,37 +33,81 @@ public static class GloomArena
     public static readonly Color Purple = new Color(0.72f, 0.55f, 1f);
     public static readonly Color Violet = new Color(0.9f, 0.45f, 1f);
 
+    // where an island's arena floor is (and its pool, for the Purple Reign)
+    private struct Site
+    {
+        public float left, right, floorY;
+        public bool hasPool;
+        public float poolX0, poolX1, poolSurface;
+    }
+
+    private static readonly (float, float, int)[] GloomPlatforms = { (0.22f, 2.2f, 3), (0.78f, 2.2f, 3), (0.5f, 4.1f, 4) };
+    private static readonly (float, float, int)[] VioletPlatforms = { (0.18f, 2.3f, 3), (0.82f, 2.3f, 3), (0.5f, 3.6f, 5) };
+    private static readonly Color GloomPlatformTint = new Color(0.42f, 0.36f, 0.55f), VioletPlatformTint = new Color(0.75f, 0.45f, 0.9f);
+
     public static void Build(FrontierArena frontier)
     {
         if (frontier == null) return;
         GameObject beachGo = GameObject.Find("BeachMap");
         Tilemap beach = beachGo != null ? beachGo.GetComponent<Tilemap>() : null;
-        if (beach == null || beach.layoutGrid == null) { Debug.LogWarning("Gloomwood: BeachMap not found"); return; }
+        GloomArenaBaked bakedGloom = GloomArenaBaked.Find(1), bakedViolet = GloomArenaBaked.Find(2);
+        if ((beach == null || beach.layoutGrid == null) && (bakedGloom == null || bakedViolet == null)) { Debug.LogWarning("Gloomwood: BeachMap not found"); return; }
 
         DressFrontier(frontier);
 
-        // ---- THE GLOOMWOOD
-        GameObject root = BuildIsland("The Gloomwood (runtime)", frontier, beachGo, beach, Shift, Dye, out Tilemap gloomTiles);
-        float left = frontier.leftX + Shift, right = frontier.rightX + Shift;
-        arena = MakeArena(root, frontier, Shift, 1, new Color(0.75f, 0.65f, 1f));
-        Decorate(root, left - 6f, right + 6f, arena.floorY);
-        Platforms(root, left, right, arena.floorY, new Color(0.42f, 0.36f, 0.55f), new[] { (0.22f, 2.2f, 3), (0.78f, 2.2f, 3), (0.5f, 4.1f, 4) });
+        // ---- THE GLOOMWOOD: the one baked into the scene (edited by hand), or built from the Frontier island
+        GameObject root;
+        Site g;
+        if (bakedGloom != null)
+        {
+            root = bakedGloom.gameObject;
+            g = new Site { left = bakedGloom.leftX, right = bakedGloom.rightX, floorY = bakedGloom.floorY };
+            arena = MakeArena(root, g, bakedGloom.gongSpot != null ? bakedGloom.gongSpot.position : GongFrom(frontier, Shift, g), 1, new Color(0.75f, 0.65f, 1f), true);
+        }
+        else
+        {
+            root = BuildIsland("The Gloomwood (runtime)", frontier.leftX, frontier.rightX, frontier.floorY, beachGo, beach, Shift, Dye, out _);
+            g = new Site { left = frontier.leftX + Shift, right = frontier.rightX + Shift, floorY = frontier.floorY };
+            arena = MakeArena(root, g, GongFrom(frontier, Shift, g), 1, new Color(0.75f, 0.65f, 1f), false);
+            g.floorY = arena.floorY;
+            Decorate(root, g.left - 6f, g.right + 6f, g.floorY);
+            Platforms(root, g.left, g.right, g.floorY, GloomPlatformTint, GloomPlatforms);
+        }
+        float left = arena.leftX, right = arena.rightX;
         root.AddComponent<GloomSky>().Setup((left + right) / 2f, arena.floorY, MinX, VioletMinX, false);
 
         // ---- THE PURPLE REIGN
-        GameObject vroot = BuildIsland("The Purple Reign (runtime)", frontier, beachGo, beach, VioletShift, VioletDye, out Tilemap violetTiles);
-        float vl = frontier.leftX + VioletShift, vr = frontier.rightX + VioletShift;
-        violet = MakeArena(vroot, frontier, VioletShift, 2, new Color(0.95f, 0.6f, 1f));
-        Pool(vroot, violet, violetTiles);
-        DecorateViolet(vroot, vl - 6f, vr + 6f, violet);
-        Platforms(vroot, vl, vr, violet.floorY, new Color(0.75f, 0.45f, 0.9f), new[] { (0.18f, 2.3f, 3), (0.82f, 2.3f, 3), (0.5f, 3.6f, 5) });
+        GameObject vroot;
+        Site v;
+        if (bakedViolet != null)
+        {
+            vroot = bakedViolet.gameObject;
+            v = new Site { left = bakedViolet.leftX, right = bakedViolet.rightX, floorY = bakedViolet.floorY };
+            violet = MakeArena(vroot, v, bakedViolet.gongSpot != null ? bakedViolet.gongSpot.position : GongFrom(frontier, VioletShift, v), 2, new Color(0.95f, 0.6f, 1f), true);
+            if (bakedViolet.Pool(out float x0, out float x1, out float surface))
+            {
+                violet.hasPool = true; violet.poolX0 = x0; violet.poolX1 = x1; violet.poolSurface = surface;
+            }
+        }
+        else
+        {
+            vroot = BuildIsland("The Purple Reign (runtime)", frontier.leftX, frontier.rightX, frontier.floorY, beachGo, beach, VioletShift, VioletDye, out Tilemap violetTiles);
+            v = new Site { left = frontier.leftX + VioletShift, right = frontier.rightX + VioletShift, floorY = frontier.floorY };
+            violet = MakeArena(vroot, v, GongFrom(frontier, VioletShift, v), 2, new Color(0.95f, 0.6f, 1f), false);
+            v.floorY = violet.floorY;
+            Pool(vroot, ref v, violetTiles);
+            violet.hasPool = v.hasPool; violet.poolX0 = v.poolX0; violet.poolX1 = v.poolX1; violet.poolSurface = v.poolSurface;
+            DecorateViolet(vroot, v.left - 6f, v.right + 6f, v);
+            Platforms(vroot, v.left, v.right, v.floorY, VioletPlatformTint, VioletPlatforms);
+        }
+        float vl = violet.leftX, vr = violet.rightX;
         vroot.AddComponent<GloomSky>().Setup((vl + vr) / 2f, violet.floorY, VioletMinX, 99999f, true);
 
-        // ---- the gates between them
+        // ---- the gates between them (a baked island's gate spots are wherever they were moved to)
         Vector3 frontierGate = GateSpot(frontier.rightX + 3.4f, frontier.floorY, frontier.leftX, frontier.rightX);
-        Vector3 gloomBack = GateSpot(left - 4f, arena.floorY, left, right);
-        Vector3 gloomOn = GateSpot(right + 4f, arena.floorY, left, right);
-        Vector3 violetBack = GateSpot(vl - 4f, violet.floorY, vl, vr);
+        Vector3 gloomBack = bakedGloom != null && bakedGloom.gateBackSpot != null ? bakedGloom.gateBackSpot.position : GateSpot(left - 4f, arena.floorY, left, right);
+        Vector3 gloomOn = bakedGloom != null && bakedGloom.gateOnSpot != null ? bakedGloom.gateOnSpot.position : GateSpot(right + 4f, arena.floorY, left, right);
+        Vector3 violetBack = bakedViolet != null && bakedViolet.gateBackSpot != null ? bakedViolet.gateBackSpot.position : GateSpot(vl - 4f, violet.floorY, vl, vr);
         arrival = gloomBack + new Vector3(1.6f, 0.6f, 0f);
         frontierReturn = frontierGate + new Vector3(-1.4f, 0.6f, 0f);
         violetArrival = violetBack + new Vector3(1.6f, 0.6f, 0f);
@@ -73,10 +119,58 @@ public static class GloomArena
         EnemyMovement.ForgetWaterCache(); // the new pool counts as water for drowning
     }
 
-    private static GameObject BuildIsland(string name, FrontierArena frontier, GameObject beachGo, Tilemap beach, float shift, Color dye, out Tilemap tm)
+    private static Vector3 GongFrom(FrontierArena frontier, float shift, Site s)
+        => frontier.gong != null ? frontier.gong.position + Vector3.right * shift : new Vector3(s.left + 3f, s.floorY, 0f);
+
+    // ---------------------------------------------------------------- BAKE (editor tool): the island into the scene
+    // Builds the island exactly like at runtime (ground, walls, decoration, platforms, the pool) under a root with a
+    // GloomArenaBaked marker, plus Gong / Gate spots to move around. No logic: that's still added at Play.
+    // fLeft / fRight / fFloor = the Frontier arena's floor (as fitted at Play).
+    public static GameObject BakeIsland(int tier, float fLeft, float fRight, float fFloor, Vector3? frontierGong)
+    {
+        GameObject beachGo = GameObject.Find("BeachMap");
+        Tilemap beach = beachGo != null ? beachGo.GetComponent<Tilemap>() : null;
+        if (beach == null || beach.layoutGrid == null) { Debug.LogWarning("Bake: BeachMap not found"); return null; }
+        bool vio = tier == 2;
+        float shift = vio ? VioletShift : Shift;
+        GameObject root = BuildIsland(vio ? "The Purple Reign" : "The Gloomwood", fLeft, fRight, fFloor, beachGo, beach, shift, vio ? VioletDye : Dye, out Tilemap tm);
+        var s = new Site { left = fLeft + shift, right = fRight + shift, floorY = fFloor };
+        if (SolidGround.Ray(new Vector2((s.left + s.right) / 2f, s.floorY + 4f), Vector2.down, 10f, out RaycastHit2D hit)) s.floorY = hit.point.y;
+        if (vio)
+        {
+            Pool(root, ref s, tm);
+            DecorateViolet(root, s.left - 6f, s.right + 6f, s);
+            Platforms(root, s.left, s.right, s.floorY, VioletPlatformTint, VioletPlatforms);
+        }
+        else
+        {
+            Decorate(root, s.left - 6f, s.right + 6f, s.floorY);
+            Platforms(root, s.left, s.right, s.floorY, GloomPlatformTint, GloomPlatforms);
+        }
+        Physics2D.SyncTransforms();
+        GloomArenaBaked marker = root.AddComponent<GloomArenaBaked>();
+        marker.tier = tier;
+        marker.leftX = s.left;
+        marker.rightX = s.right;
+        marker.floorY = s.floorY;
+        marker.gongSpot = Spot(root, "Gong Spot", frontierGong.HasValue ? frontierGong.Value + Vector3.right * shift : new Vector3(s.left + 3f, s.floorY, 0f));
+        marker.gateBackSpot = Spot(root, "Gate Back Spot", GateSpot(s.left - 4f, s.floorY, s.left, s.right));
+        if (!vio) marker.gateOnSpot = Spot(root, "Gate On Spot", GateSpot(s.right + 4f, s.floorY, s.left, s.right));
+        return root;
+    }
+
+    private static Transform Spot(GameObject root, string name, Vector3 at)
+    {
+        var go = new GameObject(name);
+        go.transform.SetParent(root.transform, false);
+        go.transform.position = at;
+        return go.transform;
+    }
+
+    private static GameObject BuildIsland(string name, float fLeft, float fRight, float fFloor, GameObject beachGo, Tilemap beach, float shift, Color dye, out Tilemap tm)
     {
         var root = new GameObject(name);
-        float left = frontier.leftX + shift, right = frontier.rightX + shift;
+        float left = fLeft + shift, right = fRight + shift;
         Grid srcGrid = beach.layoutGrid;
         var gridGo = new GameObject("Grid");
         gridGo.transform.SetParent(root.transform, false);
@@ -105,9 +199,9 @@ public static class GloomArena
             tmr.sortingOrder = srcR.sortingOrder;
             tmr.mode = srcR.mode;
         }
-        Vector3Int a = beach.WorldToCell(new Vector3(frontier.leftX - 8f, frontier.floorY - 14f, 0f));
-        Vector3Int b = beach.WorldToCell(new Vector3(frontier.rightX + 8f, frontier.floorY + 16f, 0f));
-        Vector3Int shiftCells = beach.WorldToCell(new Vector3(frontier.leftX + shift, frontier.floorY, 0f)) - beach.WorldToCell(new Vector3(frontier.leftX, frontier.floorY, 0f));
+        Vector3Int a = beach.WorldToCell(new Vector3(fLeft - 8f, fFloor - 14f, 0f));
+        Vector3Int b = beach.WorldToCell(new Vector3(fRight + 8f, fFloor + 16f, 0f));
+        Vector3Int shiftCells = beach.WorldToCell(new Vector3(fLeft + shift, fFloor, 0f)) - beach.WorldToCell(new Vector3(fLeft, fFloor, 0f));
         for (int x = a.x; x <= b.x; x++)
             for (int y = a.y; y <= b.y; y++)
             {
@@ -128,14 +222,16 @@ public static class GloomArena
         comp.GenerateGeometry();
 
         // walls at both ends + a floor far below (nothing to fall off into)
-        Wall(root, beachGo, new Vector2(left - 7f, frontier.floorY + 6f), new Vector2(1f, 30f));
-        Wall(root, beachGo, new Vector2(right + 7f, frontier.floorY + 6f), new Vector2(1f, 30f));
-        Wall(root, beachGo, new Vector2((left + right) / 2f, frontier.floorY - 12f), new Vector2(40f, 1f));
+        Wall(root, beachGo, new Vector2(left - 7f, fFloor + 6f), new Vector2(1f, 30f));
+        Wall(root, beachGo, new Vector2(right + 7f, fFloor + 6f), new Vector2(1f, 30f));
+        Wall(root, beachGo, new Vector2((left + right) / 2f, fFloor - 12f), new Vector2(40f, 1f));
         Physics2D.SyncTransforms();
         return root;
     }
 
-    private static FrontierArena MakeArena(GameObject root, FrontierArena frontier, float shift, int tier, Color gongTint)
+    // The colosseum logic + its gong (never baked: always added at Play). fit = push the gates out to where the floor
+    // ends (baked islands may be reshaped by hand)
+    private static FrontierArena MakeArena(GameObject root, Site s, Vector3 gongAt, int tier, Color gongTint, bool fit)
     {
         // inactive while it's set up, so Awake sees the fields
         var arenaGo = new GameObject(tier == 2 ? "Colosseum (Purple Reign)" : "Colosseum (Gloomwood)");
@@ -144,13 +240,14 @@ public static class GloomArena
         FrontierArena a = arenaGo.AddComponent<FrontierArena>();
         a.gloom = true;
         a.tier = tier;
-        a.leftX = frontier.leftX + shift;
-        a.rightX = frontier.rightX + shift;
-        a.floorY = frontier.floorY;
+        a.leftX = s.left;
+        a.rightX = s.right;
+        a.floorY = s.floorY;
         a.islandStartX = MinX;
+        a.fitGatesToFloor = fit;
         var gongGo = new GameObject("Gong");
         gongGo.transform.SetParent(root.transform, false);
-        gongGo.transform.position = frontier.gong != null ? frontier.gong.position + Vector3.right * shift : new Vector3(a.leftX + 3f, frontier.floorY, 0f);
+        gongGo.transform.position = gongAt;
         var gongSr = gongGo.AddComponent<SpriteRenderer>();
         gongSr.sprite = FrontierArena.GongSprite;
         gongSr.sortingOrder = 8;
@@ -232,9 +329,9 @@ public static class GloomArena
     // ---------------------------------------------------------------- the Purple Reign's pool
     private const float PoolWidth = 5f, PoolDepth = 2.5f;
 
-    private static void Pool(GameObject root, FrontierArena a, Tilemap ground)
+    private static void Pool(GameObject root, ref Site a, Tilemap ground)
     {
-        float cx = Mathf.Round((a.leftX + a.rightX) / 2f), x0 = cx - PoolWidth / 2f, x1 = cx + PoolWidth / 2f;
+        float cx = Mathf.Round((a.left + a.right) / 2f), x0 = cx - PoolWidth / 2f, x1 = cx + PoolWidth / 2f;
         float surface = a.floorY - 0.3f;
         // dig: take the ground out where the water goes
         Vector3Int c0 = ground.WorldToCell(new Vector3(x0 + 0.05f, a.floorY - PoolDepth, 0f)), c1 = ground.WorldToCell(new Vector3(x1 - 0.05f, a.floorY + 0.5f, 0f));
@@ -277,12 +374,14 @@ public static class GloomArena
         {
             Sprite[] frames = ItemArt.Frames(art.lake, 6, 1, new Vector2(0f, 1f), 64f);
             var anim = pool.AddComponent<PoolWater>();
+            anim.sheet = art.lake;
             for (int i = 0; i < Mathf.RoundToInt(PoolWidth); i++)
             {
                 var t = new GameObject("Lake").AddComponent<SpriteRenderer>();
                 t.transform.SetParent(pool.transform, false);
                 t.transform.position = new Vector3(x0 + i, surface + 0.15f, 0f);
                 t.sortingOrder = 41;
+                t.sprite = frames[i % frames.Length];
                 if (CatFX.Unlit != null) t.sharedMaterial = CatFX.Unlit;
                 anim.Add(t, frames, i);
             }
@@ -296,6 +395,7 @@ public static class GloomArena
         deep.sortingOrder = 40;
         if (CatFX.Unlit != null) deep.sharedMaterial = CatFX.Unlit;
         a.hasPool = true;
+        a.poolSurface = surface;
         a.poolX0 = x0;
         a.poolX1 = x1;
         a.poolSurface = surface;
@@ -385,7 +485,7 @@ public static class GloomArena
     }
 
     // The Purple Reign: purple palms (animated), purple plants, purple fog - nothing else
-    private static void DecorateViolet(GameObject root, float from, float to, FrontierArena a)
+    private static void DecorateViolet(GameObject root, float from, float to, Site a)
     {
         ArenaArt art = ArenaArt.Get;
         var rng = new System.Random(777);
@@ -398,7 +498,7 @@ public static class GloomArena
             {
                 if (a.hasPool && x > a.poolX0 - 1f && x < a.poolX1 + 1f) continue;
                 SpriteRenderer sr = Place(decor, palm[0], x, a.floorY, -20 - rng.Next(0, 4), new Color(0.85f, 0.8f, 0.95f), -0.1f, rng.NextDouble() < 0.5);
-                if (sr != null) sr.gameObject.AddComponent<LoopFrames>().Set(palm, 10f, (float)rng.NextDouble() * 2f);
+                if (sr != null) sr.gameObject.AddComponent<LoopFrames>().Set(art.bigPalm, 22, new Vector2(0.5f, 0f), 10f, (float)rng.NextDouble() * 2f);
             }
         }
         if (art != null && art.palm != null)
@@ -410,9 +510,9 @@ public static class GloomArena
         // purple plants you can cut (juice!) along the edges of the arena
         GameObject plant = Resources.Load<GameObject>("Interactables/PurplePlant");
         if (plant != null)
-            foreach (float x in new[] { a.leftX + 1f, a.rightX - 1f, from + 1.5f, to - 1.5f })
+            foreach (float x in new[] { a.left + 1f, a.right - 1f, from + 1.5f, to - 1.5f })
                 if (SolidGround.Ray(new Vector2(x, a.floorY + 3f), Vector2.down, 6f, out RaycastHit2D hit))
-                    Object.Instantiate(plant, hit.point, Quaternion.identity, decor.transform);
+                    SpawnPrefab(plant, hit.point, decor.transform);
         // fog drifting low over the floor
         if (art != null)
             foreach (Texture2D fog in new[] { art.fog1, art.fog2, art.fog3 })
@@ -471,6 +571,20 @@ public static class GloomArena
         light.pointLightInnerRadius = 0.1f;
     }
 
+    // a prefab copy: linked to its prefab when baking in the editor (so it stays updated), a plain copy at runtime
+    private static GameObject SpawnPrefab(GameObject prefab, Vector3 at, Transform parent)
+    {
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            var g = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(prefab, parent);
+            g.transform.position = at;
+            return g;
+        }
+#endif
+        return Object.Instantiate(prefab, at, Quaternion.identity, parent);
+    }
+
     private static Sprite Pick(System.Random rng, Sprite[] list) => list == null || list.Length == 0 ? null : list[rng.Next(list.Length)];
 
     private static SpriteRenderer Place(GameObject parent, Sprite s, float x, float floorY, int order, Color tint, float sink, bool flip)
@@ -489,41 +603,6 @@ public static class GloomArena
         sr.flipX = flip;
         if (ItemArt.Lit != null) sr.sharedMaterial = ItemArt.Lit;
         return sr;
-    }
-}
-
-// Loops sprite frames on a renderer (palms swaying)
-public class LoopFrames : MonoBehaviour
-{
-    private Sprite[] frames;
-    private float fps, offset;
-    private SpriteRenderer sr;
-    public void Set(Sprite[] f, float framesPerSecond, float timeOffset) { frames = f; fps = framesPerSecond; offset = timeOffset; sr = GetComponent<SpriteRenderer>(); }
-    private void Update() { if (sr != null && frames != null && frames.Length > 0) sr.sprite = frames[(int)((Time.time + offset) * fps) % frames.Length]; }
-}
-
-// The Purple Reign's lake tiles, animated together
-public class PoolWater : MonoBehaviour
-{
-    private readonly List<(SpriteRenderer sr, Sprite[] frames, int offset)> tiles = new List<(SpriteRenderer, Sprite[], int)>();
-    public void Add(SpriteRenderer sr, Sprite[] frames, int offset) => tiles.Add((sr, frames, offset));
-    private void Update()
-    {
-        int f = (int)(Time.time * 6f);
-        foreach (var t in tiles) if (t.sr != null) t.sr.sprite = t.frames[(f + t.offset) % t.frames.Length];
-    }
-}
-
-// Fog that drifts slowly back and forth, a whole pixel at a time
-public class FogDrift : MonoBehaviour
-{
-    private Vector3 home;
-    private float phase;
-    private void Start() { home = transform.position; phase = Random.Range(0f, 10f); }
-    private void Update()
-    {
-        float x = home.x + Mathf.Sin(Time.time * 0.15f + phase) * 3f;
-        transform.position = new Vector3(Mathf.Round(x * 64f) / 64f, home.y, 0f);
     }
 }
 
