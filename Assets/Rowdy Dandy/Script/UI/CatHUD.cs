@@ -196,7 +196,7 @@ public class CatHUD : MonoBehaviour
 
         foreach (PetFollower pet in PetFollower.Pets)
         {
-            if (pet == null || !pet.IsCollected || entries.Exists(e => e.pet == pet && !e.lost)) continue;
+            if (pet == null || !pet.IsCollected || HasLiveEntry(pet)) continue;
             entries.Add(BuildEntry(pet));
             changed = true;
         }
@@ -241,14 +241,30 @@ public class CatHUD : MonoBehaviour
         int slot = 0;
         Vector2 Next() { int col = slot / maxRows, row = slot % maxRows; slot++; return new Vector2(col * columnStep, -row * step); }
 
-        List<PetFollower> party = CatRoster.Party;
-        var live = entries.FindAll(e => !e.lost);
-        live.Sort((a, b) => Order(party, a.pet).CompareTo(Order(party, b.pet)));
+        // perf: reused list + cached comparison (this runs every frame)
+        layoutParty = CatRoster.Party;
+        List<Entry> live = liveBuffer;
+        live.Clear();
+        foreach (Entry e in entries) if (!e.lost) live.Add(e);
+        if (orderComparison == null) orderComparison = (a, b) => Order(layoutParty, a.pet).CompareTo(Order(layoutParty, b.pet));
+        live.Sort(orderComparison);
         if (compactRoot != null && compactRoot.gameObject.activeSelf) compactRoot.anchoredPosition = Next(); // one row for all
         else foreach (Entry e in live) { e.home = Next(); e.root.anchoredPosition = e.home; }
         if (freeSlot != null && freeSlot.gameObject.activeSelf) freeSlot.anchoredPosition = Next();
         foreach (Entry e in entries) if (e.lost) e.home = Next();
         ratSpot = Next();
+    }
+
+    private readonly List<Entry> liveBuffer = new List<Entry>();
+    private List<PetFollower> layoutParty;
+    private System.Comparison<Entry> orderComparison;
+    private static readonly Vector3[] cornerBuffer = new Vector3[4];
+    private static readonly int[] ratFlap = { 0, 1, 2, 1 };
+
+    private bool HasLiveEntry(PetFollower pet)
+    {
+        foreach (Entry e in entries) if (e.pet == pet && !e.lost) return true;
+        return false;
     }
 
     private static int Order(List<PetFollower> party, PetFollower pet)
@@ -262,7 +278,7 @@ public class CatHUD : MonoBehaviour
         Canvas canvas = GetComponentInParent<Canvas>();
         if (canvas == null) return 99;
         var canvasRect = (RectTransform)canvas.rootCanvas.transform;
-        var corners = new Vector3[4];
+        Vector3[] corners = cornerBuffer;
         rect.GetWorldCorners(corners);
         float top = canvasRect.InverseTransformPoint(corners[1]).y;  // top-left corner of this panel
         float bottom = -canvasRect.rect.height * canvasRect.pivot.y + BottomKeepOut;
@@ -321,7 +337,7 @@ public class CatHUD : MonoBehaviour
             ratText.Rect.anchoredPosition = new Vector2(24 * pixelScale, -11 * pixelScale);
         }
         // Flaps in the HUD too
-        if (ratFrames != null) ratIcon.sprite = ratFrames[new[] { 0, 1, 2, 1 }[(int)(Time.unscaledTime * 8f) % 4]];
+        if (ratFrames != null) ratIcon.sprite = ratFrames[ratFlap[(int)(Time.unscaledTime * 8f) % 4]];
         ratPunch = Mathf.Max(0f, ratPunch - Time.unscaledDeltaTime);
         ratIcon.rectTransform.localScale = Vector3.one * (1f + ratPunch * 1.2f);
         ratIcon.color = ratPunch > 0f ? Color.Lerp(Color.white, new Color(1f, 0.85f, 0.3f), Mathf.Repeat(ratPunch * 12f, 1f)) : Color.white;

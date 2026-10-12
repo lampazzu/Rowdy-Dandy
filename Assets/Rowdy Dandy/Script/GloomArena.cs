@@ -70,7 +70,7 @@ public static class GloomArena
             g = new Site { left = frontier.leftX + Shift, right = frontier.rightX + Shift, floorY = frontier.floorY };
             arena = MakeArena(root, g, GongFrom(frontier, Shift, g), 1, new Color(0.75f, 0.65f, 1f), false);
             g.floorY = arena.floorY;
-            Decorate(root, g.left - 6f, g.right + 6f, g.floorY);
+            Decorate(root, g.left - 6f, g.right + 6f, g.floorY + ArtSink(beachGo)); // decor sits on the art, not the sunk collision
             Platforms(root, g.left, g.right, g.floorY, GloomPlatformTint, GloomPlatforms);
         }
         float left = arena.leftX, right = arena.rightX;
@@ -94,10 +94,11 @@ public static class GloomArena
             vroot = BuildIsland("The Purple Reign (runtime)", frontier.leftX, frontier.rightX, frontier.floorY, beachGo, beach, VioletShift, VioletDye, out Tilemap violetTiles);
             v = new Site { left = frontier.leftX + VioletShift, right = frontier.rightX + VioletShift, floorY = frontier.floorY };
             violet = MakeArena(vroot, v, GongFrom(frontier, VioletShift, v), 2, new Color(0.95f, 0.6f, 1f), false);
-            v.floorY = violet.floorY;
+            v.floorY = violet.floorY + ArtSink(beachGo); // the pool and its decor are drawn from the art's top
             Pool(vroot, ref v, violetTiles);
             violet.hasPool = v.hasPool; violet.poolX0 = v.poolX0; violet.poolX1 = v.poolX1; violet.poolSurface = v.poolSurface;
             DecorateViolet(vroot, v.left - 6f, v.right + 6f, v);
+            v.floorY -= ArtSink(beachGo); // platforms: the same jump from where Rowdy stands as before
             Platforms(vroot, v.left, v.right, v.floorY, VioletPlatformTint, VioletPlatforms);
         }
         float vl = violet.leftX, vr = violet.rightX;
@@ -136,15 +137,18 @@ public static class GloomArena
         GameObject root = BuildIsland(vio ? "The Purple Reign" : "The Gloomwood", fLeft, fRight, fFloor, beachGo, beach, shift, vio ? VioletDye : Dye, out Tilemap tm);
         var s = new Site { left = fLeft + shift, right = fRight + shift, floorY = fFloor };
         if (SolidGround.Ray(new Vector2((s.left + s.right) / 2f, s.floorY + 4f), Vector2.down, 10f, out RaycastHit2D hit)) s.floorY = hit.point.y;
+        float sink = ArtSink(beachGo); // the collision sits this far under the art (like the beach): decor / pool follow the art
         if (vio)
         {
+            s.floorY += sink;
             Pool(root, ref s, tm);
             DecorateViolet(root, s.left - 6f, s.right + 6f, s);
+            s.floorY -= sink;
             Platforms(root, s.left, s.right, s.floorY, VioletPlatformTint, VioletPlatforms);
         }
         else
         {
-            Decorate(root, s.left - 6f, s.right + 6f, s.floorY);
+            Decorate(root, s.left - 6f, s.right + 6f, s.floorY + sink);
             Platforms(root, s.left, s.right, s.floorY, GloomPlatformTint, GloomPlatforms);
         }
         Physics2D.SyncTransforms();
@@ -157,6 +161,16 @@ public static class GloomArena
         marker.gateBackSpot = Spot(root, "Gate Back Spot", GateSpot(s.left - 4f, s.floorY, s.left, s.right));
         if (!vio) marker.gateOnSpot = Spot(root, "Gate On Spot", GateSpot(s.right + 4f, s.floorY, s.left, s.right));
         return root;
+    }
+
+    // How far the beach's collision sits under its art. Merged into a composite, the tilemap collider's own offset is
+    // ignored (measured: the beach's surface is exactly the composite's -0.48 under the art), so that's what counts.
+    public static float ArtSink(GameObject beachGo)
+    {
+        if (beachGo == null) return 0f;
+        bool merged = beachGo.TryGetComponent(out TilemapCollider2D tc) && tc.compositeOperation != Collider2D.CompositeOperation.None;
+        if (beachGo.TryGetComponent(out CompositeCollider2D cc) && (merged || tc == null)) return -cc.offset.y;
+        return tc != null ? -tc.offset.y : 0f;
     }
 
     private static Transform Spot(GameObject root, string name, Vector3 at)
@@ -217,7 +231,9 @@ public static class GloomArena
         tc.compositeOperation = Collider2D.CompositeOperation.Merge;
         var comp = tmGo.AddComponent<CompositeCollider2D>();
         comp.geometryType = CompositeCollider2D.GeometryType.Polygons;
-        if (beachGo.TryGetComponent(out CompositeCollider2D srcComp)) comp.sharedMaterial = srcComp.sharedMaterial;
+        if (beachGo.TryGetComponent(out CompositeCollider2D srcComp)) { comp.sharedMaterial = srcComp.sharedMaterial; comp.offset = srcComp.offset; }
+        // same collision offset as the beach: Rowdy's feet sink into the grass instead of standing on top of the art
+        if (beachGo.TryGetComponent(out TilemapCollider2D srcTc)) tc.offset = srcTc.offset;
         tc.ProcessTilemapChanges();
         comp.GenerateGeometry();
 

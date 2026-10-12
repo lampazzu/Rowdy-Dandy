@@ -96,7 +96,9 @@ public class WaterSplashFX : MonoBehaviour
     // The current FX object if there is one; never creates one (safe during shutdown / scene unload)
     public static WaterSplashFX Existing => instance;
 
-    public int WaterMask => waterLayers.value != 0 ? waterLayers.value : LayerMask.GetMask("waterLayer", "Water");
+    // perf: the by-name fallback mask is looked up once (GetMask allocates and every body asks every physics step)
+    private static int defaultWaterMask = -1;
+    public int WaterMask => waterLayers.value != 0 ? waterLayers.value : defaultWaterMask != -1 ? defaultWaterMask : (defaultWaterMask = LayerMask.GetMask("waterLayer", "Water"));
     public float MinImpactSpeed => minImpactSpeed;
 
     public float GetIntensity(float speed)

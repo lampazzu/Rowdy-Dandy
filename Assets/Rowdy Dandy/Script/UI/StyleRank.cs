@@ -57,6 +57,10 @@ public class StyleRank : MonoBehaviour
     private int combo;
     private int noHitStreak;
     private long score;
+    private long shownScore = -1;
+    private int shownStreakKey = int.MinValue;
+    private string scoreTextValue, streakTextValue, comboTextValue;
+    private int shownCombo = int.MinValue;
     private float lastHitTime = -10f, lastGainTime = -10f, lastAirTag = -10f;
     private readonly List<string> recentMoves = new List<string>();
 
@@ -370,8 +374,16 @@ public class StyleRank : MonoBehaviour
         stripes.uvRect = uv;
         stripes.color = new Color(rc.r, rc.g, rc.b, 0.06f + 0.03f * rank);
 
-        scoreText.SetText("STYLE " + score.ToString("000000"));
-        streakText.SetText(noHitStreak >= 5 ? "NO HIT X" + (1f + Mathf.Min(noHitStreak, 50) * 0.02f).ToString("0.0") : "");
+        // perf: the texts are only rebuilt when the numbers change (two new strings every frame before)
+        if (score != shownScore || scoreTextValue == null) { shownScore = score; scoreTextValue = "STYLE " + score.ToString("000000"); }
+        scoreText.SetText(scoreTextValue);
+        int streakKey = noHitStreak >= 5 ? Mathf.Min(noHitStreak, 50) : -1;
+        if (streakKey != shownStreakKey || streakTextValue == null)
+        {
+            shownStreakKey = streakKey;
+            streakTextValue = noHitStreak >= 5 ? "NO HIT X" + (1f + Mathf.Min(noHitStreak, 50) * 0.02f).ToString("0.0") : "";
+        }
+        streakText.SetText(streakTextValue);
 
         // Combo
         bool showCombo = combo >= 2;
@@ -379,7 +391,8 @@ public class StyleRank : MonoBehaviour
         comboLabel.gameObject.SetActive(showCombo);
         if (showCombo)
         {
-            comboNumber.SetText(combo.ToString());
+            if (combo != shownCombo || comboTextValue == null) { shownCombo = combo; comboTextValue = combo.ToString(); } // perf
+            comboNumber.SetText(comboTextValue);
             comboPop = Mathf.MoveTowards(comboPop, 0f, dt * 5f);
             comboNumber.Rect.localScale = Vector3.one * (1f + 0.5f * comboPop);
             Color cc = combo >= 25 ? new Color(1f, 0.3f, 0.3f) : combo >= 10 ? new Color(1f, 0.6f, 0.2f) : ComboColor;

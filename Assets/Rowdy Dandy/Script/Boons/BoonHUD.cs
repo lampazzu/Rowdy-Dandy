@@ -21,7 +21,19 @@ public class BoonHUD : MonoBehaviour
     private Image moonFill, moonGlow, moonButton;
     private PixelText moonText;
     private string shownSignature = "";
+    private int shownHash = int.MinValue;
+    private int shownPercent = -1;
+    private string shownPercentText;
     private int shownDevice = -1;
+    private GameObject player;
+
+    // Same answer as FindGameObjectWithTag("Player") != null, without the tag search every frame
+    private bool PlayerAround()
+    {
+        if (player != null && player.activeInHierarchy && player.CompareTag("Player")) return true;
+        player = GameObject.FindGameObjectWithTag("Player");
+        return player != null;
+    }
 
     // build panel
     private RectTransform build;
@@ -112,12 +124,20 @@ public class BoonHUD : MonoBehaviour
         if (row == null) return;
         IReadOnlyList<string> owned = Boons.OwnedIds;
         bool any = owned.Count > 0;
-        bool hidden = !any || (PauseMenu.IsPaused && !StatsPause.IsOpen) || RowdyNotes.IsOpen || WorldMap.IsOpen || GameObject.FindGameObjectWithTag("Player") == null;
+        bool hidden = !any || (PauseMenu.IsPaused && !StatsPause.IsOpen) || RowdyNotes.IsOpen || WorldMap.IsOpen || !PlayerAround();
         group.alpha = Mathf.MoveTowards(group.alpha, hidden ? 0f : 1f, Time.unscaledDeltaTime * 6f);
 
-        string signature = string.Join(",", owned);
-        foreach (string id in owned) signature += Boons.RarityOf(id);
-        if (signature != shownSignature) Rebuild(owned, signature);
+        // perf: the signature string is only rebuilt when a cheap hash of the build changes (it used to be built
+        // every frame: ~150 KB of garbage per frame with a big build)
+        int hash = owned.Count;
+        foreach (string id in owned) hash = unchecked(hash * 31 + id.GetHashCode() * 7 + (int)Boons.RarityOf(id));
+        if (hash != shownHash)
+        {
+            shownHash = hash;
+            string signature = string.Join(",", owned);
+            foreach (string id in owned) signature += Boons.RarityOf(id);
+            if (signature != shownSignature) Rebuild(owned, signature);
+        }
 
         UpdateMoon();
         UpdateBuildPanel(owned);
@@ -201,7 +221,9 @@ public class BoonHUD : MonoBehaviour
             moonButton.sprite = ButtonIcons.Get(GameInput.IconId(GameInput.Act.Werewolf));
             moonButton.rectTransform.sizeDelta = ButtonIcons.UISize(moonButton.sprite, 2);
         }
-        moonText.SetText(active ? (other ? SpecialBoons.ActiveLabel : steph ? "BUG!" : "WOLF!") : ready ? "FULL!" : Mathf.FloorToInt(charge * 100f) + "%");
+        int percent = Mathf.FloorToInt(charge * 100f);
+        if (percent != shownPercent || shownPercentText == null) { shownPercent = percent; shownPercentText = percent + "%"; }
+        moonText.SetText(active ? (other ? SpecialBoons.ActiveLabel : steph ? "BUG!" : "WOLF!") : ready ? "FULL!" : shownPercentText);
         moonText.Color = active || ready ? new Color(tone.r, Mathf.Min(1f, tone.g * 0.6f + 0.3f * pulse + 0.2f), tone.b + 0.2f) : new Color(0.85f, 0.8f, 0.95f);
     }
     // ---------------------------------------------------------------- the BUILD panel (with the stats screen)
@@ -217,8 +239,11 @@ public class BoonHUD : MonoBehaviour
         if (!statsUp) StatsPause.Expanded = false;
         UpdateExpanded(owned, statsUp && StatsPause.Expanded);
         bool want = statsUp && !StatsPause.Expanded;
-        string sig = shownSignature + Boons.Rerolls;
-        if (want && (build == null || sig != buildSignature)) BuildPanel(owned, sig);
+        if (want) // perf: the signature string is only put together while the panel is wanted (it was built every frame)
+        {
+            string sig = shownSignature + Boons.Rerolls;
+            if (build == null || sig != buildSignature) BuildPanel(owned, sig);
+        }
         if (build == null) return;
         if (want != buildVisible)
         {
@@ -306,8 +331,11 @@ public class BoonHUD : MonoBehaviour
 
     private void UpdateExpanded(IReadOnlyList<string> owned, bool want)
     {
-        string sig = shownSignature + Boons.Rerolls;
-        if (want && (expanded == null || sig != expandedSignature || expandedDevice != GameInput.DeviceVersion)) BuildExpanded(owned, sig);
+        if (want) // perf: as above, only while it's wanted
+        {
+            string sig = shownSignature + Boons.Rerolls;
+            if (expanded == null || sig != expandedSignature || expandedDevice != GameInput.DeviceVersion) BuildExpanded(owned, sig);
+        }
         if (expanded == null) return;
         if (want != expandedVisible)
         {

@@ -201,7 +201,8 @@ public class EnemyHealthBar : MonoBehaviour
         alpha = show ? 1f : Mathf.MoveTowards(alpha, 0f, fadeStep);
         if (!alive) alpha = 0f;
 
-        ApplyAlpha(alpha);
+        // perf: a hidden bar (most of them, most of the time) isn't re-coloured every frame
+        if (alpha > 0f || appliedAlpha != 0f) { ApplyAlpha(alpha); appliedAlpha = alpha; }
         if (alpha <= 0f) return;
 
         SetFill(fillRenderer, fillSource, ratio);
@@ -275,6 +276,8 @@ public class EnemyHealthBar : MonoBehaviour
 
         transform.position = new Vector3(bounds.center.x, target.transform.position.y + headroom + style.heightOffset, target.transform.position.z);
     }
+
+    private float appliedAlpha = -1f;
 
     private void ApplyAlpha(float a)
     {

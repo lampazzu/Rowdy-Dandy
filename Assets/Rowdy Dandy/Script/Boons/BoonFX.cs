@@ -62,6 +62,19 @@ public static class BoonFX
     public static List<EnemyHealth> EnemiesIn(Vector2 center, float radius, EnemyHealth except = null)
         => Collect(Physics2D.OverlapCircle(center, radius, EnemyFilter, overlapBuffer), except);
 
+    // perf: EnemiesIn(...)[0] without building the list (projectiles ask this every frame)
+    public static EnemyHealth FirstEnemyIn(Vector2 center, float radius)
+    {
+        int n = Physics2D.OverlapCircle(center, radius, EnemyFilter, overlapBuffer);
+        for (int i = 0; i < n; i++)
+        {
+            EnemyHealth e = overlapBuffer[i].GetComponentInParent<EnemyHealth>();
+            if (e == null || e.enemydead || e.IsObject || !e.CompareTag("Enemy")) continue;
+            return e;
+        }
+        return null;
+    }
+
     public static List<EnemyHealth> EnemiesInBox(Vector2 center, Vector2 size)
         => Collect(Physics2D.OverlapBox(center, size, 0f, EnemyFilter, overlapBuffer), null);
 
@@ -275,9 +288,10 @@ public static class BoonFX
         for (int i = 0; i < count; i++)
         {
             Vector3 p = at + (Vector3)(Random.insideUnitCircle * radius);
-            SpriteRenderer sr = MakeRenderer("Sparkle", Sparkle, p, Order + 2);
-            sr.color = Color.Lerp(color, Color.white, Random.value * 0.5f);
-            sr.gameObject.AddComponent<Twinkle>().Begin(life * Random.Range(0.6f, 1.2f), Random.Range(0.6f, 1.4f));
+            // perf: pooled in FXPool (same look and motion as the Twinkle component, without a GameObject per sparkle)
+            Color c = Color.Lerp(color, Color.white, Random.value * 0.5f);
+            float l = life * Random.Range(0.6f, 1.2f);
+            FXPool.Sparkle(p, Sparkle, Order + 2, c, l, Random.Range(0.6f, 1.4f));
         }
     }
 

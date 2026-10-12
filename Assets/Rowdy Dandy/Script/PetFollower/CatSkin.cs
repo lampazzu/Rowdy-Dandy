@@ -11,6 +11,7 @@ public class CatSkin : MonoBehaviour
     private Texture2D sheet;
     private Sprite[] frames;
     private Sprite lastSource;
+    private static readonly System.Collections.Generic.Dictionary<Sprite, int> frameOf = new System.Collections.Generic.Dictionary<Sprite, int>();
 
     public static string SkinName(PetFollower.CatType type)
     {
@@ -47,7 +48,15 @@ public class CatSkin : MonoBehaviour
         if (sr == null || sheet == null) return;
         Sprite source = sr.sprite;
         if (source == null || source == lastSource) return;
-        if (!source.name.StartsWith(WigPrefix) || !int.TryParse(source.name.Substring(WigPrefix.Length), out int i)) return;
+        // perf: which Wig frame a sprite is gets worked out once per sprite (the animator writes it every frame,
+        // and reading .name allocates a new string each time); -1 = not one of Wig's frames
+        if (!frameOf.TryGetValue(source, out int i))
+        {
+            string n = source.name;
+            if (!n.StartsWith(WigPrefix) || !int.TryParse(n.Substring(WigPrefix.Length), out i)) i = -1;
+            frameOf[source] = i;
+        }
+        if (i < 0) return;
         if (frames == null)
         {
             Vector2 pivot = new Vector2(source.pivot.x / source.rect.width, source.pivot.y / source.rect.height);

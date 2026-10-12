@@ -65,7 +65,10 @@ public class PixelText : MonoBehaviour
 
     public void SetText(string content)
     {
-        content = (content ?? "").ToUpperInvariant();
+        content = content ?? "";
+        // perf: same text as now (any case) = nothing to do, without allocating an uppercase copy every call
+        if (texture != null && text != null && string.Equals(content, text, System.StringComparison.OrdinalIgnoreCase)) return;
+        content = content.ToUpperInvariant();
         if (content == text && texture != null) return;
         text = content;
         hasIcons = PixelFont.HasIcons(text);

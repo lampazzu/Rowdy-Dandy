@@ -18,9 +18,20 @@ public static class SolidGround
         if (c.attachedRigidbody != null && c.attachedRigidbody.bodyType == RigidbodyType2D.Dynamic) return false;
         if (c.CompareTag("Player") || c.CompareTag("Enemy") || c.CompareTag("Water")) return false;
         int layer = c.gameObject.layer;
-        if (layer == 6 || layer == LayerMask.NameToLayer("Water") || layer == LayerMask.NameToLayer("Enemy") || layer == LayerMask.NameToLayer("IgnorePlayer")) return false;
+        if (!layersReady) // perf: the layer names are looked up once, not 3 string lookups per collider checked
+        {
+            waterLayerIndex = LayerMask.NameToLayer("Water");
+            enemyLayerIndex = LayerMask.NameToLayer("Enemy");
+            ignorePlayerLayerIndex = LayerMask.NameToLayer("IgnorePlayer");
+            layersReady = true;
+        }
+        if (layer == 6 || layer == waterLayerIndex || layer == enemyLayerIndex || layer == ignorePlayerLayerIndex) return false;
         return true;
     }
+
+    private static bool layersReady;
+    private static int waterLayerIndex, enemyLayerIndex, ignorePlayerLayerIndex;
+    private static readonly Collider2D[] overlapBuffer = new Collider2D[64];
 
     // No allocations (it runs for every blood drop and FX every frame): a shared buffer, hits in distance order
     private static readonly RaycastHit2D[] buffer = new RaycastHit2D[32];
@@ -64,8 +75,18 @@ public static class SolidGround
 
     public static bool Blocked(Vector2 center, Vector2 size)
     {
-        foreach (Collider2D c in Physics2D.OverlapBoxAll(center, size, 0f))
-            if (IsGround(c) && !c.usedByEffector) return true;
+        if (!filterReady)
+        {
+            filter = new ContactFilter2D { useTriggers = Physics2D.queriesHitTriggers };
+            filter.SetLayerMask(Physics2D.DefaultRaycastLayers);
+            filterReady = true;
+        }
+        int n = Physics2D.OverlapBox(center, size, 0f, filter, overlapBuffer); // perf: no array per call
+        for (int i = 0; i < n; i++)
+            if (IsGround(overlapBuffer[i]) && !overlapBuffer[i].usedByEffector) return true;
+        if (n == overlapBuffer.Length) // (more than the buffer holds: fall back to the full list)
+            foreach (Collider2D c in Physics2D.OverlapBoxAll(center, size, 0f))
+                if (IsGround(c) && !c.usedByEffector) return true;
         return false;
     }
 }
@@ -224,19 +245,27 @@ public class SpriteOutline : MonoBehaviour
     {
         if (source == null) { Destroy(gameObject); return; }
         bool show = color.a > 0.01f && source.enabled && source.gameObject.activeInHierarchy && source.sprite != null;
-        float px = pixels / (source.sprite != null ? source.sprite.pixelsPerUnit : 64f);
+        if (!show)
+        {
+            for (int i = 0; i < copies.Length; i++) copies[i].enabled = false;
+            return;
+        }
+        // perf: the source's state is read once for all four copies
+        Sprite sprite = source.sprite;
+        float px = pixels / sprite.pixelsPerUnit;
+        bool flipX = source.flipX, flipY = source.flipY;
+        int layer = source.sortingLayerID, order = source.sortingOrder + orderOffset;
+        // offsets in world pixels, whatever the parent's (possibly flipped) scale
+        Vector3 s = source.transform.lossyScale;
         for (int i = 0; i < copies.Length; i++)
         {
             SpriteRenderer c = copies[i];
-            c.enabled = show;
-            if (!show) continue;
-            c.sprite = source.sprite;
-            c.flipX = source.flipX;
-            c.flipY = source.flipY;
-            c.sortingLayerID = source.sortingLayerID;
-            c.sortingOrder = source.sortingOrder + orderOffset;
-            // offsets in world pixels, whatever the parent's (possibly flipped) scale
-            Vector3 s = source.transform.lossyScale;
+            c.enabled = true;
+            c.sprite = sprite;
+            c.flipX = flipX;
+            c.flipY = flipY;
+            c.sortingLayerID = layer;
+            c.sortingOrder = order;
             c.transform.localPosition = new Vector3(Offsets[i].x * px / Mathf.Max(0.0001f, Mathf.Abs(s.x)) * Mathf.Sign(s.x),
                                                     Offsets[i].y * px / Mathf.Max(0.0001f, Mathf.Abs(s.y)), 0f);
             c.color = color;

@@ -287,6 +287,7 @@ public class PlayerStats : MonoBehaviour
     private void OnDestroy()
     {
         if (isUIPanelOpen) { RunStatsPanel.SetVisible(false, null); StatsPause.Set(false); } // the overlay outlives the scene
+        if (savePending) FlushSave();
     }
 
     private void UpdateUI()
@@ -325,8 +326,30 @@ public class PlayerStats : MonoBehaviour
     {
         PlayerPrefs.SetInt("PlayerLevel", currentLevel);
         PlayerPrefs.SetFloat("PlayerEXP", currentEXP);
+        // perf: every EXP gem used to write the whole save to disk (the registry on Windows) on pickup - a little hitch
+        // each time in a fight. The values above are set right away as before; the disk write happens at most every
+        // 2 s (and when this object goes away / the game quits).
+        savePending = true;
+        if (Time.unscaledTime - lastSaveAt >= 2f) FlushSave();
+    }
+
+    private bool savePending;
+    private float lastSaveAt = -10f;
+
+    private void FlushSave()
+    {
+        savePending = false;
+        lastSaveAt = Time.unscaledTime;
         PlayerPrefs.Save();
     }
+
+    private void LateUpdate()
+    {
+        if (savePending && Time.unscaledTime - lastSaveAt >= 2f) FlushSave();
+    }
+
+    private void OnApplicationQuit() { if (savePending) FlushSave(); }
+    private void OnApplicationPause(bool paused) { if (paused && savePending) FlushSave(); }
 
     private void LoadEXPData()
     {

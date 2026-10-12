@@ -192,6 +192,7 @@ public class EnemyMovement : MonoBehaviour
     private bool playerIsBelow;
     private float watchTimer;
     private PlayerMovement playerMovement;
+    private Transform playerMovementSearchedOn;
 
     public enum SpacingMode { Auto, On, Off }
 
@@ -333,6 +334,9 @@ public class EnemyMovement : MonoBehaviour
     // player never has to go looking for a stray enemy. Bold like the Gnoll Warriors (keep coming on other floors).
     public void ArenaAggro()
     {
+        // manta rays and pelicans never chase, not even in a colosseum: they keep flying back and forth
+        EnemyCatalog.Entry kind = health != null ? EnemyCatalog.Identify(health) : null;
+        if (kind != null && (kind.id == "mantaray" || kind.id == "pelican")) return;
         chaseDistance = 999f;
         enableChaseTimeout = false;
         enableLineOfSightCheck = false;
@@ -492,13 +496,16 @@ public class EnemyMovement : MonoBehaviour
     // Used by EnemyCorpse so a drowning corpse keeps sinking through water like the living enemy did
     public bool PassesThroughLayer(int layer) => isDrownable && IsDrowningLayer(layer);
 
+    private static int waterLayerIndex = int.MinValue, antiEnemyLayerIndex = int.MinValue; // perf: layer names looked up once
+
     // Water this enemy drowns in (its own Water Layer setting plus the 'Water' layer; not AntiEnemy walls)
     public int DrowningWaterMask
     {
         get
         {
             int mask = waterLayer.value;
-            int water = LayerMask.NameToLayer("Water");
+            if (waterLayerIndex == int.MinValue) waterLayerIndex = LayerMask.NameToLayer("Water"); // perf: asked every physics step
+            int water = waterLayerIndex;
             if (water >= 0) mask |= 1 << water;
             return mask;
         }
@@ -507,8 +514,10 @@ public class EnemyMovement : MonoBehaviour
     private bool IsDrowningLayer(int layer)
     {
         if (waterLayer.value != 0 && (waterLayer.value & (1 << layer)) != 0) return true;
-        if (layer == LayerMask.NameToLayer("Water")) return true;
-        if (layer == LayerMask.NameToLayer("AntiEnemy")) return true;
+        if (waterLayerIndex == int.MinValue) waterLayerIndex = LayerMask.NameToLayer("Water");
+        if (antiEnemyLayerIndex == int.MinValue) antiEnemyLayerIndex = LayerMask.NameToLayer("AntiEnemy");
+        if (layer == waterLayerIndex) return true;
+        if (layer == antiEnemyLayerIndex) return true;
 
         return false;
     }
@@ -1268,7 +1277,13 @@ public class EnemyMovement : MonoBehaviour
 
         if (Mathf.Abs(rb.linearVelocity.y) > 0.1f) return;
 
-        if (playerMovement == null) playerMovement = playerTransform.GetComponent<PlayerMovement>();
+        // perf: looked up once per player object (the "Player" tagged object found may have no PlayerMovement:
+        // the lookup used to fail and run again every frame for every enemy)
+        if (playerMovement == null && playerMovementSearchedOn != playerTransform)
+        {
+            playerMovementSearchedOn = playerTransform;
+            playerTransform.TryGetComponent(out playerMovement);
+        }
         if (playerMovement != null && !playerMovement.IsGrounded) return;
 
         float playerFeetY = playerCollider != null ? playerCollider.bounds.min.y : playerTransform.position.y;

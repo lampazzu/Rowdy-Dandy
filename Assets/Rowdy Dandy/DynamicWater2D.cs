@@ -83,8 +83,27 @@ public class DynamicWater2D : MonoBehaviour
 
     public bool Contains(Vector2 point, float margin = 0f)
     {
-        Bounds b = boxCollider.bounds;
+        Bounds b = CachedBounds;
         return point.x >= b.min.x && point.x <= b.max.x && point.y >= b.min.y && point.y <= b.max.y + margin;
+    }
+
+    // perf: every drownable enemy asks every water "is this point in you?" every physics step: the box is read
+    // once per frame / physics step instead of once per question (it's re-read whenever either clock moves on)
+    private Bounds cachedBounds;
+    private int boundsFrame = -1;
+    private float boundsFixedTime = -1f;
+    private Bounds CachedBounds
+    {
+        get
+        {
+            if (boundsFrame != Time.frameCount || boundsFixedTime != Time.fixedTime || !Application.isPlaying)
+            {
+                cachedBounds = boxCollider.bounds;
+                boundsFrame = Time.frameCount;
+                boundsFixedTime = Time.fixedTime;
+            }
+            return cachedBounds;
+        }
     }
 
     // World Y of the moving surface at this X
@@ -94,7 +113,7 @@ public class DynamicWater2D : MonoBehaviour
         float f = NodeFloat(worldX);
         int i = Mathf.Clamp(Mathf.FloorToInt(f), 0, nodeCount - 2);
         float h = Mathf.Lerp(heights[i], heights[i + 1], f - i);
-        return boxCollider.bounds.max.y + h;
+        return CachedBounds.max.y + h;
     }
 
     // =========================================================================
@@ -207,12 +226,15 @@ public class DynamicWater2D : MonoBehaviour
         float k = idleWaveLength > 0.01f ? Mathf.PI * 2f / idleWaveLength : 0f;
         // The shader cuts the pixel-stepped edge itself, so the triangles reach a couple of pixels higher
         float pad = 2f / Mathf.Max(1f, pixelsPerUnit);
+        // perf: TransformPoint(x, 0, 0).x is m00 * x + m03, done here without a native call per node
+        Matrix4x4 toWorld = transform.localToWorldMatrix;
+        float m00 = toWorld.m00, m03 = toWorld.m03;
 
         for (int i = 0; i < nodeCount; i++)
         {
             float u = (float)i / (nodeCount - 1);
             float x = Mathf.Lerp(leftX, rightX, u);
-            float worldX = transform.TransformPoint(new Vector3(x, 0f, 0f)).x;
+            float worldX = m00 * x + m03;
 
             float idle = idleWaveHeight * (Mathf.Sin(worldX * k + time) + 0.5f * Mathf.Sin(worldX * k * 2.3f - time * 1.4f)) / 1.5f;
             float surfaceLocal = topY + (heights[i] + idle) / scaleY;
@@ -289,8 +311,14 @@ public class DynamicWater2D : MonoBehaviour
             return;
         }
         if (!EnsureSetup()) return;
+        // perf: the mesh is only rebuilt while some camera can see it (the waves keep simulating either way).
+        // Its bounds barely change, so it gets culled back in on time and is fresh again from that frame on.
+        if (meshRenderer == null) meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer != null && !meshRenderer.isVisible && Time.frameCount > 2) return;
         UpdateMeshGeometry();
     }
+
+    private MeshRenderer meshRenderer;
 
     private float NodeFloat(float worldX)
     {
@@ -369,13 +397,13 @@ public class DynamicWater2D : MonoBehaviour
         foreach (Collider2D col in overlapResults)
         {
             Rigidbody2D rb = col.attachedRigidbody;
-            if (rb == null || rb.bodyType == RigidbodyType2D.Static || !touchingNow.Add(rb)) continue;
+            if (rb == null || rb.bodyType == RigidbodyType2D.Static ||!touchingNow.Add(rb)) continue;
 
             PushFromBody(rb, col.bounds);
         }
 
         touching.Clear();
-        touching.UnionWith(touchingNow);
+        foreach (Rigidbody2D rb in touchingNow) touching.Add(rb); // (UnionWith boxes the enumerator: garbage every step)
     }
 
     private void PushFromBody(Rigidbody2D rb, Bounds body)

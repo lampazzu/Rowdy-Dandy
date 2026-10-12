@@ -193,12 +193,15 @@ public class EnemyCorpse : MonoBehaviour
     // First solid piece of the level below a point (not characters, not water a drownable enemy sinks through)
     private bool FindGround(Vector2 origin, float distance, out RaycastHit2D result)
     {
-        foreach (RaycastHit2D hit in Physics2D.RaycastAll(origin, Vector2.down, distance))
+        int n = PhysicsQuery.RaycastAll(origin, Vector2.down, distance); // perf: no array per call (runs every step per corpse)
+        RaycastHit2D[] hits = PhysicsQuery.Hits;
+        for (int i = 0; i < n; i++)
         {
+            RaycastHit2D hit = hits[i];
             Collider2D col = hit.collider;
             if (col == null || col.isTrigger) continue;
             if (col.transform.IsChildOf(transform)) continue;
-            if (col.usedByEffector && col.GetComponent<PlatformEffector2D>() == null) continue;
+            if (col.usedByEffector && !col.TryGetComponent(out PlatformEffector2D _)) continue;
             if (col.attachedRigidbody != null && col.attachedRigidbody.bodyType == RigidbodyType2D.Dynamic) continue; // characters, jellies, pickups
             if (col.CompareTag("Player") || col.CompareTag("Enemy")) continue;
             if (movement != null && movement.PassesThroughLayer(col.gameObject.layer)) continue;

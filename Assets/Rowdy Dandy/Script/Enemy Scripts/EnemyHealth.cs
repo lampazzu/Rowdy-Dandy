@@ -563,9 +563,7 @@ public class EnemyHealth : MonoBehaviour
         if (damageTextPrefab != null)
         {
             Vector3 spawnPosition = transform.position;
-            GameObject textInstance = Instantiate(damageTextPrefab, spawnPosition, Quaternion.identity);
-
-            FloatingDamageText floatingText = textInstance.GetComponent<FloatingDamageText>();
+            FloatingDamageText floatingText = FloatingDamageText.Spawn(damageTextPrefab, spawnPosition); // pooled (perf)
             if (floatingText != null)
             {
                 floatingText.Setup(damage);
@@ -581,9 +579,7 @@ public class EnemyHealth : MonoBehaviour
         if (damageTextPrefab != null)
         {
             Vector3 spawnPosition = transform.position + Vector3.up * 0.4f;
-            GameObject textInstance = Instantiate(damageTextPrefab, spawnPosition, Quaternion.identity);
-
-            FloatingDamageText floatingText = textInstance.GetComponent<FloatingDamageText>();
+            FloatingDamageText floatingText = FloatingDamageText.Spawn(damageTextPrefab, spawnPosition); // pooled (perf)
             if (floatingText != null)
             {
                 floatingText.SetupCustomText(text, customColor, scaleMultiplier);

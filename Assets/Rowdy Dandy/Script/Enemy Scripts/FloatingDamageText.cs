@@ -165,7 +165,8 @@ public class FloatingDamageText : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= fadeDuration)
         {
-            Destroy(gameObject);
+            if (poolKey != 0) ReturnToPool();
+            else Destroy(gameObject);
         }
         else
         {
@@ -222,6 +223,41 @@ public class FloatingDamageText : MonoBehaviour
     }
 
     private Texture2D ownedTexture;
+
+    // ---------------------------------------------------------------- pooling (perf)
+    // Every hit used to Instantiate the whole TextMeshPro prefab and Destroy it 0.75 s later. Finished numbers now
+    // wait (switched off) in a pool per prefab and come back for the next hit, set up exactly like a fresh one.
+    private static readonly System.Collections.Generic.Dictionary<int, System.Collections.Generic.Stack<FloatingDamageText>> pools =
+        new System.Collections.Generic.Dictionary<int, System.Collections.Generic.Stack<FloatingDamageText>>();
+    private int poolKey;
+
+    // Like Instantiate(prefab, position, identity) + GetComponent<FloatingDamageText>() (null if the prefab has none)
+    public static FloatingDamageText Spawn(GameObject prefab, Vector3 position)
+    {
+        int key = prefab.GetInstanceID();
+        if (pools.TryGetValue(key, out var stack))
+            while (stack.Count > 0)
+            {
+                FloatingDamageText t = stack.Pop();
+                if (t == null) continue; // went with a scene reload
+                t.transform.SetPositionAndRotation(position, Quaternion.identity);
+                t.timer = 0f;
+                t.gameObject.SetActive(true);
+                return t;
+            }
+        GameObject go = Instantiate(prefab, position, Quaternion.identity);
+        FloatingDamageText text = go.GetComponent<FloatingDamageText>();
+        if (text != null) text.poolKey = key;
+        return text;
+    }
+
+    private void ReturnToPool()
+    {
+        if (ownedTexture != null) { Destroy(pixelSprite); Destroy(ownedTexture); ownedTexture = null; pixelSprite = null; }
+        gameObject.SetActive(false);
+        if (!pools.TryGetValue(poolKey, out var stack)) pools[poolKey] = stack = new System.Collections.Generic.Stack<FloatingDamageText>();
+        stack.Push(this);
+    }
 
     private void OnDestroy()
     {

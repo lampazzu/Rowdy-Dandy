@@ -72,7 +72,20 @@ public static class ButtonIcons
 
     public static Sprite Get(string id) => Get(id, new Vector2(0.5f, 0.5f));
 
+    // perf: a lookup straight from the id the caller passed (the text key below was built on every call, and button
+    // prompts ask for their sprite every frame)
+    private static readonly Dictionary<(string, Vector2), Sprite> fast = new Dictionary<(string, Vector2), Sprite>();
+
     public static Sprite Get(string id, Vector2 pivot)
+    {
+        var fastKey = (id ?? "", pivot);
+        if (fast.TryGetValue(fastKey, out Sprite known) && known != null) return known;
+        known = Build(id, pivot);
+        fast[fastKey] = known;
+        return known;
+    }
+
+    private static Sprite Build(string id, Vector2 pivot)
     {
         id = (id ?? "").ToUpperInvariant();
         string key = id + "|" + pivot.x + "," + pivot.y;

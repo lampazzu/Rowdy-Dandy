@@ -56,11 +56,13 @@ public class FireflyHover : MonoBehaviour
     {
         float dt = Time.deltaTime;
         var bodies = VegetationInteractor.All;
+        Vector3 here = transform.position; // perf: read once, not once per body (it doesn't move inside this loop)
         for (int i = 0; i < bodies.Count; i++)
         {
             if (bodies[i].IsSlash) continue;
-            Vector3 away = transform.position - bodies[i].BodyBounds.center;
+            Vector3 away = here - bodies[i].BodyBounds.center;
             away.z = 0f;
+            if (Mathf.Abs(away.x) >= scatterRadius || Mathf.Abs(away.y) >= scatterRadius) continue; // (quick reject: too far either way)
             float distance = away.magnitude;
             if (distance >= scatterRadius) continue;
 

@@ -70,8 +70,11 @@ public class EnemyDust : MonoBehaviour
         {
             groundCheckTimer = 0.15f;
             onSolidGround = false;
-            foreach (RaycastHit2D hit in Physics2D.RaycastAll(feet + Vector3.up * 0.05f, Vector2.down, 0.2f))
+            int n = PhysicsQuery.RaycastAll(feet + Vector3.up * 0.05f, Vector2.down, 0.2f); // perf: no array per call
+            RaycastHit2D[] hits = PhysicsQuery.Hits;
+            for (int i = 0; i < n; i++)
             {
+                RaycastHit2D hit = hits[i];
                 if (hit.collider == null || hit.collider.isTrigger || hit.collider.attachedRigidbody == body) continue;
                 if (hit.collider.CompareTag("Water") || hit.collider.gameObject.layer == 6) break;
                 onSolidGround = true;

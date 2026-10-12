@@ -19,18 +19,29 @@ public static class EnemyFairness
         return v.z > 0f && v.x > inset && v.x < 1f - inset && v.y > inset && v.y < 1f - inset;
     }
 
+    // perf: GetComponents into a shared list (the array version allocated on every call, and boons call this a lot)
+    private static readonly System.Collections.Generic.List<Collider2D> colliderBuffer = new System.Collections.Generic.List<Collider2D>(8);
+
+    private static Collider2D SolidBody(Component enemy)
+    {
+        enemy.GetComponents(colliderBuffer);
+        Collider2D found = null;
+        foreach (Collider2D c in colliderBuffer)
+            if (c.enabled && !c.isTrigger) { found = c; break; }
+        colliderBuffer.Clear();
+        return found;
+    }
+
     public static Vector3 BodyCenter(Component enemy)
     {
-        foreach (Collider2D c in enemy.GetComponents<Collider2D>())
-            if (c.enabled && !c.isTrigger) return c.bounds.center;
-        return enemy.transform.position;
+        Collider2D c = SolidBody(enemy);
+        return c != null ? c.bounds.center : enemy.transform.position;
     }
 
     public static float HeadHeight(Component enemy)
     {
-        foreach (Collider2D c in enemy.GetComponents<Collider2D>())
-            if (c.enabled && !c.isTrigger) return c.bounds.max.y - enemy.transform.position.y;
-        return 0.6f;
+        Collider2D c = SolidBody(enemy);
+        return c != null ? c.bounds.max.y - enemy.transform.position.y : 0.6f;
     }
 
     public static bool IsRanged(EnemyHealth health)

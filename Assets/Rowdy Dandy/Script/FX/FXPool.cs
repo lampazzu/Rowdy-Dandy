@@ -31,6 +31,18 @@ public class FXPool : MonoBehaviour
         public float life, age, alpha;
     }
 
+    // BoonFX.Sparkles: pops, twinkles, drifts up and fades (what the Twinkle component did, one GameObject each)
+    private struct Spark
+    {
+        public SpriteRenderer sr;
+        public Transform tf;
+        public Vector3 pos;
+        public float life, age, size;
+        public Color color;
+    }
+    private readonly List<Spark> sparks = new List<Spark>();
+    private static int defaultLayerId = int.MinValue;
+
     private static FXPool instance;
     private readonly List<Pixel> pixels = new List<Pixel>(MaxPixels);
     private readonly List<Drop> drops = new List<Drop>(MaxDrops);
@@ -61,7 +73,10 @@ public class FXPool : MonoBehaviour
             sr = go.AddComponent<SpriteRenderer>();
             sr.sortingLayerName = "Default";
         }
-        sr.gameObject.SetActive(true);
+        // perf: pooled renderers stay on active objects and are just switched on / off (toggling the GameObject
+        // costs far more, hundreds of times a frame in a big fight)
+        if (!sr.gameObject.activeSelf) sr.gameObject.SetActive(true);
+        sr.enabled = true;
         sr.sprite = sprite;
         sr.sortingOrder = order;
         sr.flipX = sr.flipY = false;
@@ -74,7 +89,7 @@ public class FXPool : MonoBehaviour
     private void Give(SpriteRenderer sr)
     {
         if (sr == null) return;
-        sr.gameObject.SetActive(false);
+        sr.enabled = false;
         free.Push(sr);
     }
 
@@ -83,9 +98,16 @@ public class FXPool : MonoBehaviour
     {
         if (count <= 0) return;
         FXPool p = Get;
+        // at the cap the oldest go first: freed all at once (same ones as one by one, without shifting the list per pixel)
+        int over = Mathf.Min(p.pixels.Count, p.pixels.Count + count - MaxPixels);
+        if (over > 0)
+        {
+            for (int i = 0; i < over; i++) p.Give(p.pixels[i].sr);
+            p.pixels.RemoveRange(0, over);
+        }
         for (int i = 0; i < count; i++)
         {
-            if (p.pixels.Count >= MaxPixels) { p.Give(p.pixels[0].sr); p.pixels.RemoveAt(0); }
+            if (p.pixels.Count >= MaxPixels) { p.Give(p.pixels[0].sr); p.pixels.RemoveAt(0); } // (a burst bigger than the cap)
             Vector2 dir = Random.insideUnitCircle.normalized;
             if (dir.sqrMagnitude < 0.01f) dir = Vector2.up;
             if (upwards) dir = new Vector2(dir.x, Mathf.Abs(dir.y) * 0.8f + 0.2f).normalized;
@@ -131,9 +153,34 @@ public class FXPool : MonoBehaviour
         p.ghosts.Add(new Ghost { sr = sr, life = Mathf.Max(0.01f, life), alpha = color.a });
     }
 
+    public static void Sparkle(Vector3 at, Sprite sprite, int order, Color color, float life, float size)
+    {
+        FXPool p = Get;
+        SpriteRenderer sr = p.Take("Sparkle", sprite, order, CatFX.Unlit);
+        if (defaultLayerId == int.MinValue) defaultLayerId = SortingLayer.NameToID("Default");
+        sr.sortingLayerID = defaultLayerId;
+        sr.color = color;
+        sr.transform.position = at;
+        p.sparks.Add(new Spark { sr = sr, tf = sr.transform, pos = at, life = life, size = size, color = color });
+    }
+
     private void Update()
     {
         float dt = Time.deltaTime;
+        for (int i = sparks.Count - 1; i >= 0; i--)
+        {
+            Spark s = sparks[i];
+            s.age += dt;
+            if (s.age >= s.life || s.sr == null) { Give(s.sr); sparks.RemoveAt(i); continue; }
+            float k = s.age / s.life;
+            float size = s.size * (k < 0.25f ? k / 0.25f : 1f - (k - 0.25f) / 0.75f * 0.6f);
+            s.tf.localScale = Vector3.one * Mathf.Max(0.05f, size);
+            s.pos += Vector3.up * 0.25f * dt;
+            s.tf.position = s.pos;
+            s.sr.color = new Color(s.color.r, s.color.g, s.color.b, s.color.a * (1f - k * k) * (Mathf.Repeat(s.age * 14f, 1f) < 0.8f ? 1f : 0.4f));
+            sparks[i] = s;
+        }
+
         for (int i = pixels.Count - 1; i >= 0; i--)
         {
             Pixel px = pixels[i];

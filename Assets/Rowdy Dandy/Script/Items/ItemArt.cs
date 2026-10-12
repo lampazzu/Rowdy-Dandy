@@ -57,13 +57,16 @@ public class ItemArt : ScriptableObject
         }
     }
 
-    private static readonly Dictionary<string, Sprite[]> cache = new Dictionary<string, Sprite[]>();
+    // perf: a value key (the string one was built on every call - every sheet effect played asks for its frames).
+    // The pivot is matched to 2 decimals, like the old key's text did.
+    private static readonly Dictionary<(int, int, int, int, int, float), Sprite[]> cache = new Dictionary<(int, int, int, int, int, float), Sprite[]>();
 
     // Cuts a sheet into columns x rows frames (row 0 = top row), all with the same pivot. Cached.
     public static Sprite[] Frames(Texture2D tex, int columns, int rows, Vector2 pivot, float pixelsPerUnit)
     {
         if (tex == null) return null;
-        string key = tex.GetInstanceID() + "_" + columns + "x" + rows + "_" + pivot + "_" + pixelsPerUnit;
+        var key = (tex.GetInstanceID(), columns, rows, (int)System.Math.Round(pivot.x * 100.0, System.MidpointRounding.AwayFromZero),
+                   (int)System.Math.Round(pivot.y * 100.0, System.MidpointRounding.AwayFromZero), pixelsPerUnit);
         if (cache.TryGetValue(key, out Sprite[] s)) return s;
         tex.filterMode = FilterMode.Point;
         float w = tex.width / (float)columns, h = tex.height / (float)rows;

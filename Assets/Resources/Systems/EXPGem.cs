@@ -79,6 +79,8 @@ public class EXPGem : MonoBehaviour
         // Auto-configure trigger collider if not set in Inspector
         circleCollider.isTrigger = true;
         if (circleCollider.radius <= 0) circleCollider.radius = 0.3f;
+
+        PhysicsQuery.AddMoverBody(gameObject); // perf: it bobs / flies every frame (see PhysicsQuery)
     }
 
     private void Start()

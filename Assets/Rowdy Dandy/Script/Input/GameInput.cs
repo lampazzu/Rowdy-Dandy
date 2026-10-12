@@ -433,7 +433,17 @@ public static class GameInput
     // ---------------------------------------------------------------- button icons
 
     // ButtonIcons id for a button on a device: "KB:SPACE", "XB:A", "PS:CROSS", "SW:ZL"...
+    // perf: the id only depends on (button, device, PS5 pad), so each one is built once (prompts ask every frame)
+    private static readonly Dictionary<int, string> iconIds = new Dictionary<int, string>();
+
     public static string IconId(Act a, Device d)
+    {
+        int key = ((int)d * 256 + (int)a) * 2 + (dualSense ? 1 : 0);
+        if (!iconIds.TryGetValue(key, out string id)) iconIds[key] = id = BuildIconId(a, d);
+        return id;
+    }
+
+    private static string BuildIconId(Act a, Device d)
     {
         string label = Label(a, d);
         switch (d)

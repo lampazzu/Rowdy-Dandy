@@ -556,27 +556,22 @@ public class PetFollower : MonoBehaviour
 
     private void DetectNearestEnemy()
     {
-        int enemyLayer = LayerMask.GetMask("Enemy");
-        int projectileLayer = LayerMask.GetMask("projectileLayer");
-        int combinedLayerMask = enemyLayer | projectileLayer;
-
-        Collider2D[] targets = Physics2D.OverlapCircleAll(
-            transform.position,
-            detectionRange,
-            combinedLayerMask
-        );
+        // perf: masks looked up once, no collider array per frame per cat
+        if (detectMask == -1) detectMask = LayerMask.GetMask("Enemy") | LayerMask.GetMask("projectileLayer");
+        int count = PhysicsQuery.OverlapCircleAll(transform.position, detectionRange, detectMask);
+        Collider2D[] targets = PhysicsQuery.Colliders;
 
         float closestDistance = Mathf.Infinity;
         Transform closestTarget = null;
 
-        foreach (Collider2D target in targets)
+        for (int i = 0; i < count; i++)
         {
+            Collider2D target = targets[i];
             if (target == null)
                 continue;
 
             // Only things he's allowed to hit (so a plant next to him doesn't block the enemy behind it)
-            EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
-            if (enemyHealth == null || enemyHealth.NoPetFollow || (enemyHealth.IsObject && !targetObjects))
+            if (!target.TryGetComponent(out EnemyHealth enemyHealth) || enemyHealth.NoPetFollow || (enemyHealth.IsObject && !targetObjects))
                 continue;
             if (!EnemyFairness.OnScreen(target.transform.position, 0.04f)) continue; // stays where Rowdy can see it
 
@@ -654,10 +649,15 @@ public class PetFollower : MonoBehaviour
         }
     }
 
+    private static int detectMask = -1;
+
     private bool EnemyNear(float range, bool groundedOnly)
     {
-        foreach (Collider2D hit in Physics2D.OverlapCircleAll(player.position, range, LayerMask.GetMask("Enemy")))
+        int count = PhysicsQuery.OverlapCircleAll(player.position, range, PhysicsQuery.EnemyMask); // perf: no array
+        Collider2D[] hits = PhysicsQuery.Colliders;
+        for (int i = 0; i < count; i++)
         {
+            Collider2D hit = hits[i];
             EnemyHealth e = hit.GetComponentInParent<EnemyHealth>();
             if (e == null || e.enemydead || e.IsObject || e.NoPetFollow) continue;
             if (!EnemyFairness.OnScreen(e.transform.position, 0.02f)) continue;
@@ -927,12 +927,14 @@ public class PetFollower : MonoBehaviour
     // Closest executable enemy around 'center' that no other samurai is already going for
     private EnemyHealth FindExecutable(Vector2 center, float range, HashSet<EnemyHealth> skip)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(center, range, LayerMask.GetMask("Enemy"));
+        int count = PhysicsQuery.OverlapCircleAll(center, range, PhysicsQuery.EnemyMask); // perf: no array per call
+        Collider2D[] hits = PhysicsQuery.Colliders;
 
         EnemyHealth best = null;
         float bestDistance = Mathf.Infinity;
-        foreach (Collider2D hit in hits)
+        for (int i = 0; i < count; i++)
         {
+            Collider2D hit = hits[i];
             if (hit == null) continue;
 
             EnemyHealth enemy = hit.GetComponentInParent<EnemyHealth>();

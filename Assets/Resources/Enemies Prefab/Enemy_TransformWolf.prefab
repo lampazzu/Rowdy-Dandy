@@ -1364,9 +1364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38a155e414034c49a3a5e88459e9e32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
+  patrolPoints: []
   moveSpeed: 2
   patrolDestination: 0
   playerTransform: {fileID: 0}

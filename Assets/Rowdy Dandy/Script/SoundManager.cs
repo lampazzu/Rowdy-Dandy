@@ -21,6 +21,7 @@ public class SoundManager : MonoBehaviour
 
     public List<Sound> sounds = new List<Sound>();
     private Dictionary<string, Sound> soundDictionary = new Dictionary<string, Sound>();
+    private static readonly HashSet<string> warnedMissing = new HashSet<string>();
 
     private void Awake()
     {
@@ -68,7 +69,8 @@ public class SoundManager : MonoBehaviour
             // Clip can be missing/destroyed after a scene reload since this object survives scene changes
             if (sound.clip == null)
             {
-                Debug.LogWarning("Sound clip missing or destroyed: " + soundName);
+                // perf: said once per sound (it came every time an enemy hit the water, each with a stack trace)
+                if (warnedMissing.Add(soundName)) Debug.LogWarning("Sound clip missing or destroyed: " + soundName);
                 return;
             }
 

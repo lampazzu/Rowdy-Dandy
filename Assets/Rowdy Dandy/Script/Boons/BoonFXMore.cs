@@ -374,9 +374,10 @@ public class Lob : MonoBehaviour
             if (trailTimer <= 0f) { trailTimer = 0.04f; FXParticle.Burst(p, trail, 1, 0.1f, 0.4f, 0f, 0.3f); }
         }
 
-        foreach (EnemyHealth e in BoonFX.EnemiesIn(next, radius))
+        EnemyHealth hitEnemy = BoonFX.FirstEnemyIn(next, radius); // perf: no list per frame
+        if (hitEnemy != null)
         {
-            Impact(next, e);
+            Impact(next, hitEnemy);
             return;
         }
         if (velocity.y < 0f && SolidGround.Ray(p, (next - p).normalized, (next - p).magnitude + 0.05f, out RaycastHit2D hit))
@@ -401,7 +402,8 @@ public class Shard : MonoBehaviour
     private float spin, age, life;
     private SpriteRenderer sr;
     private Color color;
-    private static readonly Dictionary<string, Sprite> pieces = new Dictionary<string, Sprite>();
+    private static readonly Dictionary<(int, float, float, float, float), Sprite> pieces = new Dictionary<(int, float, float, float, float), Sprite>();
+    private static readonly Stack<Shard> free = new Stack<Shard>();
 
     // Breaks a sprite renderer into cols x rows chunks that keep its scale / rotation and fly away from 'from'
     public static void Break(SpriteRenderer source, int cols, int rows, Vector3 from, float force = 3.5f)
@@ -418,7 +420,7 @@ public class Shard : MonoBehaviour
                 float x0 = r.x + x * cw, y0 = r.y + y * ch;
                 float w = Mathf.Min(cw, r.xMax - x0), h = Mathf.Min(ch, r.yMax - y0);
                 if (w <= 0f || h <= 0f) continue;
-                string key = s.texture.GetInstanceID() + "_" + x0 + "_" + y0 + "_" + w + "_" + h;
+                var key = (s.texture.GetInstanceID(), x0, y0, w, h); // perf: no string key per chunk
                 if (!pieces.TryGetValue(key, out Sprite piece) || piece == null)
                 {
                     piece = Sprite.Create(s.texture, new Rect(x0, y0, w, h), new Vector2(0.5f, 0.5f), ppu);
@@ -428,18 +430,31 @@ public class Shard : MonoBehaviour
                 Vector2 local = new Vector2(x0 - r.x + w * 0.5f - s.pivot.x, y0 - r.y + h * 0.5f - s.pivot.y) / ppu;
                 if (source.flipX) local.x = -local.x;
                 Vector3 world = t.TransformPoint(local);
-                var go = new GameObject("Shard");
-                go.transform.position = world;
-                go.transform.rotation = t.rotation;
-                go.transform.localScale = t.lossyScale;
-                var sr = go.AddComponent<SpriteRenderer>();
+                // perf: finished shards are kept and reused (an Earth Erupt alone breaks into ~70 of them)
+                Shard sh = null;
+                while (free.Count > 0 && sh == null) sh = free.Pop();
+                SpriteRenderer sr;
+                if (sh == null)
+                {
+                    var go = new GameObject("Shard");
+                    sr = go.AddComponent<SpriteRenderer>();
+                    sh = go.AddComponent<Shard>();
+                }
+                else
+                {
+                    sr = sh.sr;
+                    sr.enabled = true;
+                    sh.enabled = true;
+                    sh.age = 0f;
+                }
+                sh.transform.SetPositionAndRotation(world, t.rotation);
+                sh.transform.localScale = t.lossyScale;
                 sr.sprite = piece;
                 sr.flipX = source.flipX;
                 sr.sortingLayerID = source.sortingLayerID;
                 sr.sortingOrder = source.sortingOrder;
                 sr.sharedMaterial = source.sharedMaterial;
                 sr.color = source.color;
-                var sh = go.AddComponent<Shard>();
                 sh.sr = sr;
                 sh.color = source.color;
                 Vector2 away = ((Vector2)(world - from)).normalized;
@@ -454,7 +469,7 @@ public class Shard : MonoBehaviour
     {
         float dt = Time.deltaTime;
         age += dt;
-        if (age >= life) { Destroy(gameObject); return; }
+        if (age >= life) { sr.enabled = false; enabled = false; free.Push(this); return; } // back in the pool (see Break)
         velocity.y -= 16f * dt;
         transform.position += (Vector3)(velocity * dt);
         transform.rotation = Quaternion.Euler(0f, 0f, transform.eulerAngles.z + spin * dt);
