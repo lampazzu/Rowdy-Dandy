@@ -8,10 +8,10 @@ using UnityEngine.UI;
 //   1 THE GLOOMWOOD     - built at runtime by GloomArena far to the east, through the Gloom Gate once the Frontier is cleared
 //   2 THE PURPLE REIGN  - built at runtime by GloomArena even further east, a pool in the middle, through a gate in the
 //                         Gloomwood once the Gloomwood is cleared. The hardest.
-// Ring the war gong ({INTERACT}) to start a trial: the gates slam shut and 30 WAVES come in (ArenaWaves) back to back -
-// no banner per wave, no breathers: only WAVE START, BOSS FIGHT (waves 10 / 20 / 30) and the END.
-// Every trial is a fresh run (ArenaRun): level 1, no boons, the cats wait outside - over the 30 waves Rowdy climbs to
-// level 10. The boons he earns wait: one to start with, then all of them at the seals (waves 10 / 20) and at the end.
+// Ring the war gong ({INTERACT}) to start a trial: the gates slam shut and 20 WAVES come in (ArenaWaves) back to back -
+// no banner per wave, no breathers: only WAVE START, BOSS FIGHT (waves 10 / 20) and the END.
+// Every trial is a fresh run (ArenaRun): level 1, no boons, the cats wait outside - over the 20 waves Rowdy climbs to
+// level 10. The boons he earns wait: one to start with, three at the gong, one every 3 waves, one at the end; wave 10 is the seal.
 // During a trial {INTERACT} at the gong drops a legendary rat (RatBait): a cat that waits outside comes running.
 // Arena enemies always know where Rowdy is (EnemyMovement.ArenaAggro). Ore rocks and wolf statues sometimes show up as
 // a wave starts. A SEAL saves the build: dying after one, the next trial starts there with it.
@@ -65,6 +65,7 @@ public class FrontierArena : MonoBehaviour
         {
             int wave = PlayerPrefs.GetInt(Key + "Seal", 0);
             if (wave <= 0) return 0;
+            if (wave != ArenaRun.SealWave) { DropSeal(); return 0; } // a seal from the old 30-wave trials
             if (PlayerPrefs.GetInt(Key + "SealTrial", -1) != ClearsHere) { DropSeal(); return 0; }
             return wave;
         }
@@ -95,7 +96,7 @@ public class FrontierArena : MonoBehaviour
     private string Title => Titles[Mathf.Clamp(tier, 0, 2)];
     private Color Theme => tier == 2 ? new Color(0.9f, 0.45f, 1f) : tier == 1 ? new Color(0.72f, 0.55f, 1f) : new Color(1f, 0.65f, 0.3f);
 
-    // this trial's 30 waves, drawn from the templates (ArenaWaves.ForRun) when the gong is rung
+    // this trial's 20 waves, drawn from the templates (ArenaWaves.ForRun) when the gong is rung
     private ArenaWaves.Round[] runWaves;
     public int CurrentWave { get; private set; }     // 1-based, 0 = not fighting yet
     public int WaveCount => runWaves != null ? runWaves.Length : ArenaRun.Waves;
@@ -362,8 +363,9 @@ public class FrontierArena : MonoBehaviour
     private IEnumerator BaitCooldown() { baitBusy = true; yield return new WaitForSeconds(2.5f); baitBusy = false; }
 
     // ---------------------------------------------------------------- the trial
-    private float HealthScale(int wave)
+    private float HealthScale(int waveIndex)
     {
+        float wave = waveIndex * 30f / Mathf.Max(1, WaveCount); // tuned for 30 waves: same ramp over a shorter trial
         float encore = 1f + 0.03f * Encore.Level + (Encore.BloodMoon ? 0.3f : 0f);
         switch (tier)
         {
@@ -433,19 +435,20 @@ public class FrontierArena : MonoBehaviour
             {
                 if (Time.time >= scanAt) { scanAt = Time.time + 0.5f; AdoptStrays(); }
                 if (Time.time >= pullAt) { pullAt = Time.time + 15f; PullStragglers(); } // a long wave: nobody stuck somewhere
+                KeepFlyersInside();
                 alive.RemoveAll(e => e == null || e.enemydead || !e.gameObject.activeInHierarchy
                                      || e.transform.position.y < floorY - 8f); // fell out of the world
                 if (alive.Count == 0) break;
                 if (BoonRunner.Rowdy == null) yield break; // died: the scene reloads
                 yield return null;
             }
-            // cleared: a sip of health, and the level plan (1 to 10 over the 30 waves) catches him up if needed
+            // cleared: a sip of health, and the level plan (1 to 10 over the 20 waves) catches him up if needed
             Health h = BoonRunner.Rowdy != null ? BoonRunner.Rowdy.GetComponent<Health>() : null;
             if (h != null) h.AddHealth(h.startingHealth * (boss ? 0.35f : 0.06f), false);
             ArenaRun.LevelCap = ArenaRun.CapDuring(n + 1);
             if (PlayerStats.Instance != null) PlayerStats.Instance.ReachLevel(ArenaRun.MinLevelAfter(n));
             if (n == waves.Length) { Boons.Grant(1); break; } // the last one opens with the victory picks
-            if (n % 5 == 0) yield return BoonTime(n);
+            if (n % ArenaRun.BoonEvery == 0 || n == ArenaRun.SealWave) yield return BoonTime(n);
             else yield return new WaitForSeconds(1.1f);
         }
         Victory(trial);
@@ -462,17 +465,22 @@ public class FrontierArena : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
     }
 
-    // Every 5 waves: one boon. Waves 10 / 20 are also seals (half heal, a reroll, the build is saved)
+    // Every 3 waves: one boon. Wave 10 (the halfway boss) is the seal: half heal, a reroll, the build is saved
     private IEnumerator BoonTime(int n)
     {
-        bool seal = n % 10 == 0;
+        bool seal = n == ArenaRun.SealWave;
+        bool boon = n % ArenaRun.BoonEvery == 0;
         Health h = BoonRunner.Rowdy != null ? BoonRunner.Rowdy.GetComponent<Health>() : null;
-        Banner.Show("BOON TIME", null, Theme, 2.2f);
+        Banner.Show(boon ? "BOON TIME" : "SEALED", null, Theme, 2.2f);
         if (seal && h != null) h.AddHealth(h.startingHealth * 0.5f, false);
         if (seal) Boons.AddRerolls(1);
-        Boons.Grant(1);
-        yield return new WaitForSeconds(1.6f);
-        yield return TakeBoons();
+        if (boon)
+        {
+            Boons.Grant(1);
+            yield return new WaitForSeconds(1.6f);
+            yield return TakeBoons();
+        }
+        else yield return new WaitForSeconds(1.4f);
         ArenaRun.HoldBoons = true;
         if (seal)
         {
@@ -571,7 +579,9 @@ public class FrontierArena : MonoBehaviour
             float px = BoonRunner.Rowdy != null && BoonRunner.RowdyCenter.x > mid ? leftX + 3.5f : rightX - 3.5f;
             if (hasPool && px > poolX0 - 2f && px < poolX1 + 2f) px = px < mid ? poolX0 - 3f : poolX1 + 3f;
             x = px;
-            enemy = SpawnPelich(new Vector3(x, floorY + 0.3f, 0f));
+            float ground = floorY;
+            if (SolidGround.Ray(new Vector2(x, floorY + 3f), Vector2.down, 8f, out RaycastHit2D g)) ground = g.point.y;
+            enemy = SpawnPelich(new Vector3(x, ground + pelichHeight, 0f));
             if (enemy == null) return;
             Banner.Show("PELICH ANUS", null, new Color(1f, 0.82f, 0.3f), 1.4f);
         }
@@ -581,6 +591,22 @@ public class FrontierArena : MonoBehaviour
             if (prefab == null) { Debug.LogWarning("Arena: no prefab " + s.prefab); return; }
             enemy = Instantiate(prefab, new Vector3(x, y, 0f), Quaternion.identity);
             enemy.name = prefab.name;
+            // the manta's patrol points come baked into its prefab at level heights: in here it flew off to reach them.
+            // Pin them to the gates at its skimming height so it sweeps the arena floor
+            // ... and in here they hunt Rowdy instead of patrolling (level, no tilting): ArenaMantaChase
+            if (s.prefab == "Neutral_MantaRay")
+                foreach (EnemyMovement m in enemy.GetComponentsInChildren<EnemyMovement>(true))
+                    if (m.GetComponent<ArenaMantaChase>() == null) m.gameObject.AddComponent<ArenaMantaChase>().floorY = floorY;
+            if (s.prefab == "Neutral_MantaRay")
+                foreach (EnemyMovement m in enemy.GetComponentsInChildren<EnemyMovement>(true))
+                    if (m.patrolPoints != null)
+                        for (int i = 0; i < m.patrolPoints.Length; i++)
+                            if (m.patrolPoints[i] != null)
+                            {
+                                m.patrolPoints[i].SetParent(null, true);
+                                m.patrolPoints[i].position = new Vector3(i % 2 == 0 ? leftX + 1.5f : rightX - 1.5f, y, 0f);
+                                Destroy(m.patrolPoints[i].gameObject, 600f);
+                            }
         }
 
         bool elite = s.Has('E') || (s.Has('e') && firstOfGroup) || (tier == 1 && Random.value < 0.1f + 0.01f * wave) || (tier == 2 && Random.value < 0.2f + 0.012f * wave);
@@ -599,7 +625,7 @@ public class FrontierArena : MonoBehaviour
             BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.waterBoom : null, 0.4f, 0.8f);
             GraftFX.Play("spr_bug_special_shockwave", new Vector3(x, poolSurface + 0.2f, 0f), new Color(0.8f, 0.6f, 1f), 95);
         }
-        else if (!flying)
+        else if (!flying && s.prefab != ArenaWaves.Pelich) // Pelich is placed by his measured height (frozen body)
         {
             Collider2D col = enemy.GetComponentInChildren<Collider2D>();
             if (col != null)
@@ -633,6 +659,7 @@ public class FrontierArena : MonoBehaviour
     // holder, and arena waves spawn copies of that. His song stays on the beach; his death has no tutorial banner.
     private static GameObject pelichTemplate;
     private static Vector3 pelichScale = Vector3.one;
+    private static float pelichHeight = 1.47f; // root over the floor, measured on the beach (half his sprite if not found)
 
     private void MakePelichTemplate()
     {
@@ -649,6 +676,10 @@ public class FrontierArena : MonoBehaviour
         holder.SetActive(false);
         holder.transform.SetParent(transform, false);
         pelichScale = src.transform.lossyScale;
+        // his body is frozen on Y (no gravity): measure how high he stands over the beach so copies stand the same
+        Vector2 o = src.transform.position;
+        if (SolidGround.Ray(o + Vector2.up * 0.5f, Vector2.down, 12f, out RaycastHit2D g) && o.y - g.point.y > 0.2f && o.y - g.point.y < 4f) pelichHeight = o.y - g.point.y;
+        Debug.Log("Arena: Pelich stands " + pelichHeight.ToString("0.00") + " over the ground");
         pelichTemplate = Instantiate(src, holder.transform);
         pelichTemplate.name = "Pelich Anus (Arena)";
         foreach (AudioSource a in pelichTemplate.GetComponentsInChildren<AudioSource>(true)) if (a.loop || a.playOnAwake) a.enabled = false;
@@ -683,6 +714,30 @@ public class FrontierArena : MonoBehaviour
             if (root.TryGetComponent(out Rigidbody2D rb)) { rb.position = root.position; rb.linearVelocity = Vector2.zero; }
             PulseRing.Spawn(root.position + Vector3.up * 0.5f, Theme, 1.4f, 0.35f);
             FXParticle.Burst(root.position, Theme, 10, 1f, 3f, 4f, 0.5f);
+        }
+    }
+
+    // Flyers (manta rays, red jellies, pelicans) drift off the sides or up out of reach and soft-lock the wave:
+    // every frame they're held inside the gates and below a ceiling Rowdy can reach (mantas lower still)
+    private void KeepFlyersInside()
+    {
+        foreach (EnemyHealth e in alive)
+        {
+            if (e == null || e.enemydead) continue;
+            Transform root = e.transform.root;
+            Rigidbody2D rb = e.GetComponentInParent<Rigidbody2D>();
+            if (rb == null) rb = root.GetComponentInChildren<Rigidbody2D>();
+            if (rb == null || rb.gravityScale > 0.01f || rb.bodyType == RigidbodyType2D.Static) continue; // walkers fall back on their own
+            if (root.GetComponent<PelichBoss>() != null || root.GetComponentInChildren<CursedElder>(true) != null) continue;
+            float ceiling = floorY + (root.name.Contains("Manta") ? 2.2f : 4.5f);
+            Vector2 p = rb.position;
+            Vector2 c = new Vector2(Mathf.Clamp(p.x, leftX + 0.8f, rightX - 0.8f), Mathf.Clamp(p.y, floorY + 0.4f, ceiling));
+            if ((c - p).sqrMagnitude < 0.0001f) continue;
+            rb.position = c;
+            Vector2 v = rb.linearVelocity;
+            if (c.x != p.x) v.x = 0f;
+            if (c.y != p.y) v.y = Mathf.Min(v.y, 0f);
+            rb.linearVelocity = v;
         }
     }
 
@@ -868,7 +923,7 @@ public class FrontierArena : MonoBehaviour
     }
 }
 
-// The colosseum's little tracker, top middle: WAVE 3/30 and how many enemies are left in it (the ones still on their
+// The colosseum's little tracker, top middle: WAVE 3/20 and how many enemies are left in it (the ones still on their
 // way count too). Shown while a trial runs, gone with it (victory, death, leaving the scene).
 public class ArenaHUD : MonoBehaviour
 {

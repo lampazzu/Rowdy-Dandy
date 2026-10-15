@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 // One colosseum trial = one run, Hades style (FrontierArena):
 //   - ringing the gong for a fresh trial resets the build: level 1, no boons, the cat party leaves (back to their
 //     hiding spots, first in line for a rat - drop one at the gong to lure them back). Hair gel and rats stay.
-//   - over the 30 waves Rowdy climbs from level 1 to 10: LevelPlan says the least level he should have after each
+//   - over the 20 waves Rowdy climbs from level 1 to 10: LevelPlan says the least level he should have after each
 //     wave (topped up if the kills fell short) and LevelCap keeps him from running more than a level ahead.
-//   - boons don't interrupt the fight: picks bank up (HoldBoons): 3 at the gong, 1 every 5 waves (9 in all).
-//   - a SEAL (waves 10 / 20) saves the build; dying after it, the next trial starts there with that build.
+//   - boons don't interrupt the fight: picks bank up (HoldBoons): 3 at the gong, 1 every 3 waves, 1 at the end (10 in all).
+//   - a SEAL (wave 10, the halfway boss) saves the build; dying after it, the next trial starts there with that build.
 public static class ArenaRun
 {
     public static int LevelCap;        // 0 = no cap (outside a trial)
@@ -28,10 +28,12 @@ public static class ArenaRun
     // a death mid-trial reloads the scene: the trial is over
     private static void OnLoaded(Scene s, LoadSceneMode m) { LevelCap = 0; HoldBoons = false; InTrial = false; }
 
-    public const int Waves = 30;
+    public const int Waves = 20;
+    public const int BoonEvery = 3;  // one boon after waves 3, 6, 9, 12, 15, 18
+    public const int SealWave = 10;  // the boss halfway: heal, a reroll, the build is saved
 
-    // The least level after clearing wave w (1-based): level 10 by wave 28
-    public static int MinLevelAfter(int w) => Mathf.Clamp(1 + Mathf.FloorToInt(9f * w / 28f), 1, PlayerStats.MaxLevel);
+    // The least level after clearing wave w (1-based): level 10 by wave 18
+    public static int MinLevelAfter(int w) => Mathf.Clamp(1 + Mathf.FloorToInt(9f * w / (Waves - 2f)), 1, PlayerStats.MaxLevel);
 
     // How far ahead the kills may carry him while fighting wave w (1-based)
     public static int CapDuring(int w) => Mathf.Clamp(MinLevelAfter(w) + 1, 1, PlayerStats.MaxLevel);

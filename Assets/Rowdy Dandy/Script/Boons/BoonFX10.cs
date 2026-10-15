@@ -463,7 +463,8 @@ public static class WeaponSharpness
         if (weapon <= 0 || weapon > 3 || amount <= 0f) return;
         float before = value[weapon];
         value[weapon] = Mathf.Min(Cap, value[weapon] + amount);
-        holdUntil[weapon] = Time.time + 0.8f;
+        holdUntil[weapon] = Time.time + 3f;
+        Debug.Log("[Sharp] weapon " + weapon + " +" + amount.ToString("0.00") + " -> " + value[weapon].ToString("0.00") + " (cap " + Cap.ToString("0.00") + ")");
         if (value[weapon] > before + 0.01f && BoonRunner.Rowdy != null)
         {
             Vector3 c = BoonRunner.RowdyCenter;
@@ -484,7 +485,7 @@ public static class WeaponSharpness
             if (value[i] <= 0f) continue;
             if (!Boons.Has("sharp")) { value[i] = 0f; continue; }
             if (Time.time < holdUntil[i]) continue;
-            value[i] = Mathf.Max(0f, value[i] - (0.035f + value[i] * 0.08f) * dt);
+            value[i] = Mathf.Max(0f, value[i] - (0.02f + value[i] * 0.04f) * dt);
         }
     }
 }

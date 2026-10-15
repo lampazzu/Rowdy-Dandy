@@ -12,7 +12,7 @@ using UnityEngine.Tilemaps;
 //   THE PURPLE REIGN (VioletShift)  - the same island again, dyed violet, a POOL dug in the middle of the arena (lake
 //                                     water you can surf, Shark Wolves come out of it, walkers drown in it), purple
 //                                     palms and purple fog only (Resources/ArenaArt), one-way platforms
-// GATES (GloomGate, the Graft portal art): Frontier <-> Gloomwood (sealed until the Frontier's 30 waves are cleared),
+// GATES (GloomGate, the Graft portal art): Frontier <-> Gloomwood (sealed until the Frontier's 20 waves are cleared),
 // Gloomwood <-> Purple Reign (sealed until the Gloomwood is cleared). Dev tools > Travel jumps in (and unseals).
 // Also dresses the scene's Frontier arena with orange rocks (ArenaArt) when it builds.
 public static class GloomArena
@@ -53,7 +53,7 @@ public static class GloomArena
         GloomArenaBaked bakedGloom = GloomArenaBaked.Find(1), bakedViolet = GloomArenaBaked.Find(2);
         if ((beach == null || beach.layoutGrid == null) && (bakedGloom == null || bakedViolet == null)) { Debug.LogWarning("Gloomwood: BeachMap not found"); return; }
 
-        DressFrontier(frontier);
+        // (the runtime "Frontier Rocks" decoration is off: the user dresses the Frontier arena in the scene)
 
         // ---- THE GLOOMWOOD: the one baked into the scene (edited by hand), or built from the Frontier island
         GameObject root;
@@ -113,9 +113,9 @@ public static class GloomArena
         frontierReturn = frontierGate + new Vector3(-1.4f, 0.6f, 0f);
         violetArrival = violetBack + new Vector3(1.6f, 0.6f, 0f);
         gloomReturn = gloomOn + new Vector3(-1.4f, 0.6f, 0f);
-        GloomGate.Make(frontierGate, "THE GLOOMWOOD", () => GateOpen, "SEALED: CLEAR THE FRONTIER'S 30 WAVES", TravelToGloom, Purple);
+        GloomGate.Make(frontierGate, "THE GLOOMWOOD", () => GateOpen, "SEALED: CLEAR THE FRONTIER'S 20 WAVES", TravelToGloom, Purple);
         GloomGate.Make(gloomBack, "BACK TO THE FRONTIER", () => true, null, TravelToFrontier, Purple);
-        GloomGate.Make(gloomOn, "THE PURPLE REIGN", () => VioletGateOpen, "SEALED: CLEAR THE GLOOMWOOD'S 30 WAVES", TravelToViolet, Violet);
+        GloomGate.Make(gloomOn, "THE PURPLE REIGN", () => VioletGateOpen, "SEALED: CLEAR THE GLOOMWOOD'S 20 WAVES", TravelToViolet, Violet);
         GloomGate.Make(violetBack, "BACK TO THE GLOOMWOOD", () => true, null, TravelBackToGloom, Violet);
         EnemyMovement.ForgetWaterCache(); // the new pool counts as water for drowning
     }
@@ -549,6 +549,7 @@ public static class GloomArena
     }
 
     // The scene's Frontier arena gets orange rocks and earth: piles, walls, pillars, the big orange cliff, a wolf skull
+    // NOT CALLED since 2026-10-14 (the user didn't want it) - kept in case it's wanted back
     private static void DressFrontier(FrontierArena f)
     {
         ArenaArt art = ArenaArt.Get;

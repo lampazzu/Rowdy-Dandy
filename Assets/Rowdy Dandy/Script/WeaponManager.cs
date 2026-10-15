@@ -374,7 +374,7 @@ public class WeaponManager : MonoBehaviour
         if (!show) return;
         sharpBar.fillAmount = s;
         float shimmer = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 10f);
-        sharpBar.color = new Color(0.75f + 0.25f * shimmer, 0.95f, 1f, 0.9f);
+        sharpBar.color = new Color(1f, 0.55f + 0.35f * shimmer, 0.15f + 0.3f * shimmer, 1f); // hot orange, unlike the normal bar
     }
 
     // In his hands now (WeaponBoons: a respawn with the boon weapon)

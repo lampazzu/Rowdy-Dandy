@@ -51,7 +51,13 @@ public class VoltRat : MonoBehaviour
         angle = Random.Range(0f, Mathf.PI * 2f);
         nextAttackAt = Time.time + Random.Range(attackEvery.x, attackEvery.y) + 0.8f;
         health.SetExpDropIfMissing(Resources.Load<GameObject>("Systems/EXPgem"), 2);
-        health.HyperArmor = true;
+        // 2026-10-13 playtest: "too fast, too much damage, can't react". The prefab values are overridden here:
+        // a longer, readable wind-up (aim locks at the end of it), a slower dash, more time between attacks, and hits
+        // knock it out of the charge again (no hyper armor)
+        health.HyperArmor = false;
+        chargeTime = Mathf.Max(chargeTime, 1.05f);
+        dashSpeed = Mathf.Min(dashSpeed, 7f);
+        attackEvery = new Vector2(Mathf.Max(attackEvery.x, 2.6f), Mathf.Max(attackEvery.y, 4.5f));
         hoverHeight = Mathf.Min(hoverHeight, 0.4f); // old prefab value (1.3) floated out of reach
         wanted = transform.position;
         // a small red glow so it reads against the sunset (no dark rim: it drew a heavy black outline)
@@ -103,7 +109,11 @@ public class VoltRat : MonoBehaviour
         int i;
         switch (clip)
         {
-            case "Charge": i = (int)(t * 24f) % n; c = Mathf.Repeat(t * 10f, 1f) < 0.5f ? Color.white : new Color(1f, 0.7f, 0.7f); break; // pulsing fast
+            case "Charge": // pulsing, then a hard white blink once the aim is locked: "it's coming NOW"
+                i = (int)(t * 24f) % n;
+                c = aimLocked ? (Mathf.Repeat(t * 16f, 1f) < 0.5f ? new Color(1f, 1f, 1f, 1f) : new Color(1f, 0.35f, 0.3f))
+                              : (Mathf.Repeat(t * 6f, 1f) < 0.5f ? Color.white : new Color(1f, 0.7f, 0.7f));
+                break;
             case "Dash": i = 3; break;                                   // tentacles trailing
             case "GetHit": i = (int)(t * 14f) % n; break;
             case "Death": i = Mathf.Min(2 + (int)(t * 20f), n - 1); break;
@@ -157,8 +167,28 @@ public class VoltRat : MonoBehaviour
         return result;
     }
 
+    // only a couple of jellies wind up / dash at the same time
+    private const int MaxAttacking = 2;
+    private const float AimLock = 0.35f;
+    private static int Attacking;
+    private bool counted, aimLocked;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetSession() => Attacking = 0;
+
+    private void SetCounted(bool on)
+    {
+        if (on == counted) return;
+        counted = on;
+        Attacking = Mathf.Max(0, Attacking + (on ? 1 : -1));
+    }
+
+    private void OnDisable() => SetCounted(false);
+
     private void Go(State s)
     {
+        SetCounted(s == State.Charge || s == State.Dash);
+        if (s == State.Charge) aimLocked = false;
         state = s;
         stateAt = Time.time;
         dashing = s == State.Dash;
@@ -210,6 +240,7 @@ public class VoltRat : MonoBehaviour
                 dashing = false;
                 playing = null;
                 Play("GetHit");
+                SetCounted(false);
                 state = State.Recover;
                 stateAt = Time.time - recoverTime * 0.3f;
                 knock += away * 7f;          // knocked back smoothly (it used to teleport 0.35 units)
@@ -233,19 +264,27 @@ public class VoltRat : MonoBehaviour
                 Face(target.x);
                 if (playing != "Fly" && playing != "GetHit") Play("Fly");
                 if (playing == "GetHit" && t > 0.3f) Play("Fly");
-                if (Time.time >= nextAttackAt && EnemyFairness.OnScreen(transform.position, 0.04f)) Go(State.Charge);
+                if (Time.time >= nextAttackAt && EnemyFairness.OnScreen(transform.position, 0.04f))
+                {
+                    if (Attacking < MaxAttacking) Go(State.Charge);
+                    else nextAttackAt = Time.time + Random.Range(0.4f, 0.9f); // a pack takes turns
+                }
                 break;
 
             case State.Charge:
                 Face(target.x);
                 wanted = transform.position; // holds still while it crackles
                 if (Random.value < 0.35f) FXParticle.Burst(transform.position + (Vector3)Random.insideUnitCircle * 0.2f, new Color(1f, 0.45f, 0.35f), 1, 0.5f, 1.5f, 0f, 0.2f);
-                if (t >= chargeTime)
+                // the aim locks AimLock seconds before it goes: dodge after the lock and it misses
+                if (!aimLocked && t >= chargeTime - AimLock)
                 {
+                    aimLocked = true;
                     dashDir = (target - transform.position).normalized;
                     dashTarget = target + dashDir * 1.5f;
-                    Go(State.Dash);
+                    PulseRing.Spawn(transform.position, new Color(1f, 0.9f, 0.85f, 1f), 0.8f, AimLock);
+                    BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.zap : null, 0.3f, 2.2f);
                 }
+                if (t >= chargeTime) Go(State.Dash);
                 break;
 
             case State.Dash:
@@ -293,6 +332,7 @@ public class VoltRat : MonoBehaviour
 
     private void Die()
     {
+        SetCounted(false);
         state = State.Dead;
         diedAt = Time.time;
         if (hitbox != null) hitbox.SetActive(false);

@@ -46,6 +46,7 @@ public class Health : MonoBehaviour
         if (GetComponent<RowdyAura>() == null) gameObject.AddComponent<RowdyAura>();
         if (GetComponent<RowdyBuffs>() == null) gameObject.AddComponent<RowdyBuffs>();
         if (GetComponent<BoonRunner>() == null) gameObject.AddComponent<BoonRunner>(); // level-up boons + the werewolf
+        if (GetComponent<PlayerMovement>() != null && GetComponent<FallSafety>() == null) gameObject.AddComponent<FallSafety>(); // out of the map = back on safe ground
     }
 
     public void AddHealth(float _value) => AddHealth(_value, false);
