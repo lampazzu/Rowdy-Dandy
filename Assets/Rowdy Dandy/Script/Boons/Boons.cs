@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 // saved (PlayerPrefs RD_Boons) and survive death; the dev reset / Reset Level wipe them.
 //   - Attack / Dash / Jump / Cats / Special hold one boon each: taking another one for the same slot replaces it.
 //   - Passives (and duos) stack.
-//   - A boon you already own can come back at a higher rarity: UPGRADE.
+//   - A boon you own is never offered again (no upgrades): its tier is fixed, it says how strong the boon is.
 //   - Hair Gel (very rare drop from ore rocks) = a reroll of the three cards.
 // The picker is BoonPicker, the effects run in BoonRunner (on Rowdy), the werewolf is Werewolf.
 public static class Boons
@@ -47,7 +47,8 @@ public static class Boons
     public static IReadOnlyList<string> OwnedIds { get { if (owned == null) Load(); return order; } }
 
     public static bool Has(string id) => Owned.ContainsKey(id);
-    public static Rarity RarityOf(string id) => Owned.TryGetValue(id, out Rarity r) ? r : Rarity.Common;
+    // A boon's tier is fixed (how strong it is by nature): the saved letter is ignored
+    public static Rarity RarityOf(string id) { BoonDef d = BoonCatalog.Get(id); return d != null ? d.tier : Rarity.Common; }
     public static float V(string id, int index) { BoonDef d = BoonCatalog.Get(id); return d != null ? d.Value(index, RarityOf(id)) : 0f; }
 
     public static int Picks => PlayerPrefs.GetInt(PicksKey, 0);
@@ -70,6 +71,14 @@ public static class Boons
     {
         if (PlayerPrefs.GetInt(UnlockKey, 0) == 1) return;
         PlayerPrefs.SetInt(UnlockKey, 1);
+        PlayerPrefs.Save();
+    }
+
+    // The picks still owed are dropped (a colosseum run that just ended: they'd have nothing left to do)
+    public static void DropPending()
+    {
+        if (Grants <= Picks) return;
+        PlayerPrefs.SetInt(GrantsKey, Picks);
         PlayerPrefs.Save();
     }
 
@@ -247,8 +256,7 @@ public static class Boons
     public static void DevGive(BoonDef d, Rarity r)
     {
         if (d == null) return;
-        if (d.legendaryOnly) r = Rarity.Legendary;
-        if (d.IsDuo) r = Rarity.Duo;
+        r = d.tier;
         var o = new Offer { def = d, rarity = r };
         if (Has(d.id)) { o.upgrade = true; o.oldRarity = RarityOf(d.id); }
         else
@@ -283,6 +291,23 @@ public static class Boons
     // ---------------------------------------------------------------- the Sun God's COME TO THE LIGHT
     // The boons that only work (or work better) at night
     public static readonly string[] NightIds = { "moonrage", "silverfur", "wolfpack", "eclipse" };
+    // ... and the ones that only work in daylight (the HUD dims them at night)
+    public static readonly string[] DayIds = { "daybreak", "sunbathing", "photosynthesis" };
+
+    // A day-only / night-only boon: +1 = works by day, -1 = works at night, 0 = always (Eclipse counts as always)
+    public static int DayNightSide(string id)
+    {
+        if (id == "eclipse") return 0;
+        if (System.Array.IndexOf(DayIds, id) >= 0) return 1;
+        if (System.Array.IndexOf(NightIds, id) >= 0) return -1;
+        return 0;
+    }
+
+    public static bool DayNightBoonOn(string id)
+    {
+        int side = DayNightSide(id);
+        return side == 0 || (side > 0 ? DayBoons : NightBoons);
+    }
 
     public static int NightBoonCount
     {
@@ -325,13 +350,8 @@ public static class Boons
                 owned[pick.id] = r;
                 order.Add(pick.id);
                 got.Add(pick);
-                continue;
             }
-            // every Sun boon owned already: the weakest one goes up a rarity
-            BoonDef low = null;
-            foreach (BoonDef d in BoonCatalog.All)
-                if (!d.IsDuo && d.patron == Patron.Sun && !d.legendaryOnly && Has(d.id) && owned[d.id] < Rarity.Legendary && (low == null || owned[d.id] < owned[low.id])) low = d;
-            if (low != null) { owned[low.id] = (Rarity)Mathf.Min((int)Rarity.Legendary, (int)owned[low.id] + 1); got.Add(low); }
+            // (every Sun boon owned already: nothing comes - boons don't upgrade any more)
         }
         Save();
         return got;
@@ -355,17 +375,28 @@ public static class Boons
         return true;
     }
 
-    private static Rarity RollRarity(BoonDef d)
+    // How often a tier shows up in offers (stronger boons are rarer finds). Ore gems (drop luck) nudge the strong ones up.
+    private static float TierWeight(BoonDef d)
     {
-        if (d.legendaryOnly) return Rarity.Legendary;
-        if (d.IsDuo) return Rarity.Duo;
-        float luck = DropLuck.Bonus; // ore gems nudge rarities up a little
-        float r = Random.value;
-        if (r < 0.03f + luck * 0.02f) return Rarity.Legendary;
-        if (r < 0.11f + luck * 0.05f) return Rarity.Epic;
-        if (r < 0.28f + luck * 0.08f) return Rarity.Rare;
-        if (r < 0.55f + luck * 0.1f) return Rarity.Uncommon;
-        return Rarity.Common;
+        float luck = DropLuck.Bonus;
+        switch (d.tier)
+        {
+            case Rarity.Common: return 1f;
+            case Rarity.Uncommon: return 0.85f;
+            case Rarity.Rare: return 0.65f + 0.1f * luck;
+            case Rarity.Epic: return 0.42f + 0.1f * luck;
+            case Rarity.Legendary: return 0.3f + 0.1f * luck;
+            default: return 1f;
+        }
+    }
+
+    private static BoonDef PickWeighted(List<BoonDef> c)
+    {
+        float total = 0f;
+        foreach (BoonDef d in c) total += TierWeight(d);
+        float roll = Random.value * total;
+        foreach (BoonDef d in c) { roll -= TierWeight(d); if (roll <= 0f) return d; }
+        return c[c.Count - 1];
     }
 
     public static List<Offer> MakeOffer(List<Offer> previous = null)
@@ -374,14 +405,13 @@ public static class Boons
         var usedPatrons = new HashSet<Patron>();
         var usedBoons = new HashSet<string>();
 
-        // Candidates: boons not owned, or owned at a lower rarity (upgrade)
+        // Candidates: boons not owned yet (an owned boon never comes back: no upgrades)
         List<BoonDef> Candidates(Patron p)
         {
             var c = new List<BoonDef>();
             foreach (BoonDef d in BoonCatalog.All)
             {
-                if (d.IsDuo || d.patron != p || usedBoons.Contains(d.id) || !Eligible(d)) continue;
-                if (Has(d.id) && (d.legendaryOnly || RarityOf(d.id) >= Rarity.Legendary)) continue;
+                if (d.IsDuo || d.patron != p || usedBoons.Contains(d.id) || !Eligible(d) || Has(d.id)) continue;
                 c.Add(d);
             }
             return c;
@@ -419,7 +449,7 @@ public static class Boons
             usedPatrons.Add(pick);
 
             List<BoonDef> c = Candidates(pick);
-            BoonDef d = c[Random.Range(0, c.Count)];
+            BoonDef d = PickWeighted(c);
             usedBoons.Add(d.id);
             result.Add(Build(d));
         }
@@ -439,16 +469,15 @@ public static class Boons
             var passives = new List<BoonDef>();
             foreach (BoonDef d in BoonCatalog.All)
             {
-                if (d.IsDuo || d.slot != BoonSlot.Passive || !Eligible(d) || result.Exists(o => o.def == d)) continue;
-                if (Has(d.id) && (d.legendaryOnly || RarityOf(d.id) >= Rarity.Legendary)) continue;
+                if (d.IsDuo || d.slot != BoonSlot.Passive || !Eligible(d) || Has(d.id) || result.Exists(o => o.def == d)) continue;
                 passives.Add(d);
             }
             if (passives.Count > 0)
             {
                 // the last card makes room (the moon card on the very first offer stays)
                 int at = result.Count - 1;
-                if (first && at == 0) result.Add(Build(passives[Random.Range(0, passives.Count)]));
-                else result[at] = Build(passives[Random.Range(0, passives.Count)]);
+                if (first && at == 0) result.Add(Build(PickWeighted(passives)));
+                else result[at] = Build(PickWeighted(passives));
             }
         }
         return result;
@@ -456,14 +485,7 @@ public static class Boons
 
     private static Offer Build(BoonDef d)
     {
-        var o = new Offer { def = d, rarity = RollRarity(d) };
-        if (Has(d.id))
-        {
-            o.upgrade = true;
-            o.oldRarity = RarityOf(d.id);
-            if (o.rarity <= o.oldRarity) o.rarity = (Rarity)Mathf.Min((int)o.oldRarity + 1, (int)Rarity.Legendary);
-        }
-        else
+        var o = new Offer { def = d, rarity = d.tier }; // the tier is the boon's own (no rolls, no upgrades)
         {
             BoonDef current = InSlot(d.slot);
             if (current == null && d.excludes != null) // a passive that can't live next to one you own: that one goes

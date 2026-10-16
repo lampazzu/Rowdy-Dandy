@@ -81,7 +81,7 @@ public class WorldMap : MonoBehaviour
 
     public static void Unmark(string key) { PlayerPrefs.DeleteKey("RD_MapMark_" + key); PlayerPrefs.Save(); }
 
-    private static readonly string[] MarkKeys = { "RD_AltarA", "RD_AltarB" };
+    private static readonly string[] MarkKeys = { "RD_AltarA", "RD_AltarB", GloomArena.MapKey };
 
     public static void ResetProgress()
     {
@@ -684,7 +684,13 @@ public class WorldMap : MonoBehaviour
             if (m.Length < 3 || !float.TryParse(m[0], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float mx)
                 || !float.TryParse(m[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float my)) continue;
             Color mc = ColorUtility.TryParseHtmlString("#" + m[2], out Color parsed) ? parsed : Pink;
-            AddIcon(PinKind.Question, mc, new Vector2(mx, my), 30f, delay += 0.03f);
+            AddIcon(PinKind.Question, mc, new Vector2(mx, my), key == GloomArena.MapKey ? 38f : 30f, delay += 0.03f);
+            if (key == GloomArena.MapKey)
+            {
+                // the next colosseum's portal: named on the map
+                PixelText label = PixelText.Create(content, "COLOSSEUM PORTAL", 3, mc, 0.5f);
+                AddPin(label.Rect, new Vector2(mx, my + 3f), delay);
+            }
         }
 
         // Cats Rowdy has seen but not picked up (they hide somewhere new on every load, so it's per load)

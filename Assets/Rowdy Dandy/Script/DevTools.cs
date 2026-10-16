@@ -46,11 +46,28 @@ public static class DevTools
     public static void GoToLastCheckpoint() => GoTo(FindCheckpoint(false));
     public static void GoToSavedCheckpoint() => Reload();
 
+    // The checkpoint by the first colosseum (THE FRONTIER): the one closest to its gong / arena middle
+    public static void GoToFrontierCheckpoint()
+    {
+        FrontierArena f = FrontierArena.Frontier;
+        if (f == null) { GoToLastCheckpoint(); return; }
+        Vector2 mid = f.gong != null ? (Vector2)f.gong.position : new Vector2((f.leftX + f.rightX) / 2f, f.floorY);
+        Transform best = null;
+        foreach (RespawnTrigger c in Object.FindObjectsByType<RespawnTrigger>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (FrontierArena.InGloom(c.transform.position)) continue;
+            if (best == null || Vector2.Distance(c.transform.position, mid) < Vector2.Distance(best.position, mid)) best = c.transform;
+        }
+        GoTo(best);
+    }
+
+    // (the tutorial level and the runtime colosseums sit far left / right: their checkpoints never count as first / last)
     private static Transform FindCheckpoint(bool leftMost)
     {
         Transform best = null;
         foreach (RespawnTrigger c in Object.FindObjectsByType<RespawnTrigger>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
+            if (FrontierArena.InGloom(c.transform.position)) continue;
             float x = c.transform.position.x;
             if (best == null || (leftMost ? x < best.position.x : x > best.position.x)) best = c.transform;
         }

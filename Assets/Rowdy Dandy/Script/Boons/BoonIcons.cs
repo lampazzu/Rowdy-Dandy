@@ -12,6 +12,10 @@ public static class BoonIcons
     {
         if (d == null) return null;
         if (cache.TryGetValue(d.id, out Sprite s) && s != null) return s;
+        // Resources/BoonIcons/<id>.png: every boon's icon cut from the user's own art, all 24 x 24 at native pixel
+        // size (2026-10-15). Swap any PNG there to change an icon; the old drawn / cropped icon is only a fallback.
+        s = Resources.Load<Sprite>("BoonIcons/" + d.id);
+        if (s != null) { s.texture.filterMode = FilterMode.Point; cache[d.id] = s; return s; }
         PatronInfo p = BoonCatalog.Of(d.patron);
         Color b = d.IsDuo ? BoonCatalog.Of(d.partner.Value).color : p.accent;
         s = Make(d.icon, p.color, b);

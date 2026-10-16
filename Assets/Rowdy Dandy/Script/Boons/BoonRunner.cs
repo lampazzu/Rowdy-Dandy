@@ -32,6 +32,14 @@ public class BoonRunner : MonoBehaviour
     private float whistleTimer = 3f, eyeTimer, catFxTimer, rankSparkTimer, jealousyTimer, stenchTimer, regenTimer, leviathanReadyAt, sauceReadyAt;
     private float spotlightTimer = 4f, spotlightUntil = -1f, wellFedUntil = -1f;
     private bool nineLivesUsed;
+    private float leviathanUntil = -1f;
+    private const float LeviathanSeconds = 5f;
+    // Blinding Dash: golden Rowdy (body tint + gold outline + sparkles), the tint he had before comes back after
+    private float goldenUntil = -1f, goldenSparkTimer;
+    private bool golden;
+    private Color goldenBase = Color.white;
+    private const float GoldenSeconds = 1.4f;
+    private static readonly Color Gold = new Color(1f, 0.82f, 0.25f);
     private readonly Dictionary<PetFollower, SpriteOutline> catAuras = new Dictionary<PetFollower, SpriteOutline>();
     private readonly Dictionary<EnemyHealth, int> rodHits = new Dictionary<EnemyHealth, int>();
 
@@ -177,6 +185,9 @@ public class BoonRunner : MonoBehaviour
         {
             r.flashReadyAt = now + 4f;
             SunFX.BlindingFlash(r.Center, Boons.V("blinding", 0));
+            r.goldenUntil = now + GoldenSeconds; // Rowdy turns golden and sparkles for a moment
+            BoonSfx.Play("golden", a => a.sparkle, 0.5f, 1.25f, 0.3f);
+            BoonSfx.Play("goldenbeam", a => a.sunBeam, 0.3f, 1.5f, 0.3f);
         }
         if (Boons.Has("catcall") && Boons.CatsWithRowdy > 0)
         {
@@ -316,7 +327,7 @@ public class BoonRunner : MonoBehaviour
             // a streak of dark water pulling back toward Rowdy, so the drag reads
             for (int i = 0; i < 5; i++)
                 FXParticle.Burst(c + new Vector3(-toward * (0.15f + i * 0.18f), Random.Range(-0.15f, 0.15f), 0f), BoonFX.Deep, 1, 0.5f, 1.2f + i * 0.4f, 0f, 0.3f);
-            if (Random.value < 0.35f) BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.boto : null, 0.25f, Random.Range(1.1f, 1.3f));
+            BoonSfx.Play("undertow", a => a.boto, 0.3f, 1.2f, 0.25f); // the deep gurgles on every pull
         }
         if (Boons.Has("rottenedge") && !e.enemydead) BoonFX.Poison(e, 4f, Boons.V("rottenedge", 0));
         if (Boons.Has("feral")) r.StartCoroutine(r.ClawEcho(e, damage * Boons.V("feral", 0) / 100f * (Boons.Has("silverclaws") ? 2f : 1f)));
@@ -334,7 +345,7 @@ public class BoonRunner : MonoBehaviour
         if (Boons.Has("solarflare") && r.hits % 4 == 0) SunFX.SunPillar(c, Boons.V("solarflare", 0));
         if (Boons.Has("sunburn") && !e.enemydead) BoonDot.Burn(e, Boons.V("sunburn", 0), 3f);
         if (Boons.Has("forgefire") && !e.enemydead) BoonDot.Burn(e, 6f, 3f);
-        if (Boons.Has("skewer") && Boons.ActiveWeapon == 2) SmithFX.Skewer(e, r.Facing, damage * Boons.V("skewer", 0) / 100f);
+        // (Skewer pierces per thrust in WeaponTricks, not per hit)
         if (Boons.Has("hookline") && Boons.ActiveWeapon == 0 && !e.enemydead) r.HookLine(e, c);
         if (crit && Boons.Has("cheese")) ChefFX.CheeseSpray(c, r.Facing);
         if (crit && Boons.Has("glamourpuss"))
@@ -405,6 +416,7 @@ public class BoonRunner : MonoBehaviour
         {
             BankHeal(Boons.V("compost", 0), false);
             r.StartCoroutine(r.HealStream(cat.transform.position));
+            BoonSfx.Play("compost", a => a.heal, 0.2f, 1.4f, 0.35f);
         }
         if (Boons.Has("foodfight"))
         {
@@ -474,6 +486,8 @@ public class BoonRunner : MonoBehaviour
         {
             r.health.AddHealth(Boons.V("bloodthirst", 0), true);
             r.StartCoroutine(r.BloodStream(c));
+            BoonSfx.Play("bloodthirst", a => a.claw, 0.25f, 0.7f, 0.2f);
+            BoonSfx.Play("bloodthirstheal", a => a.heal, 0.2f, 1.3f, 0.3f);
         }
         if (Boons.Has("feast") && Werewolf.Active) BankHeal(3f, true);
         if (Boons.Has("rabid") && poisoned) Werewolf.AddChargeRaw(5f); // Rabid: poisoned kills feed the moon
@@ -488,6 +502,8 @@ public class BoonRunner : MonoBehaviour
         {
             r.health.AddHealth(10f, false);
             HuntersMark.Clear();
+            BoonSfx.Play("huntkill", a => a.wolfHowl, 0.3f, 1.4f, 1f); // the prey is down
+            BoonSfx.Play("huntheal", a => a.heal, 0.3f, 1.1f, 0.3f);
         }
         if (Boons.Has("straytax") && Random.value < Boons.V("straytax", 0) / 100f) FishTreat.Drop(c);
         if (Boons.Has("sandwich") && ++r.sandwichKills >= Mathf.RoundToInt(Boons.V("sandwich", 0)))
@@ -518,7 +534,9 @@ public class BoonRunner : MonoBehaviour
     // Tempered Steel saved a swing
     public static void OnDurabilitySaved()
     {
-        if (instance == null || Random.value > 0.5f) return;
+        if (instance == null) return;
+        BoonSfx.Play("tempered", a => a.clang, 0.15f, 2.2f, 0.2f); // a bright little tink: no wear this swing
+        if (Random.value > 0.5f) return;
         BoonFX.Sparkles(instance.Center + new Vector3(instance.Facing * 0.4f, 0f, 0f), new Color(0.85f, 0.9f, 1f), 3, 0.2f, 0.4f);
     }
 
@@ -541,6 +559,9 @@ public class BoonRunner : MonoBehaviour
         // Thorn Skin: the enemy whose hitbox just landed
         if (Boons.Has("thornskin") && Spike.LastAttackFrame >= Time.frameCount - 1 && Spike.LastAttacker != null && !Spike.LastAttacker.enemydead)
             RotFX.Thorns(Spike.LastAttacker, Boons.V("thornskin", 0));
+
+        // Leviathan: every hit taken lets the tentacles out for 5 s (another hit restarts the 5 s)
+        if (Boons.Has("leviathan")) r.leviathanUntil = Time.time + LeviathanSeconds;
 
     }
 
@@ -708,6 +729,7 @@ public class BoonRunner : MonoBehaviour
                 {
                     health.AddHealth(saltHealBank, false);
                     saltHealBank = 0f;
+                    BoonSfx.Play("saltwater", a => a.heal, 0.15f, 1.2f, 0.8f);
                 }
                 saltFxTimer -= dt;
                 if (saltFxTimer <= 0f) { saltFxTimer = 0.15f; FXParticle.Burst(Center + (Vector3)Random.insideUnitCircle * 0.3f, BoonFX.Cyan, 1, 0.2f, 0.6f, -1.5f, 0.6f); }
@@ -716,6 +738,7 @@ public class BoonRunner : MonoBehaviour
             {
                 saltyUntil = now + 4f;
                 FXParticle.Burst(Center, BoonFX.Foam, 10, 1f, 3f, 6f, 0.5f);
+                BoonSfx.Play("salty", a => a.splash, 0.3f, 1.3f, 1f);
             }
         }
         wasWatered = watered;
@@ -735,7 +758,11 @@ public class BoonRunner : MonoBehaviour
                     BoonFX.Popup(BoonFX.Center(e) + Vector3.up * 0.6f, "WOW...", BoonFX.Pink, 0.55f, 0.8f);
                     charmed++;
                 }
-                if (charmed > 0) BoonFX.Sparkles(HeadTop, BoonFX.Pink, 5, 0.3f, 0.6f);
+                if (charmed > 0)
+                {
+                    BoonFX.Sparkles(HeadTop, BoonFX.Pink, 5, 0.3f, 0.6f);
+                    BoonSfx.Play("wolfwhistle", a => a.charmSfx, 0.35f, 1.3f, 1f);
+                }
             }
         }
 
@@ -784,6 +811,7 @@ public class BoonRunner : MonoBehaviour
                 {
                     health.AddHealth(1f, false);
                     FXParticle.Burst(Center + (Vector3)Random.insideUnitCircle * 0.25f, BoonFX.Sunny, 2, 0.2f, 0.6f, -1.5f, 0.6f);
+                    BoonSfx.Play("daybreak", a => a.sparkle, 0.1f, 1.6f, 1.5f);
                 }
             }
         }
@@ -803,8 +831,8 @@ public class BoonRunner : MonoBehaviour
         AnglerLure.Keep(Boons.Has("angler"), transform);
         SunHalo.Keep(Boons.Has("halo"), transform);
         HuntersMark.Keep(Boons.Has("huntmark"), Center);
-        // Leviathan: below 30% health the tentacles are out, smashing, for as long as it lasts
-        LeviathanArms.Keep(Boons.Has("leviathan") && health.currentHealth <= health.startingHealth * 0.3f, this, Boons.V("leviathan", 0));
+        // Leviathan: the tentacles are out for 5 s after every hit Rowdy takes
+        LeviathanArms.Keep(Boons.Has("leviathan") && now < leviathanUntil, this, Boons.V("leviathan", 0));
         AllyJelly.Keep(Boons.Has("jellypals") ? Boons.CatsWithRowdy : 0, transform);
         CatLoyalty.Tick(Boons.Has("catloyalty"), transform);
         WeaponSharpness.Tick(dt);
@@ -918,6 +946,28 @@ public class BoonRunner : MonoBehaviour
     }
     private float sunbathTimer = 3f;
 
+    // Blinding Dash: Rowdy shines gold (fading back over the last third), with sparkles and golden afterimages
+    private void UpdateGolden(float now)
+    {
+        bool on = now < goldenUntil && !Werewolf.Active && !StephmossForm.Active;
+        if (on && !golden) { golden = true; goldenBase = body.color; }
+        if (!on)
+        {
+            if (golden) { golden = false; body.color = goldenBase; }
+            return;
+        }
+        float left = (goldenUntil - now) / GoldenSeconds;           // 1 .. 0
+        float k = Mathf.Clamp01(left * 3f) * (0.75f + 0.25f * Mathf.Sin(now * 25f));
+        body.color = Color.Lerp(goldenBase, new Color(Gold.r, Gold.g * 1.05f, Gold.b * 0.6f, goldenBase.a), k);
+        goldenSparkTimer -= Time.deltaTime;
+        if (goldenSparkTimer <= 0f)
+        {
+            goldenSparkTimer = 0.05f;
+            BoonFX.Sparkles(Center + new Vector3(Random.Range(-0.35f, 0.35f), Random.Range(-0.45f, 0.5f), 0f), Random.value < 0.4f ? Color.white : Gold, 1, 0.1f, 0.5f);
+            if (Random.value < 0.35f) CatFX.Afterimage(body, new Color(Gold.r, Gold.g, Gold.b, 0.5f), 0.18f);
+        }
+    }
+
     private void LateUpdate()
     {
         if (movement != null)
@@ -936,8 +986,10 @@ public class BoonRunner : MonoBehaviour
         if (body == null) return;
         if (aura == null) aura = SpriteOutline.Add(body, Color.clear, 1, -5);
         float t = Time.time;
+        UpdateGolden(t);
         Color c = Color.clear;
-        if (posed) c = Color.Lerp(BoonFX.Pink, BoonFX.Gold, 0.5f + 0.5f * Mathf.Sin(t * 8f));
+        if (golden) c = Color.Lerp(Gold, Color.white, 0.5f + 0.5f * Mathf.Sin(t * 20f));
+        else if (posed) c = Color.Lerp(BoonFX.Pink, BoonFX.Gold, 0.5f + 0.5f * Mathf.Sin(t * 8f));
         else if (TideRider.Riding) c = TideRider.RidingPink ? new Color(1f, 0.5f, 0.85f, 0.9f) : new Color(0.4f, 0.95f, 1f, 0.9f);
         else if (InSpotlight) c = new Color(1f, 0.95f, 0.75f, 0.6f + 0.3f * Mathf.Sin(t * 9f));
         else if (SaltyActive) c = new Color(0.4f, 0.95f, 1f, 0.55f + 0.25f * Mathf.Sin(t * 10f));

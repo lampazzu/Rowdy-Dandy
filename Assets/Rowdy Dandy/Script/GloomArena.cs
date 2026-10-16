@@ -74,7 +74,8 @@ public static class GloomArena
             Platforms(root, g.left, g.right, g.floorY, GloomPlatformTint, GloomPlatforms);
         }
         float left = arena.leftX, right = arena.rightX;
-        root.AddComponent<GloomSky>().Setup((left + right) / 2f, arena.floorY, MinX, VioletMinX, false);
+        // the sky: the level's own hand-made parallax, with the look set in Resources/ArenaBackdrops/Gloomwood.asset
+        ArenaBackdrops.Register(MinX, VioletMinX, ArenaBackdrop.Load("Gloomwood"));
 
         // ---- THE PURPLE REIGN
         GameObject vroot;
@@ -102,10 +103,14 @@ public static class GloomArena
             Platforms(vroot, v.left, v.right, v.floorY, VioletPlatformTint, VioletPlatforms);
         }
         float vl = violet.leftX, vr = violet.rightX;
-        vroot.AddComponent<GloomSky>().Setup((vl + vr) / 2f, violet.floorY, VioletMinX, 99999f, true);
+        ArenaBackdrops.Register(VioletMinX, 99999f, ArenaBackdrop.Load("PurpleReign")); // ... PurpleReign.asset
 
         // ---- the gates between them (a baked island's gate spots are wherever they were moved to)
-        Vector3 frontierGate = GateSpot(frontier.rightX + 3.4f, frontier.floorY, frontier.leftX, frontier.rightX);
+        // The way into the Gloomwood is up in the Gloomy Forest, next to the Mega Creature on the high beach ground
+        // (a scene object named "Gloomwood Portal Spot" overrides where)
+        Vector3 frontierGate = GloomwoodPortalSpot();
+        GloomGatePosition = frontierGate;
+        if (GateOpen) WorldMap.Mark(MapKey, frontierGate, Purple); // pinned on the map once it's open
         Vector3 gloomBack = bakedGloom != null && bakedGloom.gateBackSpot != null ? bakedGloom.gateBackSpot.position : GateSpot(left - 4f, arena.floorY, left, right);
         Vector3 gloomOn = bakedGloom != null && bakedGloom.gateOnSpot != null ? bakedGloom.gateOnSpot.position : GateSpot(right + 4f, arena.floorY, left, right);
         Vector3 violetBack = bakedViolet != null && bakedViolet.gateBackSpot != null ? bakedViolet.gateBackSpot.position : GateSpot(vl - 4f, violet.floorY, vl, vr);
@@ -113,11 +118,54 @@ public static class GloomArena
         frontierReturn = frontierGate + new Vector3(-1.4f, 0.6f, 0f);
         violetArrival = violetBack + new Vector3(1.6f, 0.6f, 0f);
         gloomReturn = gloomOn + new Vector3(-1.4f, 0.6f, 0f);
-        GloomGate.Make(frontierGate, "THE GLOOMWOOD", () => GateOpen, "SEALED: CLEAR THE FRONTIER'S 20 WAVES", TravelToGloom, Purple);
-        GloomGate.Make(gloomBack, "BACK TO THE FRONTIER", () => true, null, TravelToFrontier, Purple);
+        GloomGate.Make(frontierGate, "THE GLOOMWOOD", () => GateOpen, "SEALED: CLEAR THE FRONTIER 20 WAVES", TravelToGloom, Purple);
+        GloomGate.Make(gloomBack, "BACK TO THE GLOOMY FOREST", () => true, null, TravelToFrontier, Purple);
         GloomGate.Make(gloomOn, "THE PURPLE REIGN", () => VioletGateOpen, "SEALED: CLEAR THE GLOOMWOOD'S 20 WAVES", TravelToViolet, Violet);
         GloomGate.Make(violetBack, "BACK TO THE GLOOMWOOD", () => true, null, TravelBackToGloom, Violet);
         EnemyMovement.ForgetWaterCache(); // the new pool counts as water for drowning
+
+        // DANDY SCHOOL: the tutorial level and its portal on the first island
+        TutorialLevel.Setup();
+    }
+
+    // ---------------------------------------------------------------- the Gloomwood portal, in the Gloomy Forest
+    public const string MapKey = "RD_ColosseumPortal";
+    public static Vector3 GloomGatePosition { get; private set; }
+    private static readonly Vector2 MegaCreatureSpot = new Vector2(35.18f, 15.45f); // the hand-placed Mega Creature up there
+
+    private static Vector3 GloomwoodPortalSpot()
+    {
+        GameObject spot = GameObject.Find("Gloomwood Portal Spot");
+        if (spot != null) return spot.transform.position;
+        Vector2 mega = MegaCreatureSpot;
+        // the scene's Mega Creature where it stands at load (before it has walked anywhere)
+        foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None))
+        {
+            Vector2 p = e.transform.position;
+            if (e.transform.root.name.StartsWith("Enemy_MegaCreature") && Vector2.Distance(p, MegaCreatureSpot) < 6f) { mega = p; break; }
+        }
+        // a walkable floor spot a little to the side of it (right first, then left, further out)
+        foreach (float dx in new[] { 2.5f, -2.5f, 3.5f, -3.5f, 1.8f, -1.8f, 4.5f, -4.5f })
+        {
+            Vector2 from = new Vector2(mega.x + dx, mega.y + 2f);
+            if (SolidGround.Ray(from, Vector2.down, 6f, out RaycastHit2D hit) && Mathf.Abs(hit.point.y - mega.y) < 2.5f
+                && !SolidGround.Blocked(hit.point + new Vector2(0f, 1.1f), new Vector2(0.8f, 1.6f)))
+                return hit.point;
+        }
+        return new Vector3(mega.x + 2.5f, mega.y - 0.5f, 0f);
+    }
+
+    // The Frontier was just won: the portal opens, it's pinned on the map, and Rowdy is told to look at the map
+    public static void AnnounceGloomGate()
+    {
+        if (GloomGatePosition == Vector3.zero) return;
+        WorldMap.Mark(MapKey, GloomGatePosition, Purple);
+        BoonRunner.Delay(3.6f, () =>
+        {
+            Banner.Show("NEXT COLOSSEUM: ON YOUR MAP", null, Purple, 2.4f);
+            if (BoonRunner.Rowdy != null)
+                IconPopup.Show(BoonRunner.RowdyHead + Vector3.up * 0.6f, null, GameInput.Format("{MAP} OPEN THE MAP: THE PORTAL IS IN THE GLOOMY FOREST"), Purple, 0.8f, 5f);
+        });
     }
 
     private static Vector3 GongFrom(FrontierArena frontier, float shift, Site s)
@@ -301,7 +349,7 @@ public static class GloomArena
     }
 
     // ---------------------------------------------------------------- platforms (one-way, the sand pass-through tile)
-    private static void Platforms(GameObject root, float left, float right, float floorY, Color tint, (float at, float height, int tiles)[] list)
+    public static void Platforms(GameObject root, float left, float right, float floorY, Color tint, (float at, float height, int tiles)[] list)
     {
         ArenaArt art = ArenaArt.Get;
         Sprite tile = art != null && art.passThrough != null ? ItemArt.Frames(art.passThrough, 1, 1, new Vector2(0f, 1f), 64f)[0] : null;
@@ -344,6 +392,14 @@ public static class GloomArena
 
     // ---------------------------------------------------------------- the Purple Reign's pool
     private const float PoolWidth = 5f, PoolDepth = 2.5f;
+
+    // A pool (PoolWidth wide) dug into a tilemap floor, centred on centerX (the tutorial level uses it too)
+    public static void PoolAt(GameObject root, float centerX, float floorY, Tilemap ground)
+    {
+        var s = new Site { left = centerX - 2f, right = centerX + 2f, floorY = floorY };
+        Pool(root, ref s, ground);
+        EnemyMovement.ForgetWaterCache();
+    }
 
     private static void Pool(GameObject root, ref Site a, Tilemap ground)
     {
@@ -438,7 +494,7 @@ public static class GloomArena
         if (violet != null) TravelToViolet();
     }
 
-    private static void Travel(Vector3 to, string title, string sub, Color color)
+    public static void Travel(Vector3 to, string title, string sub, Color color)
     {
         Transform rowdy = BoonRunner.Rowdy;
         if (rowdy == null || to == Vector3.zero) return;
@@ -623,118 +679,6 @@ public static class GloomArena
     }
 }
 
-// A runtime arena's sky: while the camera is inside [minX, maxX], a dark gradient covers whatever the main level's
-// backgrounds are doing so far from home; the Gloomwood gets its gloomy tree line as parallax, the Purple Reign its
-// purple fog. Fog puffs and wisps float.
-public class GloomSky : MonoBehaviour
-{
-    private SpriteRenderer sky, backdrop, backdrop2;
-    private float centerX, floorY, wispTimer, minX, maxX;
-    private bool violet;
-
-    public void Setup(float centerX, float floorY, float minX, float maxX, bool violet)
-    {
-        this.centerX = centerX;
-        this.floorY = floorY;
-        this.minX = minX;
-        this.maxX = maxX;
-        this.violet = violet;
-        int layer = SortingLayer.NameToID("Default");
-        sky = Make("Sky", SkySprite(violet), -190, Color.white, layer);
-        if (!violet)
-        {
-            GloomArt art = GloomArt.Get;
-            if (art != null && art.backdrop != null)
-            {
-                backdrop = Make("Gloom Backdrop", art.backdrop, -160, new Color(0.3f, 0.26f, 0.42f), layer);
-                backdrop2 = Make("Gloom Backdrop 2", art.backdrop, -175, new Color(0.17f, 0.14f, 0.26f), layer);
-                backdrop2.flipX = true;
-            }
-        }
-        else
-        {
-            ArenaArt art = ArenaArt.Get;
-            if (art != null && art.frontzada != null && art.fog3 != null)
-            {
-                backdrop = Make("Purple Palms", ArenaArt.Standing(art.frontzada), -160, new Color(0.75f, 0.6f, 0.9f), layer);
-                backdrop2 = Make("Purple Fog", ArenaArt.Standing(art.fog3), -175, new Color(0.8f, 0.6f, 1f, 0.7f), layer);
-            }
-        }
-    }
-
-    private SpriteRenderer Make(string name, Sprite s, int order, Color tint, int layer)
-    {
-        var go = new GameObject(name);
-        go.transform.SetParent(transform, false);
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = s;
-        sr.sortingLayerID = layer;
-        sr.sortingOrder = order;
-        sr.color = tint;
-        if (CatFX.Unlit != null) sr.sharedMaterial = CatFX.Unlit; // the sky ignores the day / night light
-        sr.enabled = false;
-        return sr;
-    }
-
-    private void LateUpdate()
-    {
-        Camera cam = Camera.main;
-        if (cam == null || sky == null) return;
-        Vector3 c = cam.transform.position;
-        bool here = c.x >= minX && c.x < maxX;
-        sky.enabled = here;
-        if (backdrop != null) backdrop.enabled = backdrop2.enabled = here;
-        if (!here) return;
-        float h = cam.orthographicSize * 2f + 2f, w = h * cam.aspect + 2f;
-        sky.transform.position = new Vector3(c.x, c.y, 0f);
-        Vector2 size = sky.sprite.bounds.size;
-        sky.transform.localScale = new Vector3(w / size.x, h / size.y, 1f); // a smooth gradient: scaling it is fine
-        if (backdrop != null)
-        {
-            // the tree lines / fog drift slower than the world (parallax), whole pixels
-            float px = centerX + (c.x - centerX) * 0.55f, px2 = centerX + (c.x - centerX) * 0.75f;
-            float y1 = violet ? floorY - 1.5f - backdrop.sprite.bounds.min.y : floorY - 0.6f + backdrop.sprite.bounds.extents.y;
-            float y2 = violet ? floorY - 0.5f - backdrop2.sprite.bounds.min.y : floorY + 1.2f + backdrop2.sprite.bounds.extents.y;
-            backdrop.transform.position = new Vector3(Mathf.Round(px * 64f) / 64f, Mathf.Round((y1 + (c.y - floorY) * 0.4f) * 64f) / 64f, 0f);
-            backdrop2.transform.position = new Vector3(Mathf.Round(px2 * 64f) / 64f, Mathf.Round((y2 + (c.y - floorY) * 0.6f) * 64f) / 64f, 0f);
-        }
-        wispTimer -= Time.deltaTime;
-        if (wispTimer <= 0f)
-        {
-            wispTimer = 0.12f;
-            Vector3 p = new Vector3(c.x + Random.Range(-w / 2f, w / 2f), floorY + Random.Range(0f, 0.6f), 0f);
-            FXParticle.Burst(p, violet ? new Color(0.8f, 0.5f, 0.9f, 0.35f) : new Color(0.55f, 0.5f, 0.7f, 0.35f), 1, 0.1f, 0.4f, -0.2f, 2.2f);
-            if (Random.value < 0.4f)
-                FXParticle.Burst(new Vector3(c.x + Random.Range(-w / 2f, w / 2f), floorY + Random.Range(0.5f, 4f), 0f),
-                                 violet ? new Color(1f, 0.6f, 1f, 0.9f) : Random.value < 0.5f ? new Color(0.55f, 0.9f, 1f, 0.9f) : new Color(0.85f, 0.6f, 1f, 0.9f), 1, 0.05f, 0.3f, -0.4f, 1.6f);
-        }
-    }
-
-    // 4 x 64 vertical gradient (smooth, bilinear): night violet for the Gloomwood, magenta dusk for the Purple Reign
-    private static Sprite gloomSky, violetSky;
-    private static Sprite SkySprite(bool violet)
-    {
-        if (violet ? violetSky != null : gloomSky != null) return violet ? violetSky : gloomSky;
-        const int w = 4, h = 64;
-        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp, name = violet ? "VioletSky" : "GloomSky" };
-        var px = new Color32[w * h];
-        Color top = violet ? new Color(0.12f, 0.03f, 0.18f) : new Color(0.04f, 0.03f, 0.08f);
-        Color mid = violet ? new Color(0.3f, 0.08f, 0.38f) : new Color(0.1f, 0.08f, 0.17f);
-        Color low = violet ? new Color(0.62f, 0.25f, 0.6f) : new Color(0.24f, 0.19f, 0.32f);
-        for (int y = 0; y < h; y++)
-        {
-            float t = y / (h - 1f);
-            Color col = t < 0.5f ? Color.Lerp(low, mid, t * 2f) : Color.Lerp(mid, top, (t - 0.5f) * 2f);
-            for (int x = 0; x < w; x++) px[y * w + x] = col;
-        }
-        tex.SetPixels32(px);
-        tex.Apply(false, true);
-        Sprite s = AIArt.Use(violet ? "PurpleReign_Sky" : "Gloomwood_Sky", Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 4f));
-        if (violet) violetSky = s; else gloomSky = s;
-        return s;
-    }
-}
-
 // A portal between colosseums (the Graft portal art, BRJ_Portal_Loop). {INTERACT} next to it travels; a sealed one
 // stays grey and says what opens it.
 public class GloomGate : MonoBehaviour
@@ -789,6 +733,10 @@ public class GloomGate : MonoBehaviour
     {
         if (isOpen == null || portal == null) return; // (a script reload in play mode drops the delegate)
         t += Time.deltaTime;
+        // while a colosseum trial runs, the portals are gone (no sprite, no glow, no sparkles, no prompt)
+        bool trial = FrontierArena.Running;
+        portal.enabled = glow.enabled = !trial;
+        if (trial) { prompt.enabled = false; return; }
         bool open = isOpen();
         if (open && !wasOpen) GraftFX.Play("BRJ_Portal_Create", transform.position + Vector3.up * 0.7f, Color.white, 7); // just unsealed
         wasOpen = open;

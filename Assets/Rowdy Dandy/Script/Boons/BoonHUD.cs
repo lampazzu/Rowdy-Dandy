@@ -99,8 +99,43 @@ public class BoonHUD : MonoBehaviour
             Image icon = OverlayUI.MakeImage("Icon", plate.rectTransform, Color.white);
             icon.preserveAspect = true;
             Fill(icon.rectTransform, 0.62f);
+            // day-only / night-only boons wear a little sun or moon on the corner (bright = working right now)
+            Image badge = OverlayUI.MakeImage("Day Night Badge", plate.rectTransform, Color.white, DayNightIcons.Sun);
+            badge.rectTransform.anchorMin = badge.rectTransform.anchorMax = badge.rectTransform.pivot = new Vector2(1f, 1f);
+            badge.rectTransform.anchoredPosition = new Vector2(6f, 6f);
+            badge.rectTransform.sizeDelta = new Vector2(22f, 22f);
+            badge.enabled = false;
             plate.gameObject.SetActive(false);
             passives.Add((plate, icon));
+            passiveBadges.Add(badge);
+        }
+    }
+
+    // per passive slot: the boon in it, its patron colour and day / night side (+1 day, -1 night, 0 always)
+    private readonly List<Image> passiveBadges = new List<Image>();
+    private readonly string[] passiveIds = new string[12];
+    private readonly Color[] passiveBase = new Color[12];
+    private readonly Color[] passiveTint = new Color[12];
+
+    // Day / night boons: bright with a glowing sun / moon while they work, dimmed (grey, faded) while they don't
+    private void UpdateDayNightBadges()
+    {
+        float now = Time.unscaledTime;
+        for (int i = 0; i < passives.Count && i < passiveBadges.Count; i++)
+        {
+            string id = passiveIds[i];
+            Image badge = passiveBadges[i];
+            int side = id != null ? Boons.DayNightSide(id) : 0;
+            if (side == 0 || !passives[i].plate.gameObject.activeSelf) { badge.enabled = false; continue; }
+            bool on = Boons.DayNightBoonOn(id);
+            badge.enabled = true;
+            badge.sprite = side > 0 ? DayNightIcons.Sun : DayNightIcons.Moon;
+            float pulse = 0.5f + 0.5f * Mathf.Sin(now * 4f + i);
+            badge.color = on ? Color.Lerp(Color.white, side > 0 ? new Color(1f, 0.9f, 0.5f) : new Color(0.75f, 0.85f, 1f), pulse) : new Color(0.45f, 0.42f, 0.5f, 0.8f);
+            badge.rectTransform.localScale = Vector3.one * (on ? 1f + 0.12f * pulse : 0.9f);
+            var (plate, icon) = passives[i];
+            plate.color = on ? passiveBase[i] : Color.Lerp(passiveBase[i], new Color(0.3f, 0.28f, 0.34f), 0.75f);
+            icon.color = new Color(passiveTint[i].r, passiveTint[i].g, passiveTint[i].b, on ? 1f : 0.3f);
         }
     }
 
@@ -140,6 +175,7 @@ public class BoonHUD : MonoBehaviour
         }
 
         UpdateMoon();
+        UpdateDayNightBadges();
         UpdateBuildPanel(owned);
     }
 
@@ -168,15 +204,16 @@ public class BoonHUD : MonoBehaviour
         {
             BoonDef d = BoonCatalog.Get(id);
             if (d == null || d.slot != BoonSlot.Passive || p >= passives.Count) continue;
+            passiveIds[p] = id;
             var (plate, icon) = passives[p++];
             plate.gameObject.SetActive(true);
-            plate.color = d.IsDuo ? Color.Lerp(BoonCatalog.Of(d.patron).color, BoonCatalog.Of(d.partner.Value).color, 0.5f) : BoonCatalog.Of(d.patron).color;
+            plate.color = passiveBase[p - 1] = d.IsDuo ? Color.Lerp(BoonCatalog.Of(d.patron).color, BoonCatalog.Of(d.partner.Value).color, 0.5f) : BoonCatalog.Of(d.patron).color;
             icon.sprite = BoonIcons.Get(d);
-            icon.color = d.iconTint;
+            icon.color = passiveTint[p - 1] = d.iconTint;
             Put(plate.rectTransform, x, PassiveSize);
             x += PassiveSize + Gap;
         }
-        for (; p < passives.Count; p++) passives[p].plate.gameObject.SetActive(false);
+        for (; p < passives.Count; p++) { passives[p].plate.gameObject.SetActive(false); passiveIds[p] = null; }
     }
 
     private void UpdateMoon()

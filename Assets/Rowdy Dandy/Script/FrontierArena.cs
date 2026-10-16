@@ -39,8 +39,14 @@ public class FrontierArena : MonoBehaviour
     private static readonly List<FrontierArena> arenas = new List<FrontierArena>();
     public static bool Running { get { foreach (FrontierArena a in arenas) if (a != null && a.running) return true; return false; } }
     // the island and everything past it (the runtime arenas are far to the right): no random waves there
-    public static bool IsQuiet(Vector2 p) { foreach (FrontierArena a in arenas) if (a != null && !a.gloom && p.x >= a.islandStartX) return true; return false; }
-    public static bool InGloom(Vector2 p) => p.x >= GloomArena.MinX;
+    public static bool IsQuiet(Vector2 p)
+    {
+        if (TutorialLevel.Contains(p)) return true; // the tutorial level: only its practice wolf
+        foreach (FrontierArena a in arenas) if (a != null && !a.gloom && p.x >= a.islandStartX) return true;
+        return false;
+    }
+    // behind a portal (the runtime colosseums, the tutorial level): cats don't hide there
+    public static bool InGloom(Vector2 p) => p.x >= GloomArena.MinX || TutorialLevel.Contains(p);
     public static FrontierArena Frontier { get { foreach (FrontierArena a in arenas) if (a != null && !a.gloom) return a; return null; } }
     // the colosseum mid-trial that this point is inside (null = none): arena-only behaviour (Wereknights walk, radar)
     public static FrontierArena ArenaAt(Vector2 p)
@@ -91,7 +97,7 @@ public class FrontierArena : MonoBehaviour
                 PlayerPrefs.DeleteKey(k + part);
         PlayerPrefs.DeleteKey("RD_GloomGateOpen");
         PlayerPrefs.DeleteKey("RD_VioletGateOpen");
-        PlayerPrefs.Save();
+        WorldMap.Unmark(GloomArena.MapKey); // (saves)
     }
     private string Title => Titles[Mathf.Clamp(tier, 0, 2)];
     private Color Theme => tier == 2 ? new Color(0.9f, 0.45f, 1f) : tier == 1 ? new Color(0.72f, 0.55f, 1f) : new Color(1f, 0.65f, 0.3f);
@@ -264,26 +270,11 @@ public class FrontierArena : MonoBehaviour
         var col = go.AddComponent<BoxCollider2D>();
         col.size = new Vector2(0.6f, GateHeight);
         col.offset = new Vector2(0f, GateHeight / 2f - 2f); // from just under the floor all the way up
+        // the portcullis sprite is gone (user, 2026-10-15): the wall is only the collider + the shimmering barrier.
+        // "Bars" stays as an empty marker (the dust bursts when the gates slam come from it)
         var barsGo = new GameObject("Bars");
         barsGo.transform.SetParent(go.transform, false);
         bars = barsGo.AddComponent<SpriteRenderer>();
-        bars.sprite = BarsSprite;
-        bars.sortingOrder = 30;
-        if (ItemArt.Lit != null) bars.sharedMaterial = ItemArt.Lit;
-        if (gloom) bars.color = new Color(0.7f, 0.6f, 0.9f);
-        // more bars stacked on top (they all drop together) + a shimmering barrier up past the top of the screen
-        float segment = bars.sprite != null ? bars.sprite.bounds.size.y : 2.1875f;
-        for (int k = 1; k <= 3; k++)
-        {
-            var up = new GameObject("Bars " + k);
-            up.transform.SetParent(barsGo.transform, false);
-            up.transform.localPosition = new Vector3(0f, segment * k, 0f);
-            SpriteRenderer s = up.AddComponent<SpriteRenderer>();
-            s.sprite = bars.sprite;
-            s.sortingOrder = bars.sortingOrder;
-            s.sharedMaterial = bars.sharedMaterial;
-            s.color = bars.color;
-        }
         SpriteRenderer barrier = PixelShape.Make("Barrier", PixelShape.Kind.Shaft, go.transform.position, 29, go.transform);
         if (barrier != null)
         {
@@ -303,6 +294,7 @@ public class FrontierArena : MonoBehaviour
     private void Update()
     {
         UpdateGates();
+        AutoBait();
         // first time near this arena this session
         if (!announced && BoonRunner.Rowdy != null && !PauseMenu.IsPaused && Mathf.Abs(BoonRunner.RowdyCenter.x - (leftX + rightX) / 2f) < 20f
             && Mathf.Abs(BoonRunner.RowdyCenter.y - floorY) < 12f)
@@ -361,6 +353,20 @@ public class FrontierArena : MonoBehaviour
     }
 
     private IEnumerator BaitCooldown() { baitBusy = true; yield return new WaitForSeconds(2.5f); baitBusy = false; }
+
+    // During a trial a rat Rowdy holds is used by itself as soon as there's a free cat slot (one he just grabbed, or a
+    // slot that opened on a level up): the bait drops at his feet and the cat comes running to him.
+    private float autoBaitAt;
+
+    private void AutoBait()
+    {
+        if (!running || baitBusy || Time.time < autoBaitAt || PauseMenu.IsPaused || BoonRunner.Rowdy == null) return;
+        autoBaitAt = Time.time + 0.5f;
+        if (CatRoster.Rats <= 0 || !CatRoster.HasRoom || CatRoster.Lurable() == null) return;
+        if (!CatRoster.SpendRat(out PetFollower cat)) return;
+        RatBait.Drop(BoonRunner.Rowdy.position + Vector3.left * 0.9f, cat); // (Drop adds 0.9 to the right: lands under him)
+        StartCoroutine(BaitCooldown());
+    }
 
     // ---------------------------------------------------------------- the trial
     private float HealthScale(int waveIndex)
@@ -447,7 +453,7 @@ public class FrontierArena : MonoBehaviour
             if (h != null) h.AddHealth(h.startingHealth * (boss ? 0.35f : 0.06f), false);
             ArenaRun.LevelCap = ArenaRun.CapDuring(n + 1);
             if (PlayerStats.Instance != null) PlayerStats.Instance.ReachLevel(ArenaRun.MinLevelAfter(n));
-            if (n == waves.Length) { Boons.Grant(1); break; } // the last one opens with the victory picks
+            if (n == waves.Length) break; // no boon after the last wave: the run is over (user, 2026-10-15)
             if (n % ArenaRun.BoonEvery == 0 || n == ArenaRun.SealWave) yield return BoonTime(n);
             else yield return new WaitForSeconds(1.1f);
         }
@@ -787,12 +793,14 @@ public class FrontierArena : MonoBehaviour
         GraftFX.Play("BRJ_FireCircle", c, new Color(Theme.r, Theme.g, Theme.b, 0.9f), 140);
         if (PlayerStats.Instance != null) PlayerStats.Instance.ReachLevel(PlayerStats.MaxLevel);
         ArenaRun.InTrial = false;
-        // prizes: boons, hair gel (the later colosseums pay more)
-        for (int i = 0; i <= tier; i++) Boons.DevOfferPick();
+        // prizes: hair gel only (the later colosseums pay more). No boons: the run they'd belong to is over.
         Boons.AddRerolls(2 + 2 * tier);
-        IconPopup.Show(c + Vector3.up * 1.6f, null, "+" + (tier + 1) + " BOON" + (tier > 0 ? "S" : "") + "  +" + (2 + 2 * tier) + " HAIR GEL", new Color(1f, 0.85f, 0.5f), 1f, 3f);
+        IconPopup.Show(c + Vector3.up * 1.6f, null, "+" + (2 + 2 * tier) + " HAIR GEL", new Color(1f, 0.85f, 0.5f), 1f, 3f);
         if (ClearsHere == 1 && tier < 2)
             IconPopup.Show(c + Vector3.up * 2.4f, null, tier == 0 ? "THE GLOOM GATE IS OPEN" : "THE VIOLET GATE IS OPEN", new Color(0.8f, 0.55f, 1f), 1.1f, 3.5f);
+        if (tier == 0) GloomArena.AnnounceGloomGate(); // the portal is in the Gloomy Forest: pinned on the map
+        // the boons he banked can't come out now (level ups after the win grant nothing either)
+        Boons.DropPending();
     }
     private void RingGong()
     {
@@ -847,38 +855,7 @@ public class FrontierArena : MonoBehaviour
     }
 
     // ---------------------------------------------------------------- art (drawn)
-    private static Sprite bars, gongArt;
-
-    // Portcullis: iron bars with two braces, 20 x 140 px, pivot at the bottom
-    private static Sprite BarsSprite
-    {
-        get
-        {
-            if (bars != null) return bars;
-            const int w = 20, h = 140;
-            var rows = new string[h];
-            for (int y = 0; y < h; y++)
-            {
-                bool brace = y % 46 < 4;
-                var row = new char[w];
-                for (int x = 0; x < w; x++)
-                {
-                    int col = x % 5;
-                    char c = '.';
-                    if (brace) c = (y % 46 == 0 || y % 46 == 3) ? 'k' : (x % 2 == 0 ? 's' : 'i');
-                    else if (col == 1) c = 'k';
-                    else if (col == 2) c = 's';
-                    else if (col == 3) c = 'i';
-                    if (y >= h - 6 && (col == 2 || col == 3)) c = (y >= h - 3) ? 'k' : 's'; // spikes at the bottom
-                    row[x] = c;
-                }
-                rows[h - 1 - y] = new string(row); // rows[0] is the top
-            }
-            bars = BoonFX.FromRows("FrontierBars", rows, ch =>
-                ch == 'k' ? new Color32(27, 8, 32, 255) : ch == 's' ? new Color32(150, 156, 176, 255) : new Color32(84, 88, 104, 255), new Vector2(0.5f, 0f));
-            return bars;
-        }
-    }
+    private static Sprite gongArt;
 
     // War gong on a wooden frame, 34 x 44 px
     public static Sprite GongSprite

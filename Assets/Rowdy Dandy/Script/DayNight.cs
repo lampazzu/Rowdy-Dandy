@@ -80,6 +80,30 @@ public class DayNight : MonoBehaviour
         animator.Update(0f);
     }
 
+    // The HUD clock (DayNightHUD): real seconds left until it turns night / day, and how long this phase lasts
+    public static float SecondsToFlip { get; private set; } = -1f;
+    public static float PhaseLength { get; private set; } = 1f;
+    public static bool Running => current != null && current.animator != null && current.enabled;
+
+    // Real seconds the clip takes to get from clip time 'from' to 'to' (forward, wrapping): the night part
+    // (NightStart..NightEnd) runs at the night speed, the rest at the day speed
+    private static float RealSecondsBetween(float from, float to)
+    {
+        float nightClip = NightEnd - NightStart, dayClip = ClipLength - nightClip;
+        float nightRate = Mathf.Max(10f, NightMinutes * 60f) / nightClip, dayRate = Mathf.Max(10f, DayMinutes * 60f) / dayClip;
+        float total = 0f, t = from, left = Mathf.Repeat(to - from, ClipLength);
+        for (int guard = 0; guard < 6 && left > 0.0001f; guard++)
+        {
+            bool night = t >= NightStart && t < NightEnd;
+            float edge = night ? NightEnd : (t < NightStart ? NightStart : NightStart + ClipLength);
+            float step = Mathf.Min(left, edge - t);
+            total += step * (night ? nightRate : dayRate);
+            left -= step;
+            t = Mathf.Repeat(t + step, ClipLength);
+        }
+        return total;
+    }
+
     // The Sun God's COME TO THE LIGHT: the night never comes (dusk skips straight to the morning)
     public static bool NightBanned => Boons.Has("cometothelight");
 
@@ -102,6 +126,11 @@ public class DayNight : MonoBehaviour
         float clipSeconds = night ? NightEnd - NightStart : ClipLength - (NightEnd - NightStart);
         float realSeconds = Mathf.Max(10f, (night ? NightMinutes : DayMinutes) * 60f);
         animator.speed = clipSeconds / StateSpeed / realSeconds;
+
+        // for the HUD clock: real seconds until the day / night flips (IsNight flips halfway through dusk / dawn)
+        float flipAt = IsNight ? (NightFullEnd + 38.3f) / 2f : (NightStart + NightFull) / 2f;
+        SecondsToFlip = RealSecondsBetween(t, flipAt);
+        PhaseLength = IsNight ? RealSecondsBetween((NightStart + NightFull) / 2f, flipAt) : RealSecondsBetween((NightFullEnd + 38.3f) / 2f, flipAt);
 
         if (t < NightStart || t >= 38.3f) NightAmount = 0f;
         else if (t < NightFull) NightAmount = Mathf.SmoothStep(0f, 1f, (t - NightStart) / (NightFull - NightStart));

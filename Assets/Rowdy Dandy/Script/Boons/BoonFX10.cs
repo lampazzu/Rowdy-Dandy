@@ -88,6 +88,7 @@ public class WeaponTricks : MonoBehaviour
         if (kind == 0 && w == 3 && Boons.Has("butcher")) t.StartCoroutine(t.ExtraChops());
         if (kind == 1 && w == 3 && Boons.Has("slices")) t.slicesArmedUntil = Time.time + 0.9f;
         if (kind == 1 && w == 2 && Boons.Has("quake")) t.quakeArmedUntil = Time.time + 2f;
+        if (kind == 0 && w == 2 && Boons.Has("skewer")) t.StartCoroutine(t.SkewerThrust());
         if (kind == 1 && w == 1 && Boons.Has("dizzy")) { t.dizzy = true; t.dizzyReplayTimer = 0.22f; }
         if (kind == 2 && w == 2 && Boons.Has("skybeam")) SkySpear.Summon(t.Center, t.Facing, Boons.V("skybeam", 0) + t.HitWorth(2) * 0.3f);
         if (kind == 2 && w == 3 && Boons.Has("apron")) t.RaiseApron();
@@ -165,7 +166,47 @@ public class WeaponTricks : MonoBehaviour
         ScreenShake.Impulse(0.25f);
     }
 
+    // ---------------------------------------------------------------- Skewer (naginata ground thrust)
+    // The thrust runs straight through every enemy in a line in front of Rowdy. Each one further down the line takes
+    // +X% more than the one before (1st x1, 2nd x1+X, 3rd x1+2X...). The blade's own hitbox already struck the nearest
+    // ones: those only get the extra part.
+    private IEnumerator SkewerThrust()
+    {
+        yield return new WaitForSeconds(0.14f); // the thrust's hit frame (the blade's own hits land first)
+        if (Boons.ActiveWeapon != 2 || Werewolf.Active || StephmossForm.Active) yield break;
+        float f = Facing;
+        const float reach = 3.6f;
+        Vector3 from = Center + new Vector3(f * 0.2f, 0f, 0f);
+        var line = new List<EnemyHealth>(BoonFX.EnemiesInBox(from + new Vector3(f * reach / 2f, 0f, 0f), new Vector2(reach, 1.15f)));
+        if (line.Count == 0) yield break;
+        line.Sort((a, b) => Mathf.Abs(BoonFX.Center(a).x - from.x).CompareTo(Mathf.Abs(BoonFX.Center(b).x - from.x)));
+        float step = Boons.V("skewer", 0) / 100f, worth = HitWorth(2);
+        Vector3 end = BoonFX.Center(line[line.Count - 1]);
+        Lines.Flash(from, new Vector3(end.x + f * 0.6f, from.y, 0f), Color.white, new Color(0.75f, 0.85f, 1f, 0f), 3f / 64f, 0.16f);
+        int pierced = 0;
+        for (int i = 0; i < line.Count; i++)
+        {
+            EnemyHealth e = line[i];
+            if (e == null || e.enemydead) continue;
+            float dmg = swingHit.Contains(e) ? worth * step * i : worth * (1f + step * i);
+            if (dmg >= 1f) AutoHit(e, dmg, "Skewer");
+            Vector3 c = BoonFX.Center(e);
+            FXParticle.Burst(c, BoonFX.Steel, 6 + 2 * i, 1f, 3f + i, 4f, 0.3f);
+            Blood.Spill(c, f, 2 + i);
+            pierced++;
+        }
+        if (pierced >= 2)
+        {
+            BoonFX.Popup(end + Vector3.up * 0.7f, "PIERCE X" + pierced, new Color(0.85f, 0.92f, 1f), 0.6f + 0.08f * pierced, 0.8f);
+            BoonArt art = BoonArt.Get;
+            if (art != null) { BoonArt.Play(art.clang, 0.45f, 1.2f + 0.1f * pierced); BoonArt.Play(art.whoosh, 0.3f, 1.5f); }
+            TimeSlowController.HitStop(0.03f + 0.01f * pierced, 0.06f);
+            ScreenShake.Impulse(0.15f + 0.05f * pierced);
+        }
+    }
+
     // ---------------------------------------------------------------- Ground Breaker (naginata jump attack landing)
+    // The quake only hurts enemies standing on the ground: flyers, jumpers and anything in the air are safe.
     private void Quake()
     {
         Vector3 f = Feet;
@@ -175,9 +216,25 @@ public class WeaponTricks : MonoBehaviour
         {
             BoonArt.Play(art.bigBoom, 0.55f, 0.7f);
             BoonArt.Play(art.rockBreak, 0.5f, 0.8f);
-            if (art.groundPound != null) BoonFX.Sheet(art.groundPound, 12, f, 24f, 1f, new Color(1f, 0.85f, 0.6f), null, false, BoonFX.Order + 1, new Vector2(0.5f, 0.2f));
+            // the cracks run along the floor as far as it goes (one crack sprite every 1.8 units, rippling out from
+            // the impact), stay a moment and fade away slowly
+            if (art.groundPound != null)
+            {
+                GroundShock.FloorSpan(f, 3.6f, out float spanL, out float spanR);
+                Texture2D crack = art.groundPound;
+                for (float x = -Mathf.Floor(spanL / 1.8f) * 1.8f; x <= spanR + 0.01f; x += 1.8f)
+                {
+                    float px = f.x + x;
+                    Vector3 at = SolidGround.Ray(new Vector2(px, f.y + 0.5f), Vector2.down, 1.2f, out RaycastHit2D g) ? (Vector3)g.point : new Vector3(px, f.y, 0f);
+                    BoonRunner.Delay(Mathf.Abs(x) * 0.06f, () =>
+                    {
+                        SheetFX fx = BoonFX.Sheet(crack, 12, at, 24f, 1f, new Color(1f, 0.85f, 0.6f), null, false, BoonFX.Order + 1, new Vector2(0.5f, 0.2f));
+                        if (fx != null) fx.HoldLastFrame(0.5f, 1.2f);
+                    });
+                }
+            }
         }
-        GroundShock.Spawn(f, 3.6f, new Color(1f, 0.85f, 0.55f), new Color(0.5f, 0.38f, 0.25f), 0.5f);
+        GroundShock.Spawn(f, 3.6f, new Color(1f, 0.85f, 0.55f), new Color(0.5f, 0.38f, 0.25f), 1.6f);
         FXParticle.Burst(f + Vector3.up * 0.1f, new Color(0.6f, 0.45f, 0.3f), 28, 2f, 6f, 12f, 0.7f, true);
         ScreenShake.Impulse(1f);
         GamepadRumble.Pulse(0.9f, 0.6f, 0.3f);
@@ -185,12 +242,27 @@ public class WeaponTricks : MonoBehaviour
         int n = 0;
         foreach (EnemyHealth e in BoonFX.EnemiesIn(f + Vector3.up * 0.4f, 3.6f))
         {
+            if (!OnGround(e)) continue;
             AutoHit(e, dmg, "Ground Breaker");
             BoonFX.Stun(e, 1.5f);
             BoonFX.Push(e, new Vector2(0f, 5f));
             n++;
         }
         if (n > 0) FXSound.Play("Stun", 0.7f, 1f);
+    }
+
+    // Standing on solid ground right now: has gravity (flyers don't) and there's floor just under its collider
+    private static bool OnGround(EnemyHealth e)
+    {
+        if (e == null) return false;
+        Rigidbody2D body = e.GetComponentInParent<Rigidbody2D>();
+        if (body == null) body = e.transform.root.GetComponentInChildren<Rigidbody2D>();
+        if (body != null && body.bodyType == RigidbodyType2D.Dynamic && body.gravityScale < 0.05f) return false; // a flyer
+        if (body != null && body.linearVelocity.y > 1.5f) return false;                                         // jumping up
+        Collider2D col = e.GetComponent<Collider2D>();
+        if (col == null) col = e.GetComponentInChildren<Collider2D>();
+        Vector2 feet = col != null ? new Vector2(col.bounds.center.x, col.bounds.min.y) : (Vector2)e.transform.position;
+        return SolidGround.Ray(feet + Vector2.up * 0.15f, Vector2.down, 0.5f, out _);
     }
 
     // ---------------------------------------------------------------- Meat Shield (cleaver down + attack; id "apron")
@@ -392,8 +464,17 @@ public class WeaponTricks : MonoBehaviour
     {
         bool on = Boons.Has("onrush") && Boons.ActiveWeapon == 2 && grounded && GameInput.Held(GameInput.Act.Attack) && !Werewolf.Active && !GameInput.HoldingDown;
         if (!on) { onrushHeld = 0f; return; }
+        bool starting = onrushHeld < 0.2f;
         onrushHeld += dt;
         if (onrushHeld < 0.2f) return; // a tap is a normal swing
+        if (starting)
+        {
+            // the drill revs up
+            BoonArt startArt = BoonArt.Get;
+            if (startArt != null) { BoonArt.Play(startArt.whoosh, 0.45f, 1.5f); BoonArt.Play(startArt.clang, 0.3f, 1.3f); }
+        }
+        // a steady metal whirr while drilling (whooshes back to back)
+        BoonSfx.Play("onrushwhirr", a => a.whoosh, 0.18f, 2.1f, 0.16f);
         // the drill: the swing replays nonstop, a hit every 0.08 s on the closest enemy in front (no piercing)
         onrushAnimTimer -= dt;
         if (onrushAnimTimer <= 0f && anim != null) { onrushAnimTimer = 0.14f; anim.Play("Attack", 0, 0.3f); }
@@ -415,7 +496,8 @@ public class WeaponTricks : MonoBehaviour
         Vector3 c = BoonFX.Center(best);
         Lines.Flash(Center + new Vector3(Facing * 0.3f, 0f, 0f), c + new Vector3(Facing * 0.3f, Random.Range(-0.1f, 0.1f), 0f), Color.white, new Color(0.8f, 0.9f, 1f, 0f), 2f / 64f, 0.06f);
         FXParticle.Burst(c, BoonFX.Steel, 3, 1f, 3f, 4f, 0.2f);
-        if (Random.value < 0.35f) BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.clang : null, 0.12f, Random.Range(1.7f, 2f));
+        BoonSfx.Play("onrushhit", a => a.clang, 0.26f, Random.Range(1.7f, 2.05f), 0.07f); // every drill hit rings
+        if (Random.value < 0.3f) BoonSfx.Play("onrushflesh", a => a.squish, 0.15f, 1.8f, 0.15f);
         ScreenShake.Impulse(0.05f);
     }
 
@@ -1145,7 +1227,7 @@ public class SpecialBoons : MonoBehaviour
             if (Rain) StartCoroutine(IngredientRain());
             else
             {
-                activeLength = Boons.V("senbonzakura", 0) + Senbonzakura.FinaleSeconds;
+                activeLength = Boons.V("senbonzakura", 0) + Senbonzakura.FinaleSeconds + Senbonzakura.IntroScaled;
                 activeUntil = Time.time + activeLength;
                 Senbonzakura.Begin(Boons.V("senbonzakura", 0));
             }
@@ -1338,7 +1420,7 @@ public class Senbonzakura : MonoBehaviour
         {
             SpriteRenderer sr = BoonFX.MakeRenderer("Petal", art[i % art.Length], rc, BoonFX.Order + 6 + (i % 3), transform, CatFX.Unlit);
             petals[i] = sr;
-            // the release: they burst out of his blade in a spiral
+            sr.enabled = false; // hidden until the giant blades scatter (the intro)
             float a = i * 0.618f * Mathf.PI * 2f;
             pos[i] = rc + new Vector3(Mathf.Cos(a), Mathf.Sin(a), 0f) * Random.Range(0.1f, 0.5f);
             lag[i] = Mathf.Pow(i / (float)Count, 0.8f);
@@ -1353,24 +1435,301 @@ public class Senbonzakura : MonoBehaviour
             glow.transform.SetParent(transform, false);
             glow.lightType = Light2D.LightType.Point;
             glow.color = Pink;
-            glow.intensity = 0.9f;
+            glow.intensity = 0.2f;
             glow.pointLightOuterRadius = 2.2f;
         }
         catch { }
-        BoonArt art2 = BoonArt.Get;
-        if (art2 != null) { BoonArt.Play(art2.clang, 0.6f, 0.55f); BoonArt.Play(art2.sparkle, 0.6f, 1.2f); BoonArt.Play(art2.whoosh, 0.6f, 0.7f); }
-        PulseRing.Spawn(rc, new Color(Pink.r, Pink.g, Pink.b, 1f), 2.4f, 0.5f);
-        PulseRing.Spawn(rc, new Color(1f, 1f, 1f, 0.8f), 1.2f, 0.3f);
-        ScreenShake.Impulse(0.5f);
-        GamepadRumble.Pulse(0.4f, 0.8f, 0.3f);
-        TimeSlowController.HitStop(0.12f, 0.05f);
+        BeginIntro(rc);
     }
 
-    private void OnDestroy() { if (current == this) current = null; }
+    private void OnDestroy()
+    {
+        if (current == this) current = null;
+        CleanIntro();
+    }
+
+    // ---------------------------------------------------------------- BANKAI (the intro, like the anime)
+    // The world slows to a crawl and darkens around Rowdy, a pink aura rises off him. He drops his blade point first:
+    // it sinks into the ground with ripples. Then two rows of giant blades rise out of the ground on both sides of him,
+    // one after another, outward - the ground shakes. A beat of stillness... and the giant blades scatter into a
+    // thousand petals: the stream begins. Rowdy can't be hurt during it.
+    public const float IntroSeconds = 2.2f;   // real time (the world is in slow motion meanwhile)
+    public const float IntroScaled = 1f;      // about the same in game time (SpecialBoons' meter)
+    private static readonly float[] GiantOffsets = { 0.9f, 1.7f, 2.5f, 3.3f, 4.1f };
+    private const float DropAt = 0.25f, LandAt = 0.5f, RiseFrom = 0.8f, RiseEvery = 0.09f, RiseTime = 0.2f;
+
+    private class Giant { public SpriteRenderer sr; public GameObject mask; public float x, ground, at; public bool up; }
+    private readonly List<Giant> giants = new List<Giant>();
+    private float introT = -1f, sparkAt, rumbleAt;
+    private SpriteRenderer drop, dim;
+    private GameObject dropMask;
+    private SpriteOutline aura;
+    private float dropGround;
+    private bool landed, named;
+    private static Sprite giantArt, dropArt, maskArt;
+
+    private void BeginIntro(Vector3 rc)
+    {
+        introT = 0f;
+        TimeSlowController.SlowMotion(IntroSeconds + 0.35f, 0.22f);
+        Transform rowdy = BoonRunner.Rowdy;
+        if (rowdy != null && rowdy.TryGetComponent(out Health h)) h.GrantInvulnerability(IntroScaled + 0.6f);
+        SpriteRenderer body = rowdy != null ? rowdy.GetComponent<SpriteRenderer>() : null;
+        if (body != null) aura = SpriteOutline.Add(body, Color.clear, 1, -7);
+
+        // the world goes dark around him (drawn just under Rowdy: he, the blades and the petals stay bright)
+        dim = BoonFX.MakeRenderer("Bankai Dim", BoonFX.Pixel, rc, body != null ? body.sortingOrder - 1 : BoonFX.Order - 1, transform, CatFX.Unlit);
+        dim.color = Color.clear;
+
+        Vector3 feet = BoonRunner.RowdyFeet;
+        dropGround = SolidGround.Ray(feet + Vector3.up * 0.4f, Vector2.down, 3f, out RaycastHit2D g) ? g.point.y : feet.y;
+        float facing = BoonRunner.RowdyFacing;
+        // the giant blades: both sides, from the middle outward, on whatever floor is there
+        for (int k = 0; k < GiantOffsets.Length; k++)
+            foreach (float side in new[] { facing, -facing })
+            {
+                float x = rc.x + side * GiantOffsets[k];
+                float ground = SolidGround.Ray(new Vector2(x, dropGround + 1.5f), Vector2.down, 4f, out RaycastHit2D gh) ? gh.point.y : dropGround;
+                giants.Add(new Giant { x = x, ground = ground, at = RiseFrom + RiseEvery * k + (side == facing ? 0f : 0.04f) });
+            }
+        Banner.Show("BANKAI", null, Pink, 1.1f);
+        BoonArt art = BoonArt.Get;
+        if (art != null) { BoonArt.Play(art.clang, 0.6f, 0.45f); BoonArt.Play(art.whoosh, 0.45f, 0.5f); BoonArt.Play(art.wolfTransform, 0.25f, 1.6f); }
+        GamepadRumble.Pulse(0.3f, 0.4f, 0.4f);
+    }
+
+    private void Intro(float dt)
+    {
+        introT += dt;
+        Vector3 rc = BoonRunner.RowdyCenter;
+        Camera cam = Camera.main;
+        BoonArt art = BoonArt.Get;
+
+        // darkness in, out again at the very end
+        float dark = Mathf.Clamp01(introT / 0.35f) * Mathf.Clamp01((IntroSeconds - introT) / 0.2f);
+        if (dim != null && cam != null)
+        {
+            float h = cam.orthographicSize * 2f + 2f, w = h * cam.aspect + 2f;
+            dim.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, 0f);
+            dim.transform.localScale = new Vector3(w * 64f, h * 64f, 1f);
+            dim.color = new Color(0.06f, 0.01f, 0.05f, 0.55f * dark);
+        }
+
+        // the aura: a pink outline that beats faster and faster, petals of light rising off him, the glow swelling
+        float beat = 0.5f + 0.5f * Mathf.Sin(introT * Mathf.Lerp(8f, 30f, introT / IntroSeconds));
+        if (aura != null) aura.color = new Color(Pink.r, Pink.g, Pink.b, (0.4f + 0.5f * beat) * dark);
+        if (glow != null) { glow.transform.position = rc; glow.intensity = Mathf.Lerp(0.2f, 1.6f, introT / IntroSeconds) * (0.8f + 0.2f * beat); }
+        if (introT >= sparkAt)
+        {
+            sparkAt = introT + 0.03f;
+            Vector3 p = rc + new Vector3(Random.Range(-0.45f, 0.45f), Random.Range(-0.6f, 0.2f), 0f);
+            FXParticle.Burst(p, Random.value < 0.3f ? Color.white : Pink, 1, 0.2f, 0.8f, -4f, 0.7f);
+        }
+
+        // the blade: dropped point first from his hand, it sinks into the ground
+        if (introT >= DropAt && drop == null && !landed)
+        {
+            drop = BoonFX.MakeRenderer("Dropped Blade", DropArt, rc + Vector3.up * 0.5f, BoonFX.Order + 5, transform, CatFX.Unlit);
+            drop.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+            dropMask = GroundMask(rc.x, dropGround, 0.4f);
+            if (art != null) BoonArt.Play(art.whoosh, 0.35f, 1.4f);
+        }
+        if (drop != null)
+        {
+            float len = drop.sprite.bounds.size.y;
+            float tip;
+            if (introT < LandAt) { float k = Mathf.Clamp01((introT - DropAt) / (LandAt - DropAt)); tip = Mathf.Lerp(rc.y + 0.2f, dropGround, k * k); }
+            else tip = Mathf.Lerp(dropGround, dropGround - len * 0.85f, Mathf.Clamp01((introT - LandAt) / 0.35f)); // sinking
+            drop.transform.position = new Vector3(Mathf.Round(rc.x * 64f) / 64f, Mathf.Round(tip * 64f) / 64f, 0f);
+            if (introT >= LandAt && !landed)
+            {
+                landed = true;
+                Vector3 at = new Vector3(rc.x, dropGround + 0.03f, 0f);
+                for (int i = 0; i < 3; i++)
+                {
+                    int k = i;
+                    BoonRunner.Delay(0.05f * k, () => PulseRing.Spawn(at, new Color(Pink.r, Pink.g, Pink.b, 0.9f - 0.2f * k), 1.4f + 1.1f * k, 0.5f, BoonFX.Order + 4, true));
+                }
+                FXParticle.Burst(at, Pink, 14, 1f, 3f, 6f, 0.5f, true);
+                if (art != null) { BoonArt.Play(art.clang, 0.7f, 0.6f); BoonArt.Play(art.rockBreak, 0.35f, 0.7f); }
+                ScreenShake.Impulse(0.35f);
+                GamepadRumble.Pulse(0.5f, 0.5f, 0.15f);
+            }
+        }
+
+        // the giant blades rise, one after another, outward from him
+        foreach (Giant gt in giants)
+        {
+            if (introT < gt.at) continue;
+            if (gt.sr == null)
+            {
+                gt.sr = BoonFX.MakeRenderer("Giant Blade", GiantArt, new Vector3(gt.x, gt.ground - 3f, 0f), BoonFX.Order + 4, transform, ItemArt.Lit);
+                gt.sr.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                gt.sr.flipX = gt.x < rc.x;
+                gt.mask = GroundMask(gt.x, gt.ground, 0.6f);
+                FXParticle.Burst(new Vector3(gt.x, gt.ground + 0.05f, 0f), new Color(0.6f, 0.45f, 0.35f), 10, 1.5f, 4f, 10f, 0.5f, true);
+                FXParticle.Burst(new Vector3(gt.x, gt.ground + 0.1f, 0f), Pink, 6, 1f, 3f, 3f, 0.5f, true);
+                BoonSfx.Play("bankairise", a => a.rockBreak, 0.4f, 0.8f, 0.06f);
+                BoonSfx.Play("bankaiclang", a => a.clang, 0.3f, 0.7f, 0.06f);
+                ScreenShake.Impulse(0.18f);
+            }
+            float len = gt.sr.sprite.bounds.size.y;
+            float k = Mathf.Clamp01((introT - gt.at) / RiseTime);
+            float y = Mathf.Lerp(gt.ground - len - 0.05f, gt.ground - len * 0.12f, 1f - (1f - k) * (1f - k));
+            float shake = k < 1f ? Mathf.Round(Random.Range(-1f, 1f)) / 64f : 0f;
+            gt.sr.transform.position = new Vector3(Mathf.Round(gt.x * 64f) / 64f + shake, Mathf.Round(y * 64f) / 64f, 0f);
+            if (k >= 1f && !gt.up) { gt.up = true; PulseRing.Spawn(new Vector3(gt.x, gt.ground + 0.03f, 0f), new Color(1f, 0.85f, 0.95f, 0.8f), 0.6f, 0.25f, BoonFX.Order + 3, true); }
+        }
+        if (introT >= RiseFrom && introT < RiseFrom + RiseEvery * GiantOffsets.Length + RiseTime && introT >= rumbleAt)
+        {
+            rumbleAt = introT + 0.12f;
+            GamepadRumble.Pulse(0.35f, 0.8f, 0.12f);
+        }
+        if (!named && introT >= RiseFrom + RiseEvery * GiantOffsets.Length + 0.2f)
+        {
+            named = true;
+            Banner.Show("SENBONZAKURA KAGEYOSHI", null, Pink, 0.9f);
+        }
+
+        if (introT >= IntroSeconds) Release();
+    }
+
+    // The giant blades scatter: every one bursts into the petals, and the stream begins
+    private void Release()
+    {
+        introT = -1f;
+        age = 0f;
+        Vector3 rc = BoonRunner.RowdyCenter;
+        for (int i = 0; i < Count; i++)
+        {
+            Giant g = giants.Count > 0 ? giants[i % giants.Count] : null;
+            if (g != null && g.sr != null)
+            {
+                float len = g.sr.sprite.bounds.size.y;
+                pos[i] = new Vector3(g.x + Random.Range(-0.12f, 0.12f), g.ground + Random.Range(0.1f, len * 0.85f), 0f);
+            }
+            petals[i].enabled = true;
+            petals[i].transform.position = pos[i];
+        }
+        foreach (Giant g in giants)
+            if (g.sr != null)
+            {
+                g.sr.maskInteraction = SpriteMaskInteraction.None;
+                Shard.Break(g.sr, 2, 6, g.sr.bounds.center, 2.5f);
+                FXParticle.Burst(g.sr.bounds.center, Pink, 8, 1.5f, 4f, 1f, 0.6f);
+            }
+        head = rc + new Vector3(BoonRunner.RowdyFacing * 0.5f, 0.6f, 0f);
+        BoonArt art = BoonArt.Get;
+        if (art != null) { BoonArt.Play(art.glassBreak, 0.55f, 1.3f); BoonArt.Play(art.sparkle, 0.7f, 1.1f); BoonArt.Play(art.whoosh, 0.6f, 0.7f); }
+        PulseRing.Spawn(rc, new Color(Pink.r, Pink.g, Pink.b, 1f), 3.2f, 0.5f);
+        PulseRing.Spawn(rc, new Color(1f, 1f, 1f, 0.8f), 1.6f, 0.3f);
+        ScreenShake.Impulse(0.6f);
+        GamepadRumble.Pulse(0.6f, 0.9f, 0.3f);
+        TimeSlowController.HitStop(0.1f, 0.05f);
+        CleanIntro();
+    }
+
+    private void CleanIntro()
+    {
+        foreach (Giant g in giants) { if (g.sr != null) Destroy(g.sr.gameObject); if (g.mask != null) Destroy(g.mask); }
+        giants.Clear();
+        if (drop != null) Destroy(drop.gameObject);
+        if (dropMask != null) Destroy(dropMask);
+        if (dim != null) Destroy(dim.gameObject);
+        if (aura != null) Destroy(aura.gameObject);
+    }
+
+    // Hides everything under the floor line (for the blades that sink in / rise out)
+    private static GameObject GroundMask(float x, float ground, float width)
+    {
+        var go = new GameObject("Bankai Ground Mask");
+        go.transform.position = new Vector3(x, ground, 0f);
+        go.AddComponent<SpriteMask>().sprite = MaskArt;
+        go.transform.localScale = new Vector3(width, 5f, 1f);
+        return go;
+    }
+
+    private static Sprite MaskArt
+    {
+        get
+        {
+            if (maskArt != null) return maskArt;
+            var tex = new Texture2D(4, 4, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, name = "BankaiMask" };
+            var px = new Color32[16];
+            for (int i = 0; i < 16; i++) px[i] = new Color32(255, 255, 255, 255);
+            tex.SetPixels32(px);
+            tex.Apply(false, true);
+            maskArt = Sprite.Create(tex, new Rect(0, 0, 4, 4), new Vector2(0.5f, 1f), 4f); // 1 x 1 unit, pivot top middle
+            return maskArt;
+        }
+    }
+
+    // A giant blade standing point up, 11 x 112 px, pivot at the bottom of its hilt
+    private static Sprite GiantArt
+    {
+        get
+        {
+            if (giantArt != null) return giantArt;
+            const int h = 112;
+            var rows = new string[h];
+            for (int y = 0; y < h; y++)
+            {
+                if (y == 0) rows[y] = ".....W.....";
+                else if (y < 3) rows[y] = "....WSk....";
+                else if (y < 7) rows[y] = "...WSSPk...";
+                else if (y < 90) rows[y] = (y % 9 == 4) ? "..WSSSPPk.." : "..WSSSSPk..";
+                else if (y < 94) rows[y] = y == 90 || y == 93 ? "kkkkkkkkkkk" : "kGGGGGGGGGk";
+                else rows[y] = (y % 3 == 0) ? "....kHk...." : "....HkH....";
+            }
+            giantArt = BoonFX.FromRows("BankaiGiantBlade", rows, c =>
+            {
+                switch (c)
+                {
+                    case 'W': return new Color32(255, 250, 252, 255);
+                    case 'S': return new Color32(205, 205, 222, 255);
+                    case 'P': return new Color32(255, 150, 200, 255);
+                    case 'k': return new Color32(40, 18, 44, 255);
+                    case 'G': return new Color32(232, 180, 64, 255);
+                    case 'H': return new Color32(125, 32, 64, 255);
+                }
+                return new Color32(0, 0, 0, 0);
+            }, new Vector2(0.5f, 0f));
+            return giantArt;
+        }
+    }
+
+    // Rowdy's own blade, point down, 5 x 40 px, pivot at the tip
+    private static Sprite DropArt
+    {
+        get
+        {
+            if (dropArt != null) return dropArt;
+            const int h = 40;
+            var rows = new string[h];
+            for (int y = 0; y < h; y++)
+            {
+                if (y < 7) rows[y] = (y % 2 == 0) ? "..H.." : ".kHk.";
+                else if (y < 9) rows[y] = "kGGGk";
+                else if (y < 37) rows[y] = ".WSP.";
+                else if (y < 39) rows[y] = "..WS.";
+                else rows[y] = "..W..";
+            }
+            dropArt = BoonFX.FromRows("BankaiDroppedBlade", rows, c =>
+                c == 'W' ? new Color32(255, 250, 252, 255) : c == 'S' ? new Color32(205, 205, 222, 255) : c == 'P' ? new Color32(255, 150, 200, 255)
+                : c == 'k' ? new Color32(40, 18, 44, 255) : c == 'G' ? new Color32(232, 180, 64, 255) : c == 'H' ? new Color32(125, 32, 64, 255) : new Color32(0, 0, 0, 0),
+                new Vector2(0.5f, 0f));
+            return dropArt;
+        }
+    }
 
     private void Update()
     {
         if (BoonRunner.Rowdy == null) { Destroy(gameObject); return; }
+        if (introT >= 0f)
+        {
+            if (!PauseMenu.IsPaused) Intro(Time.unscaledDeltaTime);
+            return;
+        }
         float dt = Time.deltaTime;
         age += dt;
         Vector3 rc = BoonRunner.RowdyCenter;

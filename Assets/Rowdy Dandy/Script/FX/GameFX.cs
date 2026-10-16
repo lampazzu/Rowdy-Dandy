@@ -181,6 +181,17 @@ public class SheetFX : MonoBehaviour
     }
     private float fadeTime = 0.15f;
 
+    // Plays once, then holds the last frame for 'hold' seconds and fades over 'fade' (cracks that linger)
+    private bool holdLast;
+    private float holdTime;
+    public SheetFX HoldLastFrame(float hold, float fade)
+    {
+        holdLast = true;
+        holdTime = Mathf.Max(0f, hold);
+        fadeTime = Mathf.Max(0.01f, fade);
+        return this;
+    }
+
     private void LateUpdate()
     {
         age += unscaled ? Time.unscaledDeltaTime : Time.deltaTime;
@@ -190,14 +201,22 @@ public class SheetFX : MonoBehaviour
         int f = (int)(age * fps);
         if (f >= frames.Length)
         {
-            if (!loop && fadeOutAt < 0f) { Destroy(gameObject); return; }
-            f %= frames.Length;
+            if (holdLast)
+            {
+                f = frames.Length - 1; // stays on its last frame, then fades out slowly
+                if (fadeOutAt < 0f) fadeOutAt = age + holdTime;
+            }
+            else
+            {
+                if (!loop && fadeOutAt < 0f) { Destroy(gameObject); return; }
+                f %= frames.Length;
+            }
         }
         sr.sprite = frames[f];
 
         if (fadeOutAt >= 0f)
         {
-            float k = 1f - (age - fadeOutAt) / fadeTime;
+            float k = Mathf.Min(1f, 1f - (age - fadeOutAt) / fadeTime);
             if (k <= 0f) { Destroy(gameObject); return; }
             sr.color = new Color(color.r, color.g, color.b, color.a * k);
         }
@@ -275,25 +294,50 @@ public class SpriteOutline : MonoBehaviour
 
 // Side-on shockwave along the ground (stomps): a thin bright line racing out left and right from the impact,
 // with dust crests at its two fronts kicking pixels up. Reads right on thin 2D platforms (no ellipses).
+// It runs only as far as the floor really goes (stops at a drop or a wall), and lingers, fading out slowly.
 public class GroundShock : MonoBehaviour
 {
     private static Sprite pixel;
     private SpriteRenderer line, crestL, crestR;
-    private float age, life, reach;
+    private float age, life, reachL, reachR;
     private Color color, dust;
     private float debrisTimer;
+    private const float Spread = 0.3f; // the fronts race out in this long; the rest of the life is the slow fade
 
     public static GroundShock Spawn(Vector3 groundPoint, float reach, Color color, Color dust, float life = 0.45f)
     {
         var go = new GameObject("Ground Shock");
         go.transform.position = new Vector3(Mathf.Round(groundPoint.x * 64f) / 64f, Mathf.Round(groundPoint.y * 64f) / 64f, 0f);
         var g = go.AddComponent<GroundShock>();
-        g.reach = reach; g.life = life; g.color = color; g.dust = dust;
+        FloorSpan(groundPoint, reach, out g.reachL, out g.reachR);
+        g.life = Mathf.Max(life, Spread + 0.6f); g.color = color; g.dust = dust;
         g.line = g.Make(9);
         g.crestL = g.Make(10);
         g.crestR = g.Make(10);
         g.Update();
         return g;
+    }
+
+    // How far the floor runs left and right of a point (up to maxReach): stops where it drops away or meets a wall
+    public static void FloorSpan(Vector3 groundPoint, float maxReach, out float left, out float right)
+    {
+        left = Walk(groundPoint, -1f, maxReach);
+        right = Walk(groundPoint, 1f, maxReach);
+    }
+
+    private static float Walk(Vector3 from, float dir, float max)
+    {
+        const float step = 0.125f;
+        float last = 0f, y = from.y;
+        for (float d = step; d <= max; d += step)
+        {
+            float x = from.x + dir * d;
+            if (SolidGround.Ray(new Vector2(x - dir * step, y + 0.35f), new Vector2(dir, 0f), step, out _)) break; // a wall
+            if (!SolidGround.Ray(new Vector2(x, y + 0.4f), Vector2.down, 0.8f, out RaycastHit2D h)) break;          // the floor ends
+            y = h.point.y;
+            last = d;
+        }
+        return last;
     }
 
     private SpriteRenderer Make(int order)
@@ -311,32 +355,33 @@ public class GroundShock : MonoBehaviour
     private void Update()
     {
         age += Time.unscaledDeltaTime;
-        float t = Mathf.Clamp01(age / life);
-        if (t >= 1f) { Destroy(gameObject); return; }
-        float ease = 1f - (1f - t) * (1f - t) * (1f - t);
-        float front = Mathf.Round(reach * ease * 64f) / 64f;
-        float fade = 1f - t;
+        if (age >= life) { Destroy(gameObject); return; }
+        float s = Mathf.Clamp01(age / Spread);
+        float ease = 1f - (1f - s) * (1f - s) * (1f - s);
+        float frontL = Mathf.Round(reachL * ease * 64f) / 64f, frontR = Mathf.Round(reachR * ease * 64f) / 64f;
+        float fade = age < Spread ? 1f : 1f - (age - Spread) / (life - Spread); // slow fade once it has spread
 
-        // the line: 2 px tall, thinning to 1 px, brightest near the fronts
-        line.transform.localScale = new Vector3(Mathf.Max(1f, front * 2f * 64f), t < 0.5f ? 2f : 1f, 1f);
-        line.transform.localPosition = new Vector3(0f, 1f / 64f, 0f);
+        // the line: 2 px tall while it spreads, then 1 px, fading slowly
+        line.transform.localScale = new Vector3(Mathf.Max(1f, (frontL + frontR) * 64f), age < Spread ? 2f : 1f, 1f);
+        line.transform.localPosition = new Vector3((frontR - frontL) / 2f, 1f / 64f, 0f);
         line.color = new Color(color.r, color.g, color.b, color.a * fade * 0.8f);
 
-        // crests: little 3x5 px dust walls at both fronts
-        foreach (var (crest, side) in new[] { (crestL, -1f), (crestR, 1f) })
+        // crests: little 3x5 px dust walls at both fronts (they settle once the fronts stop)
+        foreach (var (crest, side, front) in new[] { (crestL, -1f, frontL), (crestR, 1f, frontR) })
         {
-            crest.transform.localScale = new Vector3(3f, Mathf.Round(Mathf.Lerp(6f, 2f, t)), 1f);
-            crest.transform.localPosition = new Vector3(side * front, Mathf.Lerp(6f, 2f, t) * 0.5f / 64f, 0f);
-            crest.color = new Color(1f, 1f, 1f, fade);
+            float h = Mathf.Round(Mathf.Lerp(6f, 2f, s));
+            crest.transform.localScale = new Vector3(3f, h, 1f);
+            crest.transform.localPosition = new Vector3(side * front, h * 0.5f / 64f, 0f);
+            crest.color = new Color(1f, 1f, 1f, fade * fade);
         }
 
         debrisTimer -= Time.unscaledDeltaTime;
-        if (debrisTimer <= 0f && t < 0.8f)
+        if (debrisTimer <= 0f && age < Spread + 0.15f)
         {
             debrisTimer = 0.035f;
             Vector3 p = transform.position;
-            FXParticle.Burst(p + new Vector3(-front, 0.02f, 0f), dust, 2, 0.8f, 2.2f, 10f, 0.4f, true);
-            FXParticle.Burst(p + new Vector3(front, 0.02f, 0f), dust, 2, 0.8f, 2.2f, 10f, 0.4f, true);
+            FXParticle.Burst(p + new Vector3(-frontL, 0.02f, 0f), dust, 2, 0.8f, 2.2f, 10f, 0.4f, true);
+            FXParticle.Burst(p + new Vector3(frontR, 0.02f, 0f), dust, 2, 0.8f, 2.2f, 10f, 0.4f, true);
         }
     }
 

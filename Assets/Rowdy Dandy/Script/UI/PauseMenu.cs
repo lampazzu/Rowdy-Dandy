@@ -739,8 +739,10 @@ public class PauseMenu : MonoBehaviour
         AddDevButton(panel, "First Checkpoint", ref y, DevTools.GoToFirstCheckpoint, "Reload at the start of the map", false);
         AddDevButton(panel, "Last Checkpoint", ref y, DevTools.GoToLastCheckpoint, "Reload at the right-most checkpoint (Pelich)", false);
         AddDevButton(panel, "Saved Checkpoint", ref y, DevTools.GoToSavedCheckpoint, "Reload at the checkpoint you touched last", false);
+        AddDevButton(panel, "The Frontier", ref y, DevTools.GoToFrontierCheckpoint, "Reload at the checkpoint by the first colosseum", false);
         AddDevButton(panel, "The Gloomwood", ref y, GloomArena.DevTravel, "Unseal the Gloom Gate and jump into the second colosseum", false);
         AddDevButton(panel, "The Purple Reign", ref y, GloomArena.DevTravelViolet, "Unseal every gate and jump into the third colosseum", false);
+        AddDevButton(panel, "Dandy School", ref y, TutorialLevel.DevTravel, "Jump into the tutorial level", false);
         AddHeader(devRows, panel, "Boons", ref y);
         AddDevButton(panel, "Offer A Boon", ref y, Boons.DevOfferPick, "Opens the boon picker (one extra pick)", false);
         AddDevButton(panel, "Hair Gel +3", ref y, () => Boons.AddRerolls(3), "Three rerolls for the boon cards", true);

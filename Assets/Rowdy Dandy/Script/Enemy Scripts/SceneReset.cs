@@ -34,6 +34,7 @@ public class SceneReset : MonoBehaviour
         Transform best = null;
         foreach (RespawnTrigger checkpoint in FindObjectsByType<RespawnTrigger>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
+            if (FrontierArena.InGloom(checkpoint.transform.position)) continue; // the tutorial level / colosseums
             if (best == null || checkpoint.transform.position.x < best.position.x) best = checkpoint.transform;
         }
         return best;

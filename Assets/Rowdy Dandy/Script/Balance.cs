@@ -144,24 +144,10 @@ public static class Balance
     public static float WipeoutWallBonus => 1.4f;
     public static Vector2 WipeoutFling => new Vector2(1.5f, 2f);
 
-    // Numbers per boon: { values[0] per rarity, values[1]... } - missing = the BoonCatalog values
+    // A boon's number, overriding BoonCatalog: { id, new[] { new float[] { value } } }. Every boon has ONE number now
+    // (2026-10-15: the rarity no longer scales boons, it only says how strong a boon is), set in BoonCatalog.
     public static readonly Dictionary<string, float[][]> BoonValues = new Dictionary<string, float[][]>
     {
-        { "hairflip",    new[] { new float[] { 8, 12, 16 } } },        // Lamp 18 / 26 / 36
-        { "admire",      new[] { new float[] { 2f, 2.4f, 2.8f } } },   // Lamp x2.5 / 3 / 3.5
-        { "mainchar",    new[] { new float[] { 3, 4, 5 } } },          // Lamp 6 / 8 / 10% per rank (60% at SSS)
-        { "wipeout",     new[] { new float[] { 10, 14, 18 } } },       // Lamp 20 / 28 / 38
-        { "hangten",     new[] { new float[] { 12, 17, 23 } } },       // Lamp 16 / 23 / 32
-        { "saltwater",   new[] { new float[] { 2, 3, 4 } } },          // Lamp 3 / 4.5 / 6
-        { "feral",       new[] { new float[] { 15, 22, 30 } } },       // Lamp 35 / 50 / 65%
-        { "moonrage",    new[] { new float[] { 15, 22, 30 } } },       // Lamp 25 / 35 / 45%
-        { "bloodthirst", new[] { new float[] { 2, 3, 5 } } },          // Lamp 4 / 6 / 9
-        { "packleader",  new[] { new float[] { 40, 60, 80 } } },       // Lamp 60 / 90 / 120%
-        { "sporestep",   new[] { new float[] { 5, 7, 10 } } },         // Lamp 8 / 12 / 16
-        { "rottenedge",  new[] { new float[] { 4, 6, 9 } } },          // Lamp 6 / 9 / 13
-        { "furcoat",     new[] { new float[] { 2, 3, 4 } } },          // Lamp 3 / 4 / 5% per cat (40% at 8 cats)
-        { "felinefury",  new[] { new float[] { 14, 20, 28 } } },       // Lamp 22 / 32 / 44
-        { "weaponsnob",  new[] { new float[] { 30, 45, 60 } } },       // Lamp 40 / 60 / 80
     };
 
     // Descriptions that changed meaning with the rebalance

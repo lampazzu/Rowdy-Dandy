@@ -6,6 +6,29 @@ using UnityEngine;
 // hair crescents, decoys, foam rings, spore clouds, lightning, ghost cats... (the newer patrons' effects are in
 // BoonFXMore.cs). Damage from here is credited to Rowdy (kill feed / stats) with the
 // boon's name.
+
+// Throttled boon sounds: every boon effect makes a sound, but a tick every frame / every hit would be noise.
+// One key per effect; the same key won't play again within 'gap' seconds. Pitch gets a little random spread.
+public static class BoonSfx
+{
+    private static readonly Dictionary<string, float> last = new Dictionary<string, float>();
+
+    public static void Play(string key, AudioClip clip, float volume, float pitch, float gap = 0.12f)
+    {
+        if (clip == null) return;
+        if (last.TryGetValue(key, out float t) && Time.unscaledTime - t < gap && Time.unscaledTime >= t) return;
+        last[key] = Time.unscaledTime;
+        BoonArt.Play(clip, volume, pitch * Random.Range(0.94f, 1.06f));
+    }
+
+    // BoonSfx.Play("halo", a => a.sizzle, 0.2f, 1.6f): picks the clip from BoonArt (nothing if it isn't loaded)
+    public static void Play(string key, System.Func<BoonArt, AudioClip> pick, float volume, float pitch, float gap = 0.12f)
+    {
+        BoonArt art = BoonArt.Get;
+        if (art != null) Play(key, pick(art), volume, pitch, gap);
+    }
+}
+
 public static class BoonFX
 {
     public const int Order = 96;
@@ -761,21 +784,35 @@ public class GhostCat : MonoBehaviour
 // ================================================================================================ Depth Charge (hangten)
 public static class Rings
 {
+    // A big juicy splash out of the ground where Rowdy lands: the game's own water splash (the one the sea makes when
+    // he dives in) at full size, a fountain of droplets, foam racing along the floor, a heavy thump.
     public static void FoamRing(Vector3 feet, float damage, bool toxic)
     {
         BoonArt art = BoonArt.Get;
-        Color foam = toxic ? BoonFX.Toxic : new Color(0.45f, 0.7f, 1f); // black water from the deep
-        GroundShock.Spawn(feet, 2.4f, foam, toxic ? new Color(0.4f, 0.8f, 0.3f) : BoonFX.Deep, 0.35f);
+        Color foam = toxic ? BoonFX.Toxic : new Color(0.55f, 0.85f, 1f);
+        Color drop = toxic ? new Color(0.5f, 1f, 0.35f) : new Color(0.35f, 0.7f, 1f);
+        GroundShock.Spawn(feet, 2.6f, foam, toxic ? new Color(0.4f, 0.8f, 0.3f) : new Color(0.3f, 0.55f, 0.95f), 0.9f);
+        WaterSplashFX splash = WaterSplashFX.Instance;
+        if (splash != null)
+        {
+            splash.PlaySplash(feet, 1f, 3f, WaterSplashFX.SplashKind.Entry);
+            splash.PlaySplash(feet + new Vector3(-0.6f, 0f, 0f), 0.7f, 1.6f, WaterSplashFX.SplashKind.Exit);
+            splash.PlaySplash(feet + new Vector3(0.6f, 0f, 0f), 0.7f, 1.6f, WaterSplashFX.SplashKind.Exit);
+        }
         if (art != null)
         {
-            BoonFX.Sheet(art.waterSonic, 9, feet + new Vector3(-0.7f, 0.35f, 0f), 24f, 1f, toxic ? new Color(0.6f, 1f, 0.45f) : new Color(0.4f, 0.6f, 1f));
-            SheetFX right = BoonFX.Sheet(art.waterSonic, 9, feet + new Vector3(0.7f, 0.35f, 0f), 24f, 1f, toxic ? new Color(0.6f, 1f, 0.45f) : new Color(0.4f, 0.6f, 1f));
-            if (right != null) right.transform.localScale = new Vector3(-1f, 1f, 1f);
+            BoonArt.Play(art.splash, 0.8f, Random.Range(0.75f, 0.85f));
             BoonArt.Play(art.waterBoom, 0.6f, Random.Range(0.85f, 1f));   // the Iara water burst
             BoonArt.Play(art.waveCrash, 0.35f, Random.Range(1.1f, 1.25f));
         }
-        FXParticle.Burst(feet, foam, 20, 2f, 5f, 10f, 0.6f, true);
-        ScreenShake.Impulse(0.35f);
+        // the fountain: a tall column of droplets falling back down, and spray out to the sides
+        FXParticle.Burst(feet + Vector3.up * 0.1f, drop, 26, 3f, 7f, 12f, 0.8f, true);
+        FXParticle.Burst(feet + Vector3.up * 0.1f, foam, 18, 2f, 5f, 10f, 0.6f, true);
+        FXParticle.Burst(feet + Vector3.up * 0.1f, Color.white, 8, 1.5f, 4f, 8f, 0.45f, true);
+        PulseRing.Spawn(feet + Vector3.up * 0.15f, new Color(drop.r, drop.g, drop.b, 0.9f), 2.4f, 0.35f, 90, true);
+        TimeSlowController.HitStop(0.05f, 0.08f);
+        ScreenShake.Impulse(0.45f);
+        GamepadRumble.Pulse(0.5f, 0.7f, 0.2f);
         foreach (EnemyHealth e in BoonFX.EnemiesIn(feet + Vector3.up * 0.4f, 2.4f))
         {
             BoonFX.Hit(e, damage, "Depth Charge");

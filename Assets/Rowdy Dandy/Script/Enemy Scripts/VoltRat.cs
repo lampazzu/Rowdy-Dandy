@@ -219,6 +219,7 @@ public class VoltRat : MonoBehaviour
         // got hit
         if (health.currentenemyHealth < lastHealth - 0.01f)
         {
+            bool realHit = PlayerDamage.hitEnemy || lastHealth - health.currentenemyHealth >= 8f; // not a poison / burn tick
             lastHealth = health.currentenemyHealth;
             Vector2 away = Rowdy != null ? ((Vector2)(transform.position - BoonRunner.RowdyCenter)).normalized : Vector2.up;
             HitFlash.Flash(this, 0.1f); // every hit flashes it white
@@ -226,9 +227,11 @@ public class VoltRat : MonoBehaviour
             if (Time.time - lastHurtSound > 0.08f)
             {
                 lastHurtSound = Time.time;
-                FXSound.Play("Jelly", 0.45f, Random.Range(1.05f, 1.3f));
-                BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.3f, Random.Range(1.3f, 1.6f));
+                FXSound.Play("Jelly", 0.55f, Random.Range(1.05f, 1.3f));
+                BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.squish : null, 0.45f, Random.Range(1.3f, 1.6f));
+                BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.plop : null, 0.25f, Random.Range(1.7f, 2f));
                 if (Random.value < 0.5f) BoonArt.Play(BoonArt.Get != null ? BoonArt.Get.zap : null, 0.15f, Random.Range(1.8f, 2.1f));
+                if (realHit) HitJuice(away);
             }
             if (health.ArmorHolds)
             {
@@ -356,4 +359,19 @@ public class VoltRat : MonoBehaviour
     }
 
     private void HideBody() { if (body != null) body.enabled = false; }
+
+    // A hit that lands (not every poison tick: throttled with the sound): a beat of hit-stop, goo splattering out the
+    // far side, a small goo burst, a ring and a little shake + rumble
+    private void HitJuice(Vector2 away)
+    {
+        Vector3 p = transform.position;
+        TimeSlowController.HitStop(0.035f, 0.08f);
+        SheetFX goo = GraftFX.Play("BRJ_Blood_Hit_Effect", p + (Vector3)(away * 0.15f), new Color(Goo.r, Goo.g, Goo.b, 0.85f), 96, null, false, away.x < 0f, 1.6f);
+        if (goo != null) goo.Stop(0.25f);
+        FXParticle.Burst(p + (Vector3)(away * 0.2f), Goo, 10, 2f, 5f, 9f, 0.55f, true);      // droplets flung away from the hit
+        FXParticle.Burst(p, new Color(1f, 0.85f, 0.8f), 5, 1f, 3f, 2f, 0.25f);
+        PulseRing.Spawn(p, new Color(1f, 0.45f, 0.4f, 0.9f), 0.7f, 0.18f);
+        ScreenShake.Impulse(0.12f);
+        GamepadRumble.Pulse(0.25f, 0.5f, 0.08f);
+    }
 }

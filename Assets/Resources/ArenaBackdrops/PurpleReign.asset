@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be7c2d9a1f64e3b8c5d7e9f0a1b2c3d, type: 3}
+  m_Name: PurpleReign
+  m_EditorClassIdentifier: Assembly-CSharp::ArenaBackdrop
+  tint: {r: 0.85, g: 0.55, b: 0.95, a: 1}
+  layers:
+  - layerName: A_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+  - layerName: B_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+  - layerName: C_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+  - layerName: D_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+  - layerName: E_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+  - layerName: F_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+  - layerName: G_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+  - layerName: H_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+  - layerName: Fog_Parallax
+    hide: 0
+    sprite: {fileID: 0}
+    overrideTint: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}

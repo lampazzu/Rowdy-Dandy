@@ -43,11 +43,12 @@ public class Parallax : MonoBehaviour
             transform.position = new Vector3(startPos + dist, transform.position.y, transform.position.z);
 
             // Adjust startPos to maintain looping with camera movement
-            if (temp > startPos + length)
+            // (while, not if: after a teleport - the colosseum portals - it catches up in one step)
+            while (length > 0f && temp > startPos + length)
             {
                 startPos += length;
             }
-            else if (temp < startPos - length)
+            while (length > 0f && temp < startPos - length)
             {
                 startPos -= length;
             }

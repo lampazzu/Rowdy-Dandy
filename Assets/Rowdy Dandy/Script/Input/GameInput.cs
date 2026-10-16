@@ -113,8 +113,13 @@ public static class GameInput
         return false;
     }
 
-    public static bool Down(Act a) { Binding b = Bindings[(int)a]; return KeysTest(b, Check.Down) || PadTest(b, Check.Down); }
-    public static bool Held(Act a) { Binding b = Bindings[(int)a]; return KeysTest(b, Check.Held) || PadTest(b, Check.Held); }
+    // Automated play tests only: press / hold a button and push left-right from code (never set by the game itself)
+    public static Act? TestHeld;
+    public static int TestDownFrame = -1;
+    public static float TestMoveX;
+
+    public static bool Down(Act a) { Binding b = Bindings[(int)a]; return KeysTest(b, Check.Down) || PadTest(b, Check.Down) || (TestHeld == a && TestDownFrame == Time.frameCount); }
+    public static bool Held(Act a) { Binding b = Bindings[(int)a]; return KeysTest(b, Check.Held) || PadTest(b, Check.Held) || TestHeld == a; }
     public static bool Up(Act a) { Binding b = Bindings[(int)a]; return KeysTest(b, Check.Up) || PadTest(b, Check.Up); }
     public static bool PadDown(Act a) => PadTest(Bindings[(int)a], Check.Down);
 
@@ -160,7 +165,7 @@ public static class GameInput
     private static float Combine(float keys, float pad) => Mathf.Abs(pad) > Mathf.Abs(keys) ? pad : keys;
 
     // Digital, like the old axes: keys / d-pad give -1, 0, 1 and so does the stick once past half way
-    public static float MoveX => Combine(KeysX, PadVector(true).x);
+    public static float MoveX => TestMoveX != 0f ? TestMoveX : Combine(KeysX, PadVector(true).x);
     public static float MoveY => Combine(KeysY, PadVector(true).y); // menus: up / W, down / S, d-pad, stick
 
     // Rowdy's "down" (duck, down + jump drops through), as before: the S key (not the down arrow), or down on a pad.
@@ -208,7 +213,7 @@ public static class GameInput
     {
         get
         {
-            float keys = KeysX;
+            float keys = TestMoveX != 0f ? TestMoveX : KeysX;
             if (smoothFrame != Time.frameCount)
             {
                 float dt = smoothFrame < 0 ? 0f : Mathf.Min(Time.unscaledTime - smoothTime, 1f);

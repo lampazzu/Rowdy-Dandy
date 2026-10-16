@@ -43,7 +43,8 @@ public class CatParty : MonoBehaviour
     private RectTransform root, row, particles, bubble;
     private CanvasGroup rootGroup, bubbleGroup;
     private Image dim, wash, flash, bubbleBox;
-    private PixelText header, subheader, hints, bubbleText, autoText;
+    private PixelText header, subheader, hints, bubbleText, autoText, infoTitle, info;
+    private Image infoPanel;
     private readonly List<Card> cards = new List<Card>();
     private readonly List<Card> leaving = new List<Card>();
     private readonly List<(Image img, Vector2 vel, float life, float age, float spin)> bits = new List<(Image, Vector2, float, float, float)>();
@@ -283,9 +284,34 @@ public class CatParty : MonoBehaviour
                 c.tag.Color = isSub ? new Color(0.75f, 0.85f, 1f) : new Color(1f, 0.85f, 0.3f);
             }
         }
+        RefreshInfo();
         autoText.SetText(GameInput.Format("{NOTES} AUTO PICK UP: " + (CatRoster.AutoPickup ? "ON" : "OFF")
                                           + "      {MAP} COMPACT CAT HUD: " + (GameSettings.CatHudCollapsed ? "ON" : "OFF")));
         autoText.Color = new Color(1f, 0.85f, 0.95f);
+    }
+
+    // The highlighted cat's attack / power, in words (from the Notes' cat pages), its cooldown and its rank's bonus
+    private void RefreshInfo()
+    {
+        if (info == null) return;
+        Card c = Selected;
+        PetFollower p = c != null ? c.pet : null;
+        infoPanel.enabled = p != null;
+        if (p == null) { infoTitle.SetText(""); info.SetText(""); return; }
+        string what = CatInfo(p.Type);
+        string rank = CatRoster.IsLeader(p) ? "  LEADER: COOLS DOWN FASTER." : CatRoster.IsSubLeader(p) ? "  SUB-LEADER: COOLS DOWN A BIT FASTER." : "";
+        infoTitle.SetText(p.CatName.ToUpperInvariant() + " - " + p.PowerName + "  (EVERY " + Mathf.RoundToInt(p.CooldownSeconds) + "S)");
+        infoTitle.Color = Color.Lerp(p.Tint, Color.white, 0.45f);
+        info.SetText(BoonPicker.Wrap(what + rank, 74));
+    }
+
+    private static string CatInfo(PetFollower.CatType t)
+    {
+        int i = (int)t;
+        if (i < 0 || i >= NotesData.Cats.Length || NotesData.Cats[i].sections == null || NotesData.Cats[i].sections.Length == 0) return "";
+        string s = NotesData.Cats[i].sections[0].Item2.ToUpperInvariant();
+        // the pixel font has no apostrophes / quotes
+        return s.Replace("'", "").Replace("\"", "");
     }
 
     private void RefreshHints()
@@ -807,8 +833,16 @@ public class CatParty : MonoBehaviour
         bubbleText = Text(bubble, "", 2, new Color(0.15f, 0.06f, 0.2f));
         Center(bubbleText.Rect, Vector2.zero);
 
+        // what the highlighted cat does (its attack / power), under the row
+        infoPanel = OverlayUI.MakePanel("Info", root);
+        Center(infoPanel.rectTransform, new Vector2(0f, -262f), new Vector2(1180f, 96f));
+        infoTitle = Text(root, "", 3, new Color(1f, 0.85f, 0.3f));
+        Center(infoTitle.Rect, new Vector2(0f, -232f));
+        info = Text(root, "", 2, new Color(0.95f, 0.92f, 1f));
+        Center(info.Rect, new Vector2(0f, -272f));
+
         autoText = Text(root, "", 3, Color.white);
-        Center(autoText.Rect, new Vector2(0f, -330f));
+        Center(autoText.Rect, new Vector2(0f, -352f));
         hints = Text(root, "", 3, new Color(0.95f, 0.9f, 1f, 0.9f));
         hints.Rect.anchorMin = hints.Rect.anchorMax = new Vector2(0.5f, 0f);
         hints.Rect.anchoredPosition = new Vector2(0f, 46f);

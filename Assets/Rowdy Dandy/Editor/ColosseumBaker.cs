@@ -67,7 +67,7 @@ public static class ColosseumBaker
     }
 
     // ---------------------------------------------------------------- make everything survive a scene save
-    private static void KeepArt(GameObject root, string title)
+    internal static void KeepArt(GameObject root, string title)
     {
         Material lit = AssetDatabase.LoadAssetAtPath<Material>(LitPath), unlit = AssetDatabase.LoadAssetAtPath<Material>(UnlitPath);
         if (!AssetDatabase.IsValidFolder("Assets/Scenery")) AssetDatabase.CreateFolder("Assets", "Scenery");

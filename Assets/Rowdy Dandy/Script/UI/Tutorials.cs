@@ -3,13 +3,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// First-time popups: the first weapon, cat, legendary rat, checkpoint, level up and nightfall each get one small
-// card that pauses the game. Few words, a bit of Rowdy. Dismiss with the face buttons / Space / Enter / E / Esc.
-// Seen ones are saved (PlayerPrefs RD_Tut_*); Accessibility > Tutorial Popups turns them off. Texts are in Texts below
-// (pixel font: A-Z 0-9 . , : ! ? % / - + < > ( ) only - no apostrophes or =).
+// Tutorial cards: a small card that pauses the game. Few words, a bit of Rowdy. Dismiss with the face buttons /
+// Space / Enter / E / Esc. Since 2026-10-15 they ONLY show inside the TUTORIAL LEVEL (DANDY SCHOOL, the portal on the
+// first island - TutorialLevel): its stations show them as Rowdy walks in, and the game's own calls (first weapon,
+// water, platforms...) show there too. In the normal game nothing pops up. Each card shows once per visit.
+// Texts are in Texts below (pixel font: A-Z 0-9 . , : ! ? % / - + < > ( ) only - no apostrophes or =).
 public class Tutorials : MonoBehaviour
 {
-    public enum Topic { Weapon, Cat, Rat, Checkpoint, LevelUp, Night, Controls, Hurt, Notes, Water, Platform, WeaponBroke, Boons, Werewolf }
+    public enum Topic
+    {
+        Weapon, Cat, Rat, Checkpoint, LevelUp, Night, Controls, Hurt, Notes, Water, Platform, WeaponBroke, Boons, Werewolf,
+        Jump, SurfDash, BluePlant, Breakables, Counter, Colosseum, DayNight, Menus, Goodbye,
+    }
 
     // title, line 1, line 2, line 3 ({I} = the interact button of whatever was used last: E, Y, triangle, X)
     // Highlights: |WORD| = a mechanic (aqua), ^WORD^ = a warning / number (gold). Every important word gets one.
@@ -17,15 +22,28 @@ public class Tutorials : MonoBehaviour
     {
         switch (topic)
         {
-            case Topic.Weapon: return ("SHINY!", "EVERY SWING WEARS YOUR WEAPON DOWN.", "WATCH OUT FOR THE |DURABILITY BAR| (^DUR^).",
+            case Topic.Weapon: return ("SHINY!", "PICK UP WEAPONS WITH {I}. {SWITCH} SWITCHES BETWEEN THEM.", "EVERY SWING WEARS ONE DOWN: WATCH THE |DURABILITY BAR| (^DUR^).",
                                        "AT ZERO IT ^BREAKS^. THE |ROD| NEVER BREAKS. ENEMIES DROP MORE WEAPONS.");
-            case Topic.Cat: return ("A CAT!", "|CATS| FIGHT FOR YOU. NO TRAINING NEEDED.", "YOUR FIRST CAT IS THE |LEADER|: ITS POWER COMES BACK ^FASTER^.",
+            case Topic.Cat: return ("CATS!", "|CATS| HIDE ALL OVER THE ISLANDS. WALK INTO ONE: IT JOINS YOU AND FIGHTS.", "EVERY CAT HAS A |POWER|. THE |LEADER| USES IT ^FASTER^.",
                                     "THE |CAT PARTY| (PAUSE MENU) SETS THE ORDER. DIE AND ALL BUT THE |LEADER| ^WANDER OFF^.");
-            case Topic.Rat: return ("LEGENDARY RAT!", "DROP IT AT A |CHECKPOINT| AS |BAIT|:", "A ^LOST CAT^ COMES RUNNING BACK.", "");
-            case Topic.Checkpoint: return ("CHECKPOINT", "PRESS {I} HERE TO |REST|.", "^FULL HEALTH^, FRESH ENEMIES, MORNING SUN.", "");
-            case Topic.LevelUp: return ("LEVEL UP!", "MORE ^DAMAGE^, ^CRIT CHANCE^, ^CRIT DAMAGE^", "AND ^+1^ |CAT SLOT|.", "");
+            case Topic.Rat: return ("LEGENDARY RATS", "A GOLDEN |FLYING RAT| SOMETIMES SHOWS UP. GRAB IT!", "DROP IT AT A |CHECKPOINT| AS |BAIT|: A ^LOST CAT^ COMES RUNNING BACK.",
+                                    "IN A |COLOSSEUM| YOUR RATS CALL CATS BY THEMSELVES.");
+            case Topic.Checkpoint: return ("CHECKPOINT", "TOUCH IT: YOU COME BACK HERE WHEN YOU DIE.", "PRESS {I} HERE TO |REST|: ^FULL HEALTH^, FRESH ENEMIES, MORNING SUN.", "");
+            case Topic.LevelUp: return ("LEVEL UP!", "ENEMIES DROP |EXP GEMS|. ENOUGH OF THEM: |LEVEL UP|.", "MORE ^DAMAGE^, ^CRIT CHANCE^, ^CRIT DAMAGE^ AND ^+1^ |CAT SLOT|.", "");
             case Topic.Night: return ("NIGHTFALL", "MORE MONSTERS. GLOWING ONES ARE |ELITES|.", "|REST| AT A CHECKPOINT TO SKIP TO MORNING.", "");
-            case Topic.Controls: return ("WELCOME, DANDY!", "{MOVE} MOVE, {JUMP} JUMP (HOLD IT), {ATTACK} ATTACK.", "{SURF} WHILE MOVING: |SURF DASH| ON YOUR BOARD.", "");
+            case Topic.Controls: return ("WELCOME TO DANDY SCHOOL!", "{MOVE} MOVE, {JUMP} JUMP, {ATTACK} ATTACK.", "WALK RIGHT: EVERY |SIGN| TEACHES YOU ONE THING.",
+                                         "THE |PORTALS| AT BOTH ENDS TAKE YOU ^BACK TO THE BEACH^.");
+            case Topic.Jump: return ("JUMPING", "HOLD {JUMP} TO JUMP ^HIGHER^. TAP IT FOR A SMALL HOP.", "{ATTACK} IN THE AIR IS A |JUMP ATTACK|.", "");
+            case Topic.SurfDash: return ("SURF DASH", "PRESS {SURF} WHILE MOVING: ROWDY ^DASHES^ ON HIS BOARD.", "IT IS FAST AND CUTS THROUGH ENEMIES. |DASH BOONS| GO OFF WITH IT.", "");
+            case Topic.BluePlant: return ("BOUNCY THINGS", "HIT A |BLUE PLANT| AND STAND IN IT: IT LAUNCHES YOU ^SKY HIGH^.", "LAND ON A |JELLY| TO BOUNCE. THAT IS HOW YOU REACH HIGH PLACES.", "");
+            case Topic.Breakables: return ("SMASH IT", "HIT |ORE ROCKS| UNTIL THEY BREAK: ^GEMS^ RAISE YOUR |DROP LUCK|.", "SOMETIMES A ^HAIR GEL^ FALLS OUT: A REROLL FOR YOUR |BOON| CARDS.", "");
+            case Topic.Counter: return ("COUNTER!", "HIT AN ENEMY ^RIGHT AS IT ATTACKS^ FOR A |COUNTER|: HUGE DAMAGE.", "PRACTICE ON THIS WOLF. A NEW ONE COMES EVERY TIME.", "");
+            case Topic.Colosseum: return ("COLOSSEUMS", "RING THE |GONG| TO START A ^20 WAVE^ TRIAL.", "EVERY TRIAL IS A FRESH RUN: LEVEL 1, AND |BOONS| EVERY FEW WAVES.",
+                                          "WIN AND THE |MAP| SHOWS YOU THE NEXT COLOSSEUM.");
+            case Topic.DayNight: return ("DAY AND NIGHT", "THE |CLOCK| (TOP RIGHT) SAYS IF IT IS DAY OR NIGHT.", "NIGHT BRINGS MORE MONSTERS AND ^ELITES^.",
+                                         "SOME |BOONS| ONLY WORK BY DAY OR BY NIGHT: THEIR SUN / MOON ^LIGHTS UP^.");
+            case Topic.Menus: return ("YOUR STUFF", "{MAP} MAP     {NOTES} ROWDY NOTES     {STATS} STATS", "{PAUSE} PAUSE: |CAT PARTY|, SETTINGS AND MORE.", "");
+            case Topic.Goodbye: return ("GRADUATED!", "THAT IS EVERYTHING, DANDY.", "TAKE THE |PORTAL| BACK TO THE BEACH. COME BACK ANY TIME.", "");
             case Topic.Hurt: return ("OUCH!", "HIT ENEMIES RIGHT AS THEY ATTACK", "FOR A |COUNTER|: ^HUGE DAMAGE^.", "");
             case Topic.Notes: return ("ROWDY NOTES", "EVERY ENEMY, CAT AND WEAPON YOU MEET GETS A PAGE.", "", "");
             case Topic.Water: return ("SURFS UP!", "ROWDY RIDES THE WATER. {JUMP} TO HOP OUT.", "{ATTACK} IN THE WATER LAUNCHES A |JUMP ATTACK|.", "");
@@ -94,10 +112,12 @@ public class Tutorials : MonoBehaviour
         return true;
     }
 
-    // Queue a popup (only the first time ever). delay = real seconds, so the pickup's own feedback plays first.
+    // Queue a popup: only inside the tutorial level, once per visit there. delay = real seconds, so the pickup's own
+    // feedback plays first. Anywhere else in the game this does nothing (the user moved every tip into the level).
+    public static bool Muted; // automated tests: no cards
     public static void Show(Topic topic, Sprite icon = null, float delay = 0.5f)
     {
-        if (!GameSettings.TutorialPopups || Done(topic) || Retired(topic)) return;
+        if (Muted || Retired(topic) || !TutorialLevel.Inside || !TutorialLevel.FirstThisVisit(topic)) return;
         foreach (Pending p in queue) if (p.topic == topic) return;
         queue.Add(new Pending { topic = topic, icon = icon, showAt = Time.unscaledTime + delay });
     }
@@ -168,23 +188,16 @@ public class Tutorials : MonoBehaviour
     {
         if (IsOpen && asking) { HandleAsk(); Animate(); return; }
         if (IsOpen) { HandleInput(); Animate(); return; }
-        CheckReady();
-        if (!ready) return;
-        if (PlayerPrefs.GetInt(AskedKey, 0) == 0)
-        {
-            if (!FirstDrop.Running && !PauseMenu.IsPaused && GameObject.FindGameObjectWithTag("Player") != null && Time.timeSinceLevelLoad > 0.6f) OpenAsk();
-            return;
-        }
-        if (!FirstDrop.Running && !Done(Topic.Controls) && GameObject.FindGameObjectWithTag("Player") != null) Show(Topic.Controls, null, 1f);
-        if (queue.Count == 0 || !GameSettings.TutorialPopups) { if (!GameSettings.TutorialPopups) queue.Clear(); return; }
-        if (PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || CheckpointRest.Resting || FirstDrop.Running) return;
+        // (the old "activate tutorial tips?" question is gone: the tips live in the tutorial level now)
+        if (!TutorialLevel.Inside) { queue.Clear(); return; }
+        if (queue.Count == 0) return;
+        if (PauseMenu.IsPaused || RowdyNotes.IsOpen || WorldMap.IsOpen || CheckpointRest.Resting || FirstDrop.Running || BoonPicker.IsOpen || CatParty.IsOpen) return;
         Health rowdy = FindFirstObjectByType<Health>();
         if (rowdy != null && rowdy.IsDead) return;
         if (Time.unscaledTime < queue[0].showAt) return;
 
         Pending next = queue[0];
         queue.RemoveAt(0);
-        if (Seen(next.topic)) return;
         Open(next);
     }
 

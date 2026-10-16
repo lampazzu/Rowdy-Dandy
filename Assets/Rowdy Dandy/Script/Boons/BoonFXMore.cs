@@ -597,7 +597,7 @@ public class BoonDot : MonoBehaviour
                 bodySr = health.GetComponent<SpriteRenderer>();
                 Bounds b = bodySr != null ? bodySr.bounds : new Bounds(BoonFX.Center(health), Vector3.one * 0.6f);
                 float scale = Mathf.Clamp(b.size.x / 1.6f, 0.35f, 0.7f);
-                flames = SheetFX.Play(art.charge, 10, new Vector3(b.center.x, b.min.y - 0.1f, 0f), 20f, 64f,
+                flames = SheetFX.Play(art.charge, 10, new Vector3(b.center.x, b.min.y - 0.1f, 0f), 40f, 64f, // 2x speed (user: the fire looked slow)
                     bodySr != null ? bodySr.sortingOrder + 3 : 80, health.transform, true, new Color(1f, 0.9f, 0.6f, 1f), scale, new Vector2(0.5f, 0f));
                 if (bodySr != null) bodyBase = bodySr.color;
             }
@@ -1456,7 +1456,11 @@ public class HuntersMark : MonoBehaviour
                 if (best == null || e.startingenemyHealth > best.startingenemyHealth + 0.5f ||
                     (Mathf.Abs(e.startingenemyHealth - best.startingenemyHealth) <= 0.5f && e.currentenemyHealth > best.currentenemyHealth)) best = e;
             }
-            if (best != Target && Target != null && best != null) BoonFX.Popup(BoonFX.Center(best) + Vector3.up * 0.9f, "PREY", BoonFX.Blood, 0.55f, 0.7f);
+            if (best != Target && best != null)
+            {
+                if (Target != null) BoonFX.Popup(BoonFX.Center(best) + Vector3.up * 0.9f, "PREY", BoonFX.Blood, 0.55f, 0.7f);
+                BoonSfx.Play("huntmark", a => a.fearSfx, 0.25f, 1.5f, 0.8f); // a new prey is marked
+            }
             Target = best;
         }
     }
@@ -1770,6 +1774,7 @@ public static class GuildFX
             if (Boons.Has("moldcats")) StatusEffects.Of(e).Poison(2f, 4f + 0.4f * PlayerStats.Level, cat); // Mold Cats
             BoonFX.Slow(e, 1f, 0.25f);
             if (Random.value < 0.3f) FXParticle.Burst(BoonFX.Center(e), Stink, 3, 0.3f, 1f, -1f, 0.6f);
+            BoonSfx.Play("stench", a => a.squish, 0.18f, 0.7f, 0.9f); // a wet, stinky squelch now and then
         }
     }
 }
@@ -2430,6 +2435,7 @@ public class SunHalo : MonoBehaviour
                 lastHit[e] = Time.time;
                 BoonFX.Hit(e, Boons.V("halo", 0), "Halo");
                 FXParticle.Burst(p, BoonFX.Sunny, 5, 1f, 2.5f, 2f, 0.3f);
+                BoonSfx.Play("halo", a => a.sizzle, 0.3f, 1.7f, 0.1f);
             }
         }
         if (lastHit.Count > 60) lastHit.Clear();

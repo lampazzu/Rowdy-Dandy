@@ -176,7 +176,7 @@ public class EnemyTeleport : MonoBehaviour
 
         // where it's going: the sigil opens first
         int order = body.sortingOrder;
-        SheetFX portal = GraftFX.Play("BRJ_Portal_Create", spot + Vector3.up * 0.75f, new Color(1f, 0.75f, 1f, 0.95f), order - 1);
+        SheetFX portal = GraftFX.Play("BRJ_Portal_Create", spot + Vector3.up * 0.75f, new Color(1f, 0.75f, 1f, 0.95f), order - 1, fpsScale: 2f);
         FXSound.Play("Teleport", 0.45f, Random.Range(1.05f, 1.2f));
 
         // DECONSTRUCT: top first, pixels breaking off and drifting up

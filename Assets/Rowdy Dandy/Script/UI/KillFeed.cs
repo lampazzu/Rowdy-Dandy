@@ -197,7 +197,7 @@ public class KillFeed : MonoBehaviour
         for (int i = 0; i < rows.Count; i++)
         {
             RectTransform rect = rows[i].rect;
-            OverlayUI.Place(rect, new Vector2(1f, 1f), new Vector2(-Margin, -Margin - i * (RowHeight + RowGap)));
+            OverlayUI.Place(rect, new Vector2(1f, 1f), new Vector2(-Margin, -Margin - DayNightHUD.Reserve - i * (RowHeight + RowGap))); // under the day / night clock
         }
     }
 

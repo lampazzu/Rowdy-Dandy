@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Every patron and every boon: names, slots, numbers per rarity, icons and what the patrons say.
+// Every patron and every boon: names, slots, numbers, tiers, icons and what the patrons say.
 // Texts use the pixel font: A-Z 0-9 . , : ! ? % / - + < > ( ) only (no apostrophes).
-//   {0} {1} in a description = the boon's values for the rarity shown (Common / Uncommon / Rare / Epic / Legendary)
+//   {0} in a description = the boon's number. Every boon has ONE number (no per-rarity scaling since 2026-10-15).
+//   The tier (Common .. Legendary) only tells the player how strong the boon is by nature: a whole transformation
+//   is Legendary, +15% attack speed is Common. A boon is never offered again once owned (no upgrades).
 //   Slots: one boon per Attack / Dash / Jump / Cats / Special slot (a new one replaces the old), Passives stack.
 // Patron portraits: Resources/BoonPortraits/<enum name>.png (e.g. Narcissism.png, Chef.png, Sun.png).
 public enum Patron { Narcissism, Abyss, Lycanthropy, Rot, Guild, Chef, Smith, Sun }
@@ -25,8 +27,9 @@ public class BoonDef
     public Patron patron;
     public Patron? partner;          // duo boons: the second patron
     public BoonSlot slot;
+    public Rarity tier = Rarity.Common; // how strong it is by nature (duos: Duo)
     public string desc;
-    public float[][] values;         // values[i] = { common, rare, epic } or { common, rare, epic, legendary } or all five
+    public float[][] values;         // values[i] = { the number }
     public string icon;              // BoonIcons key
     public Color iconTint = Color.white;
     public string duoLine;           // what the two patrons say together
@@ -37,26 +40,16 @@ public class BoonDef
 
     public bool IsDuo => partner.HasValue;
 
-    public float Value(int index, Rarity r)
+    // The boon's number (the rarity is ignored: one value per boon). Balance.BoonValues can override it.
+    public float Value(int index, Rarity r = Rarity.Common)
     {
         if (values == null || index < 0 || index >= values.Length) return 0f;
         float[] v = values[index];
-        // tuned numbers for this boon (Balance.BoonValues) win over the ones below
         if (Balance.BoonValues.TryGetValue(id, out float[][] tuned) && index < tuned.Length) v = tuned[index];
-        if (r == Rarity.Duo || v.Length == 1) return v[0];
-        if (v.Length >= 5) return v[Mathf.Min((int)r, v.Length - 1)];
-        // 3 or 4 numbers = common / rare / epic (/ legendary): uncommon sits halfway, legendary = epic x1.25
-        switch (r)
-        {
-            case Rarity.Common: return v[0];
-            case Rarity.Uncommon: return Mathf.Lerp(v[0], v[1], 0.5f);
-            case Rarity.Rare: return v[1];
-            case Rarity.Epic: return v[Mathf.Min(2, v.Length - 1)];
-            default: return v.Length >= 4 ? v[3] : v[v.Length - 1] * 1.25f;
-        }
+        return v.Length > 0 ? v[v.Length - 1] : 0f;
     }
 
-    public string Describe(Rarity r)
+    public string Describe(Rarity r = Rarity.Common)
     {
         string s = Balance.BoonDescription(id, desc);
         if (values != null)
@@ -113,9 +106,6 @@ public static class BoonCatalog
         return ids.ToArray();
     }
 
-    private static float[] V(float c, float r, float e) => new[] { c, r, e };
-    private static float[] V(float c, float r, float e, float l) => new[] { c, r, e, l };
-    private static float[] F(float v) => new[] { v, v, v, v };
 
     private static Dictionary<Patron, PatronInfo> BuildPatrons()
     {
@@ -176,218 +166,216 @@ public static class BoonCatalog
     private static List<BoonDef> BuildBoons()
     {
         var list = new List<BoonDef>();
-        BoonDef Add(string id, string name, Patron p, BoonSlot slot, string desc, string icon, params float[][] values)
+        // tier = how strong the boon is by nature (it never changes), value = its one number ({0})
+        BoonDef Add(string id, string name, Patron p, BoonSlot slot, Rarity tier, float value, string desc, string icon)
         {
-            var b = new BoonDef { id = id, name = name, patron = p, slot = slot, desc = desc, icon = icon, values = values };
+            var b = new BoonDef { id = id, name = name, patron = p, slot = slot, tier = tier, desc = desc, icon = icon, values = new[] { new[] { value } } };
+            if (tier == Rarity.Legendary && slot == BoonSlot.Special) b.legendaryOnly = true; // the signature moves
             list.Add(b);
             return b;
         }
-        BoonDef Duo(string id, string name, Patron a, Patron b, string desc, string icon, string line, string[] needA, string[] needB, params float[][] values)
+        BoonDef Duo(string id, string name, Patron a, Patron b, string desc, string icon, string line, string[] needA, string[] needB)
         {
-            var d = new BoonDef { id = id, name = name, patron = a, partner = b, slot = BoonSlot.Passive, desc = desc, icon = icon, values = values, duoLine = line };
+            var d = new BoonDef { id = id, name = name, patron = a, partner = b, slot = BoonSlot.Passive, tier = Rarity.Duo, desc = desc, icon = icon, duoLine = line };
             d.requires = new[] { string.Join(",", needA), string.Join(",", needB) };
             list.Add(d);
             return d;
         }
+        const Rarity C = Rarity.Common, U = Rarity.Uncommon, R = Rarity.Rare, E = Rarity.Epic, L = Rarity.Legendary;
 
         // ---------------------------------------------------------------- NARCISSISM
-        Add("hairflip", "HAIR FLIP", Patron.Narcissism, BoonSlot.Attack,
-            "EVERY 3RD SWING FLIPS YOUR HAIR: A PINK CRESCENT FLIES OUT FOR {0} DAMAGE.", "draw:hairflip", V(18, 26, 36));
-        Add("decoy", "TOO PRETTY TO HIT", Patron.Narcissism, BoonSlot.Dash,
-            "SURF DASH LEAVES A GORGEOUS DECOY. ENEMIES STARE AT IT FOR {0}S, THEN IT SHATTERS FOR 20.", "sheet:charm:9:4", V(2f, 2.8f, 3.6f));
-        Add("admire", "ADMIRE YOURSELF", Patron.Narcissism, BoonSlot.Passive,
-            "STAND STILL 1.5S TO STRIKE A POSE. YOUR NEXT HIT DEALS X{0} DAMAGE.", "draw:mirror", V(2.5f, 3f, 3.5f));
-        Add("mainchar", "MAIN CHARACTER", Patron.Narcissism, BoonSlot.Passive,
-            "THE STYLE RANK FOLLOWS YOU NOW (D TO SSS). +{0}% DAMAGE FOR EVERY RANK. AT SSS YOU SHINE LIKE THE SUN.", "draw:crown", V(6, 8, 10));
-        Add("kiss", "BLOW A KISS", Patron.Narcissism, BoonSlot.Jump,
-            "EVERY JUMP BLOWS A KISS: A HEART FLIES TO THE NEAREST ENEMY. {0} DAMAGE AND CHARMED 1S.", "draw:kiss", V(8, 12, 16));
-        Add("spotlight", "SPOTLIGHT", Patron.Narcissism, BoonSlot.Passive,
-            "EVERY 10S THE SPOTLIGHT FINDS YOU FOR 4S: +{0}% DAMAGE AND +15% CRIT CHANCE WHILE IT SHINES.", "draw:spotlight", V(25, 35, 50));
-        Add("jealousy", "JEALOUSY", Patron.Narcissism, BoonSlot.Passive,
-            "CHARMED ENEMIES GET JEALOUS OF EACH OTHER AND SLAP THE CLOSEST ONE FOR {0} DAMAGE EVERY SECOND.", "draw:brokenheart", V(6, 9, 12));
-        Add("flawless", "FLAWLESS", Patron.Narcissism, BoonSlot.Passive,
-            "AT FULL HEALTH YOU DEAL +{0}% DAMAGE. A SCRATCH? THAT IS JUST CHARACTER.", "draw:diamond", V(20, 30, 40));
-        Add("hairspray", "HAIR SPRAY", Patron.Narcissism, BoonSlot.Attack,
-            "HITS LEAVE A STICKY GLOSS FOR 3S: ENEMIES ARE SLOWED 30% AND TAKE +{0}% DAMAGE FROM YOU.", "draw:spraycan", V(15, 22, 30));
+        Add("hairflip", "HAIR FLIP", Patron.Narcissism, BoonSlot.Attack, U, 20,
+            "EVERY 3RD SWING FLIPS YOUR HAIR: A PINK CRESCENT FLIES OUT FOR {0} DAMAGE.", "draw:hairflip");
+        Add("decoy", "TOO PRETTY TO HIT", Patron.Narcissism, BoonSlot.Dash, R, 3.5f,
+            "SURF DASH LEAVES A GORGEOUS DECOY. ENEMIES STARE AT IT FOR {0}S, THEN IT SHATTERS FOR 20.", "sheet:charm:9:4");
+        Add("admire", "ADMIRE YOURSELF", Patron.Narcissism, BoonSlot.Passive, U, 3,
+            "STAND STILL 1.5S TO STRIKE A POSE. YOUR NEXT HIT DEALS X{0} DAMAGE.", "draw:mirror");
+        Add("mainchar", "MAIN CHARACTER", Patron.Narcissism, BoonSlot.Passive, R, 6,
+            "THE STYLE RANK FOLLOWS YOU NOW (D TO SSS). +{0}% DAMAGE FOR EVERY RANK. AT SSS YOU SHINE LIKE THE SUN.", "draw:crown");
+        Add("kiss", "BLOW A KISS", Patron.Narcissism, BoonSlot.Jump, U, 16,
+            "EVERY JUMP BLOWS A KISS: A HEART FLIES TO THE NEAREST ENEMY. {0} DAMAGE AND CHARMED 1S.", "draw:kiss");
+        Add("spotlight", "SPOTLIGHT", Patron.Narcissism, BoonSlot.Passive, R, 50,
+            "EVERY 10S THE SPOTLIGHT FINDS YOU FOR 4S: +{0}% DAMAGE AND +15% CRIT CHANCE WHILE IT SHINES.", "draw:spotlight");
+        Add("jealousy", "JEALOUSY", Patron.Narcissism, BoonSlot.Passive, C, 12,
+            "CHARMED ENEMIES GET JEALOUS OF EACH OTHER AND SLAP THE CLOSEST ONE FOR {0} DAMAGE EVERY SECOND.", "draw:brokenheart");
+        Add("flawless", "FLAWLESS", Patron.Narcissism, BoonSlot.Passive, U, 40,
+            "AT FULL HEALTH YOU DEAL +{0}% DAMAGE. A SCRATCH? THAT IS JUST CHARACTER.", "draw:diamond");
+        Add("hairspray", "HAIR SPRAY", Patron.Narcissism, BoonSlot.Attack, R, 30,
+            "HITS LEAVE A STICKY GLOSS FOR 3S: ENEMIES ARE SLOWED 30% AND TAKE +{0}% DAMAGE FROM YOU.", "draw:spraycan");
 
         // ---------------------------------------------------------------- SEA ABYSS
-        Add("wipeout", "WIPEOUT", Patron.Abyss, BoonSlot.Dash,
-            "WHEN YOU SURF, YOU BECOME THE WAVE: ENEMIES IN YOUR WAY ARE SWEPT ALONG AND SLAMMED FOR {0}, MORE INTO A WALL.", "sheet:waterSonic:9:2", V(20, 28, 38));
-        Add("undertow", "UNDERTOW", Patron.Abyss, BoonSlot.Attack,
-            "HITS DRAG ENEMIES DOWN TOWARD YOU AND SLOW THEM BY {0}% FOR 2S.", "draw:spiral", V(30, 40, 50));
-        Add("hangten", "DEPTH CHARGE", Patron.Abyss, BoonSlot.Jump,
-            "LANDING FROM A BIG JUMP BURSTS A RING OF BLACK WATER: {0} DAMAGE AND KNOCKBACK.", "draw:board", V(16, 23, 32));
-        Add("saltwater", "SALT WATER BLOOD", Patron.Abyss, BoonSlot.Passive,
-            "IN THE WATER YOU HEAL {0} HP PER SECOND. LEAVING IT: +20% DAMAGE FOR 4S.", "sheet:manaRecovery:10:6", V(3, 4.5f, 6));
-        Add("pressure", "CRUSHING DEPTHS", Patron.Abyss, BoonSlot.Attack,
-            "EVERY 5TH HIT, THE WEIGHT OF THE DEEP CRUSHES THE TARGET AND EVERYONE NEAR IT FOR {0}.", "draw:pressure", V(20, 30, 42));
-        Add("angler", "ANGLER LURE", Patron.Abyss, BoonSlot.Passive,
-            "A GLOWING LURE DANGLES OVER YOUR HEAD. EVERY 2.5S IT ZAPS THE NEAREST ENEMY FOR {0}.", "draw:lure", V(6, 9, 13));
-        Add("endlesssurf", "ENDLESS SWELL", Patron.Abyss, BoonSlot.Dash,
-            "HOLD {SURF} AND THE WAVE NEVER ENDS: YOU SURF FOR AS LONG AS YOU HOLD IT, ON LAND OR SEA. ENEMIES YOU RIDE INTO TAKE {0}.", "sheet:waterSonic:9:4", V(6, 9, 12));
-        Add("ripcurrent", "RIP CURRENT", Patron.Abyss, BoonSlot.Jump,
-            "EVERY LANDING PULLS ENEMIES WITHIN 3 TOWARD YOU AND SLOWS THEM {0}% FOR 2S.", "draw:whirl", V(30, 40, 50));
-        Add("leviathan", "LEVIATHAN", Patron.Abyss, BoonSlot.Passive,
-            "BELOW 30% HEALTH, TENTACLES BURST OUT OF YOUR BODY AND SMASH EVERYTHING AROUND YOU: {0} DAMAGE PER SMASH. NO COOLDOWN: THEY STAY OUT UNTIL YOU HEAL.", "draw:tentacle", V(12, 18, 25));
+        Add("wipeout", "WIPEOUT", Patron.Abyss, BoonSlot.Dash, R, 22,
+            "WHEN YOU SURF, YOU BECOME THE WAVE: ENEMIES IN YOUR WAY ARE SWEPT ALONG AND SLAMMED FOR {0}, MORE INTO A WALL.", "sheet:waterSonic:9:2");
+        Add("undertow", "UNDERTOW", Patron.Abyss, BoonSlot.Attack, U, 50,
+            "HITS DRAG ENEMIES DOWN TOWARD YOU AND SLOW THEM BY {0}% FOR 2S.", "draw:spiral");
+        Add("hangten", "DEPTH CHARGE", Patron.Abyss, BoonSlot.Jump, U, 26,
+            "LANDING FROM A BIG JUMP BURSTS A HUGE SPLASH OF WATER: {0} DAMAGE AND KNOCKBACK.", "draw:board");
+        Add("saltwater", "SALT WATER BLOOD", Patron.Abyss, BoonSlot.Passive, U, 5,
+            "IN THE WATER YOU HEAL {0} HP PER SECOND. LEAVING IT: +20% DAMAGE FOR 4S.", "sheet:manaRecovery:10:6");
+        Add("pressure", "CRUSHING DEPTHS", Patron.Abyss, BoonSlot.Attack, R, 42,
+            "EVERY 5TH HIT, THE WEIGHT OF THE DEEP CRUSHES THE TARGET AND EVERYONE NEAR IT FOR {0}.", "draw:pressure");
+        Add("angler", "ANGLER LURE", Patron.Abyss, BoonSlot.Passive, U, 14,
+            "A GLOWING LURE DANGLES OVER YOUR HEAD. EVERY 2.5S IT ZAPS THE NEAREST ENEMY FOR {0}.", "draw:lure");
+        Add("endlesssurf", "ENDLESS SWELL", Patron.Abyss, BoonSlot.Dash, E, 14,
+            "HOLD {SURF} AND THE WAVE NEVER ENDS: YOU SURF FOR AS LONG AS YOU HOLD IT, ON LAND OR SEA. ENEMIES YOU RIDE INTO TAKE {0}.", "sheet:waterSonic:9:4");
+        Add("ripcurrent", "RIP CURRENT", Patron.Abyss, BoonSlot.Jump, C, 50,
+            "EVERY LANDING PULLS ENEMIES WITHIN 3 TOWARD YOU AND SLOWS THEM {0}% FOR 2S.", "draw:whirl");
+        Add("leviathan", "LEVIATHAN", Patron.Abyss, BoonSlot.Passive, E, 25,
+            "EVERY TIME YOU GET HIT, TENTACLES BURST OUT OF YOUR BODY FOR 5S AND SMASH EVERYTHING AROUND YOU: {0} DAMAGE PER SMASH.", "draw:tentacle");
 
         // ---------------------------------------------------------------- LYCANTHROPY
-        Add("feral", "FERAL SWIPE", Patron.Lycanthropy, BoonSlot.Attack,
-            "EVERY HIT RAKES A SECOND TIME WITH SPECTRAL CLAWS FOR {0}% OF ITS DAMAGE.", "sheet:clawSlash:6:0", V(35, 50, 65));
-        Add("moonrage", "MOONRAGE", Patron.Lycanthropy, BoonSlot.Passive,
-            "AT NIGHT: +{0}% DAMAGE, +15% SPEED AND GLOWING RED EYES.", "draw:moonrage", V(25, 35, 45));
-        Add("bloodthirst", "BLOODTHIRST", Patron.Lycanthropy, BoonSlot.Passive,
-            "EVERY KILL HEALS {0} HP. PAST FULL HEALTH IT BECOMES OVERHEAL.", "draw:fang", V(4, 6, 9));
-        Add("packleader", "PACK LEADER", Patron.Lycanthropy, BoonSlot.Cats,
-            "YOUR CATS GROW A BLOOD RED AURA: +{0}% CAT DAMAGE. NICK EXECUTES AT 20% HEALTH.", "draw:paw", V(60, 90, 120));
-        BoonDef moon = Add("moon", "CALL OF THE MOON", Patron.Lycanthropy, BoonSlot.Special,
-            "PRESS {WOLF} WHEN THE MOON IS FULL: BECOME A WEREWOLF FOR {0}S. CLAWS, SPEED, LIFESTEAL.", "draw:moonwolf", F(12));
-        moon.legendaryOnly = true;
-        Add("huntmark", "HUNTERS MARK", Patron.Lycanthropy, BoonSlot.Passive,
-            "THE BIGGEST PREY IN SIGHT IS MARKED. YOU DEAL +{0}% DAMAGE TO IT, AND ITS DEATH HEALS 10.", "draw:mark", V(30, 45, 60));
-        Add("pounce", "POUNCE", Patron.Lycanthropy, BoonSlot.Jump,
-            "LANDING NEXT TO ENEMIES RAKES THEM WITH CLAWS: {0} DAMAGE AND THEY BLEED.", "sheet:clawSlash:6:2", V(12, 18, 25));
-        Add("openwounds", "OPEN WOUNDS", Patron.Lycanthropy, BoonSlot.Attack,
-            "+10% CRIT CHANCE. CRITICAL HITS MAKE ENEMIES BLEED {0} DAMAGE PER SECOND FOR 4S.", "draw:drop", V(6, 9, 13));
-        Add("alpharoar", "ALPHA ROAR", Patron.Lycanthropy, BoonSlot.Dash,
-            "SURF DASH ROARS: ENEMIES NEAR YOU ARE TERRIFIED FOR {0}S.", "sheet:fear:9:5", V(1.2f, 1.6f, 2.1f));
-        Add("feast", "MOON FEAST", Patron.Lycanthropy, BoonSlot.Passive,
-            "THE MOON METER FILLS {0}% FASTER. AS A WEREWOLF, EVERY KILL HEALS 3.", "draw:moonbite", V(40, 60, 80)).condition = () => Boons.Has("moon");
-        Add("silverfur", "SILVER FUR", Patron.Lycanthropy, BoonSlot.Passive,
-            "AT NIGHT YOU TAKE {0}% LESS DAMAGE.", "draw:fur", V(15, 22, 30));
+        Add("feral", "FERAL SWIPE", Patron.Lycanthropy, BoonSlot.Attack, R, 50,
+            "EVERY HIT RAKES A SECOND TIME WITH SPECTRAL CLAWS FOR {0}% OF ITS DAMAGE.", "sheet:clawSlash:6:0");
+        Add("moonrage", "MOONRAGE", Patron.Lycanthropy, BoonSlot.Passive, U, 35,
+            "AT NIGHT: +{0}% DAMAGE, +15% SPEED AND GLOWING RED EYES.", "draw:moonrage");
+        Add("bloodthirst", "BLOODTHIRST", Patron.Lycanthropy, BoonSlot.Passive, R, 5,
+            "EVERY KILL HEALS {0} HP. PAST FULL HEALTH IT BECOMES OVERHEAL.", "draw:fang");
+        Add("packleader", "PACK LEADER", Patron.Lycanthropy, BoonSlot.Cats, R, 100,
+            "YOUR CATS GROW A BLOOD RED AURA: +{0}% CAT DAMAGE. NICK EXECUTES AT 20% HEALTH.", "draw:paw");
+        Add("moon", "CALL OF THE MOON", Patron.Lycanthropy, BoonSlot.Special, L, 12,
+            "PRESS {WOLF} WHEN THE MOON IS FULL: BECOME A WEREWOLF FOR {0}S. CLAWS, SPEED, LIFESTEAL.", "draw:moonwolf");
+        Add("huntmark", "HUNTERS MARK", Patron.Lycanthropy, BoonSlot.Passive, U, 60,
+            "THE BIGGEST PREY IN SIGHT IS MARKED. YOU DEAL +{0}% DAMAGE TO IT, AND ITS DEATH HEALS 10.", "draw:mark");
+        Add("pounce", "POUNCE", Patron.Lycanthropy, BoonSlot.Jump, U, 26,
+            "LANDING NEXT TO ENEMIES RAKES THEM WITH CLAWS: {0} DAMAGE AND THEY BLEED.", "sheet:clawSlash:6:2");
+        Add("openwounds", "OPEN WOUNDS", Patron.Lycanthropy, BoonSlot.Attack, R, 12,
+            "+10% CRIT CHANCE. CRITICAL HITS MAKE ENEMIES BLEED {0} DAMAGE PER SECOND FOR 4S.", "draw:drop");
+        Add("alpharoar", "ALPHA ROAR", Patron.Lycanthropy, BoonSlot.Dash, U, 2,
+            "SURF DASH ROARS: ENEMIES NEAR YOU ARE TERRIFIED FOR {0}S.", "sheet:fear:9:5");
+        Add("feast", "MOON FEAST", Patron.Lycanthropy, BoonSlot.Passive, U, 80,
+            "THE MOON METER FILLS {0}% FASTER. AS A WEREWOLF, EVERY KILL HEALS 3.", "draw:moonbite").condition = () => Boons.Has("moon");
+        Add("silverfur", "SILVER FUR", Patron.Lycanthropy, BoonSlot.Passive, U, 30,
+            "AT NIGHT YOU TAKE {0}% LESS DAMAGE.", "draw:fur");
 
         // ---------------------------------------------------------------- STEPHMOSS (was Mama Rot)
-        Add("sporestep", "SPORE STEP", Patron.Rot, BoonSlot.Jump,
-            "EVERY LANDING PUFFS A MUSHROOM CLOUD: {0} POISON DAMAGE PER SECOND FOR 3S.", "flora:1:toxic", V(8, 12, 16));
-        Add("rottenedge", "ROTTEN EDGE", Patron.Rot, BoonSlot.Attack,
-            "ALL YOUR HITS POISON: {0} DAMAGE PER SECOND FOR 4S.", "item:vfxPoison:10:4", V(6, 9, 13));
-        Add("overgrowth", "EARTH ERUPT", Patron.Rot, BoonSlot.Passive,
-            "POISONED ENEMIES THAT DIE MAKE THE EARTH ERUPT, ROOTING EVERYONE NEARBY FOR {0}S.", "sheet:earthPillar:1:0", V(1.5f, 2f, 2.5f));
-        Add("compost", "COMPOST", Patron.Rot, BoonSlot.Cats,
-            "EVERY TIME A CAT ATTACKS OR USES ITS POWER, YOU HEAL {0} HP.", "item:vfxHeal:10:4", V(2, 3, 4));
-        Add("fester", "FESTER", Patron.Rot, BoonSlot.Passive,
-            "POISONED ENEMIES TAKE +{0}% DAMAGE FROM YOUR HITS.", "draw:fester", V(20, 30, 40));
-        Add("plague", "PLAGUE", Patron.Rot, BoonSlot.Passive,
-            "WHEN A POISONED ENEMY DIES, ITS POISON JUMPS TO {0} ENEMIES NEARBY.", "draw:plague", V(2, 3, 4));
-        Add("thornskin", "THORN SKIN", Patron.Rot, BoonSlot.Passive,
-            "ENEMIES THAT HIT YOU TAKE {0} THORN DAMAGE AND GET POISONED.", "draw:thorn", V(10, 16, 22));
-        Add("rootsnare", "ROOT SNARE", Patron.Rot, BoonSlot.Dash,
-            "SURF DASH LEAVES GRASPING ROOTS WHERE YOU STARTED. ENEMIES THAT STEP IN ARE ROOTED {0}S AND POISONED.", "draw:roots", V(1.5f, 2f, 2.5f));
-        BoonDef steph = Add("stephmoss", "BECOME STEPHMOSS", Patron.Rot, BoonSlot.Special,
-            "PRESS {WOLF} WHEN THE SWARM IS READY: BECOME STEPHMOSS FOR {0}S. WALK TO ROLL A WHIRLWIND, DASH TO TELEPORT, ATTACK FOR A CROSS BLADE, DOWN + ATTACK FOR EXPLODING MOSQUITOES.", "draw:sporestep", F(12));
-        steph.legendaryOnly = true;
+        Add("sporestep", "SPORE STEP", Patron.Rot, BoonSlot.Jump, C, 14,
+            "EVERY LANDING PUFFS A MUSHROOM CLOUD: {0} POISON DAMAGE PER SECOND FOR 3S.", "flora:1:toxic");
+        Add("rottenedge", "ROTTEN EDGE", Patron.Rot, BoonSlot.Attack, R, 12,
+            "ALL YOUR HITS POISON: {0} DAMAGE PER SECOND FOR 4S.", "item:vfxPoison:10:4");
+        Add("overgrowth", "EARTH ERUPT", Patron.Rot, BoonSlot.Passive, U, 2.5f,
+            "POISONED ENEMIES THAT DIE MAKE THE EARTH ERUPT, ROOTING EVERYONE NEARBY FOR {0}S.", "sheet:earthPillar:1:0");
+        Add("compost", "COMPOST", Patron.Rot, BoonSlot.Cats, U, 4,
+            "EVERY TIME A CAT ATTACKS OR USES ITS POWER, YOU HEAL {0} HP.", "item:vfxHeal:10:4");
+        Add("fester", "FESTER", Patron.Rot, BoonSlot.Passive, U, 40,
+            "POISONED ENEMIES TAKE +{0}% DAMAGE FROM YOUR HITS.", "draw:fester");
+        Add("plague", "PLAGUE", Patron.Rot, BoonSlot.Passive, U, 4,
+            "WHEN A POISONED ENEMY DIES, ITS POISON JUMPS TO {0} ENEMIES NEARBY.", "draw:plague");
+        Add("thornskin", "THORN SKIN", Patron.Rot, BoonSlot.Passive, C, 24,
+            "ENEMIES THAT HIT YOU TAKE {0} THORN DAMAGE AND GET POISONED.", "draw:thorn");
+        Add("rootsnare", "ROOT SNARE", Patron.Rot, BoonSlot.Dash, C, 2.5f,
+            "SURF DASH LEAVES GRASPING ROOTS WHERE YOU STARTED. ENEMIES THAT STEP IN ARE ROOTED {0}S AND POISONED.", "draw:roots");
+        BoonDef steph = Add("stephmoss", "BECOME STEPHMOSS", Patron.Rot, BoonSlot.Special, L, 12,
+            "PRESS {WOLF} WHEN THE SWARM IS READY: BECOME STEPHMOSS FOR {0}S. WALK TO ROLL A WHIRLWIND, DASH TO TELEPORT, ATTACK FOR A CROSS BLADE, DOWN + ATTACK FOR EXPLODING MOSQUITOES.", "draw:sporestep");
         steph.iconTint = new Color(0.85f, 1f, 0.4f);
-        Add("bloom", "BLOOM", Patron.Rot, BoonSlot.Passive,
-            "EVERY 5TH POISON KILL GROWS A FLOWER. TOUCH IT TO HEAL {0} HP.", "flora:0", V(10, 15, 20));
-        Add("sporelob", "SPORE LOB", Patron.Rot, BoonSlot.Attack,
-            "EVERY 3RD SWING LOBS A SPORE POD THAT BURSTS INTO A POISON CLOUD: {0} DAMAGE PER SECOND.", "draw:pod", V(5, 8, 11));
+        Add("bloom", "BLOOM", Patron.Rot, BoonSlot.Passive, C, 20,
+            "EVERY 5TH POISON KILL GROWS A FLOWER. TOUCH IT TO HEAL {0} HP.", "flora:0");
+        Add("sporelob", "SPORE LOB", Patron.Rot, BoonSlot.Attack, C, 12,
+            "EVERY 3RD SWING LOBS A SPORE POD THAT BURSTS INTO A POISON CLOUD: {0} DAMAGE PER SECOND.", "draw:pod");
 
         // ---------------------------------------------------------------- STINKY BOIS GUILD
-        Add("catnip", "CATNIP FRENZY", Patron.Guild, BoonSlot.Cats,
-            "YOUR CATS COOL DOWN {0}% FASTER AND LEAVE SPARKLY TRAILS.", "draw:leaf", V(25, 35, 45));
-        Add("ninelives", "NINE LIVES", Patron.Guild, BoonSlot.Passive,
-            "ONCE PER LIFE, A DEADLY HIT LEAVES YOU AT {0}% HEALTH INSTEAD. THE GUILD SAVES YOU.", "draw:ninelives", V(20, 35, 50));
-        Add("furcoat", "FUR COAT", Patron.Guild, BoonSlot.Passive,
-            "-{0}% DAMAGE TAKEN FOR EVERY CAT WITH YOU (UP TO 8). IT SMELLS, BUT IT WORKS.", "draw:fur", V(3, 4, 5));
-        Add("felinefury", "FELINE FURY", Patron.Guild, BoonSlot.Attack,
-            "EVERY 4TH HIT, A GHOST CAT POUNCES ON THE ENEMY FOR {0} DAMAGE.", "draw:catface", V(22, 32, 44));
-        Add("catcall", "CAT CALL", Patron.Guild, BoonSlot.Dash,
-            "SURF DASH WAKES YOUR LEADER AND SUB-LEADER: THEIR POWERS ARE READY AGAIN. EVERY OTHER CAT GETS {0}% OF ITS COOLDOWN CUT.", "draw:bell", V(10, 12, 15));
-        Add("straytax", "STRAY TAX", Patron.Guild, BoonSlot.Passive,
-            "KILLS HAVE A {0}% CHANCE TO DROP A FISH TREAT. GRAB IT: HEAL 8 AND YOUR CATS COOL DOWN.", "draw:fish", V(8, 12, 16));
-        Add("hairball", "HAIRBALL", Patron.Guild, BoonSlot.Jump,
-            "WHEN YOU JUMP, ONE OF YOUR CATS HACKS A HAIRBALL AT THE NEAREST ENEMY: {0} DAMAGE, SLOWED 40%.", "draw:hairball", V(10, 15, 20)).condition = () => Boons.CatsWithRowdy > 0;
-        Add("ambush", "ALLEY AMBUSH", Patron.Guild, BoonSlot.Dash,
-            "SURF DASH SENDS YOUR CATS LEAPING AT THE NEAREST ENEMIES: {0} DAMAGE EACH.", "draw:ambush", V(12, 18, 25)).condition = () => Boons.CatsWithRowdy > 0;
-        Add("stench", "STENCH", Patron.Guild, BoonSlot.Cats,
-            "YOUR CATS REEK. ENEMIES NEAR THEM TAKE {0} DAMAGE PER SECOND AND MOVE 25% SLOWER.", "draw:stench", V(3, 5, 7));
-        Add("topcat", "TOP CAT", Patron.Guild, BoonSlot.Cats,
-            "YOUR PARTY LEADER DEALS +{0}% DAMAGE AND WEARS A TINY CROWN. (PICK THE LEADER IN THE CAT PARTY.)", "draw:topcat", V(50, 75, 100));
-        Add("catloyalty", "CAT LOYALTY", Patron.Guild, BoonSlot.Passive,
-            "YOUR CAT PARTY IS ALWAYS FULL: EVERY FREE SLOT CALLS A CAT TO YOU, NEW SLOTS TOO. YOU NEVER LOSE A CAT, NOT EVEN WHEN YOU DIE. CATS DEAL +{0}% DAMAGE.", "draw:ninelives", V(5, 10, 15));
+        Add("catnip", "CATNIP FRENZY", Patron.Guild, BoonSlot.Cats, R, 40,
+            "YOUR CATS COOL DOWN {0}% FASTER AND LEAVE SPARKLY TRAILS.", "draw:leaf");
+        Add("ninelives", "NINE LIVES", Patron.Guild, BoonSlot.Passive, E, 50,
+            "ONCE PER LIFE, A DEADLY HIT LEAVES YOU AT {0}% HEALTH INSTEAD. THE GUILD SAVES YOU.", "draw:ninelives");
+        Add("furcoat", "FUR COAT", Patron.Guild, BoonSlot.Passive, R, 4,
+            "-{0}% DAMAGE TAKEN FOR EVERY CAT WITH YOU (UP TO 8). IT SMELLS, BUT IT WORKS.", "draw:fur");
+        Add("felinefury", "FELINE FURY", Patron.Guild, BoonSlot.Attack, U, 30,
+            "EVERY 4TH HIT, A GHOST CAT POUNCES ON THE ENEMY FOR {0} DAMAGE.", "draw:catface");
+        Add("catcall", "CAT CALL", Patron.Guild, BoonSlot.Dash, U, 15,
+            "SURF DASH WAKES YOUR LEADER AND SUB-LEADER: THEIR POWERS ARE READY AGAIN. EVERY OTHER CAT GETS {0}% OF ITS COOLDOWN CUT.", "draw:bell");
+        Add("straytax", "STRAY TAX", Patron.Guild, BoonSlot.Passive, C, 16,
+            "KILLS HAVE A {0}% CHANCE TO DROP A FISH TREAT. GRAB IT: HEAL 8 AND YOUR CATS COOL DOWN.", "draw:fish");
+        Add("hairball", "HAIRBALL", Patron.Guild, BoonSlot.Jump, C, 20,
+            "WHEN YOU JUMP, ONE OF YOUR CATS HACKS A HAIRBALL AT THE NEAREST ENEMY: {0} DAMAGE, SLOWED 40%.", "draw:hairball").condition = () => Boons.CatsWithRowdy > 0;
+        Add("ambush", "ALLEY AMBUSH", Patron.Guild, BoonSlot.Dash, U, 25,
+            "SURF DASH SENDS YOUR CATS LEAPING AT THE NEAREST ENEMIES: {0} DAMAGE EACH.", "draw:ambush").condition = () => Boons.CatsWithRowdy > 0;
+        Add("stench", "STENCH", Patron.Guild, BoonSlot.Cats, C, 8,
+            "YOUR CATS REEK. ENEMIES NEAR THEM TAKE {0} DAMAGE PER SECOND AND MOVE 25% SLOWER.", "draw:stench");
+        Add("topcat", "TOP CAT", Patron.Guild, BoonSlot.Cats, U, 100,
+            "YOUR PARTY LEADER DEALS +{0}% DAMAGE AND WEARS A TINY CROWN. (PICK THE LEADER IN THE CAT PARTY.)", "draw:topcat");
+        Add("catloyalty", "CAT LOYALTY", Patron.Guild, BoonSlot.Passive, E, 15,
+            "YOUR CAT PARTY IS ALWAYS FULL: EVERY FREE SLOT CALLS A CAT TO YOU, NEW SLOTS TOO. YOU NEVER LOSE A CAT, NOT EVEN WHEN YOU DIE. CATS DEAL +{0}% DAMAGE.", "draw:ninelives");
 
         // ---------------------------------------------------------------- CRAZY CHEF
-        Add("sandwich", "SANDWICH TIME", Patron.Chef, BoonSlot.Passive,
-            "EVERY {0} KILLS A GIANT SANDWICH FALLS FROM THE SKY. EAT IT: HEAL 25 AND +20% DAMAGE FOR 8S.", "draw:sandwich", V(14, 11, 8));
-        Add("meatball", "MEATBALL MORTAR", Patron.Chef, BoonSlot.Attack,
-            "EVERY 3RD SWING LOBS A MEATBALL THAT EXPLODES IN SAUCE: {0} DAMAGE AROUND IT.", "food:armondega", V(17, 24, 33));
-        Add("eggs", "EGG TOSS", Patron.Chef, BoonSlot.Dash,
-            "SURF DASH THROWS AN EGG AT EVERY ENEMY ON SCREEN. THEY CRACK: {0} DAMAGE AND YOLK IN THE EYES (STUNNED 0.8S).", "food:ovo", V(8, 12, 16));
-        Add("tomato", "TOMATO SPLAT", Patron.Chef, BoonSlot.Jump,
-            "LANDING SQUASHES A BAG OF TOMATOES: {0} DAMAGE AROUND YOU, AND ENEMIES SLIP (SLOWED 40%).", "food:tomate", V(10, 15, 21));
-        Add("cheese", "GRATE EXPECTATIONS", Patron.Chef, BoonSlot.Passive,
-            "+{0}% CRIT CHANCE AND +20% CRIT DAMAGE. CRITICAL HITS SPRAY CHEESE.", "food:guejo", V(8, 12, 16));
-        Add("secretsauce", "SECRET SAUCE", Patron.Chef, BoonSlot.Passive,
-            "ALL YOUR HEALING IS {0}% STRONGER, AND EVERY BIG HEAL SPLASHES HOT SAUCE ON ENEMIES NEAR YOU FOR 10.", "draw:sauce", V(25, 40, 55));
-        Add("foodfight", "FOOD FIGHT", Patron.Chef, BoonSlot.Cats,
-            "WHEN A CAT ATTACKS, IT ALSO THROWS FOOD AT A NEARBY ENEMY: {0} DAMAGE.", "food:pao", V(9, 13, 18));
-        Add("foodstock", "FOOD STOCK", Patron.Chef, BoonSlot.Passive,
-            "EVERY FOOD YOUR BOONS MAKE COMES X3: THREE SANDWICHES, THREE EGGS PER ENEMY, NINE TOMATOES, THREE MEATBALLS... FOOD DEALS +{0}% DAMAGE.", "food:pao", V(5, 10, 15))
+        Add("sandwich", "SANDWICH TIME", Patron.Chef, BoonSlot.Passive, U, 8,
+            "EVERY {0} KILLS A GIANT SANDWICH FALLS FROM THE SKY. EAT IT: HEAL 25 AND +20% DAMAGE FOR 8S.", "draw:sandwich");
+        Add("meatball", "MEATBALL MORTAR", Patron.Chef, BoonSlot.Attack, R, 34,
+            "EVERY 3RD SWING LOBS A MEATBALL THAT EXPLODES IN SAUCE: {0} DAMAGE AROUND IT.", "food:armondega");
+        Add("eggs", "EGG TOSS", Patron.Chef, BoonSlot.Dash, R, 16,
+            "SURF DASH THROWS AN EGG AT EVERY ENEMY ON SCREEN. THEY CRACK: {0} DAMAGE AND YOLK IN THE EYES (STUNNED 0.8S).", "food:ovo");
+        Add("tomato", "TOMATO SPLAT", Patron.Chef, BoonSlot.Jump, U, 22,
+            "LANDING SQUASHES A BAG OF TOMATOES: {0} DAMAGE AROUND YOU, AND ENEMIES SLIP (SLOWED 40%).", "food:tomate");
+        Add("cheese", "GRATE EXPECTATIONS", Patron.Chef, BoonSlot.Passive, R, 16,
+            "+{0}% CRIT CHANCE AND +20% CRIT DAMAGE. CRITICAL HITS SPRAY CHEESE.", "food:guejo");
+        Add("secretsauce", "SECRET SAUCE", Patron.Chef, BoonSlot.Passive, U, 50,
+            "ALL YOUR HEALING IS {0}% STRONGER, AND EVERY BIG HEAL SPLASHES HOT SAUCE ON ENEMIES NEAR YOU FOR 10.", "draw:sauce");
+        Add("foodfight", "FOOD FIGHT", Patron.Chef, BoonSlot.Cats, C, 18,
+            "WHEN A CAT ATTACKS, IT ALSO THROWS FOOD AT A NEARBY ENEMY: {0} DAMAGE.", "food:pao");
+        Add("foodstock", "FOOD STOCK", Patron.Chef, BoonSlot.Passive, E, 15,
+            "EVERY FOOD YOUR BOONS MAKE COMES X3: THREE SANDWICHES, THREE EGGS PER ENEMY, NINE TOMATOES, THREE MEATBALLS... FOOD DEALS +{0}% DAMAGE.", "food:pao")
             .condition = () => Boons.Has("sandwich") || Boons.Has("eggs") || Boons.Has("tomato") || Boons.Has("meatball") || Boons.Has("foodfight") || Boons.Has("sandwichrain");
-        Add("satisfied", "SATISFIED", Patron.Chef, BoonSlot.Passive,
-            "YOU CAN OVERHEAL TWICE AS MUCH: A NEW BAR GROWS OVER THE GOLDEN ONE. ALL YOUR HEALING IS {0}% STRONGER.", "draw:sauce", V(5, 10, 15)).iconTint = new Color(1f, 0.6f, 0.9f);
-        BoonDef rain = Add("sandwichrain", "INGREDIENT RAIN", Patron.Chef, BoonSlot.Special,
-            "PRESS {WOLF} WHEN THE KITCHEN IS READY: FOR 6S EVERY SANDWICH INGREDIENT POURS FROM THE SKY. FOOD THAT HITS AN ENEMY DEALS DAMAGE, FOOD YOU CATCH HEALS YOU. LONG COOLDOWN.", "draw:sandwich", F(1));
-        rain.legendaryOnly = true;
+        Add("satisfied", "SATISFIED", Patron.Chef, BoonSlot.Passive, R, 15,
+            "YOU CAN OVERHEAL TWICE AS MUCH: A NEW BAR GROWS OVER THE GOLDEN ONE. ALL YOUR HEALING IS {0}% STRONGER.", "draw:sauce").iconTint = new Color(1f, 0.6f, 0.9f);
+        BoonDef rain = Add("sandwichrain", "INGREDIENT RAIN", Patron.Chef, BoonSlot.Special, L, 6,
+            "PRESS {WOLF} WHEN THE KITCHEN IS READY: FOR {0}S EVERY SANDWICH INGREDIENT POURS FROM THE SKY. FOOD THAT HITS AN ENEMY DEALS DAMAGE, FOOD YOU CATCH HEALS YOU. LONG COOLDOWN.", "draw:sandwich");
         rain.iconTint = new Color(1f, 0.85f, 0.5f);
 
         // ---------------------------------------------------------------- THE BLACKSMITH
-        Add("weaponsnob", "WEAPON SNOB", Patron.Smith, BoonSlot.Passive,
-            "WEAPONS WEAR OUT TWICE AS FAST. WHEN ONE BREAKS IT EXPLODES FOR {0}.", "draw:brokensword", V(40, 60, 80)).excludes = new[] { "gearedup" };
-        Add("whetstone", "WHETSTONE", Patron.Smith, BoonSlot.Passive,
-            "YOU ATTACK {0}% FASTER.", "draw:whetstone", V(12, 18, 25));
-        Add("tempered", "TEMPERED STEEL", Patron.Smith, BoonSlot.Passive,
-            "SWINGS HAVE A {0}% CHANCE TO COST NO DURABILITY. WEAPONS YOU PICK UP GET +25% DURABILITY.", "draw:ingot", V(25, 35, 50));
-        Add("hookline", "HOOK LINE AND SINKER", Patron.Smith, BoonSlot.Passive,
-            "ROD: YOUR ROD DEALS DOUBLE DAMAGE. HITS REEL ENEMIES IN, AND EVERY 3RD ROD HIT ON THE SAME ENEMY STUNS IT AND DEALS {0} MORE.", "draw:hook", V(15, 22, 30));
-        Add("splitedge", "SPLIT EDGE", Patron.Smith, BoonSlot.Passive,
-            "SWORD: EVERY SWING ALSO FIRES A STEEL WAVE THAT CUTS THROUGH ENEMIES FOR {0} DAMAGE.", "draw:steelwave", V(8, 12, 16));
-        Add("skewer", "SKEWER", Patron.Smith, BoonSlot.Passive,
-            "NAGINATA: HITS PIERCE THROUGH, STRIKING UP TO 3 ENEMIES BEHIND THE TARGET FOR {0}% DAMAGE.", "draw:spear", V(60, 80, 100)).excludes = new[] { "onrush" };
-        Add("butcher", "BUTCHER BLOCK", Patron.Smith, BoonSlot.Passive,
-            "CLEAVER: EVERY ATTACK CHOPS 5 TIMES INSTEAD OF 3, AND HITS ON ENEMIES BELOW 40% HEALTH DEAL X{0} DAMAGE.", "draw:cleaver", V(1.6f, 2f, 2.5f));
-        Add("gearedup", "GEARED UP", Patron.Smith, BoonSlot.Passive,
-            "YOUR WEAPONS NEVER LOSE DURABILITY, AND THEY HIT {0}% HARDER.", "draw:ingot", V(5, 10, 15)).excludes = new[] { "weaponsnob", "justrod" };
-        Add("justrod", "JUST THE ROD, PLEASE.", Patron.Smith, BoonSlot.Passive,
-            "THE ROD DEALS X{0} DAMAGE. BUT YOU CAN NOT PICK UP ANY OTHER WEAPON.", "draw:hook", V(5, 5, 5, 5)).excludes = new[] { "gearedup" };
-        Add("sharp", "SHARP WEAPONS", Patron.Smith, BoonSlot.Passive,
-            "A WEAPON PICKED UP PAST FULL DURABILITY GETS SHARPENED: +1% DAMAGE FOR EVERY 1% OF SHARPENING, UP TO +{0}%. IT WEARS OFF FAST, LIKE OVERHEAL.", "draw:whetstone", V(50, 75, 100));
-        Add("dizzy", "DIZZY FIGHTER", Patron.Smith, BoonSlot.Passive,
-            "SWORD: HOLD {ATTACK} IN THE AIR AND YOU NEVER STOP SPINNING, SLASHING {0} TIMES A SECOND.", "draw:steelwave", V(6, 8, 10));
-        Add("swordcharge", "GRAND SLASH", Patron.Smith, BoonSlot.Passive,
-            "SWORD: AFTER DOWN + ATTACK, KEEP HOLDING {ATTACK} TO CHARGE UP TO 3 TICKS. EVERY TICK MAKES THE SLASH BIGGER: UP TO {0} DAMAGE.", "draw:steelwave", V(40, 60, 80));
-        Add("skybeam", "SKY SPEAR", Patron.Smith, BoonSlot.Passive,
-            "NAGINATA: DOWN + ATTACK SUMMONS 5 MAGIC SPEARS THAT BURST UP OUT OF THE GROUND ONE AFTER ANOTHER, BEHIND YOU, UNDER YOU AND IN FRONT OF YOU: {0} DAMAGE EACH, AND THEY LAUNCH ENEMIES UP.", "draw:spear", V(14, 20, 28));
-        Add("onrush", "ONRUSH", Patron.Smith, BoonSlot.Passive,
-            "NAGINATA: HOLD {ATTACK} ON THE GROUND TO DRILL NONSTOP: A HIT EVERY 0.08S FOR {0}% DAMAGE. IT DOES NOT PIERCE. DRILLING WEARS THE NAGINATA DOWN: 2 DURABILITY PER SECOND WHILE YOU HOLD IT.", "draw:spear", V(40, 50, 60)).excludes = new[] { "skewer" };
-        Add("quake", "GROUND BREAKER", Patron.Smith, BoonSlot.Passive,
-            "NAGINATA: A JUMP ATTACK THAT HITS THE GROUND CAUSES AN EARTHQUAKE: {0} DAMAGE, AND ENEMIES NEARBY ARE STUNNED 1.5S.", "draw:pressure", V(20, 30, 40));
-        Add("apron", "MEAT SHIELD", Patron.Smith, BoonSlot.Passive,
-            "CLEAVER: DOWN + ATTACK RAISES A SHIELD THAT BLOCKS THE NEXT HIT YOU TAKE. WHILE IT IS UP, ARROWS AND BOMBS THAT HIT IT BOUNCE BACK AT THE ENEMIES FOR 500% DAMAGE (THAT DOES NOT BREAK IT). READY AGAIN AFTER {0}S.", "draw:ricochet", V(8, 6, 4));
-        Add("slices", "FIVE SLICE", Patron.Smith, BoonSlot.Passive,
-            "CLEAVER: LAND A JUMP ATTACK AND 1S LATER THE ENEMY IS SLICED 5 TIMES FOR {0}% DAMAGE EACH. THE SLICES COUNT AS ATTACKS.", "draw:cleaver", V(40, 55, 70));
-        Add("armory", "THE ARMORY", Patron.Smith, BoonSlot.Passive,
-            "{0} ENCHANTED SWORDS FLOAT AROUND YOU AND SLASH THE NEAREST ENEMIES BY THEMSELVES, EVERY 1.4S EACH.", "draw:swords",
-            new float[] { 1, 1, 2, 2, 3 }).iconTint = new Color(1f, 0.8f, 0.55f);
-        BoonDef bankai = Add("senbonzakura", "SENBONZAKURA KAGEYOSHI", Patron.Smith, BoonSlot.Special,
-            "PRESS {WOLF} WHEN THE PETALS ARE READY. BANKAI: YOUR BLADE SCATTERS INTO A THOUSAND TINY BLADES LIKE CHERRY PETALS. FOR {0}S THEY STREAM THROUGH YOUR ENEMIES, CUTTING EVERYTHING THEY TOUCH, THEN CLOSE IN ON THE BIGGEST CROWD AND CRUSH IT. LONG COOLDOWN.", "draw:sakura", F(9));
-        bankai.legendaryOnly = true;
+        Add("weaponsnob", "WEAPON SNOB", Patron.Smith, BoonSlot.Passive, C, 60,
+            "WEAPONS WEAR OUT TWICE AS FAST. WHEN ONE BREAKS IT EXPLODES FOR {0}.", "draw:brokensword").excludes = new[] { "gearedup" };
+        Add("whetstone", "WHETSTONE", Patron.Smith, BoonSlot.Passive, C, 15,
+            "YOU ATTACK {0}% FASTER.", "draw:whetstone");
+        Add("tempered", "TEMPERED STEEL", Patron.Smith, BoonSlot.Passive, C, 50,
+            "SWINGS HAVE A {0}% CHANCE TO COST NO DURABILITY. WEAPONS YOU PICK UP GET +25% DURABILITY.", "draw:ingot");
+        Add("hookline", "HOOK LINE AND SINKER", Patron.Smith, BoonSlot.Passive, U, 30,
+            "ROD: YOUR ROD DEALS DOUBLE DAMAGE. HITS REEL ENEMIES IN, AND EVERY 3RD ROD HIT ON THE SAME ENEMY STUNS IT AND DEALS {0} MORE.", "draw:hook");
+        Add("splitedge", "SPLIT EDGE", Patron.Smith, BoonSlot.Passive, U, 16,
+            "SWORD: EVERY SWING ALSO FIRES A STEEL WAVE THAT CUTS THROUGH ENEMIES FOR {0} DAMAGE.", "draw:steelwave");
+        Add("skewer", "SKEWER", Patron.Smith, BoonSlot.Passive, R, 35,
+            "NAGINATA: EVERY THRUST PIERCES STRAIGHT THROUGH EVERY ENEMY IN FRONT OF YOU. EACH ENEMY PIERCED IN THE SAME THRUST TAKES +{0}% MORE DAMAGE THAN THE ONE BEFORE.", "draw:spear").excludes = new[] { "onrush" };
+        Add("butcher", "BUTCHER BLOCK", Patron.Smith, BoonSlot.Passive, R, 2.5f,
+            "CLEAVER: EVERY ATTACK CHOPS 5 TIMES INSTEAD OF 3, AND HITS ON ENEMIES BELOW 40% HEALTH DEAL X{0} DAMAGE.", "draw:cleaver");
+        Add("gearedup", "GEARED UP", Patron.Smith, BoonSlot.Passive, E, 15,
+            "YOUR WEAPONS NEVER LOSE DURABILITY, AND THEY HIT {0}% HARDER.", "draw:ingot").excludes = new[] { "weaponsnob", "justrod" };
+        Add("justrod", "JUST THE ROD, PLEASE.", Patron.Smith, BoonSlot.Passive, E, 5,
+            "THE ROD DEALS X{0} DAMAGE. BUT YOU CAN NOT PICK UP ANY OTHER WEAPON.", "draw:hook").excludes = new[] { "gearedup" };
+        Add("sharp", "SHARP WEAPONS", Patron.Smith, BoonSlot.Passive, U, 100,
+            "A WEAPON PICKED UP PAST FULL DURABILITY GETS SHARPENED: +1% DAMAGE FOR EVERY 1% OF SHARPENING, UP TO +{0}%. IT WEARS OFF FAST, LIKE OVERHEAL.", "draw:whetstone");
+        Add("dizzy", "DIZZY FIGHTER", Patron.Smith, BoonSlot.Passive, R, 10,
+            "SWORD: HOLD {ATTACK} IN THE AIR AND YOU NEVER STOP SPINNING, SLASHING {0} TIMES A SECOND.", "draw:steelwave");
+        Add("swordcharge", "GRAND SLASH", Patron.Smith, BoonSlot.Passive, R, 80,
+            "SWORD: AFTER DOWN + ATTACK, KEEP HOLDING {ATTACK} TO CHARGE UP TO 3 TICKS. EVERY TICK MAKES THE SLASH BIGGER: UP TO {0} DAMAGE.", "draw:steelwave");
+        Add("skybeam", "SKY SPEAR", Patron.Smith, BoonSlot.Passive, E, 28,
+            "NAGINATA: DOWN + ATTACK SUMMONS 5 MAGIC SPEARS THAT BURST UP OUT OF THE GROUND ONE AFTER ANOTHER, BEHIND YOU, UNDER YOU AND IN FRONT OF YOU: {0} DAMAGE EACH, AND THEY LAUNCH ENEMIES UP.", "draw:spear");
+        Add("onrush", "ONRUSH", Patron.Smith, BoonSlot.Passive, E, 60,
+            "NAGINATA: HOLD {ATTACK} ON THE GROUND TO DRILL NONSTOP: A HIT EVERY 0.08S FOR {0}% DAMAGE. IT DOES NOT PIERCE. DRILLING WEARS THE NAGINATA DOWN: 2 DURABILITY PER SECOND WHILE YOU HOLD IT.", "draw:spear").excludes = new[] { "skewer" };
+        Add("quake", "GROUND BREAKER", Patron.Smith, BoonSlot.Passive, R, 40,
+            "NAGINATA: A JUMP ATTACK THAT HITS THE GROUND CAUSES AN EARTHQUAKE: {0} DAMAGE TO EVERY ENEMY STANDING ON THE GROUND NEARBY, AND THEY ARE STUNNED 1.5S. FLYING ENEMIES ARE SAFE.", "draw:pressure");
+        Add("apron", "MEAT SHIELD", Patron.Smith, BoonSlot.Passive, U, 4,
+            "CLEAVER: DOWN + ATTACK RAISES A SHIELD THAT BLOCKS THE NEXT HIT YOU TAKE. WHILE IT IS UP, ARROWS AND BOMBS THAT HIT IT BOUNCE BACK AT THE ENEMIES FOR 500% DAMAGE (THAT DOES NOT BREAK IT). READY AGAIN AFTER {0}S.", "draw:ricochet");
+        Add("slices", "FIVE SLICE", Patron.Smith, BoonSlot.Passive, R, 70,
+            "CLEAVER: LAND A JUMP ATTACK AND 1S LATER THE ENEMY IS SLICED 5 TIMES FOR {0}% DAMAGE EACH. THE SLICES COUNT AS ATTACKS.", "draw:cleaver");
+        Add("armory", "THE ARMORY", Patron.Smith, BoonSlot.Passive, E, 3,
+            "{0} ENCHANTED SWORDS FLOAT AROUND YOU AND SLASH THE NEAREST ENEMIES BY THEMSELVES, EVERY 1.4S EACH.", "draw:swords").iconTint = new Color(1f, 0.8f, 0.55f);
+        BoonDef bankai = Add("senbonzakura", "SENBONZAKURA KAGEYOSHI", Patron.Smith, BoonSlot.Special, L, 9,
+            "PRESS {WOLF} WHEN THE PETALS ARE READY. BANKAI: YOU DROP YOUR BLADE INTO THE GROUND, A THOUSAND GIANT BLADES RISE AROUND YOU AND SCATTER INTO PETALS. FOR {0}S THEY STREAM THROUGH YOUR ENEMIES, CUTTING EVERYTHING THEY TOUCH, THEN CLOSE IN ON THE BIGGEST CROWD AND CRUSH IT. LONG COOLDOWN.", "draw:sakura");
         bankai.iconTint = new Color(1f, 0.75f, 0.9f);
 
         // ---------------------------------------------------------------- THE SUN GOD
-        Add("solarflare", "SOLAR FLARE", Patron.Sun, BoonSlot.Attack,
-            "EVERY 4TH HIT CALLS A PILLAR OF SUNLIGHT ON THE TARGET: {0} DAMAGE TO EVERYTHING IN IT.", "draw:sunbeam", V(20, 30, 42));
-        Add("sunburn", "SUNBURN", Patron.Sun, BoonSlot.Attack,
-            "HITS SET ENEMIES ABLAZE: {0} DAMAGE PER SECOND FOR 3S.", "draw:flame", V(5, 8, 11));
-        Add("daybreak", "DAYBREAK", Patron.Sun, BoonSlot.Passive,
-            "IN DAYLIGHT: +{0}% DAMAGE AND YOU HEAL 1 HP EVERY 2 SECONDS.", "draw:sun", V(15, 22, 30));
-        Add("halo", "HALO", Patron.Sun, BoonSlot.Passive,
-            "THREE LITTLE SUNS CIRCLE YOU, BURNING ENEMIES THEY TOUCH FOR {0}.", "draw:halo", V(6, 9, 12));
-        Add("blinding", "BLINDING DASH", Patron.Sun, BoonSlot.Dash,
-            "SURF DASH FLASHES LIKE HIGH NOON: ENEMIES NEAR YOU ARE BLINDED (STUNNED) FOR {0}S.", "draw:flash", V(1f, 1.4f, 1.8f));
-        Add("sunspot", "SUNSPOT", Patron.Sun, BoonSlot.Jump,
-            "LANDING LEAVES A POOL OF SUNLIGHT FOR 3S: ENEMIES IN IT BURN FOR {0} PER SECOND, YOU HEAL 2 PER SECOND.", "draw:sunspot", V(6, 9, 12));
-        BoonDef light = Add("cometothelight", "COME TO THE LIGHT", Patron.Sun, BoonSlot.Passive,
-            "THE NIGHT NEVER COMES AGAIN. YOU GIVE UP EVERY NIGHT BOON YOU HAVE, AND FOR EACH ONE THE SUN GOD HANDS YOU ONE OF HIS OWN, AT THE SAME RARITY. NO MORE NIGHT ELITES EITHER.", "draw:sun", F(1));
+        Add("solarflare", "SOLAR FLARE", Patron.Sun, BoonSlot.Attack, R, 42,
+            "EVERY 4TH HIT CALLS A PILLAR OF SUNLIGHT ON THE TARGET: {0} DAMAGE TO EVERYTHING IN IT.", "draw:sunbeam");
+        Add("sunburn", "SUNBURN", Patron.Sun, BoonSlot.Attack, U, 12,
+            "HITS SET ENEMIES ABLAZE: {0} DAMAGE PER SECOND FOR 3S.", "draw:flame");
+        Add("daybreak", "DAYBREAK", Patron.Sun, BoonSlot.Passive, U, 30,
+            "IN DAYLIGHT: +{0}% DAMAGE AND YOU HEAL 1 HP EVERY 2 SECONDS.", "draw:sun");
+        Add("halo", "HALO", Patron.Sun, BoonSlot.Passive, U, 12,
+            "THREE LITTLE SUNS CIRCLE YOU, BURNING ENEMIES THEY TOUCH FOR {0}.", "draw:halo");
+        Add("blinding", "BLINDING DASH", Patron.Sun, BoonSlot.Dash, R, 1.8f,
+            "SURF DASH FLASHES LIKE HIGH NOON: YOU TURN GOLDEN AND SPARKLE, AND ENEMIES NEAR YOU ARE BLINDED (STUNNED) FOR {0}S.", "draw:flash");
+        Add("sunspot", "SUNSPOT", Patron.Sun, BoonSlot.Jump, U, 12,
+            "LANDING LEAVES A POOL OF SUNLIGHT FOR 3S: ENEMIES IN IT BURN FOR {0} PER SECOND, YOU HEAL 2 PER SECOND.", "draw:sunspot");
+        BoonDef light = Add("cometothelight", "COME TO THE LIGHT", Patron.Sun, BoonSlot.Passive, L, 1,
+            "THE NIGHT NEVER COMES AGAIN. YOU GIVE UP EVERY NIGHT BOON YOU HAVE, AND FOR EACH ONE THE SUN GOD HANDS YOU ONE OF HIS OWN. NO MORE NIGHT ELITES EITHER.", "draw:sun");
         light.legendaryOnly = true;
         light.iconTint = new Color(1f, 0.95f, 0.6f);
         light.condition = () => Boons.NightBoonCount >= 2;
